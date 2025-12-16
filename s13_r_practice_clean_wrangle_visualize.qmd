@@ -1,6 +1,5 @@
 ---
 title: "Practice Session: Collaborative Report"
-bibliography: book.bib
 ---
 
 :::{.callout-tip}
@@ -20,7 +19,7 @@ These exercises are adapted from Allison Horst's EDS 221: Scientific Programming
 
 ## About the data {.unnumbered}
 
-These exercises will be using data on abundance, size, and trap counts (fishing pressure) of California spiny lobster (*Panulirus interruptus*) and were collected along the mainland coast of the Santa Barbara Channel by Santa Barbara Coastal LTER researchers [@lter2022].
+These exercises will be using data on abundance, size, and trap counts (fishing pressure) of California spiny lobster (*Panulirus interruptus*) and were collected along the mainland coast of the Santa Barbara Channel by Santa Barbara Coastal LTER researchers [CITATION].
 
 Your task: Collaborate on an analysis and create a report to publish using GitHub Pages.
 
