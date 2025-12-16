@@ -1,0 +1,22 @@
+module,lesson,lesson_file_package,lesson_file_course,package,pkg_version
+Day 1,r_rstudio_server_setup,r_rstudio_server_setup.qmd,s01_r_rstudio_server_setup.qmd,lhLessons,2024.11.07
+Day 1,git_setup,git_setup.qmd,s02_git_setup.qmd,lhLessons,2024.11.07
+Day 1,r_programming_introduction,r_programming_introduction.qmd,s03_r_programming_introduction.qmd,lhLessons,2024.11.07
+Day 1,r_quarto_literate_analysis,r_quarto_literate_analysis.qmd,s04_r_quarto_literate_analysis.qmd,lhLessons,2024.11.07
+Day 1,activity_reproducibility_lego,activity_reproducibility_lego.qmd,s05_activity_reproducibility_lego.qmd,lhLessons,2024.11.07
+Day 1,github_introduction,github_introduction.qmd,s06_github_introduction.qmd,lhLessons,2024.11.07
+Day 1,lecture_tidy_data,lecture_tidy_data.qmd,s07_lecture_tidy_data.qmd,lhLessons,2024.11.07
+Day 1,r_tidyverse_clean_wrangle,r_tidyverse_clean_wrangle.qmd,s08_r_tidyverse_clean_wrangle.qmd,lhLessons,2024.11.07
+Day 1,r_practice_tidy_data_joins,r_practice_tidy_data_joins.qmd,s09_r_practice_tidy_data_joins.qmd,lhLessons,2024.11.07
+Day 1,github_collaboration,github_collaboration.qmd,s10_github_collaboration.qmd,lhLessons,2024.11.07
+Day 1,r_data_visualization,r_data_visualization.qmd,s11_r_data_visualization.qmd,lhLessons,2024.11.07
+Day 1,github_publishing,github_publishing.qmd,s12_github_publishing.qmd,lhLessons,2024.11.07
+Day 1,r_practice_clean_wrangle_visualize,r_practice_clean_wrangle_visualize.qmd,s13_r_practice_clean_wrangle_visualize.qmd,lhLessons,2024.11.07
+Day 1,lecture_data_management,lecture_data_management.qmd,s14_lecture_data_management.qmd,lhLessons,2024.11.07
+Day 1,r_geospatial_vector_analysis,r_geospatial_vector_analysis.qmd,s15_r_geospatial_vector_analysis.qmd,lhLessons,2024.11.07
+Day 1,r_functions,r_functions.qmd,s16_r_functions.qmd,lhLessons,2024.11.07
+Day 1,r_packages,r_packages.qmd,s17_r_packages.qmd,lhLessons,2024.11.07
+Day 1,r_practice_functions,r_practice_functions.qmd,s18_r_practice_functions.qmd,lhLessons,2024.11.07
+Day 1,github_project_management,github_project_management.qmd,s19_github_project_management.qmd,lhLessons,2024.11.07
+Day 1,r_provenance_reproducibility,r_provenance_reproducibility.qmd,s20_r_provenance_reproducibility.qmd,lhLessons,2024.11.07
+Day 1,r_git_install_guide,r_git_install_guide.qmd,s21_r_git_install_guide.qmd,lhLessons,2024.11.07
