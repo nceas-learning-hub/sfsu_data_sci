@@ -45,27 +45,35 @@ website:
     contents:
       - index.qmd # preface
       # START SESSIONS
-      - section: "Day 1"
+      - section: "Weeks 1 and 2"
         contents:
         - s01_r_rstudio_server_setup.qmd
         - s02_git_setup.qmd
         - s03_r_programming_introduction.qmd
         - s04_r_quarto_literate_analysis.qmd
         - s05_activity_reproducibility_lego.qmd
-      - section: "Day 2"
+      - section: "Week 3"
         contents:
         - s06_github_introduction.qmd
         - s07_lecture_tidy_data.qmd
+      - section: "Week 4"
+        contents:
         - s08_r_tidyverse_clean_wrangle.qmd
         - s09_r_practice_tidy_data_joins.qmd
-      - section: "Day 3"
+      - section: "Week 5"
         contents:
         - s10_github_collaboration.qmd
+      - section: "Week 6"
+        contents:
         - s11_r_data_visualization.qmd
+      - section: "Week 7"
+        contents:
         - s12_github_publishing.qmd
         - s13_r_practice_clean_wrangle_visualize.qmd
+      - section: "Week 8"
+        contents:
         - s14_lecture_data_management.qmd
-      - section: "Day 4"
+      - section: "Week 9"
         contents:
         - s15_r_geospatial_vector_analysis.qmd
         - s16_r_functions.qmd
