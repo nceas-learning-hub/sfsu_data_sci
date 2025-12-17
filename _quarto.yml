@@ -25,7 +25,7 @@ website:
     right:
       - text: "Instructors"
         menu:
-          - text: "Casey O'Hara"
+          - text: "Gretchen LeBuhn and Nicole Adelstein"
             href: https://www.oharascience.com/
       - icon: github
         href: https://github.com/nceas-learning-hub/sfsu_data_sci
