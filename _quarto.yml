@@ -76,13 +76,23 @@ website:
       - section: "Week 9"
         contents:
         - s15_r_geospatial_vector_analysis.qmd
+      - section: "Week 10"
+        contents:
         - s16_r_functions.qmd
+      - section: "Week 11"
+        contents:
         - s17_r_packages.qmd
+      - section: "Week 12"
+        contents:
         - s18_r_practice_functions.qmd
-      - section: "Day 5"
+      - section: "Week 13"
         contents:
         - s19_github_project_management.qmd
+      - section: "Week 14"
+        contents:
         - s20_r_provenance_reproducibility.qmd
+      - section: "Week 15"
+        contents:
         - s21_r_git_install_guide.qmd
       # END SESSIONS
 
