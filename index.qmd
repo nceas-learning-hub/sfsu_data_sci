@@ -26,7 +26,7 @@ NCEAS has over 25 years of success with this model among working groups and envi
 - Increase your familiarity and confidence with data science tools
 :::
 
-### Week's Schedule
+### Semester's Schedule
 
 :::{.column-body-outset}
 <!-- ![](images/schedule.png) -->
