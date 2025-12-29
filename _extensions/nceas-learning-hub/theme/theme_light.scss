@@ -11,10 +11,10 @@ $lh-yel-3: #DB9D26; // from LH style guide
 $lh-yel-2: #eac57d;
 $lh-yel-1: #f8ece5;
 $lh-yel-0: #DB9D2622; // semi transparent
-$lh-grn-4: #0C4537;
-$lh-grn-3: #167B62; // from NCEAS LH header
-$lh-grn-2: #a1cac0;
-$lh-grn-1: #f3f8f7;
+$lh-grn-4: #3A235F;
+$lh-grn-3: #4B2E83; // from NCEAS LH header
+$lh-grn-2: #CFC6E6;
+$lh-grn-1: #F3F0FA;
 $lh-grn-0: #0C453722; // semi-transparent
 $lh-pur-4: #4B0055; // viridis purple
 $lh-pur-3: #bc40d4;
@@ -58,13 +58,13 @@ $font-size: 25px;
 // Base document colors
 $navbar-bg: $lh-grn-4;  // navbar
 $navbar-fg: $lh-cream;  // navbar foreground elements
-$navbar-hl: $lh-grn-1;  // highlight color when on a page
+$navbar-hl: #E0B24C;  // highlight color when on a page
 $sidebar-bg: $lh-grn-1; // sidebar bg for "docked" style
 $sidebar-fg: $lh-black;
 $body-bg: white;        // page background
 $body-color: $lh-black; // page text
 $footer-bg: $lh-grn-4;  // footer
-$link-color: $lh-blu-3; // hyperlinks
+$link-color: $lh-grn-3; // hyperlinks
 
 // Override default callout colors
 $callout-color-note:      $lh-blu-3;
@@ -134,7 +134,7 @@ body {
 h1, h2, h3 {
   font-family: $font-family-sans-serif;
   font-weight: 700;
-  color: #167b62;
+  color: $lh-grn-3;
 }
 
 p.caption {
