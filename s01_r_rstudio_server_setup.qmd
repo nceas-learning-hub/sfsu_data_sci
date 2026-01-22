@@ -1,5 +1,5 @@
 ---
-title: 1. RStudio Server Setup
+title: 1. RStudio Setup
 ---
 
 :::{.callout-tip}
@@ -10,9 +10,9 @@ title: 1. RStudio Server Setup
 - Understand how to move in an R Project using paths and working directories
 :::
 
-## Logon to the RStudio Server
+## Download RStudio
 
-To prevent us from spending most of this lesson troubleshooting the myriad of issues that can arise when setting up the R, RStudio, and git environments, we have chosen to have everyone work on a remote server with all of the software you need installed. We will be using a special kind of RStudio just for servers called RStudio Server. If you have never worked on a remote server before, you can think of it like working on a different computer via the internet. Note that the server has no knowledge of the files on your local filesystem, but it is easy to transfer files from the server to your local computer, and vice-versa, using the RStudio server interface.
+To give you the skills to set up R, RStudio, and git environments, we will spend some time to make sure everyone has the three components integrated on their own laptop.
 
 ::: {.callout-tip}
 ## Server Setup
