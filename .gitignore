@@ -3,3 +3,7 @@
 /.quarto/
 
 **/*.quarto_ipynb
+
+# Ignore all lecture materials
+lectures/
+student_materials/
