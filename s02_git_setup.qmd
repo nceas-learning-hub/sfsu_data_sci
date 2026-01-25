@@ -167,35 +167,75 @@ If you see `<unset>` instead of `<discovered>` means your PAT is not correctly s
 
 Congrats! Now you've setup your authentication you should be able to work with GitHub in RStudio no
 
+## To join the GitHub Classroom, use this link:
+
+Click this link and accept the assignment to create your private repo (repository):
+
+<https://classroom.github.com/a/PFNu-Lt4>
+
+Then copy the repo URL for cloning into RStudio.
+
 ## Clone your GitHub Classroom repo into RStudio
 
 After authentication:
 
-In GitHub, open your repo and copy the HTTPS URL (maybe it's already in your clipboard).
-
-In RStudio: File → New Project → Version Control → Git
-
-Paste URL, choose folder, create project.
+0.  In GitHub, open your repo and copy the HTTPS URL (maybe it's already in your clipboard).
+1.  **In RStudio**: File → New Project → Version Control → Git
+2.  Paste URL for the GitHub Classroom repo
+3.  Choose the directory (folder) where to save on your computer
+4.  Click "Create project"
 
 Render once (quarto render or Render button) to confirm local setup.
 
-## Weekly submission workflow: Branch → Commit → Pull Request
+## Weekly assignment workflow: Branch → Commit → Pull Request
 
 To submit an assignment, you'll use GitHub and this workflow:
 
-- Create a branch: a01, a02, etc.
+-   Create a branch: a01, a02, etc.
 
-- Edit assignments/a01.qmd
+    -   In RStudio, look for the Git tab (usually upper right pane)
 
-- Commit with a meaningful message
+    -   Click the purple branch icon with two branches
 
-- Push branch
+    -   Name it (for example a01)
 
-- Open PR into main
+    -   Make sure the "Sync branch with remote" is checked
 
-- Confirm the GitHub Action render check passes (green)
+    -   Click "Create"
 
-We'll discuss what these steps really mean next week. Also we’ll use merge (not rebase) as the default strategy.
+-   Create assignment
+
+    -   If first assigment, edit assignments/a01.qmd
+
+    -   Else, in RStudio, File → New File → Quarto Document (or R Markdown)
+
+    -   Save is as a0\*.qmd in the assignments/ folder
+
+-   Commit your changes with a meaningful message
+
+    -   In the Git tab, check the box next to assignments/a0\*.qmd
+
+    -   Click "Commit"
+
+    -   Write a commit message (e.g. "Add assignnmnt a03")
+
+    -   Click "Commit"
+
+-   Push branch to GitHub
+
+    -   Click the green "Push" arrow in the Git tab
+
+-   Open a Pull Request (PR) into main branch
+
+    -   Go to your repository on GitHub in your browser
+
+    -   You'll see a banner about your recent push with a "Compare & pull request" button
+
+    -   Click the button to create the pull request
+
+-   Confirm the GitHub Action render check passes (green)
+
+That's it! RStudio's Git integration makes this more straightforward once you get the hang of it. We'll discuss what these steps really mean next week. Also we’ll use merge (not rebase) as the default strategy.
 
 Above we configured our global options for all the repositories you create in your server session to use `pull.rebase = "false"` as the strategy to integrate changes from two branches. With this we are saying to [merge](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) changes (as opposed to rebasing).
 
@@ -216,4 +256,3 @@ or
 ``` bash
 git config pull.rebase true
 ```
-
