@@ -1,7 +1,9 @@
 project:
   type: website
   output-dir: docs
-
+  render:
+    - "**/*.qmd"
+    - "!lectures/**"
 filters:
 - nceas-learning-hub/theme
 exercises: ### for custom theme callouts
