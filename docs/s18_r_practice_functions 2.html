@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>GitHub for Project Management – sfsu_data_sci</title>
+<title>Practice Session: Functions – sfsu_data_sci</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -291,7 +326,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">GitHub for Project Management</h1>
+          <h1 class="quarto-secondary-nav-title">Practice Session: Functions</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -303,7 +338,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title d-none d-lg-block">GitHub for Project Management</h1>
+      <h1 class="title d-none d-lg-block">Practice Session: Functions</h1>
                       </div>
   </div>
     
@@ -349,7 +384,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./s01_r_rstudio_server_setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">RStudio Setup</span></a>
+ <span class="menu-text">1. RStudio Server Setup</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -560,7 +595,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s18_r_practice_functions.html" class="sidebar-item-text sidebar-link">
+  <a href="./s18_r_practice_functions.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Practice Session: Functions</span></a>
   </div>
 </li>
@@ -577,7 +612,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s19_github_project_management.html" class="sidebar-item-text sidebar-link active">
+  <a href="./s19_github_project_management.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">GitHub for Project Management</span></a>
   </div>
 </li>
@@ -627,9 +662,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides">Slides</a></li>
-  <li><a href="#exercise-github-issues" id="toc-exercise-github-issues" class="nav-link" data-scroll-target="#exercise-github-issues"><span class="header-section-number">1</span> Exercise: GitHub Issues</a></li>
-  <li><a href="#exercise-practice-creating-informative-readmes" id="toc-exercise-practice-creating-informative-readmes" class="nav-link" data-scroll-target="#exercise-practice-creating-informative-readmes"><span class="header-section-number">2</span> Exercise: Practice creating informative READMEs</a></li>
+  <li><a href="#getting-ready" id="toc-getting-ready" class="nav-link active" data-scroll-target="#getting-ready"><span class="header-section-number">1</span> Getting Ready</a></li>
+  <li><a href="#r-functions-warm-up" id="toc-r-functions-warm-up" class="nav-link" data-scroll-target="#r-functions-warm-up"><span class="header-section-number">2</span> R Functions Warm Up</a></li>
+  <li><a href="#functions-with-conditionals" id="toc-functions-with-conditionals" class="nav-link" data-scroll-target="#functions-with-conditionals"><span class="header-section-number">3</span> Functions with Conditionals</a></li>
+  <li><a href="#adding-error-or-warning-messages" id="toc-adding-error-or-warning-messages" class="nav-link" data-scroll-target="#adding-error-or-warning-messages"><span class="header-section-number">4</span> Adding Error or Warning Messages</a></li>
   </ul>
 </nav>
     </div>
@@ -652,170 +688,505 @@ Learning Objectives
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Utilize GitHub’s project management tools to organize and manage projects</li>
-<li>Practice creating issues in GitHub</li>
-<li>Craft informative READMEs for Git repositories</li>
+<li>Practice creating functions</li>
+<li>Practice testing functions</li>
+<li>Practice adding error messages to functions <!-- -   Practice deploying a package and organizing custom functions within it --></li>
 </ul>
 </div>
 </div>
-<section id="slides" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="slides">Slides</h2>
-<iframe width="560" height="380" src="https://docs.google.com/presentation/d/1ehw-Mg-i1QfXpz0MTLwIlaXNKRp42NB5TboZOhuTqtI/preview" allowfullscreen="">
-</iframe>
-</section>
-<section id="exercise-github-issues" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="exercise-github-issues"><span class="header-section-number">1</span> Exercise: GitHub Issues</h2>
-<p>Get back together with your partner that you collaborate for the Lobster Report.</p>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 1 - Step 1
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Owner creates a new Issue and tags collaborator.</p>
-</div>
-</div>
-</div>
-</div>
-<details>
-<summary>
-Steps
-</summary>
-<ul>
-<li>Navigate to the Lobster Report repository</li>
-<li>Go to the “Issue” tab of the repository</li>
-<li>Click on “New Issue”</li>
-<li>Give the Issue a title (Eg: Choose which plot to include in final report)</li>
-<li>Describe the issue and tag your collaborator by adding <code>@</code> followed by their username (Practice Markdown syntax when writing the issue)</li>
-<li>Click on Submit New Issue</li>
-</ul>
-</details>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 2 - Step 2
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Collaborator responds to Issue and creates a checklist</p>
-</div>
-</div>
-</div>
-</div>
-<details>
-<summary>
-Steps
-</summary>
-<ul>
-<li>Collaborator navigates to issue (either from the email notification or going into the Issue tab in the Lobster Report repo)</li>
-<li>Respond Issue and include a To Do list indicating next steps (tip: Markdown syntax for list is /- [ ])</li>
-<li>Submit your response</li>
-</ul>
-</details>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 3 - Step 3
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Collaborator create a GitHub Issues referencing code on one of the <code>.qmd</code> files</p>
-</div>
-</div>
-</div>
-</div>
-<details>
-<summary>
-Steps
-</summary>
-<ul>
-<li>Navigate to a script in the Lobster Report Report repository</li>
-<li>Hover over the line you want to reference in the Issue</li>
-<li>Click on the line number (on the left), then click on the three dots right next to the number</li>
-<li>Choose the option “Reference in new issue”</li>
-<li>Write a description of the “issue” you want to address</li>
-<li>Submit Issue</li>
-<li>Assign Issue to Owner</li>
-</ul>
-</details>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 4 - Step 4
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Owner reacts to issue with an emoji and adds a label</p>
-</div>
-</div>
-</div>
-</div>
-<details>
-<summary>
-Steps
-</summary>
-<ul>
-<li>Owner navigates to issue (either from the email notification or going into the Issue tab in the Lobster Report repo)</li>
-<li>Add an emoji to issue submitted by Collaborator</li>
-<li>Add a label
-<ul>
-<li>On the right side menu click on Label</li>
-<li>Either choose one of the default labels or create your own by selecting “Edit labels”</li>
-</ul></li>
-</ul>
-</details>
-</section>
-<section id="exercise-practice-creating-informative-readmes" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="exercise-practice-creating-informative-readmes"><span class="header-section-number">2</span> Exercise: Practice creating informative READMEs</h2>
-<p>You can do this either for the <code>training_&lt;username&gt;</code> repo, or the Lobster Report repo (make sure just one of you edits this one) or edit a personal repo from one of your projects. Make sure to include the 6 core elements:</p>
-<ul class="task-list">
-<li><label><input type="checkbox">A short, but descriptive title</label></li>
-<li><label><input type="checkbox">A brief explanation of the repository’s purpose</label></li>
-<li><label><input type="checkbox">A concise description of what’s housed in the repository</label></li>
-<li><label><input type="checkbox">Details regarding data access</label></li>
-<li><label><input type="checkbox">A list of authors or contributors (for collaborative work)</label></li>
-<li><label><input type="checkbox">References / acknowledgements</label></li>
-</ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-README Examples
+Acknowledgements
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>These exercises are adapted from Allison Horst’s EDS 221: Scientific Programming Essentials Course for the Bren School’s Master of Environmental Data Science program.</p>
+</div>
+</div>
+<section id="getting-ready" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="getting-ready"><span class="header-section-number">1</span> Getting Ready</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol start="0" type="1">
+<li><p>Make sure you’re in the right project (<code>training_{USERNAME}</code>) and use the Git workflow by <code>Pull</code>ing to check for any changes in the remote repository (aka repository on GitHub).</p></li>
+<li><p>Create a new Quarto Document.</p>
+<ol type="a">
+<li>Title it “R Practice: Functions”.</li>
+<li>Save the file and name it “r-practice-functions”.</li>
+</ol></li>
+<li><p>Organize your Quarto Document and folders in a <strong>meaningful</strong> way. Organization is personal - so this is up to you! Consider the different ways we’ve organized previous files using: headers, bold text, naming code chunks, comments in code chunks. Consider what directories (folders) we’ve used or talked about to organize these files. What is most important is organizing and documenting the file so that your future self (or if you share this file with others!) understands it as well as your current self does right now.</p></li>
+<li><p>Use the Git workflow. After you’ve set up your project and uploaded your data go through the workflow: <code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="r-functions-warm-up" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="r-functions-warm-up"><span class="header-section-number">2</span> R Functions Warm Up</h2>
+<p>We’re going to start by creating some simple functions. Recall that the anatomy of a function is the same for all functions and each one contains:</p>
 <ul>
-<li><p><a href="https://github.com/samanthacsik/strava-dashboard?tab=readme-ov-file#a-shiny-dashboard-for-exploring-my-personal-strava-data">A shiny dashboard for exploring my personal Strava data, by Sam Csik</a></p></li>
-<li><p><a href="https://github.com/annaramji/thomas-fire?tab=readme-ov-file#thomas-fire-data-analysis">Thomas Fire Data Analysis by Anna Ramji</a></p></li>
-<li><p><a href="https://github.com/hackergrrl/art-of-readme?tab=readme-ov-file#readme">Art of README by Kira Oakley</a></p></li>
+<li>a function name,</li>
+<li>arguments that allow a user to specify inputs,</li>
+<li>and body of commands and outputs enclosed within a set of curly braces <code>{}</code></li>
 </ul>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Create a function called <code>double_it()</code> that doubles any value input value. Then try out the function, are the values returned what you expect?</p>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create function #</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>double_it <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">2</span> <span class="sc">*</span> x)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># explicit notation</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">double_it</span>(<span class="at">x =</span> <span class="dv">24</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># non explicit notation</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">double_it</span>(<span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 2
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Write a function called <code>exclaim_age()</code> that returns the statement “I am ___ years old!”, where the blank is entered by the user as argument age.</p>
+<p>Then try out the function, are the values returned what you expect?</p>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write function #</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>exclaim_age <span class="ot">&lt;-</span> <span class="cf">function</span>(age) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">paste</span>(<span class="st">"I am"</span>, age, <span class="st">"years old!"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># explicit notation</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">exclaim_age</span>(<span class="at">age =</span> <span class="dv">12</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># non explicit notation</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">exclaim_age</span>(<span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="functions-with-conditionals" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="functions-with-conditionals"><span class="header-section-number">3</span> Functions with Conditionals</h2>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Consider the function called <code>find_max()</code>:</p>
+<ol type="a">
+<li>Talk to your neighbor about what this function does and what you expect the output would be.</li>
+<li>Run the function with some values. Is it running how you expect?</li>
+<li>Run the function again, but this time use the function in an arithmetic expression. Is the output what you expect?</li>
+</ol>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "find_max() function" #</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example using `find_max()` in an arithmetic expression #</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we expect the answer to be 20</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">*</span> <span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="adding-error-or-warning-messages" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="adding-error-or-warning-messages"><span class="header-section-number">4</span> Adding Error or Warning Messages</h2>
+<p>Let’s continue to test the <code>find_max()</code> function and make sure it runs appropriately in the following function calls in the following exercises</p>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 4
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Run <code>find_max(4, 2, 5)</code> in the Console.</p>
+<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<p>When you run <code>find_max(4, 2, 5)</code>, the following error message appears:</p>
+<p><code>Error in find_max(4, 2, 5) : unused argument (5)</code></p>
+<p>This is an error message that is automatically created by R since our function only requires two parameters. This is a sufficient error message.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 5
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Run <code>find_max(4, 4)</code> in the Console.</p>
+<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
+<div class="callout callout-style-default callout-hint no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-hint">
+<p>When you run <code>find_max(4, 4)</code>, no message appears and the function is sent to the Console, but no value is either returned or printed.</p>
+<p>To account for this scenario, add an <code>if()</code> statement to the beginning of the function, and then use either <code>warning()</code> or <code>stop()</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error message</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 6
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Run <code>find_max(4, "cow")</code> in the Console.</p>
+<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
+<div class="callout callout-style-default callout-hint no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-hint">
+<p>When you run <code>find_max(4, "cow")</code>, the function runs as is and returns the value “cow”. This is not expected because these two values aren’t necessarily comparable since they’re different data types.</p>
+<p>However, <code>find_max()</code> doesn’t know any better since this scenario hasn’t been defined in the body of the function yet.</p>
+<p>To account for this scenario, add additional logic that <strong>checks the class</strong> of each argument before the function continues to execute.</p>
+<p>The logical operator for OR is <code>|</code>. The not-equal-to operator is <code>!=</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error messages and checks</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `|` is the logical OR operator</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `!=` is the not-equal-to operator</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(value_1) <span class="sc">!=</span> <span class="cn">TRUE</span> <span class="sc">|</span> <span class="fu">is.numeric</span>(value_2) <span class="sc">!=</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># alt expression: is.numeric(value_1) == FALSE | is.numeric(value_2) == FALSE</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Value must be a numeric type."</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="st">"cow"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="st">"cow"</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 7
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Run <code>find_max(4, 4)</code> in the Console. Previously we coded our function to report an error. But perhaps the user would prefer to have the function return the shared value, as an option. Add an argument with a reasonable default value to allow the user to control this behavior. Add additional logic to the function, as needed.</p>
+<div class="callout callout-style-default callout-hint no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-hint">
+<p>Before, if <code>value_1 == value_2</code>, we used <code>stop()</code> to create an error. But with an additional argument, we can adjust how the function responds by testing the value of that argument.</p>
+<p>Often for arguments that turn on or turn off a behavior, a TRUE/FALSE value makes sense so you could easily include the argument in a logical test.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-answer">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error messages and checks</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2, <span class="at">equal_ok =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `|` is the logical OR operator</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `!=` is the not-equal-to operator</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(value_1) <span class="sc">!=</span> <span class="cn">TRUE</span> <span class="sc">|</span> <span class="fu">is.numeric</span>(value_2) <span class="sc">!=</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># alt expression: is.numeric(value_1) == FALSE | is.numeric(value_2) == FALSE</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Value must be a numeric type."</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="do">### the values are equal; is value of the equal_ok argument TRUE?</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(equal_ok) <span class="fu">return</span>(value_1)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="do">### if equal_ok is not TRUE, then report an error</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="at">equal_ok =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Save and apply the Git and GitHub Workflow
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Save your work and use the Git workflow:</p>
+<p><code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p>
 </div>
 </div>
 

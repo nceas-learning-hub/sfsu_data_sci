@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Practice Session: Functions – sfsu_data_sci</title>
+<title>Practice Session: Joins – sfsu_data_sci</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -326,7 +326,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Practice Session: Functions</h1>
+          <h1 class="quarto-secondary-nav-title">Practice Session: Joins</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -338,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title d-none d-lg-block">Practice Session: Functions</h1>
+      <h1 class="title d-none d-lg-block">Practice Session: Joins</h1>
                       </div>
   </div>
     
@@ -384,7 +384,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./s01_r_rstudio_server_setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">RStudio Setup</span></a>
+ <span class="menu-text">1. RStudio Setup</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -453,7 +453,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s09_r_practice_tidy_data_joins.html" class="sidebar-item-text sidebar-link">
+  <a href="./s09_r_practice_tidy_data_joins.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Practice Session: Joins</span></a>
   </div>
 </li>
@@ -595,7 +595,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./s18_r_practice_functions.html" class="sidebar-item-text sidebar-link active">
+  <a href="./s18_r_practice_functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Practice Session: Functions</span></a>
   </div>
 </li>
@@ -662,10 +662,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-ready" id="toc-getting-ready" class="nav-link active" data-scroll-target="#getting-ready"><span class="header-section-number">1</span> Getting Ready</a></li>
-  <li><a href="#r-functions-warm-up" id="toc-r-functions-warm-up" class="nav-link" data-scroll-target="#r-functions-warm-up"><span class="header-section-number">2</span> R Functions Warm Up</a></li>
-  <li><a href="#functions-with-conditionals" id="toc-functions-with-conditionals" class="nav-link" data-scroll-target="#functions-with-conditionals"><span class="header-section-number">3</span> Functions with Conditionals</a></li>
-  <li><a href="#adding-error-or-warning-messages" id="toc-adding-error-or-warning-messages" class="nav-link" data-scroll-target="#adding-error-or-warning-messages"><span class="header-section-number">4</span> Adding Error or Warning Messages</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link active" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#exercise-1-practice-joins" id="toc-exercise-1-practice-joins" class="nav-link" data-scroll-target="#exercise-1-practice-joins">Exercise 1: Practice Joins</a></li>
+  <li><a href="#read-in-the-data" id="toc-read-in-the-data" class="nav-link" data-scroll-target="#read-in-the-data"><span class="header-section-number">1</span> Read in the data</a></li>
+  <li><a href="#get-familiar-with-the-data" id="toc-get-familiar-with-the-data" class="nav-link" data-scroll-target="#get-familiar-with-the-data"><span class="header-section-number">2</span> Get familiar with the data</a></li>
+  <li><a href="#create-a-subset-of-bird_observations" id="toc-create-a-subset-of-bird_observations" class="nav-link" data-scroll-target="#create-a-subset-of-bird_observations"><span class="header-section-number">3</span> Create a subset of <code>bird_observations</code></a></li>
+  <li><a href="#use-left_join-to-merge-birds_subset-with-the-tables-sites" id="toc-use-left_join-to-merge-birds_subset-with-the-tables-sites" class="nav-link" data-scroll-target="#use-left_join-to-merge-birds_subset-with-the-tables-sites"><span class="header-section-number">4</span> Use <code>left_join()</code> to merge <code>birds_subset</code> with the tables <code>sites</code></a></li>
+  <li><a href="#use-full_join-to-merge-birds_subset-and-sites-tables" id="toc-use-full_join-to-merge-birds_subset-and-sites-tables" class="nav-link" data-scroll-target="#use-full_join-to-merge-birds_subset-and-sites-tables"><span class="header-section-number">5</span> Use <code>full_join()</code> to merge <code>birds_subset</code> and <code>sites</code> tables</a></li>
+  <li><a href="#use-inner_join-to-merge-birds_subset-and-taxalist-data" id="toc-use-inner_join-to-merge-birds_subset-and-taxalist-data" class="nav-link" data-scroll-target="#use-inner_join-to-merge-birds_subset-and-taxalist-data"><span class="header-section-number">6</span> Use <code>inner_join()</code> to merge <code>birds_subset</code> and <code>taxalist</code> data</a></li>
+  <li><a href="#exercise-2-practice-wrangling-joining-data" id="toc-exercise-2-practice-wrangling-joining-data" class="nav-link" data-scroll-target="#exercise-2-practice-wrangling-joining-data">Exercise 2: Practice Wrangling &amp; Joining Data</a></li>
+  <li><a href="#wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist" id="toc-wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist" class="nav-link" data-scroll-target="#wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist"><span class="header-section-number">7</span> Wrangle <code>bird_observations</code> data and merge the data with all the other tables (<code>sites</code>, <code>surveys</code>, and <code>taxalist</code>)</a></li>
+  <li><a href="#explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format" id="toc-explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format" class="nav-link" data-scroll-target="#explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format"><span class="header-section-number">8</span> Explore <code>observer</code> data and fix the values within this column so that all values are in the same format</a></li>
+  <li><a href="#bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" id="toc-bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="nav-link" data-scroll-target="#bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Bonus: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</a></li>
   </ul>
 </nav>
     </div>
@@ -688,9 +696,9 @@ Learning Objectives
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Practice creating functions</li>
-<li>Practice testing functions</li>
-<li>Practice adding error messages to functions <!-- -   Practice deploying a package and organizing custom functions within it --></li>
+<li>Practice joining tables together</li>
+<li>Practice identifying primary and foreign keys</li>
+<li>Practice using common cleaning and wrangling functions</li>
 </ul>
 </div>
 </div>
@@ -707,8 +715,12 @@ Acknowledgements
 <p>These exercises are adapted from Allison Horst’s EDS 221: Scientific Programming Essentials Course for the Bren School’s Master of Environmental Data Science program.</p>
 </div>
 </div>
-<section id="getting-ready" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="getting-ready"><span class="header-section-number">1</span> Getting Ready</h2>
+<section id="about-the-data" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="about-the-data">About the data</h2>
+<p>These exercises will be using bird survey data collected from the central Arizona-Phoenix metropolitan area by Arizona State University researchers <span class="citation" data-cites="warren2021">[@warren2021]</span>.</p>
+</section>
+<section id="exercise-1-practice-joins" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercise-1-practice-joins">Exercise 1: Practice Joins</h2>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -723,472 +735,597 @@ Setup
 <li><p>Make sure you’re in the right project (<code>training_{USERNAME}</code>) and use the Git workflow by <code>Pull</code>ing to check for any changes in the remote repository (aka repository on GitHub).</p></li>
 <li><p>Create a new Quarto Document.</p>
 <ol type="a">
-<li>Title it “R Practice: Functions”.</li>
-<li>Save the file and name it “r-practice-functions”.</li>
+<li>Title it “R Practice: Tidy Data and Joins”.</li>
+<li>Save the file and name it “r-practice-tidy-data-joins” in your <code>scripts</code> folder.</li>
 </ol></li>
-<li><p>Organize your Quarto Document and folders in a <strong>meaningful</strong> way. Organization is personal - so this is up to you! Consider the different ways we’ve organized previous files using: headers, bold text, naming code chunks, comments in code chunks. Consider what directories (folders) we’ve used or talked about to organize these files. What is most important is organizing and documenting the file so that your future self (or if you share this file with others!) understands it as well as your current self does right now.</p></li>
-<li><p>Use the Git workflow. After you’ve set up your project and uploaded your data go through the workflow: <code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p></li>
 </ol>
+<p><strong>Note:</strong> Double check that you’re in the right project. Where in RStudio can you check where you are?</p>
+<ol start="2" type="1">
+<li>Load the following libraries at the top of your Quarto Document.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
 </div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
 </div>
-</section>
-<section id="r-functions-warm-up" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="r-functions-warm-up"><span class="header-section-number">2</span> R Functions Warm Up</h2>
-<p>We’re going to start by creating some simple functions. Recall that the anatomy of a function is the same for all functions and each one contains:</p>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at C:/Users/casey/Documents/github/sfsu_data_sci</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate) <span class="co"># for bonus question</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lubridate'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick question: Do you get a message after loading the libraries? What is it telling you? Talk to your neighbor about it or write a note in your qmd.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Obtain data from the EDI Data Portal <a href="https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-cap&amp;identifier=256&amp;revision=10">Ecological and social interactions in urban parks: bird surveys in local parks in the central Arizona-Phoenix metropolitan area</a>. Download the following files:</li>
+</ol>
 <ul>
-<li>a function name,</li>
-<li>arguments that allow a user to specify inputs,</li>
-<li>and body of commands and outputs enclosed within a set of curly braces <code>{}</code></li>
+<li><code>52_pp52_birds_1.csv</code></li>
+<li><code>52_pp52_surveys_1.csv</code></li>
+<li><code>52_pp52_sites_1.csv</code></li>
+<li><code>52_pp52_taxalist_1.csv</code></li>
 </ul>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 1
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Create a function called <code>double_it()</code> that doubles any value input value. Then try out the function, are the values returned what you expect?</p>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create function #</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>double_it <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="dv">2</span> <span class="sc">*</span> x)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># explicit notation</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">double_it</span>(<span class="at">x =</span> <span class="dv">24</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># non explicit notation</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">double_it</span>(<span class="dv">24</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 2
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Write a function called <code>exclaim_age()</code> that returns the statement “I am ___ years old!”, where the blank is entered by the user as argument age.</p>
-<p>Then try out the function, are the values returned what you expect?</p>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write function #</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>exclaim_age <span class="ot">&lt;-</span> <span class="cf">function</span>(age) {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">paste</span>(<span class="st">"I am"</span>, age, <span class="st">"years old!"</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># explicit notation</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">exclaim_age</span>(<span class="at">age =</span> <span class="dv">12</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># non explicit notation</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">exclaim_age</span>(<span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="functions-with-conditionals" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="functions-with-conditionals"><span class="header-section-number">3</span> Functions with Conditionals</h2>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 3
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Consider the function called <code>find_max()</code>:</p>
-<ol type="a">
-<li>Talk to your neighbor about what this function does and what you expect the output would be.</li>
-<li>Run the function with some values. Is it running how you expect?</li>
-<li>Run the function again, but this time use the function in an arithmetic expression. Is the output what you expect?</li>
+<p><strong>Note:</strong> It’s up to you on how you want to download and load the data! You can either use the download links (obtain by right-clicking the “Download” button and select “Copy Link Address” for each data entity) or manually download the data and then upload the files to RStudio server.</p>
+<ol start="4" type="1">
+<li><p>Organize your Quarto Document in a <strong>meaningful</strong> way. Organization is personal - so this is up to you! Consider the different ways we’ve organized previous files using: headers, bold text, naming code chunks, comments in code chunks. What is most important is organizing and documenting the file so that your future self (or if you share this file with others!) understands it as well as your current self does right now.</p></li>
+<li><p>Use the Git workflow. After you’ve set up your project and uploaded your data go through the workflow: <code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p>
+<ul>
+<li><strong>Note:</strong> You also want to <code>Pull</code> when you first open a project.</li>
+</ul></li>
 </ol>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "find_max() function" #</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example using `find_max()` in an arithmetic expression #</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we expect the answer to be 20</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">*</span> <span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 </section>
-<section id="adding-error-or-warning-messages" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="adding-error-or-warning-messages"><span class="header-section-number">4</span> Adding Error or Warning Messages</h2>
-<p>Let’s continue to test the <code>find_max()</code> function and make sure it runs appropriately in the following function calls in the following exercises</p>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 4
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Run <code>find_max(4, 2, 5)</code> in the Console.</p>
-<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<p>When you run <code>find_max(4, 2, 5)</code>, the following error message appears:</p>
-<p><code>Error in find_max(4, 2, 5) : unused argument (5)</code></p>
-<p>This is an error message that is automatically created by R since our function only requires two parameters. This is a sufficient error message.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 5
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Run <code>find_max(4, 4)</code> in the Console.</p>
-<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
-<div class="callout callout-style-default callout-hint no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-hint">
-<p>When you run <code>find_max(4, 4)</code>, no message appears and the function is sent to the Console, but no value is either returned or printed.</p>
-<p>To account for this scenario, add an <code>if()</code> statement to the beginning of the function, and then use either <code>warning()</code> or <code>stop()</code>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error message</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 6
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Run <code>find_max(4, "cow")</code> in the Console.</p>
-<p>What happens? What kind of message appears? Is it sufficient? If not, consider adding a warning or error message using <code>warning()</code> or <code>stop()</code>. Remember, use <code>?function</code> to access the Help page. Add additional logic to the function, as needed.</p>
-<div class="callout callout-style-default callout-hint no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-hint">
-<p>When you run <code>find_max(4, "cow")</code>, the function runs as is and returns the value “cow”. This is not expected because these two values aren’t necessarily comparable since they’re different data types.</p>
-<p>However, <code>find_max()</code> doesn’t know any better since this scenario hasn’t been defined in the body of the function yet.</p>
-<p>To account for this scenario, add additional logic that <strong>checks the class</strong> of each argument before the function continues to execute.</p>
-<p>The logical operator for OR is <code>|</code>. The not-equal-to operator is <code>!=</code>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error messages and checks</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2) {</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `|` is the logical OR operator</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `!=` is the not-equal-to operator</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(value_1) <span class="sc">!=</span> <span class="cn">TRUE</span> <span class="sc">|</span> <span class="fu">is.numeric</span>(value_2) <span class="sc">!=</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># alt expression: is.numeric(value_1) == FALSE | is.numeric(value_2) == FALSE</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Value must be a numeric type."</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="st">"cow"</span>)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="st">"cow"</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 7
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Run <code>find_max(4, 4)</code> in the Console. Previously we coded our function to report an error. But perhaps the user would prefer to have the function return the shared value, as an option. Add an argument with a reasonable default value to allow the user to control this behavior. Add additional logic to the function, as needed.</p>
-<div class="callout callout-style-default callout-hint no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Hint
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-hint">
-<p>Before, if <code>value_1 == value_2</code>, we used <code>stop()</code> to create an error. But with an additional argument, we can adjust how the function responds by testing the value of that argument.</p>
-<p>Often for arguments that turn on or turn off a behavior, a TRUE/FALSE value makes sense so you could easily include the argument in a logical test.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-answer no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-answer">
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># `find_max()` function with error messages and checks</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>find_max <span class="ot">&lt;-</span> <span class="cf">function</span>(value_1, value_2, <span class="at">equal_ok =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `|` is the logical OR operator</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># `!=` is the not-equal-to operator</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(value_1) <span class="sc">!=</span> <span class="cn">TRUE</span> <span class="sc">|</span> <span class="fu">is.numeric</span>(value_2) <span class="sc">!=</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># alt expression: is.numeric(value_1) == FALSE | is.numeric(value_2) == FALSE</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Value must be a numeric type."</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">==</span> value_2) {</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="do">### the values are equal; is value of the equal_ok argument TRUE?</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(equal_ok) <span class="fu">return</span>(value_1)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="do">### if equal_ok is not TRUE, then report an error</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">"Values must be different from each other."</span>)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value_1 <span class="sc">&gt;</span> value_2) {</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_1)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span> (value_2 <span class="sc">&gt;</span> value_1) {</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(value_2)</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># try it out #</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># does the message appear as you expected?</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">find_max</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="at">equal_ok =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="read-in-the-data" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="read-in-the-data"><span class="header-section-number">1</span> Read in the data</h2>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Save and apply the Git and GitHub Workflow
+Question 1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Save your work and use the Git workflow:</p>
-<p><code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p>
+<p>Read in the data and store the data frames as <code>bird_observations</code>, <code>sites</code>, <code>surveys</code>, and <code>taxalist</code> (it should be clear from the raw file names which is which).</p>
 </div>
 </div>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 40425 Columns: 9
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (5): site_id, species_id, distance, notes, direction
+dbl (4): survey_id, bird_count, seen, heard
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 2004 Columns: 12
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (4): site_id, observer, wind_dir, notes
+dbl  (4): survey_id, wind_speed, air_temp, cloud_cover
+lgl  (1): temp_units
+dttm (3): survey_date, time_start, time_end
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 221 Columns: 7
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (5): site_id, park_code, park_district, park_name, point_code
+lgl (2): point_location, park_acreage
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 259 Columns: 3
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (2): species_id, common_name
+dbl (1): asu_itis
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data from the data directory after manually downloading data </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bird_observations <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/52_pp52_birds_1.csv"</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>surveys <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/52_pp52_surveys_1.csv"</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/52_pp52_sites_1.csv"</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>taxalist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/52_pp52_taxalist_1.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="get-familiar-with-the-data" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="get-familiar-with-the-data"><span class="header-section-number">2</span> Get familiar with the data</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 2a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What functions can you use to explore the data you just read in? Think about which functions we’ve been using to explore the structure of the data frame, information about columns, unique observations, etc. Tip: run <code>View(name_of_your_data_frame)</code> <strong>in the console</strong> to see data in a spreadsheet-style viewer.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns dimensions of the dataframe by number of rows and number of cols</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(bird_observations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40425     9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns the top six rows of the dataframe</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bird_observations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  survey_id site_id species_id distance bird_count notes  seen heard direction
+      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    
+1       144 LI-S    HOSP       5-10              4 &lt;NA&gt;      1     1 NE       
+2       145 LI-W    HOSP       20-40            10 &lt;NA&gt;      0     1 E        
+3       145 LI-W    AUWA       20-40             2 &lt;NA&gt;      0     1 SE       
+4       145 LI-W    RODO       FT                2 &lt;NA&gt;      1     0 E        
+5       145 LI-W    GTGR       &gt;40               2 &lt;NA&gt;      0     1 NE       
+6       145 LI-W    WCSP       20-40             3 &lt;NA&gt;      0     1 N        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns all the columns and some info about the cols</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(bird_observations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 40,425
+Columns: 9
+$ survey_id  &lt;dbl&gt; 144, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145, 145,…
+$ site_id    &lt;chr&gt; "LI-S", "LI-W", "LI-W", "LI-W", "LI-W", "LI-W", "LI-W", "LI…
+$ species_id &lt;chr&gt; "HOSP", "HOSP", "AUWA", "RODO", "GTGR", "WCSP", "WCSP", "GT…
+$ distance   &lt;chr&gt; "5-10", "20-40", "20-40", "FT", "&gt;40", "20-40", "20-40", "F…
+$ bird_count &lt;dbl&gt; 4, 10, 2, 2, 2, 3, 3, 2, 2, 3, 1, 10, 3, 1, 6, 6, 20, 12, 2…
+$ notes      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ seen       &lt;dbl&gt; 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0,…
+$ heard      &lt;dbl&gt; 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1,…
+$ direction  &lt;chr&gt; "NE", "E", "SE", "E", "NE", "N", "E", "E", "S", "E", "NE", …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># similar to glimpse but returns some summary statistics about the cols</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bird_observations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   survey_id      site_id           species_id          distance        
+ Min.   :   1   Length:40425       Length:40425       Length:40425      
+ 1st Qu.: 570   Class :character   Class :character   Class :character  
+ Median :1028   Mode  :character   Mode  :character   Mode  :character  
+ Mean   :1043                                                           
+ 3rd Qu.:1550                                                           
+ Max.   :2001                                                           
+                                                                        
+   bird_count          notes                seen            heard       
+ Min.   :   1.000   Length:40425       Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:   1.000   Class :character   1st Qu.:1.0000   1st Qu.:0.0000  
+ Median :   2.000   Mode  :character   Median :1.0000   Median :0.0000  
+ Mean   :   2.938                      Mean   :0.8463   Mean   :0.4967  
+ 3rd Qu.:   3.000                      3rd Qu.:1.0000   3rd Qu.:1.0000  
+ Max.   :1000.000                      Max.   :1.0000   Max.   :1.0000  
+ NA's   :33                                                             
+  direction        
+ Length:40425      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns column names </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(bird_observations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "survey_id"  "site_id"    "species_id" "distance"   "bird_count"
+[6] "notes"      "seen"       "heard"      "direction" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns unique values in a column. In this case we can see all the different bird species IDs</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(bird_observations<span class="sc">$</span>species_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "HOSP" "AUWA" "RODO" "GTGR" "WCSP" "MODO" "NOMO" "EUST" "ANHU" "CBTH"
+ [11] "INDO" "GIWO" "HOFI" "VERD" "GHJU" "ORJU" "KILL" "BCHU" "ABTO" "CACW"
+ [21] "WEME" "CORA" "NOHA" "NOFL" "PYRR" "CANW" "GIFL" "SCJU" "BRCR" "RCKI"
+ [31] "COHU" "BGGN" "SAPH" "AMKE" "HAHA" "HOLA" "LOSH" "AMGO" "BEVI" "OCWA"
+ [41] "BRSP" "COYE" "SPTO" "WBNU" "noca" "BTSP" "ROWR" "PHAI" "RWBL" "FEHA"
+ [51] "COHA" "RTHA" "ATFL" "BHCO" "BRBL" "UNDO" "SOVI" "MALL" "SSHA" "CEDW"
+ [61] "AMRO" "WEBL" "GAQU" "LEWO" "unwa" "CAGO" "LEGO" "broc" "WWDO" "COFL"
+ [71] "SOSP" "NRWS" "GBHE" "WEKI" "NAWA" "LBWO" "BTGN" "YWAR" "UDEJ" "BCNH"
+ [81] "BTYW" "LUWA" "CLSW" "CAKI" "UNTA" "PFLB" "UNHA" "HRSH" "BETH" "UNWO"
+ [91] "RSFL" "WIWA" "WEFL" "unhu" "GRRO" "ECDO" "BROC" "HOOR" "NOCA" "TOWA"
+[101] "YHBL" "WTSW" "UNTH" "RUHU" "WETA" "AMCO" "LENI" "UYRW" "LASP" "RNSA"
+[111] "UNFL" "BLPH" "MGWA" "TUVU" "UNBL" "TRES" "UNSP" "GREG" "SNEG" "UNSW"
+[121] "CHSP" "WAVI"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 2b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What are the primary and foreign keys for the tables <code>bird_observations</code> and <code>taxalist</code>? Recall that a <strong>primary key</strong> is a unique identifier for each observed entity, one per row. And a <strong>foreign key</strong> references to a primary key in another table (linkage).</p>
+<p><strong>Hint:</strong> First identify the primary keys for all the tables, then identify the foreign keys.</p>
+</div>
+</div>
+<details>
+<summary>
+Answer
+</summary>
+<ul>
+<li><code>bird_observations</code>: Primary key is a compound key made up of <code>survey_id</code>, <code>site_id</code>, and <code>species_id</code>. The foreign key is <code>species_id</code>.</li>
+<li><code>taxalist</code>: Primary key is <code>species_id</code> and does not have a foreign key that match the primary key in <code>bird_observations</code>.</li>
+</ul>
+<p>However, we could join <code>bird_observations</code> and <code>taxalist</code> by <code>species_id</code>, but depending on the type of join some values would be droped or <code>NAs</code> would be introduce in the resulting data frame.</p>
+</details>
+</section>
+<section id="create-a-subset-of-bird_observations" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="create-a-subset-of-bird_observations"><span class="header-section-number">3</span> Create a subset of <code>bird_observations</code></h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write code to create a subset of <code>bird_observations</code> called <code>birds_subset</code> that only contains observations for birds with species id <code>BHCO</code> and <code>RWBL</code>, and from sites with site ID <code>LI-W</code> and <code>NU-C</code>.</p>
+<p><strong>Hint:</strong> What function do you use to subset data by rows?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>birds_subset <span class="ot">&lt;-</span> bird_observations <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"BHCO"</span>, <span class="st">"RWBL"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(site_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"LI-W"</span>, <span class="st">"NU-C"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-left_join-to-merge-birds_subset-with-the-tables-sites" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="use-left_join-to-merge-birds_subset-with-the-tables-sites"><span class="header-section-number">4</span> Use <code>left_join()</code> to merge <code>birds_subset</code> with the tables <code>sites</code></h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 4a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>First, answer: what do you expect the outcome data frame when doing <code>left_join()</code> between <code>birds_subset</code> and <code>sites</code> to look like? What observations do you expect in the outcome data frame.</p>
+<p>You can use paper to draw if that helps you or talk to your neighbor. Write down the steps and expected outcome in your Quarto Document.</p>
+</div>
+</div>
+<details>
+<summary>
+Answer
+</summary>
+<p>I expect to see all columns and all observations from <code>birds_subset</code> and from <code>sites</code>, I expect to see the columns <code>park_code</code>, <code>park_district</code>, <code>park-name</code>, <code>point_code</code>, <code>point_location</code> and <code>park_acreage</code> and only observations for <code>NU-C</code> and <code>LI-W</code> because those are the only <code>site_id</code> values in <code>birds_subset</code> and in a left join only the observations matching the left table (in this case, <code>birds_subset</code> is the left table) will be kept.</p>
+</details>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Qustion 4b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use a left join to update <code>birds_subset</code> so that it also includes <code>sites</code> information. For each join, include an explicit argument saying which key you are joining by (even if it will just assume the correct one for you). Store the updated data frame as <code>birds_left</code>. Make sure to look at the output - is what it contains consistent with what you expected it to contain?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax using pipe</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>birds_left <span class="ot">&lt;-</span> birds_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> sites, <span class="at">by =</span> <span class="st">"site_id"</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># don't see x = birds_subset here because piping in birds_subset means it automatically assumes birds_subset as x.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax without pipe</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>birds_left <span class="ot">&lt;-</span> <span class="fu">left_join</span>(<span class="at">x =</span> birds_subset, <span class="at">y =</span> sites, <span class="at">by =</span> <span class="st">"site_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-full_join-to-merge-birds_subset-and-sites-tables" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="use-full_join-to-merge-birds_subset-and-sites-tables"><span class="header-section-number">5</span> Use <code>full_join()</code> to merge <code>birds_subset</code> and <code>sites</code> tables</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 5a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>First, answer: what do you expect a <code>full_join()</code> between <code>birds_subset</code> and <code>sites</code> to contain? Write this in your Quarto Document or tell a neighbor.</p>
+</div>
+</div>
+<details>
+<summary>
+Answer
+</summary>
+<p>I expect to see all columns and all observations from <code>birds_subset</code> and all columns and all observations from <code>sites</code> to be merged into one data frame because in a full join everything is kept. <code>NA</code> values could be introduced.</p>
+</details>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Questions 5b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write code to <code>full_join()</code> the <code>birds_subset</code> and <code>sites</code> data into a new object called <code>birds_full</code>. Explicitly include the variable you’re joining by. Look at the output. Is it what you expected?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax using pipe</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>birds_full <span class="ot">&lt;-</span> birds_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="at">y =</span> sites, <span class="at">by =</span> <span class="st">"site_id"</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax without pipe</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>birds_full <span class="ot">&lt;-</span> <span class="fu">full_join</span>(<span class="at">x =</span> birds_subset, <span class="at">y =</span> sites, <span class="at">by =</span> <span class="st">"site_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-inner_join-to-merge-birds_subset-and-taxalist-data" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="use-inner_join-to-merge-birds_subset-and-taxalist-data"><span class="header-section-number">6</span> Use <code>inner_join()</code> to merge <code>birds_subset</code> and <code>taxalist</code> data</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 6a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>First, answer: what do you expect an <code>inner_join()</code> between <code>birds_subset</code> and <code>taxalist</code> to contain? Write this in your Quarto Document or tell a neighbor.</p>
+</div>
+</div>
+<details>
+<summary>
+Answer
+</summary>
+<p>I expect to only have data merge together based on <code>species_id</code> and since there is only <code>BHCO</code> and <code>RWBL</code> in <code>birds_subset</code> then I will only retain data related to those two species. I will also expect to see the columns from <code>taxalist</code>: <code>common_name</code> and <code>asu_itis</code> to be merged into the joined table.</p>
+</details>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 6b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write code to <code>inner_join()</code> the <code>birds_subset</code> and <code>taxalist</code>, called <code>birds_inner.</code> Include an argument for what variable you’ll be joining by. Make sure you check the output.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax using pipe</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>birds_inner <span class="ot">&lt;-</span> birds_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="at">y =</span> taxalist, <span class="at">by =</span> <span class="st">"species_id"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax without pipe</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>birds_inner <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(<span class="at">x =</span> birds_subset, <span class="at">y =</span> taxalist, <span class="at">by =</span> <span class="st">"species_id"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 6c
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What would you get if instead of <code>inner_join()</code> you’d used <code>left_join()</code> for this example? Write code for the left join and check.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax using pipe</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>birds_inner_left <span class="ot">&lt;-</span> birds_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="at">y =</span> taxalist, <span class="at">by =</span> <span class="st">"species_id"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># syntax without pipe</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>birds_inner_left <span class="ot">&lt;-</span> <span class="fu">left_join</span>(<span class="at">x =</span> birds_subset, <span class="at">y =</span> taxalist, <span class="at">by =</span> <span class="st">"species_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 6d
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Why does that make sense for this scenario? In what case would you expect the outcome to differ from an <code>inner_join()</code>? Write this in your Quarto Document or tell a neighbor.</p>
+</div>
+</div>
+<details>
+<summary>
+Answer
+</summary>
+<p>You have the same resulting data set regardless of using <code>inner_join()</code> or <code>left_join()</code> to merge <code>bird_subset</code> and <code>taxalist</code>. The reasons for this are:</p>
+<ul>
+<li><p><code>inner_join()</code> keeps only the rows (observations) that have a matching key across both data sets - here, <code>species_id</code> is our key, and the only rows that match across both data sets are those where <code>species_id</code> equals <code>BHCO</code> or <code>RWBL</code></p></li>
+<li><p><code>left_join()</code> keeps all rows from the left table (in our case, the left table is <code>birds_subset</code>) and merges on data with matching keys (<code>species_id</code>) on the right (here, the right table is <code>taxalist</code>). Because our left data set (<code>birds_subset</code>) only contains <code>species_id</code>s equal to <code>BHCO</code> or <code>RWBL</code>, only rows with those species will be kept from the right data set (<code>taxalist</code>)</p></li>
+</ul>
+<p>You’d expect the outcome to differ from an <code>inner_join()</code> if <code>birds_subset</code> contained an observation with a <code>species_id</code> that was <em>not</em> found in <code>taxalist</code>. If there was an observation of a <code>species_id</code> in <code>birds_subset</code> that was <em>not</em> in <code>taxalist</code>, then that observation would be kept, and <code>NA</code>s would be assigned to the <code>common_name</code> and <code>asu_itis</code> columns for that observations</p>
+</details>
+</section>
+<section id="exercise-2-practice-wrangling-joining-data" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercise-2-practice-wrangling-joining-data">Exercise 2: Practice Wrangling &amp; Joining Data</h2>
+</section>
+<section id="wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist"><span class="header-section-number">7</span> Wrangle <code>bird_observations</code> data and merge the data with all the other tables (<code>sites</code>, <code>surveys</code>, and <code>taxalist</code>)</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 7a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Starting with your object <code>bird_observations</code>, rename the <code>notes</code> column to <code>bird_obs_notes</code> (so this doesn’t conflict with <code>notes</code> in the <code>surveys</code> table).</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bird_observations <span class="ot">&lt;-</span> bird_observations <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">bird_obs_notes =</span> notes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 7b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Create a subset that contains all observations in the <code>birds_observations</code> data frame,</li>
+<li>then join the <code>taxalist</code>, <code>sites</code> and <code>surveys</code> tables to it,</li>
+<li>and finally limit to only columns <code>survey_date</code>, <code>common_name</code>, <code>park_name</code>, <code>bird_count</code>, and <code>observer</code>.</li>
+</ul>
+<p><strong>Hint:</strong> What function do you use to subset data by columns?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>bird_obs_subset <span class="ot">&lt;-</span> bird_observations <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="at">y =</span> taxalist, <span class="at">by =</span> <span class="st">"species_id"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="at">y =</span> sites, <span class="at">by =</span> <span class="st">"site_id"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(<span class="at">y =</span> surveys, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"site_id"</span>, <span class="st">"survey_id"</span>)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(survey_date, common_name, park_name, bird_count, observer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format"><span class="header-section-number">8</span> Explore <code>observer</code> data and fix the values within this column so that all values are in the same format</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 8a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Continuing with <code>bird_obs_subset</code>, first use <code>unique()</code> to see the different unique values in the column <code>observer</code>. How many observers are there? Which value is unlike the others?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(bird_obs_subset<span class="sc">$</span>observer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "B. Rambo"   "J. Lemmer"  "D. Stuart"  "C. Putnam"  "S. Lerman" 
+[6] "Josh Burns" NA          </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question 8b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Replace “Josh Burns” with a format that matches the other observer names. Then use <code>unique()</code> again to check your work.</p>
+<p><strong>Hint:</strong> What function do you use when you are making a change to an entire column?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>bird_obs_subset <span class="ot">&lt;-</span> bird_obs_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">observer =</span> <span class="fu">if_else</span>(<span class="at">condition =</span> observer <span class="sc">==</span> <span class="st">"Josh Burns"</span>, </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">true =</span> <span class="st">"J. Burns"</span>, </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">false =</span> observer))</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(bird_obs_subset<span class="sc">$</span>observer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "B. Rambo"  "J. Lemmer" "D. Stuart" "C. Putnam" "S. Lerman" "J. Burns" 
+[7] NA         </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Save your work and dont’s forget the Git and GitHub Workflow
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>After you’ve completed the exercises or reached a significant stopping point, use the workflow: <code>Stage (add) -&gt; Commit -&gt; Pull -&gt; Push</code></p>
+</div>
+</div>
+</section>
+<section id="bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Bonus: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</h2>
+<p><strong>Hint:</strong> How do you learn about a new function or package?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bonus Question(s)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Use <code>lubridate::month()</code> to add a new column to <code>bird_obs_subset</code> called <code>survey_month</code>, containing only the month number. Then, convert the month number to a factor (again within <code>mutate()</code>).</p></li>
+<li><p>Use <code>dplyr::relocate()</code> to move the new <code>survey_month</code> column to immediately after the <code>survey_date</code> column. You can do this in a separate code chunk, or pipe straight into it from your existing code.</p></li>
+<li><p>Filter to only include parks <code>Lindo</code>, <code>Orme</code>, <code>Palomino</code>, and <code>Sonrisa</code>.</p></li>
+<li><p>Find the total number of birds observed by park and month (<strong>Hint:</strong> You can use <code>group_by()</code> and <code>summarize()</code>).</p></li>
+</ol>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>bird_obs_subset <span class="ot">&lt;-</span> bird_obs_subset <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">survey_month =</span> lubridate<span class="sc">::</span><span class="fu">month</span>(survey_date)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">survey_month =</span> <span class="fu">as.factor</span>(survey_month)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(survey_month, <span class="at">.after =</span> survey_date) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(park_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Lindo"</span>, <span class="st">"Orme"</span>, <span class="st">"Palomino"</span>, <span class="st">"Sonrisa"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(park_name, survey_month) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot_bird_count_month =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'park_name'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+</div>
+<p>Take a look at your final data frame. Does it give you the outcome you expected? Is it informative? How would you improve this wrangling process?</p>
 
 
 </section>
