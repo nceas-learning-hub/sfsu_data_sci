@@ -44,7 +44,7 @@ A Terminal tab should now be open right next to the Console tab.
 Most of our Git operations will be done in RStudio, but there are some situations where you must work in the Terminal and use command line. It may be daunting to code in the Terminal, but as your comfort increases over time, you might find you prefer it. Either way, it's beneficial to learn *enough* command line and to feel comfortable in the Terminal.
 :::
 
-## But first, join the GitHub Classroom
+## You'll need to join the GitHub Classroom
 
 Click this link and accept the assignment to create your private repo (repository):
 
@@ -141,7 +141,7 @@ When you add your username and email to the global options you **must** use the 
 ::: callout-note
 ## Why set the default branch name to `main`?
 
-Previously, the default branch name was `master` and this terminology for Git branches invokes motivates us to update our default branch to `main` instead.
+Previously, the default branch name was `master` and this terminology for Git branches invokes slavery, which motivates us to update our default branch to `main` instead.
 :::
 
 ## GitHub Authentication
@@ -165,15 +165,7 @@ We will be using a **Personal Access Token (PAT)** in this course. For better se
 If you see `<unset>` instead of `<discovered>` means your PAT is not correctly set. You need to troubleshoot.
 :::
 
-Congrats! Now you've setup your authentication you should be able to work with GitHub in RStudio no
-
-## To join the GitHub Classroom, use this link:
-
-Click this link and accept the assignment to create your private repo (repository):
-
-<https://classroom.github.com/a/PFNu-Lt4>
-
-Then copy the repo URL for cloning into RStudio.
+Congrats! Now you've setup your authentication you should be able to work with GitHub in RStudio.
 
 ## Clone your GitHub Classroom repo into RStudio
 
@@ -235,11 +227,35 @@ To submit an assignment, you'll use GitHub and this workflow:
 
 -   Confirm the GitHub Action render check passes (green)
 
-That's it! RStudio's Git integration makes this more straightforward once you get the hang of it. We'll discuss what these steps really mean next week. Also we’ll use merge (not rebase) as the default strategy.
+That's it! RStudio's Git integration makes this more straightforward once you get the hang of it. We'll discuss what these steps really mean next week. 
+
+::: callout-note
+## Try it out!
+
+-   Create a branch: a00
+
+-   Create assignment
+
+    -   For this test, make a Quarto document named assignments/a00.qmd
+    
+    -   In RStudio, File → New File → Quarto Document (or R Markdown)
+    
+-   Commit your changes with a meaningful message, like "assignment submission test"
+
+-   Push branch to GitHub
+
+-   Open a Pull Request (PR) into main branch
+
+-   Confirm the GitHub Action render check passes (green)
+
+:::
+
+
+One final technical note: we’ll use merge (not rebase) as the default strategy.
 
 Above we configured our global options for all the repositories you create in your server session to use `pull.rebase = "false"` as the strategy to integrate changes from two branches. With this we are saying to [merge](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) changes (as opposed to rebasing).
 
-It is important to highlight that this configuration can be repo specific. This mean, you can configure how you want git to reconciling two branches at a repository level and not "for all repositories". Allowing you to control on how git weaves things in when collaborating with others.
+It is important to highlight that this configuration can be repo specific. This means, you can configure how you want git to reconciling two branches at a repository level and not "for all repositories". Allowing you to control on how git weaves things in when collaborating with others.
 
 If you don't define `pull.rebase = "false"` when setting the global configurations, you will have to define this for each repository you create. You will likely see the following message after you pull, meaning you have not define how to reconciling two branches in your repository.
 
