@@ -90,6 +90,7 @@ There are two types of paths in computing: **absolute paths** and **relative pat
 
 ::: callout-tip
 ## Console Try It
+
 In your Rstudio console, print your current working directory
 
 `getwd()`
