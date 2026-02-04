@@ -664,9 +664,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#set-up-global-options-in-git" id="toc-set-up-global-options-in-git" class="nav-link active" data-scroll-target="#set-up-global-options-in-git"><span class="header-section-number">1</span> Set up global options in Git</a></li>
   <li><a href="#youll-need-to-join-the-github-classroom" id="toc-youll-need-to-join-the-github-classroom" class="nav-link" data-scroll-target="#youll-need-to-join-the-github-classroom"><span class="header-section-number">2</span> You’ll need to join the GitHub Classroom</a></li>
-  <li><a href="#github-authentication" id="toc-github-authentication" class="nav-link" data-scroll-target="#github-authentication"><span class="header-section-number">3</span> GitHub Authentication</a></li>
-  <li><a href="#clone-your-github-classroom-repo-into-rstudio" id="toc-clone-your-github-classroom-repo-into-rstudio" class="nav-link" data-scroll-target="#clone-your-github-classroom-repo-into-rstudio"><span class="header-section-number">4</span> Clone your GitHub Classroom repo into RStudio</a></li>
-  <li><a href="#weekly-assignment-workflow-branch-commit-pull-request" id="toc-weekly-assignment-workflow-branch-commit-pull-request" class="nav-link" data-scroll-target="#weekly-assignment-workflow-branch-commit-pull-request"><span class="header-section-number">5</span> Weekly assignment workflow: Branch → Commit → Pull Request</a></li>
+  <li><a href="#put-in-your-github-username-into-rstudio-and-your-computer" id="toc-put-in-your-github-username-into-rstudio-and-your-computer" class="nav-link" data-scroll-target="#put-in-your-github-username-into-rstudio-and-your-computer"><span class="header-section-number">3</span> Put in your GitHub username into RStudio (and your computer)</a></li>
+  <li><a href="#github-authentication" id="toc-github-authentication" class="nav-link" data-scroll-target="#github-authentication"><span class="header-section-number">4</span> GitHub Authentication</a></li>
+  <li><a href="#clone-your-github-classroom-repo-into-rstudio" id="toc-clone-your-github-classroom-repo-into-rstudio" class="nav-link" data-scroll-target="#clone-your-github-classroom-repo-into-rstudio"><span class="header-section-number">5</span> Clone your GitHub Classroom repo into RStudio</a></li>
+  <li><a href="#weekly-assignment-workflow-branch-commit-pull-request" id="toc-weekly-assignment-workflow-branch-commit-pull-request" class="nav-link" data-scroll-target="#weekly-assignment-workflow-branch-commit-pull-request"><span class="header-section-number">6</span> Weekly assignment workflow: Branch → Commit → Pull Request</a></li>
   </ul>
 </nav>
     </div>
@@ -749,7 +750,13 @@ Don’t be afraid to dip your toes in the Terminal
 <h2 data-number="2" class="anchored" data-anchor-id="youll-need-to-join-the-github-classroom"><span class="header-section-number">2</span> You’ll need to join the GitHub Classroom</h2>
 <p>Click this link and accept the assignment to create your private repo (repository):</p>
 <p><a href="https://classroom.github.com/a/PFNu-Lt4" class="uri">https://classroom.github.com/a/PFNu-Lt4</a></p>
-<p>Then copy the repo URL for cloning into RStudio.</p>
+<p>Make sure you accept the invite from your email. If this link is not working, your instructor can fix it for you; go ask for help.</p>
+<p><br>
+Then copy the repo URL for cloning into RStudio; use the URL for <em>your</em> github classroom, which should look something like:</p>
+<p>https://github.com/SFSUdatasci/import-template-nadelstein</p>
+</section>
+<section id="put-in-your-github-username-into-rstudio-and-your-computer" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="put-in-your-github-username-into-rstudio-and-your-computer"><span class="header-section-number">3</span> Put in your GitHub username into RStudio (and your computer)</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Console</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Terminal</a></li></ul>
 <div class="tab-content">
@@ -831,8 +838,8 @@ Why set the default branch name to <code>main</code>?
 </div>
 </div>
 </section>
-<section id="github-authentication" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="github-authentication"><span class="header-section-number">3</span> GitHub Authentication</h2>
+<section id="github-authentication" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="github-authentication"><span class="header-section-number">4</span> GitHub Authentication</h2>
 <p>GitHub recently deprecated password authentication for accessing repositories, so we need to set up a secure way to authenticate.</p>
 <p>The book <a href="https://happygitwithr.com/index.html">Happy Git and GitHub for the useR</a> has a wealth of information related to working with Git in R, and these instructions are based off of <a href="https://happygitwithr.com/https-pat.html">Chapter 9 Personal access token for HTTPS</a>.</p>
 <p>We will be using a <strong>Personal Access Token (PAT)</strong> in this course. For better security and long term use, we recommend taking the extra steps to set up SSH keys (check out <a href="https://happygitwithr.com/ssh-keys.html">Chapter 10 Set up Keys for SSH</a>).</p>
@@ -859,41 +866,43 @@ Setting up your PAT
 </div>
 <p>Congrats! Now you’ve setup your authentication you should be able to work with GitHub in RStudio.</p>
 </section>
-<section id="clone-your-github-classroom-repo-into-rstudio" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="clone-your-github-classroom-repo-into-rstudio"><span class="header-section-number">4</span> Clone your GitHub Classroom repo into RStudio</h2>
+<section id="clone-your-github-classroom-repo-into-rstudio" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="clone-your-github-classroom-repo-into-rstudio"><span class="header-section-number">5</span> Clone your GitHub Classroom repo into RStudio</h2>
 <p>After authentication:</p>
 <ol start="0" type="1">
-<li>In GitHub, open your repo and copy the HTTPS URL (maybe it’s already in your clipboard).</li>
-<li><strong>In RStudio</strong>: File → New Project → Version Control → Git</li>
-<li>Paste URL for the GitHub Classroom repo</li>
-<li>Choose the directory (folder) where to save on your computer</li>
-<li>Click “Create project”</li>
+<li><p>In GitHub, open your repo and copy the HTTPS URL (maybe it’s already in your clipboard).</p>
+<p>It should look something like: https://github.com/SFSUdatasci/import-template-nadelstein</p></li>
+<li><p><strong>In RStudio</strong>: File → New Project → Version Control → Git</p></li>
+<li><p>Paste URL for the GitHub Classroom repo</p></li>
+<li><p>Choose the directory (folder) where to save on your computer</p></li>
+<li><p>Click “Create project”</p></li>
+<li><p>In the Files tab (left panels), click on index.qmd</p></li>
+<li><p>Click Render, on the navigation bar above the index.qmd file, which confirms local setup if an html opens in a browser.</p></li>
 </ol>
-<p>Render once (quarto render or Render button) to confirm local setup.</p>
 </section>
-<section id="weekly-assignment-workflow-branch-commit-pull-request" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="weekly-assignment-workflow-branch-commit-pull-request"><span class="header-section-number">5</span> Weekly assignment workflow: Branch → Commit → Pull Request</h2>
+<section id="weekly-assignment-workflow-branch-commit-pull-request" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="weekly-assignment-workflow-branch-commit-pull-request"><span class="header-section-number">6</span> Weekly assignment workflow: Branch → Commit → Pull Request</h2>
 <p>To submit an assignment, you’ll use GitHub and this workflow:</p>
 <ul>
-<li><p>Create a branch: a01, a02, etc.</p>
+<li><p>Create a branch: a00, a01, a02, etc. (Today make a00 as our test!)</p>
 <ul>
 <li><p>In RStudio, look for the Git tab (usually upper right pane)</p></li>
 <li><p>Click the purple branch icon with two branches</p></li>
-<li><p>Name it (for example a01)</p></li>
+<li><p>Name it (for example a01 next time)</p></li>
 <li><p>Make sure the “Sync branch with remote” is checked</p></li>
 <li><p>Click “Create”</p></li>
 </ul></li>
 <li><p>Create assignment</p>
 <ul>
-<li><p>If first assigment, edit assignments/a01.qmd</p></li>
+<li><p>If today’s test assignment, or the first graded assignment, open assignments/a00.qmd or assignments/a01.qmd</p></li>
 <li><p>Else, in RStudio, File → New File → Quarto Document (or R Markdown)</p></li>
-<li><p>Save is as a0*.qmd in the assignments/ folder</p></li>
+<li><p>Save it as a0*.qmd in the assignments/ folder</p></li>
 </ul></li>
 <li><p>Commit your changes with a meaningful message</p>
 <ul>
-<li><p>In the Git tab, check the box next to assignments/a0*.qmd</p></li>
+<li><p>In the Git tab, check the box next to assignments/a0*.qmd [some people are having trouble with this and can only see the a00.html file, so just submit that for now]</p></li>
 <li><p>Click “Commit”</p></li>
-<li><p>Write a commit message (e.g.&nbsp;“Add assignnmnt a03”)</p></li>
+<li><p>Write a commit message (e.g.&nbsp;“Add assignnment a00”)</p></li>
 <li><p>Click “Commit”</p></li>
 </ul></li>
 <li><p>Push branch to GitHub</p>
@@ -906,7 +915,10 @@ Setting up your PAT
 <li><p>You’ll see a banner about your recent push with a “Compare &amp; pull request” button</p></li>
 <li><p>Click the button to create the pull request</p></li>
 </ul></li>
-<li><p>Confirm the GitHub Action render check passes (green)</p></li>
+<li><p>Confirm the GitHub Action render check passes (green)</p>
+<ul>
+<li>You might see the GitHub printing lots of lines of code, as its installing R. We are eventually going to fix that…</li>
+</ul></li>
 </ul>
 <p>That’s it! RStudio’s Git integration makes this more straightforward once you get the hang of it. We’ll discuss what these steps really mean next week.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -915,20 +927,20 @@ Setting up your PAT
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Try it out!
+Try it out (TL-DR)!
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <ul>
 <li><p>Create a branch: a00</p></li>
-<li><p>Create assignment</p>
+<li><p>Edit assignment</p>
 <ul>
-<li><p>For this test, make a Quarto document named assignments/a00.qmd</p></li>
-<li><p>In RStudio, File → New File → Quarto Document (or R Markdown)</p></li>
+<li><p>For this test, edit the Quarto document named assignments/a00.qmd</p></li>
+<li><p>Put in some new text or try out some R code</p></li>
 </ul></li>
 <li><p>Commit your changes with a meaningful message, like “assignment submission test”</p></li>
 <li><p>Push branch to GitHub</p></li>
-<li><p>Open a Pull Request (PR) into main branch</p></li>
+<li><p>Open a Pull Request (PR) into main branch (from GitHub browser)</p></li>
 <li><p>Confirm the GitHub Action render check passes (green)</p></li>
 </ul>
 </div>

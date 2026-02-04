@@ -50,9 +50,26 @@ Click this link and accept the assignment to create your private repo (repositor
 
 <https://classroom.github.com/a/PFNu-Lt4>
 
-Then copy the repo URL for cloning into RStudio.
+Make sure you accept the invite from your email. If this link is not working, your instructor can fix it for you; go ask for help.
+
+\
+Then copy the repo URL for cloning into RStudio; use the URL for *your* github classroom, which should look something like:
+
+https://github.com/SFSUdatasci/import-template-nadelstein
+
+## Put in your GitHub username into RStudio (and your computer)
 
 ::: panel-tabset
+Note: you need git on your computer for the following commands to work. Also, Rstudio needs to know where git is located.
+
+In RStudio do Tools –\> Global Options –\> Git/SVN
+
+"Git executable" should not be blank, but you can point to it if you know where it lives (search your computer).
+
+If you can't find git on your computer, install it!
+
+https://git-scm.com/install
+
 #### Console
 
 **Step 1:** set the user's global user.name and user.email and define integrate changes from one branch into another branch for all repositories.
@@ -172,24 +189,32 @@ Congrats! Now you've setup your authentication you should be able to work with G
 After authentication:
 
 0.  In GitHub, open your repo and copy the HTTPS URL (maybe it's already in your clipboard).
+
+    It should look something like: https://github.com/SFSUdatasci/import-template-nadelstein
+
 1.  **In RStudio**: File → New Project → Version Control → Git
+
 2.  Paste URL for the GitHub Classroom repo
+
 3.  Choose the directory (folder) where to save on your computer
+
 4.  Click "Create project"
 
-Render once (quarto render or Render button) to confirm local setup.
+5.  In the Files tab (left panels), click on index.qmd
+
+6.  Click Render, on the navigation bar above the index.qmd file, which confirms local setup if an html opens in a browser.
 
 ## Weekly assignment workflow: Branch → Commit → Pull Request
 
 To submit an assignment, you'll use GitHub and this workflow:
 
--   Create a branch: a01, a02, etc.
+-   Create a branch: a00, a01, a02, etc. (Today make a00 as our test!)
 
     -   In RStudio, look for the Git tab (usually upper right pane)
 
     -   Click the purple branch icon with two branches
 
-    -   Name it (for example a01)
+    -   Name it (for example a01 next time)
 
     -   Make sure the "Sync branch with remote" is checked
 
@@ -197,19 +222,19 @@ To submit an assignment, you'll use GitHub and this workflow:
 
 -   Create assignment
 
-    -   If first assigment, edit assignments/a01.qmd
+    -   If today's test assignment, or the first graded assignment, open assignments/a00.qmd or assignments/a01.qmd
 
     -   Else, in RStudio, File → New File → Quarto Document (or R Markdown)
 
-    -   Save is as a0\*.qmd in the assignments/ folder
+    -   Save it as a0\*.qmd in the assignments/ folder
 
 -   Commit your changes with a meaningful message
 
-    -   In the Git tab, check the box next to assignments/a0\*.qmd
+    -   In the Git tab, check the box next to assignments/a0\*.qmd \[some people are having trouble with this and can only see the a00.html file, so just submit that for now\]
 
     -   Click "Commit"
 
-    -   Write a commit message (e.g. "Add assignnmnt a03")
+    -   Write a commit message (e.g. "Add assignnment a00")
 
     -   Click "Commit"
 
@@ -227,29 +252,29 @@ To submit an assignment, you'll use GitHub and this workflow:
 
 -   Confirm the GitHub Action render check passes (green)
 
-That's it! RStudio's Git integration makes this more straightforward once you get the hang of it. We'll discuss what these steps really mean next week. 
+    -   You might see the GitHub printing lots of lines of code, as its installing R. We are eventually going to fix that...
+
+That's it! RStudio's Git integration makes this more straightforward once you get the hang of it. We'll discuss what these steps really mean next week.
 
 ::: callout-note
-## Try it out!
+## Try it out (TL-DR)!
 
 -   Create a branch: a00
 
--   Create assignment
+-   Edit assignment
 
-    -   For this test, make a Quarto document named assignments/a00.qmd
-    
-    -   In RStudio, File → New File → Quarto Document (or R Markdown)
-    
+    -   For this test, edit the Quarto document named assignments/a00.qmd
+
+    -   Put in some new text or try out some R code
+
 -   Commit your changes with a meaningful message, like "assignment submission test"
 
 -   Push branch to GitHub
 
--   Open a Pull Request (PR) into main branch
+-   Open a Pull Request (PR) into main branch (from GitHub browser)
 
 -   Confirm the GitHub Action render check passes (green)
-
 :::
-
 
 One final technical note: we’ll use merge (not rebase) as the default strategy.
 
