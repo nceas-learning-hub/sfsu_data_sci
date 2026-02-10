@@ -879,6 +879,25 @@ Setting up your PAT
 <li><p>In the Files tab (left panels), click on index.qmd</p></li>
 <li><p>Click Render, on the navigation bar above the index.qmd file, which confirms local setup if an html opens in a browser.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fix a problem with the code!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When we set up the GitHub Classroom, we had an error, which is causing GitHub to try to render your qmd files. We need to fix it.</p>
+<p>In RStudio, open the file from your repository .github/workflows/render-quarto.yml</p>
+<p>Under line three “on:”, remove lines 4 and 5 that say:</p>
+<p>pull_request:</p>
+<p>branches: [“main”]</p>
+<p>replace line 4 with</p>
+<p>workflow_dispatch:</p>
+</div>
+</div>
 </section>
 <section id="weekly-assignment-workflow-branch-commit-pull-request" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="weekly-assignment-workflow-branch-commit-pull-request"><span class="header-section-number">6</span> Weekly assignment workflow: Branch → Commit → Pull Request</h2>

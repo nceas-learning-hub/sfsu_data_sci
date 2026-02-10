@@ -204,6 +204,24 @@ After authentication:
 
 6.  Click Render, on the navigation bar above the index.qmd file, which confirms local setup if an html opens in a browser.
 
+::: callout-tip
+## Fix a problem with the code!
+
+When we set up the GitHub Classroom, we had an error, which is causing GitHub to try to render your qmd files. We need to fix it.
+
+In RStudio, open the file from your repository .github/workflows/render-quarto.yml
+
+Under line three "on:", remove lines 4 and 5 that say:
+
+pull_request:
+
+branches: \["main"\]
+
+replace line 4 with
+
+workflow_dispatch:
+:::
+
 ## Weekly assignment workflow: Branch → Commit → Pull Request
 
 To submit an assignment, you'll use GitHub and this workflow:
