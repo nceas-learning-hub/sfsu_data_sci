@@ -50,11 +50,10 @@ website:
       - section: "Week 1"
         contents:
         - s01_r_rstudio_server_setup.qmd
-        - s02_git_setup.qmd
         - s21_r_git_install_guide.qmd
       - section: "Week 2"
         contents:
-        - s03_r_programming_introduction.qmd
+        - s02_git_setup.qmd
       - section: "Week 3"
         contents:
         - s04_r_quarto_literate_analysis.qmd
@@ -62,6 +61,7 @@ website:
         contents:
         - s05_activity_reproducibility_lego.qmd
         - s06_github_introduction.qmd
+        - s03_r_programming_introduction.qmd
       - section: "Week 5"
         contents:
         - s07_lecture_tidy_data.qmd

@@ -7,16 +7,16 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.32">
-
-  <title>sfsu_data_sci – slides3_data_structures</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
-  <style>
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+<title>sfsu_data_sci – slides3_data_structures</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -95,14 +95,14 @@
     code span.vs { color: #008000; } /* VerbatimString */
     code span.wa { color: #696969; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-be78b24e7693d0ad0daee464e272bf0e.css">
-  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-be78b24e7693d0ad0daee464e272bf0e.css">
+<link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+<style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
       overflow: auto;
@@ -195,30 +195,27 @@
     <div class="slides">
 
 
-<section id="title-slide" class="slide level2 center" data-menu-title="Title Slide">
-<h2></h2>
+<section id="title-slide" class="slide level2 center" data-menu-title="Title Slide"><h2></h2>
 <p><span class="custom-title">Data types &amp; structures in R</span></p>
 <p><span class="custom-subtitle">An introduction to programming in R</span></p>
 <hr class="hr-red">
 <p><span class="custom-subtitle2"><strong>NCEAS Learning Hub</strong></span></p>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Common data types in R</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Common data types in R</span></p>
 <div class="body-text">
 <p>A single element of data in R typically falls into one of these types, or “classes” (there are others, but they are beyond the scope of this course):</p>
 <ul>
-<li><code>logical</code> (sometimes called <code>boolean</code>): Data take on the value of either <code>TRUE</code> or <code>FALSE</code>.</li>
-<li><code>integer</code>: Data are whole numbers (those numbers without a decimal point), e.g., <code>1</code>, <code>2</code>, <code>-999</code>. To explicitly create an integer data type, use the suffix <code>L</code> (e.g.&nbsp;<code>x &lt;- 2L</code>).</li>
-<li><code>numeric</code> (also called <code>double</code>): Data are numbers that contain a decimal, e.g., <code>0.001</code>, <code>1.0</code>, <code>-273.16</code>.</li>
-<li><code>character</code>: Data are text values, or “strings”, e.g., <code>"cat"</code>, <code>"I like bananas"</code>, or <code>"Everest is 8848.9 m tall"</code>. You can think of character strings as a word or sentence or paragraph. A special type of character string is a <code>factor</code>, which is a string but with additional attributes (like levels or an order).</li>
+<li>
+<code>logical</code> (sometimes called <code>boolean</code>): Data take on the value of either <code>TRUE</code> or <code>FALSE</code>.</li>
+<li>
+<code>integer</code>: Data are whole numbers (those numbers without a decimal point), e.g., <code>1</code>, <code>2</code>, <code>-999</code>. To explicitly create an integer data type, use the suffix <code>L</code> (e.g.&nbsp;<code>x &lt;- 2L</code>).</li>
+<li>
+<code>numeric</code> (also called <code>double</code>): Data are numbers that contain a decimal, e.g., <code>0.001</code>, <code>1.0</code>, <code>-273.16</code>.</li>
+<li>
+<code>character</code>: Data are text values, or “strings”, e.g., <code>"cat"</code>, <code>"I like bananas"</code>, or <code>"Everest is 8848.9 m tall"</code>. You can think of character strings as a word or sentence or paragraph. A special type of character string is a <code>factor</code>, which is a string but with additional attributes (like levels or an order).</li>
 </ul>
 <p>Any of these can also contain <code>NA</code> to represent missing values.</p>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Common data types in R</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Common data types in R</span></p>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -233,7 +230,7 @@
 </div>
 </div>
 <div class="body-text">
-<p>You can see what data type or class an object is using the <code>class()</code> function, or you can use a logical test such as: <code>is.numeric()</code>, <code>is.character()</code>, <code>is.logical()</code>, and so on.</p>
+<p>You can see what data type or class an object is using the <code><a href="https://rdrr.io/r/base/class.html">class()</a></code> function, or you can use a logical test such as: <code><a href="https://rdrr.io/r/base/numeric.html">is.numeric()</a></code>, <code><a href="https://rdrr.io/r/base/character.html">is.character()</a></code>, <code><a href="https://rdrr.io/r/base/logical.html">is.logical()</a></code>, and so on.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>science_rocks <span class="ot">&lt;-</span> <span class="st">"yes it does!"</span></span>
@@ -250,18 +247,12 @@
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R</span></p>
 <div class="body-text">
 <p>Working with more than one data point, we need to think about how to systematically organize and store collections of data. Here are five common data structures used in R (and other programming languages):</p>
 </div>
 
-<img data-src="images/data_structures.png" class="r-stretch"></section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: vectors</span></p>
+<img data-src="images/data_structures.png" class="r-stretch"></section><section class="slide level2"><p><span class="slide-title">Data structures in R: vectors</span></p>
 <p>A <strong>vector</strong> is the most common and most basic data structure in R.</p>
 <div class="columns">
 <div class="column" style="width:30%;">
@@ -271,7 +262,7 @@
 <ul>
 <li>A vector contains one or more elements, all with the same data type.</li>
 <li>Think back to our <code>age_yrs</code> vector. That was a vector of three elements each with a data type of <code>numeric</code>.</li>
-<li>We can create a vector using the <code>c()</code> function (“combine”):</li>
+<li>We can create a vector using the <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> function (“combine”):</li>
 </ul>
 </div>
 <div class="cell">
@@ -280,10 +271,7 @@
 </div><!-- end right column -->
 </div>
 <!-- end .columns -->
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: vectors</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: vectors</span></p>
 <div class="body-text">
 <p>Each vector can contain only one data type/class. If you try to combine classes, R will “coerce” the other elements to the least restrictive class: <code>logical</code> –&gt; <code>integer</code> –&gt; <code>numeric</code> –&gt; <code>character</code></p>
 </div>
@@ -310,10 +298,7 @@
 <pre><code>[1] "TRUE"     "3.14"     "puppies!"</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: vectors</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: vectors</span></p>
 <div class="body-text">
 <p>You can set or retrieve a value of an element in a vector using that element’s “index” or position.</p>
 <p>A set of single square brackets <code>[...]</code> is used to select an element or set of elements for vectors.</p>
@@ -339,10 +324,7 @@
 <pre><code>[1]  5.00  3.14 10.00  2.80 17.00 -1.00</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: matrix and array</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: matrix and array</span></p>
 <div class="body-text">
 <p>Matrices and arrays are like vectors, but two-dimensional and N-dimensional, respectively.</p>
 </div>
@@ -376,10 +358,7 @@
 </div>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: lists</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: lists</span></p>
 <p>A <strong>list</strong> is another common and basic data structure in R.</p>
 <div class="columns">
 <div class="column" style="width:40%;">
@@ -388,7 +367,7 @@
 <div class="body-text">
 <ul>
 <li>Like a vector, a list contains one or more elements, but <em>unlike</em> a vector, each element can be a different type (including vectors and other lists!).</li>
-<li>We can create a list using the <code>list()</code> function.</li>
+<li>We can create a list using the <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> function.</li>
 </ul>
 </div>
 </div><!-- end right column -->
@@ -405,10 +384,7 @@
 <pre><code>[1]  7  8  9 10</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: lists</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: lists</span></p>
 <div class="body-text">
 <p>Like a vector, you can set or retrieve a value of an element in a <strong>list</strong> using that element’s “index” or position.</p>
 <p>A set of <strong>double</strong> square brackets <code>[[...]]</code> is used to select an element or set of elements for lists.</p>
@@ -431,10 +407,7 @@
 <pre><code>[1] "list"</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p>A <strong>data frame</strong> is another common data structure in R, and commonly used in data science for tabular data.</p>
 <div class="columns">
 <div class="column" style="width:40%;">
@@ -443,17 +416,15 @@
 <div class="body-text">
 <ul>
 <li>Like a matrix, a data frame is two dimensional - but each column can be of a different type!</li>
-<li>We can create data frames in many ways, including <code>data.frame()</code></li>
+<li>We can create data frames in many ways, including <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>
+</li>
 <li>More commonly we will read in tabular data from spreadsheets like Excel files (<code>.xlsx</code>) and comma-separated value (<code>.csv</code>) files.</li>
 </ul>
 </div>
 </div><!-- end right column -->
 </div>
 <!-- end .columns -->
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <div class="body-text">
 <p>Data frames have one or more named <strong>columns</strong>, each representing a variable, and <strong>rows</strong> representing observations with values for each variable. Let’s create a simple one representing three dogs, with ages (in human years) and weights (in pounds).</p>
 </div>
@@ -494,10 +465,7 @@
 </div>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p>We can explore our data frame using the RStudio IDE.</p>
 <div class="body-text">
 <p>Try these out to see how they work:</p>
@@ -505,22 +473,22 @@
 <li>Find the <code>dog_df</code> data frame in the <strong>Environment</strong> pane and click on it
 <ul>
 <li>Interactive view, try sorting and searching!</li>
-</ul></li>
+</ul>
+</li>
 <li>Find the data frame in the <strong>Environment</strong> pane and click on the blue arrow next to it</li>
 <li>In the <strong>Console</strong>, type <code>head(dog_df)</code> to see the first few rows
 <ul>
 <li>Note, our data frame is very short so you’ll see all the rows!</li>
-</ul></li>
+</ul>
+</li>
 <li>In the <strong>Console</strong>, type <code>View(dog_df)</code> (note capital V)
 <ul>
 <li>This is the same as clicking on it in the <strong>Environment</strong> pane.</li>
-</ul></li>
+</ul>
+</li>
 </ul>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -546,29 +514,28 @@
 <div class="body-text">
 <p>Because a data frame is a list of vectors, our single <code>[...]</code> and double <code>[[...]]</code> square brackets can work, but there are other more elegant ways of retrieving and setting values in a data frame.</p>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p>Accessing elements of a data frame</p>
 <div class="body-text">
 <ul>
 <li>We can access individual elements of a data frame using a 2-d square bracket notation with numbers: <code>example_df[&lt;row(s)&gt;, &lt;column(s)&gt;]</code>.</li>
 <li>We can access entire columns/variables using their name, in two ways:
 <ul>
-<li>Double square brackets: <code>example_df[['&lt;colname&gt;']]</code></li>
-<li>Dollar sign notation: <code>example_df$&lt;colname&gt;</code></li>
-</ul></li>
+<li>Double square brackets: <code>example_df[['&lt;colname&gt;']]</code>
+</li>
+<li>Dollar sign notation: <code>example_df$&lt;colname&gt;</code>
+</li>
+</ul>
+</li>
 <li>We can access specific rows of a variable using a combination:
 <ul>
-<li>Dollar sign notation plus index: <code>example_df$&lt;colname&gt;[&lt;element number&gt;]</code></li>
-</ul></li>
+<li>Dollar sign notation plus index: <code>example_df$&lt;colname&gt;[&lt;element number&gt;]</code>
+</li>
+</ul>
+</li>
 </ul>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p>Accessing values of elements of a data frame</p>
 <div class="body-text">
 <p>Using the <code>dog_df</code> we created previously:</p>
@@ -596,10 +563,7 @@
 <pre><code>[1] "Khora"</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p><strong>Changing</strong> values of elements of a data frame or <strong>adding</strong> new variables</p>
 <div class="body-text">
 <p>Using the <code>dog_df</code> we created previously, let’s update Waffle’s age and weight, and then add a new column describing the color of each dog.</p>
@@ -619,10 +583,7 @@
 3  Teddy     50   7 brown</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Data structures in R: data frames</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Data structures in R: data frames</span></p>
 <p>Accessing elements of a data frame</p>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -649,37 +610,17 @@
 </div>
 </div>
 <!-- end note -->
-</section>
-<section class="slide level2">
-
-
+</section><section class="slide level2">
 
 </section>
-    </div>
+</div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
 </div></div>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
-  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
-  
-
-  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
-  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
-  <script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="../../site_libs/revealjs/dist/reveal.js"></script><!-- reveal.js plugins --><script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script><script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script><script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script><script src="../../site_libs/revealjs/plugin/notes/notes.js"></script><script src="../../site_libs/revealjs/plugin/search/search.js"></script><script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script><script src="../../site_libs/revealjs/plugin/math/math.js"></script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><script>
 
       // Full list of configuration options available at:
       // https://revealjs.com/config/
@@ -871,9 +812,7 @@
           RevealZoom
         ]
       });
-    </script>
-    
-    <script>
+    </script><script>
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
@@ -908,9 +847,7 @@
         }
 
       })();
-    </script>
-
-    <script id="quarto-html-after-body" type="application/javascript">
+    </script><script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
         tabsets.forEach(function(tabset) {
@@ -1077,6 +1014,6 @@
         }
       });
       </script>
-    
+
 
 </body></html>

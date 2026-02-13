@@ -8,3 +8,10 @@
 lectures/
 student_materials/
 .Rhistory
+.DS_Store
+_freeze/
+*.html.md
+site_libs/
+*_files/
+*.rmarkdown
+* 2/

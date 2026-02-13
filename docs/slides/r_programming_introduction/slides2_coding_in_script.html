@@ -7,16 +7,16 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.32">
-
-  <title>sfsu_data_sci – slides2_coding_in_script</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
-  <style>
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+<title>sfsu_data_sci – slides2_coding_in_script</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -95,14 +95,14 @@
     code span.vs { color: #008000; } /* VerbatimString */
     code span.wa { color: #696969; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-be78b24e7693d0ad0daee464e272bf0e.css">
-  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-be78b24e7693d0ad0daee464e272bf0e.css">
+<link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+<style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
       overflow: auto;
@@ -195,15 +195,12 @@
     <div class="slides">
 
 
-<section id="title-slide" class="slide level2 center" data-menu-title="Title Slide">
-<h2></h2>
+<section id="title-slide" class="slide level2 center" data-menu-title="Title Slide"><h2></h2>
 <p><span class="custom-title">Scripts in R and RStudio</span></p>
 <p><span class="custom-subtitle">An introduction to programming in R</span></p>
 <hr class="hr-red">
 <p><span class="custom-subtitle2"><strong>NCEAS Learning Hub</strong></span></p>
-</section>
-<section id="script1" class="slide level2" data-menu-title="script1">
-<h2></h2>
+</section><section id="script1" class="slide level2" data-menu-title="script1"><h2></h2>
 <p><span class="slide-title">Creating an R script</span></p>
 <div class="columns">
 <div class="column" style="width:60%;">
@@ -220,10 +217,7 @@
 <div class="body-text">
 <p>Save the R Script in your <code>script</code> folder, name the file <code>intro_to_programming.R</code>. The name at the top of the <strong>Source pane</strong> will change from <code>Untitled</code> to the new file name.</p>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">A simple script</span></p>
+</section><section class="slide level2"><p><span class="slide-title">A simple script</span></p>
 <div class="body-text">
 <p>Let’s write some simple code in our script. We’ll start with the age of a dog in (human) years, then convert to dog years.</p>
 </div>
@@ -241,10 +235,7 @@
 </ul>
 <p>Try these shortcuts out and get comfortable with them - you will do this a lot!</p>
 </div>
-</section>
-<section class="slide level2">
-
-<div class="callout callout-tip callout-titled callout-style-default">
+</section><section class="slide level2"><div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
@@ -271,13 +262,10 @@
 <span id="cb2-7"><a></a><span class="do">### this line is commented out so will not run:</span></span>
 <span id="cb2-8"><a></a><span class="co"># age_centuries &lt;- age_years / 100 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section class="slide level2">
-
-<p><span class="slide-title">Multiple values</span></p>
+</section><section class="slide level2"><p><span class="slide-title">Multiple values</span></p>
 <div class="body-text">
-<p>You can also store more than one value in a single object. Storing a series of ages in a single object is a convenient way to perform the same operation on multiple values at the same time. One way to create such an object is with the function <code>c()</code>, which stands for “combine”.</p>
-<p>Let’s create a <strong>vector</strong> of ages using <code>c()</code> (we’ll talk more about vectors in the next section, <a href="#/data_structures">Data structures in R</a>).</p>
+<p>You can also store more than one value in a single object. Storing a series of ages in a single object is a convenient way to perform the same operation on multiple values at the same time. One way to create such an object is with the function <code><a href="https://rdrr.io/r/base/c.html">c()</a></code>, which stands for “combine”.</p>
+<p>Let’s create a <strong>vector</strong> of ages using <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> (we’ll talk more about vectors in the next section, <a href="#/data_structures">Data structures in R</a>).</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>age_yrs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">7</span>)  <span class="do">### create a vector of ages</span></span>
@@ -293,10 +281,7 @@
 <pre><code>[1] 35 21 49</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<div class="callout callout-tip callout-titled callout-style-default">
+</section><section class="slide level2"><div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
@@ -315,31 +300,14 @@
 
 
 </section>
-    </div>
+</div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
 </div></div>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
-  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
-  
-
-  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
-  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
-  <script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="../../site_libs/revealjs/dist/reveal.js"></script><!-- reveal.js plugins --><script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script><script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script><script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script><script src="../../site_libs/revealjs/plugin/notes/notes.js"></script><script src="../../site_libs/revealjs/plugin/search/search.js"></script><script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script><script src="../../site_libs/revealjs/plugin/math/math.js"></script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><script>
 
       // Full list of configuration options available at:
       // https://revealjs.com/config/
@@ -531,9 +499,7 @@
           RevealZoom
         ]
       });
-    </script>
-    
-    <script>
+    </script><script>
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
@@ -568,9 +534,7 @@
         }
 
       })();
-    </script>
-
-    <script id="quarto-html-after-body" type="application/javascript">
+    </script><script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
         tabsets.forEach(function(tabset) {
@@ -737,6 +701,6 @@
         }
       });
       </script>
-    
+
 
 </body></html>
