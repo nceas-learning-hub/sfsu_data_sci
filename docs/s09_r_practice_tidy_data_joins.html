@@ -673,7 +673,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exercise-2-practice-wrangling-joining-data" id="toc-exercise-2-practice-wrangling-joining-data" class="nav-link" data-scroll-target="#exercise-2-practice-wrangling-joining-data">Exercise 2: Practice Wrangling &amp; Joining Data</a></li>
   <li><a href="#wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist" id="toc-wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist" class="nav-link" data-scroll-target="#wrangle-bird_observations-data-and-merge-the-data-with-all-the-other-tables-sites-surveys-and-taxalist"><span class="header-section-number">7</span> Wrangle <code>bird_observations</code> data and merge the data with all the other tables (<code>sites</code>, <code>surveys</code>, and <code>taxalist</code>)</a></li>
   <li><a href="#explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format" id="toc-explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format" class="nav-link" data-scroll-target="#explore-observer-data-and-fix-the-values-within-this-column-so-that-all-values-are-in-the-same-format"><span class="header-section-number">8</span> Explore <code>observer</code> data and fix the values within this column so that all values are in the same format</a></li>
-  <li><a href="#bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" id="toc-bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="nav-link" data-scroll-target="#bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Bonus: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</a></li>
+  <li><a href="#assignment-a04-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" id="toc-assignment-a04-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="nav-link" data-scroll-target="#assignment-a04-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Assignment a04: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</a></li>
   </ul>
 </nav>
     </div>
@@ -732,11 +732,11 @@ Setup
 </div>
 <div class="callout-body-container callout-body">
 <ol start="0" type="1">
-<li><p>Make sure you’re in the right project (<code>training_{USERNAME}</code>) and use the Git workflow by <code>Pull</code>ing to check for any changes in the remote repository (aka repository on GitHub).</p></li>
+<li><p>Make sure you’re in the right project by finding on your computer and then double clicking <code>import-template-{USERNAME}.</code>Rproj or opening it in your recent projects in RStudio. Then make a new branch a04.</p></li>
 <li><p>Create a new Quarto Document.</p>
 <ol type="a">
 <li>Title it “R Practice: Tidy Data and Joins”.</li>
-<li>Save the file and name it “r-practice-tidy-data-joins” in your <code>scripts</code> folder.</li>
+<li>Save the file and name it “tidy-data-joins.qmd” in your <code>assignments</code> folder.</li>
 </ol></li>
 </ol>
 <p><strong>Note:</strong> Double check that you’re in the right project. Where in RStudio can you check where you are?</p>
@@ -1300,8 +1300,8 @@ Save your work and dont’s forget the Git and GitHub Workflow
 </div>
 </div>
 </section>
-<section id="bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="bonus-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Bonus: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</h2>
+<section id="assignment-a04-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="assignment-a04-use-a-new-package-lubridate-to-wrangle-the-date-data-and-find-the-total-number-of-birds-by-park-and-month"><span class="header-section-number">9</span> Assignment a04: Use a new package <code>lubridate</code> to wrangle the date data and find the total number of birds by park and month</h2>
 <p><strong>Hint:</strong> How do you learn about a new function or package?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1309,7 +1309,7 @@ Save your work and dont’s forget the Git and GitHub Workflow
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Bonus Question(s)
+Set up your assignment a04.qmd in your branch a04. Potentially duplicate your tidy-data-joins.qmd to use code you’ve already written.
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1318,27 +1318,11 @@ Bonus Question(s)
 <li><p>Use <code>dplyr::relocate()</code> to move the new <code>survey_month</code> column to immediately after the <code>survey_date</code> column. You can do this in a separate code chunk, or pipe straight into it from your existing code.</p></li>
 <li><p>Filter to only include parks <code>Lindo</code>, <code>Orme</code>, <code>Palomino</code>, and <code>Sonrisa</code>.</p></li>
 <li><p>Find the total number of birds observed by park and month (<strong>Hint:</strong> You can use <code>group_by()</code> and <code>summarize()</code>).</p></li>
+<li><p>Summary: Take a look at your final data frame. Does it give you the outcome you expected? Is it informative? How would you improve this wrangling process?</p></li>
+<li><p>Make sure your assignment has the same components as your a03 assignment: a header with the title and your name and date, Introduction, Data (where you import the data and document its source), Analysis (where you do the analysis described above), and Summary.</p></li>
 </ol>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>bird_obs_subset <span class="ot">&lt;-</span> bird_obs_subset <span class="sc">%&gt;%</span> </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">survey_month =</span> lubridate<span class="sc">::</span><span class="fu">month</span>(survey_date)) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">survey_month =</span> <span class="fu">as.factor</span>(survey_month)) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(survey_month, <span class="at">.after =</span> survey_date) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(park_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Lindo"</span>, <span class="st">"Orme"</span>, <span class="st">"Palomino"</span>, <span class="st">"Sonrisa"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(park_name, survey_month) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot_bird_count_month =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has regrouped the output.
-ℹ Summaries were computed grouped by park_name and survey_month.
-ℹ Output is grouped by park_name.
-ℹ Use `summarise(.groups = "drop_last")` to silence this message.
-ℹ Use `summarise(.by = c(park_name, survey_month))` for per-operation grouping
-  (`?dplyr::dplyr_by`) instead.</code></pre>
-</div>
-</div>
-<p>Take a look at your final data frame. Does it give you the outcome you expected? Is it informative? How would you improve this wrangling process?</p>
 
 
 </section>
