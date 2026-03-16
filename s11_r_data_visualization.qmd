@@ -35,7 +35,7 @@ Let's dive into creating and customizing plots with `ggplot2`.
 ::: callout-tip
 ## Setup
 
-0. Make sure you’re in the right project (`training_{USERNAME}`) and use the `Git` workflow by `Pull`ing to check for any changes. Then, create a new Quarto document, delete the default text, and save this document.
+0. Make sure you’re in the right project (`import_template_{USERNAME}`) and use the `Git` workflow by `Pull`ing to check for any changes. Then, create a new Quarto document, delete the default text, and save this document.
 
 1. Load the packages we'll need:
 
@@ -722,16 +722,18 @@ leaflet(locations) %>%
 Leaflet has a ton of functionality that can enable you to create some beautiful, functional maps with relative ease. [Here](https://pages.github.nceas.ucsb.edu/NCEAS/sasap-data/language_vis.html) is an example of some we created as part of the [State of Alaskan Salmon and People (SASAP) project](https://www.nceas.ucsb.edu/workinggroups/state-alaskan-salmon-and-people-sasap), created using the same tools we showed you here. This map hopefully gives you an idea of how powerful the combination of Quarto or RMarkdown and GitHub Pages can be. 
 
 
-## Publish the Data Visualization lesson to your webpage
+## Assignment 5
 
 ::: callout-tip
-### Steps
+### Write up a quarto document to report the plots
 
 1. Save the `qmd` you have been working on for this lesson.
-2. "Render" the `qmd`. This is a good way to test if everything in your code is working.
-3. Go to your `index.qmd` and the link to the `html` file with this lesson's content.
-4. Save and render `index.qmd` to an `html`.
-5. Use the `Git` workflow: ```Stage > Commit > Pull > Push```
+2. Duplicate the qmd and rename it a05.qmd, which you will edit
+3. Your report should contain two images: one plot of the data and one map of the locations. Pick the versions from the lesson that you like best.
+4. Each line of code that makes the plot and map needs a comment line explaining what it does
+5. You also need an introduction, motivatin the analysis, and a discussion, commenting on the images. 
+6. "Render" the `qmd`. You will upload the html along with other files to your GitHub repo.
+7. Use the `Git` workflow: ```Stage > Commit > Pull > Push```
 
 :::
 
