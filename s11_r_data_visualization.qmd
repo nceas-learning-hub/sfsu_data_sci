@@ -623,13 +623,13 @@ We will start by creating a `data.frame` containing unique sampling locations.
 
 ```{r uniq_locations}
 locations <- visits_long %>%
-    distinct(restore_loc, .keep_all = T) %>%
+    distinct(restore_loc, .keep_all = TRUE) %>%
     select(restore_loc, latitude, longitude)
 
 head(locations)
 ```
 
-The `dplyr::distinct()` function comes pretty handy when you want to filter unique values in a column. In this case we use the `.keep_all = T` argument to keep all the columns of our data frame so we can have the `latitude` and `longitude` of each of the locations. If we don't add this argument, we would end up with a data frame with only one column: `restore_loc` and 10 rows, one for each of the unique locations.
+The `dplyr::distinct()` function comes pretty handy when you want to filter unique values in a column. In this case we use the `.keep_all = TRUE` argument to keep all the columns of our data frame so we can have the `latitude` and `longitude` of each of the locations. If we don't add this argument, we would end up with a data frame with only one column: `restore_loc` and 10 rows, one for each of the unique locations.
 
 
 Now we can display this table as an interactive table using `datatable()` from the `DT` package.
@@ -658,16 +658,13 @@ leaflet(locations) %>%
 
 <br>
 
-You can also use `leaflet` to import Web Map Service (WMS) tiles. For example, we can use any of the base maps provided by USGS in the [National Map](https://basemap.nationalmap.gov/) archive. For example, let's use the USGSTopo base map. In this example, we also demonstrate how to create a more simple circle marker, the look of which is explicitly set using a series of style-related arguments.
+You can also change the base map style. For websites, `addProviderTiles()` is often more reliable than directly calling external WMS services. Here we use a topographic-style provider map and draw circle markers on top.
 
 
 ```{r}
 
 leaflet(locations) %>%
-    addWMSTiles(
-        "https://basemap.nationalmap.gov/arcgis/services/USGSTopo/MapServer/WmsServer",
-        layers = "0",
-        options = WMSTileOptions(format = "image/png", transparent = TRUE)) %>%
+    addProviderTiles(providers$Esri.WorldTopoMap) %>%
     addCircleMarkers(
         lng = ~ longitude,
         lat = ~ latitude,
@@ -677,7 +674,7 @@ leaflet(locations) %>%
         fillColor = "salmon",
         fillOpacity = 1,
         # set stroke properties
-        stroke = T,
+        stroke = TRUE,
         weight = 0.5,
         color = "white",
         opacity = 1)
@@ -686,19 +683,13 @@ leaflet(locations) %>%
 
 <br>
 
-We can also layer base maps. In this case the USGSImageryTopo base map with the USGSHydroCached base map. Note that the url where the map is retrieved is very similar for each USGS base map.
+We can also layer a second reference map on top of the base map. In this example, we add labels over satellite imagery using common provider tiles that tend to render more consistently on published Quarto websites.
  
 ```{r}
 
 leaflet(locations) %>%
-    addWMSTiles(
-        "https://basemap.nationalmap.gov/arcgis/services/USGSImageryTopo/MapServer/WmsServer",
-        layers = "0",
-        options = WMSTileOptions(format = "image/png", transparent = TRUE)) %>%
-    addWMSTiles(
-        "https://basemap.nationalmap.gov/arcgis/services/USGSHydroCached/MapServer/WmsServer",
-        layers = "0",
-        options = WMSTileOptions(format = "image/png", transparent = TRUE)) %>%
+    addProviderTiles(providers$Esri.WorldImagery) %>%
+    addProviderTiles(providers$CartoDB.PositronOnlyLabels) %>%
     addCircleMarkers(
         lng = ~ longitude,
         lat = ~ latitude,
@@ -708,7 +699,7 @@ leaflet(locations) %>%
         fillColor = "salmon",
         fillOpacity = 1,
         # set stroke properties
-        stroke = T,
+        stroke = TRUE,
         weight = 0.5,
         color = "white",
         opacity = 1)
@@ -720,7 +711,6 @@ leaflet(locations) %>%
 <br>
 
 Leaflet has a ton of functionality that can enable you to create some beautiful, functional maps with relative ease. [Here](https://pages.github.nceas.ucsb.edu/NCEAS/sasap-data/language_vis.html) is an example of some we created as part of the [State of Alaskan Salmon and People (SASAP) project](https://www.nceas.ucsb.edu/workinggroups/state-alaskan-salmon-and-people-sasap), created using the same tools we showed you here. This map hopefully gives you an idea of how powerful the combination of Quarto or RMarkdown and GitHub Pages can be. 
-
 
 ## Assignment 5
 
