@@ -713,16 +713,16 @@ leaflet(locations) %>%
 Leaflet has a ton of functionality that can enable you to create some beautiful, functional maps with relative ease. [Here](https://pages.github.nceas.ucsb.edu/NCEAS/sasap-data/language_vis.html) is an example of some we created as part of the [State of Alaskan Salmon and People (SASAP) project](https://www.nceas.ucsb.edu/workinggroups/state-alaskan-salmon-and-people-sasap), created using the same tools we showed you here. This map hopefully gives you an idea of how powerful the combination of Quarto or RMarkdown and GitHub Pages can be. 
 
 ## Assignment 5
-
+git commit -m "Republish site"
 ::: callout-tip
 ### Write up a quarto document to report the plots
 
 1. Save the `qmd` you have been working on for this lesson.
-2. Duplicate the qmd and rename it a05.qmd, which you will edit
+2. Duplicate the qmd and rename it a05.qmd in the assignments directory, which you will edit
 3. Your report should contain two images: one plot of the data and one map of the locations. Pick the versions from the lesson that you like best.
 4. Each line of code that makes the plot and map needs a comment line explaining what it does
-5. You also need an introduction, motivatin the analysis, and a discussion, commenting on the images. 
-6. "Render" the `qmd`. You will upload the html along with other files to your GitHub repo.
+5. You also need an introduction that motivates the analysis and a discussion that comments on the images. 
+6. "Render" the `qmd`. You will upload the html, qmd, and some other files that enable the plot and map to your GitHub repo.
 7. Use the `Git` workflow: ```Stage > Commit > Pull > Push```
 
 :::
