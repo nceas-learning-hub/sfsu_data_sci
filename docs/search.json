@@ -4642,5 +4642,26 @@
     "title": "Week 1, Day 1: Data Science as Scientific Practice",
     "section": "",
     "text": "Pacing: Build in pauses. Online students need processing time.\nEngagement: Call on specific groups/people by name when possible\nBackup plan: If breakout rooms fail, use collaborative Google Doc with sections for each “group”\nAccessibility: Keep chat open for those who prefer not to unmute"
+  },
+  {
+    "objectID": "student_materials/week3/test.html",
+    "href": "student_materials/week3/test.html",
+    "title": "test_week3",
+    "section": "",
+    "text": "This analysis examines water quality at 10 streams"
+  },
+  {
+    "objectID": "student_materials/week3/test.html#introduction",
+    "href": "student_materials/week3/test.html#introduction",
+    "title": "test_week3",
+    "section": "",
+    "text": "This analysis examines water quality at 10 streams"
+  },
+  {
+    "objectID": "student_materials/week3/test.html#load-data",
+    "href": "student_materials/week3/test.html#load-data",
+    "title": "test_week3",
+    "section": "Load data",
+    "text": "Load data\nlibrary (readr)\n\n#load water quality data\n\nwater &lt;- read_csv(\"data/raw/water_samples.csv\")\n\n#Quick look\nhead(water)"
   }
 ]
