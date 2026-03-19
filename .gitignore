@@ -13,3 +13,4 @@ _freeze/
 *.html.md
 *.rmarkdown
 * 2/
+.Rhistory
