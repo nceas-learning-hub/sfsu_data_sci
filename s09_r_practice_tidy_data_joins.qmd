@@ -2,7 +2,7 @@
 title: "Practice Session: Joins"
 ---
 
-:::{.callout-tip}
+::: callout-tip
 ## Learning Objectives
 
 -   Practice joining tables together
@@ -25,13 +25,16 @@ These exercises will be using bird survey data collected from the central Arizon
 ::: callout-tip
 ## Setup
 
-0. Make sure you're in the right project (`training_{USERNAME}`) and use the Git workflow by `Pull`ing to check for any changes in the remote repository (aka repository on GitHub).
+0.  Make sure you're in the right project by finding on your computer and then double clicking `import-template-{USERNAME}.`Rproj or opening it in your recent projects in RStudio.
+    Then make a new branch a04.
 
-1. Create a new Quarto Document. 
-    a. Title it "R Practice: Tidy Data and Joins". 
-    b. Save the file and name it "r-practice-tidy-data-joins" in your `scripts` folder. 
+1.  Create a new Quarto Document.
 
-**Note:** Double check that you're in the right project. Where in RStudio can you check where you are?
+    a.  Title it "R Practice: Tidy Data and Joins".
+    b.  Save the file and name it "tidy-data-joins.qmd" in your `assignments` folder.
+
+**Note:** Double check that you're in the right project.
+Where in RStudio can you check where you are?
 
 2.  Load the following libraries at the top of your Quarto Document.
 
@@ -52,12 +55,18 @@ library(lubridate) # for bonus question
 -   `52_pp52_sites_1.csv`
 -   `52_pp52_taxalist_1.csv`
 
-**Note:** It's up to you on how you want to download and load the data! You can either use the download links (obtain by right-clicking the "Download" button and select "Copy Link Address" for each data entity) or manually download the data and then upload the files to RStudio server.
+**Note:** It's up to you on how you want to download and load the data!
+You can either use the download links (obtain by right-clicking the "Download" button and select "Copy Link Address" for each data entity) or manually download the data and then upload the files to RStudio server.
 
-4. Organize your Quarto Document in a **meaningful** way. Organization is personal - so this is up to you! Consider the different ways we've organized previous files using: headers, bold text, naming code chunks, comments in code chunks. What is most important is organizing and documenting the file so that your future self (or if you share this file with others!) understands it as well as your current self does right now. 
+4.  Organize your Quarto Document in a **meaningful** way.
+    Organization is personal - so this is up to you!
+    Consider the different ways we've organized previous files using: headers, bold text, naming code chunks, comments in code chunks.
+    What is most important is organizing and documenting the file so that your future self (or if you share this file with others!) understands it as well as your current self does right now.
 
-5. Use the Git workflow. After you've set up your project and uploaded your data go through the workflow: ```Stage (add) -> Commit -> Pull -> Push```
-    - **Note:** You also want to `Pull` when you first open a project.
+5.  Use the Git workflow.
+    After you've set up your project and uploaded your data go through the workflow: `Stage (add) -> Commit -> Pull -> Push`
+
+    -   **Note:** You also want to `Pull` when you first open a project.
 :::
 
 ## Read in the data
@@ -116,7 +125,8 @@ taxalist <- read_csv(here::here("data/52_pp52_taxalist_1.csv"))
 ::: callout-note
 #### Question 2a
 
-What functions can you use to explore the data you just read in? Think about which functions we've been using to explore the structure of the data frame, information about columns, unique observations, etc.
+What functions can you use to explore the data you just read in?
+Think about which functions we've been using to explore the structure of the data frame, information about columns, unique observations, etc.
 Tip: run `View(name_of_your_data_frame)` **in the console** to see data in a spreadsheet-style viewer.
 :::
 
@@ -145,7 +155,9 @@ unique(bird_observations$species_id)
 ::: callout-note
 #### Question 2b
 
-What are the primary and foreign keys for the tables `bird_observations` and `taxalist`? Recall that a **primary key** is a unique identifier for each observed entity, one per row. And a **foreign key** references to a primary key in another table (linkage).
+What are the primary and foreign keys for the tables `bird_observations` and `taxalist`?
+Recall that a **primary key** is a unique identifier for each observed entity, one per row.
+And a **foreign key** references to a primary key in another table (linkage).
 
 **Hint:** First identify the primary keys for all the tables, then identify the foreign keys.
 :::
@@ -183,9 +195,11 @@ birds_subset <- bird_observations %>%
 ::: callout-note
 #### Question 4a
 
-First, answer: what do you expect the outcome data frame when doing `left_join()` between `birds_subset` and `sites` to look like? What observations do you expect in the outcome data frame.
+First, answer: what do you expect the outcome data frame when doing `left_join()` between `birds_subset` and `sites` to look like?
+What observations do you expect in the outcome data frame.
 
-You can use paper to draw if that helps you or talk to your neighbor. Write down the steps  and expected outcome in your Quarto Document.
+You can use paper to draw if that helps you or talk to your neighbor.
+Write down the steps and expected outcome in your Quarto Document.
 :::
 
 <details>
@@ -196,11 +210,13 @@ I expect to see all columns and all observations from `birds_subset` and from `s
 
 </details>
 
-
 ::: callout-note
 #### Qustion 4b
 
-Use a left join to update `birds_subset` so that it also includes `sites` information. For each join, include an explicit argument saying which key you are joining by (even if it will just assume the correct one for you). Store the updated data frame as `birds_left`. Make sure to look at the output - is what it contains consistent with what you expected it to contain?
+Use a left join to update `birds_subset` so that it also includes `sites` information.
+For each join, include an explicit argument saying which key you are joining by (even if it will just assume the correct one for you).
+Store the updated data frame as `birds_left`.
+Make sure to look at the output - is what it contains consistent with what you expected it to contain?
 :::
 
 ```{r}
@@ -219,21 +235,26 @@ birds_left <- left_join(x = birds_subset, y = sites, by = "site_id")
 ::: callout-note
 #### Question 5a
 
-First, answer: what do you expect a `full_join()` between `birds_subset` and `sites` to contain? Write this in your Quarto Document or tell a neighbor.
+First, answer: what do you expect a `full_join()` between `birds_subset` and `sites` to contain?
+Write this in your Quarto Document or tell a neighbor.
 :::
 
 <details>
 
 <summary>Answer</summary>
 
-I expect to see all columns and all observations from `birds_subset` and all columns and all observations from `sites` to be merged into one data frame because in a full join everything is kept. `NA` values could be introduced.
+I expect to see all columns and all observations from `birds_subset` and all columns and all observations from `sites` to be merged into one data frame because in a full join everything is kept.
+`NA` values could be introduced.
 
 </details>
 
 ::: callout-note
 #### Questions 5b
 
-Write code to `full_join()` the `birds_subset` and `sites` data into a new object called `birds_full`. Explicitly include the variable you're joining by. Look at the output. Is it what you expected?
+Write code to `full_join()` the `birds_subset` and `sites` data into a new object called `birds_full`.
+Explicitly include the variable you're joining by.
+Look at the output.
+Is it what you expected?
 :::
 
 ```{r}
@@ -246,25 +267,29 @@ birds_full <- birds_subset %>%
 birds_full <- full_join(x = birds_subset, y = sites, by = "site_id")
 ```
 
-
 ## Use `inner_join()` to merge `birds_subset` and `taxalist` data
 
 ::: callout-note
 #### Question 6a
-First, answer: what do you expect an `inner_join()` between `birds_subset` and `taxalist` to contain? Write this in your Quarto Document or tell a neighbor.
+
+First, answer: what do you expect an `inner_join()` between `birds_subset` and `taxalist` to contain?
+Write this in your Quarto Document or tell a neighbor.
 :::
 
 <details>
 
 <summary>Answer</summary>
 
-I expect to only have data merge together based on `species_id` and since there is only `BHCO` and `RWBL` in `birds_subset` then I will only retain data related to those two species. I will also expect to see the columns from `taxalist`: `common_name` and `asu_itis` to be merged into the joined table.
+I expect to only have data merge together based on `species_id` and since there is only `BHCO` and `RWBL` in `birds_subset` then I will only retain data related to those two species.
+I will also expect to see the columns from `taxalist`: `common_name` and `asu_itis` to be merged into the joined table.
 
 </details>
 
 ::: callout-note
 #### Question 6b
-Write code to `inner_join()` the `birds_subset` and `taxalist`, called `birds_inner.` Include an argument for what variable you'll be joining by. Make sure you check the output.
+
+Write code to `inner_join()` the `birds_subset` and `taxalist`, called `birds_inner.` Include an argument for what variable you'll be joining by.
+Make sure you check the output.
 :::
 
 ```{r}
@@ -279,7 +304,9 @@ birds_inner <- inner_join(x = birds_subset, y = taxalist, by = "species_id" )
 
 ::: callout-note
 #### Question 6c
-What would you get if instead of `inner_join()` you'd used `left_join()` for this example? Write code for the left join and check.
+
+What would you get if instead of `inner_join()` you'd used `left_join()` for this example?
+Write code for the left join and check.
 :::
 
 ```{r}
@@ -294,20 +321,26 @@ birds_inner_left <- left_join(x = birds_subset, y = taxalist, by = "species_id")
 
 ::: callout-note
 #### Question 6d
-Why does that make sense for this scenario? In what case would you expect the outcome to differ from an `inner_join()`? Write this in your Quarto Document or tell a neighbor.
+
+Why does that make sense for this scenario?
+In what case would you expect the outcome to differ from an `inner_join()`?
+Write this in your Quarto Document or tell a neighbor.
 :::
 
 <details>
 
 <summary>Answer</summary>
 
-You have the same resulting data set regardless of using `inner_join()` or `left_join()` to merge `bird_subset` and `taxalist`. The reasons for this are:
+You have the same resulting data set regardless of using `inner_join()` or `left_join()` to merge `bird_subset` and `taxalist`.
+The reasons for this are:
 
-- `inner_join()` keeps only the rows (observations) that have a matching key across both data sets - here, `species_id` is our key, and the only rows that match across both data sets are those where `species_id` equals `BHCO` or `RWBL`
+-   `inner_join()` keeps only the rows (observations) that have a matching key across both data sets - here, `species_id` is our key, and the only rows that match across both data sets are those where `species_id` equals `BHCO` or `RWBL`
 
-- `left_join()` keeps all rows from the left table (in our case, the left table is `birds_subset`) and merges on data with matching keys (`species_id`) on the right (here, the right table is `taxalist`). Because our left data set (`birds_subset`) only contains `species_id`s equal to `BHCO` or `RWBL`, only rows with those species will be kept from the right data set (`taxalist`)
+-   `left_join()` keeps all rows from the left table (in our case, the left table is `birds_subset`) and merges on data with matching keys (`species_id`) on the right (here, the right table is `taxalist`).
+    Because our left data set (`birds_subset`) only contains `species_id`s equal to `BHCO` or `RWBL`, only rows with those species will be kept from the right data set (`taxalist`)
 
-You'd expect the outcome to differ from an `inner_join()` if `birds_subset` contained an observation with a `species_id` that was *not* found in `taxalist`. If there was an observation of a `species_id` in `birds_subset` that was *not* in `taxalist`, then that observation would be kept, and `NA`s would be assigned to the `common_name` and `asu_itis` columns for that observations
+You'd expect the outcome to differ from an `inner_join()` if `birds_subset` contained an observation with a `species_id` that was *not* found in `taxalist`.
+If there was an observation of a `species_id` in `birds_subset` that was *not* in `taxalist`, then that observation would be kept, and `NA`s would be assigned to the `common_name` and `asu_itis` columns for that observations
 
 </details>
 
@@ -317,6 +350,7 @@ You'd expect the outcome to differ from an `inner_join()` if `birds_subset` cont
 
 ::: callout-note
 #### Question 7a
+
 Starting with your object `bird_observations`, rename the `notes` column to `bird_obs_notes` (so this doesn't conflict with `notes` in the `surveys` table).
 :::
 
@@ -329,9 +363,9 @@ bird_observations <- bird_observations %>%
 ::: callout-note
 #### Question 7b
 
-- Create a subset that contains all observations in the `birds_observations` data frame, 
-- then join the `taxalist`, `sites` and `surveys` tables to it, 
-- and finally limit to only columns `survey_date`, `common_name`, `park_name`, `bird_count`, and `observer`. 
+-   Create a subset that contains all observations in the `birds_observations` data frame,
+-   then join the `taxalist`, `sites` and `surveys` tables to it,
+-   and finally limit to only columns `survey_date`, `common_name`, `park_name`, `bird_count`, and `observer`.
 
 **Hint:** What function do you use to subset data by columns?
 :::
@@ -349,7 +383,10 @@ bird_obs_subset <- bird_observations %>%
 
 ::: callout-note
 #### Question 8a
-Continuing with `bird_obs_subset`, first use `unique()` to see the different unique values in the column `observer`. How many observers are there? Which value is unlike the others?
+
+Continuing with `bird_obs_subset`, first use `unique()` to see the different unique values in the column `observer`.
+How many observers are there?
+Which value is unlike the others?
 :::
 
 ```{r}
@@ -359,7 +396,9 @@ unique(bird_obs_subset$observer)
 
 ::: callout-note
 #### Question 8b
-Replace "Josh Burns" with a format that matches the other observer names. Then use `unique()` again to check your work.
+
+Replace "Josh Burns" with a format that matches the other observer names.
+Then use `unique()` again to check your work.
 
 **Hint:** What function do you use when you are making a change to an entire column?
 :::
@@ -376,34 +415,46 @@ unique(bird_obs_subset$observer)
 
 ::: callout-important
 ## Save your work and dont's forget the Git and GitHub Workflow
-After you've completed the exercises or reached a significant stopping point, use the workflow: ```Stage (add) -> Commit -> Pull -> Push```
+
+After you've completed the exercises or reached a significant stopping point, use the workflow: `Stage (add) -> Commit -> Pull -> Push`
 :::
 
-## Bonus: Use a new package `lubridate` to wrangle the date data and find the total number of birds by park and month
+## Assignment a04: Use a new package `lubridate` to wrangle the date data and find the total number of birds by park and month
 
 **Hint:** How do you learn about a new function or package?
 
 ::: callout-note
-#### Bonus Question(s)
+#### Set up your assignment a04.qmd in your branch a04. Potentially duplicate your tidy-data-joins.qmd to use code you've already written.
 
-1. Use `lubridate::month()` to add a new column to `bird_obs_subset` called `survey_month`, containing only the month number. Then, convert the month number to a factor (again within `mutate()`).
+1.  Use `lubridate::month()` to add a new column to `bird_obs_subset` called `survey_month`, containing only the month number.
+    Then, convert the month number to a factor (again within `mutate()`).
 
-2. Use `dplyr::relocate()` to move the new `survey_month` column to immediately after the `survey_date` column. You can do this in a separate code chunk, or pipe straight into it from your existing code.
+2.  Use `dplyr::relocate()` to move the new `survey_month` column to immediately after the `survey_date` column.
+    You can do this in a separate code chunk, or pipe straight into it from your existing code.
 
-3. Filter to only include parks `Lindo`, `Orme`, `Palomino`, and `Sonrisa`.
+3.  Filter to only include parks `Lindo`, `Orme`, `Palomino`, and `Sonrisa`.
 
-4. Find the total number of birds observed by park and month (**Hint:** You can use `group_by()` and `summarize()`).
+4.  Find the total number of birds observed by park and month (**Hint:** You can use `group_by()` and `summarize()`).
+
+5.  Summary: Take a look at your final data frame.
+    Does it give you the outcome you expected?
+    Is it informative?
+    How would you improve this wrangling process?
+
+6.  Make sure your assignment has the same components as your a03 assignment: a header with the title and your name and date, Introduction, Data (where you import the data and document its source), Analysis (where you do the analysis described above), and Summary.
 :::
 
-```{r}
+::: {.content-visible unless-format="html"}
+
+```{#{r}
 #| code-summary: "Answer"
-bird_obs_subset <- bird_obs_subset %>% 
-  mutate(survey_month = lubridate::month(survey_date)) %>% 
-  mutate(survey_month = as.factor(survey_month)) %>% 
-  dplyr::relocate(survey_month, .after = survey_date) %>% 
-  filter(park_name %in% c("Lindo", "Orme", "Palomino", "Sonrisa")) %>% 
-  group_by(park_name, survey_month) %>% 
-  summarize(tot_bird_count_month = n())
+#bird_obs_subset <- bird_obs_subset %>% 
+#  mutate(survey_month = lubridate::month(survey_date)) %>% 
+#  mutate(survey_month = as.factor(survey_month)) %>% 
+#  dplyr::relocate(survey_month, .after = survey_date) %>% 
+#  filter(park_name %in% c("Lindo", "Orme", "Palomino", "Sonrisa")) %>% 
+#  group_by(park_name, survey_month) %>% 
+#  summarize(tot_bird_count_month = n())
 ```
 
-Take a look at your final data frame. Does it give you the outcome you expected? Is it informative? How would you improve this wrangling process?
+:::

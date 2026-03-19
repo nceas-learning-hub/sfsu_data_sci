@@ -7,3 +7,10 @@
 # Ignore all lecture materials
 lectures/
 student_materials/
+.Rhistory
+.DS_Store
+_freeze/
+*.html.md
+*.rmarkdown
+* 2/
+.Rhistory

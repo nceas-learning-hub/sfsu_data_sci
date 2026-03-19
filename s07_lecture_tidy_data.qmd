@@ -1,9 +1,13 @@
 ---
 title: Tidy Data
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
-:::{.callout-tip}
+::: callout-tip
 ## Learning Objectives
+
 Learn how to design and create effective data tables by:
 
 -   applying tidy and normalized data principles,
@@ -11,7 +15,6 @@ Learn how to design and create effective data tables by:
 -   relating tables following relational data models principles, and
 -   understanding how to perform table joins.
 :::
-
 
 ## What is tidy data?
 
@@ -279,6 +282,7 @@ A surrogate key is often simpler, and can be a better choice than a natural key 
 
 ![](images/lecture_tidy_data/surrogate_natural_keys.png){fig-align="center" width=70%} -->
 ```
+
 <!--Finally,-->
 
 It can also be the case that a variable is not a key, but by combining it with a second variable we get that the combined values uniquely identify the rows.
@@ -448,21 +452,37 @@ In the Cleaning & Wrangling chapter we will cover more best practices for cleani
 
 ::: callout-tip
 ## Tidy data, keys and joins
+
 -   Get together in pairs or small groups
 -   Obtain materials from instructors including activity handout and blank paper(s).
-- Follow instructions in activity handout.
+-   Follow instructions in activity handout.
+:::
 
+## Assignment Two: a02
+
+::: callout-tip
+## Make a quarto document to examime YOUR research data (or someone else's)
+
+-   In RStudio, create a new branch called a02
+-   In the assignments folder, create a new assignment called a02.qmd
+-   Make sure your data is in the data/raw or data/processed folder in your R project
+-   Create a quarto document that examines whether or not your data is tidy
+-   Your document needs a title (and your name and date) and the following sections: Introduction, Data (where you import the data and view it, to see if it is tidy), Analysis (where you comment on whether or not it is tidy and if it has primary and foreign keys), Conclusion (a short summary)
+-   Follow the instructions from chapter Quarto Literate Analysis, to commit and push (the qmd and html) from RStudio, and submit a Pull Request from your GitHub classroom repository when you have completed your assignment.
 :::
 
 <!-- ### Excersice 2: Relational Databases -->
 
 <!-- ::: callout-tip -->
+
 <!-- ## Prompt -->
 
 <!-- > Our funding agency requires that we take surveys of individuals who complete our training courses so that we can report on the demographics of our trainees and how effective they find our courses to be. -->
+
 <!-- ::: -->
 
 <!-- ::: callout-note -->
+
 <!-- ## Design data collection tables -->
 
 <!-- -   In your small groups, design a set of tables that will capture information collected in a participant survey that would apply to many courses. -->
@@ -470,9 +490,11 @@ In the Cleaning & Wrangling chapter we will cover more best practices for cleani
 <!-- -   Don't focus on designing a comprehensive set of questions for the survey, one or two simple questions would be sufficient (eg: "Did the course meet your expectations?", "What could be improved?", "To what degree did your knowledge increase?"). -->
 
 <!-- -   Include variables (columns) with basic set of information from the surveys and about the courses, such as the date of the course and name of the course, etc. -->
+
 <!-- ::: -->
 
 <!-- ::: callout-note -->
+
 <!-- ## Create entity relationsip model -->
 
 <!-- After you have thought about what kind of information you care collecting, let's break it down and build the entity-relationship model. -->
@@ -486,5 +508,7 @@ In the Cleaning & Wrangling chapter we will cover more best practices for cleani
 <!-- 4.  Add "words" describing how each entity relates -->
 
 <!-- 5.  Add cardinality to every relationship in the diagram. -->
+
 <!--     This mean, use the **EDR Crow's Foot** [Quick Reference](https://learning.nceas.ucsb.edu/2024-02-arctic/session_07.html#edr-crows-foot) to quantify how many items in an entity are related to another entity. -->
+
 <!-- ::: -->
