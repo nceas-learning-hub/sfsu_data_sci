@@ -713,7 +713,6 @@ leaflet(locations) %>%
 Leaflet has a ton of functionality that can enable you to create some beautiful, functional maps with relative ease. [Here](https://pages.github.nceas.ucsb.edu/NCEAS/sasap-data/language_vis.html) is an example of some we created as part of the [State of Alaskan Salmon and People (SASAP) project](https://www.nceas.ucsb.edu/workinggroups/state-alaskan-salmon-and-people-sasap), created using the same tools we showed you here. This map hopefully gives you an idea of how powerful the combination of Quarto or RMarkdown and GitHub Pages can be. 
 
 ## Assignment 5
-git commit -m "Republish site"
 ::: callout-tip
 ### Write up a quarto document to report the plots
 
