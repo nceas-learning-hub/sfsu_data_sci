@@ -786,8 +786,8 @@ point, use the workflow: `Stage (add) -> Commit -> Pull -> Push`
 ## Collaborate on a report and publish using GitHub pages
 
 The final step! Time to work together again. Collaborate with your
-partner in `lobster-report.qmd` to create a report to publish to GitHub
-pages.
+partner to create a report to publish to GitHub
+pages. You and your partner will combine some of your analysis into a single new qmd file, called lobster-report.qmd. Then you will render the file into html and make sure that it is visible using GitHub pages (see previous chapter from Week 11).
 
 ::: callout-note
 ### Code Review
@@ -816,6 +816,8 @@ reviews](https://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Qual
 
 ## Assignment a07
 
+ 
+
 Make sure your Quarto Document (lobster-report.qmd) is well organized and includes the
 following elements:
 
@@ -837,6 +839,8 @@ following elements:
     -   plots can be added either with the data visualization code or
         with Markdown syntax (calling a saved image) - it's up to you if
         you want to include the code or not.
+-   a summary or discussion section that shows you gained some insight into lobsters through your plots
+      -   make sure you push all your "html" files to GitHub, so the plots show correctly
 
 Finally, publish on GitHub pages (from Owner's repository). Refer back
 to [Chapter
