@@ -36,7 +36,7 @@ using GitHub Pages.
 ::: callout-tip
 ### Setup
 
-#### 1.  Create a new repository with a partner {#setup -}
+#### 1.  Create a new repository with a partner {#setup .unnumbered}
     a.  Determine who is the Owner and who is the Collaborator
     b.  The Owner creates a repository on GitHub titled with both your
         names (i.e. If Casey and Camila were partners, and Casey is the
@@ -49,15 +49,15 @@ using GitHub Pages.
     c.  The Owner adds the Collaborator to the repo
     d.  Both the Collaborator and the Owner clone the repo into their
         RStudio
-        <!-- e.  Both the Collaborator and the Owner run ```git config pull.rebase false``` in the Terminal to set the `Git` default strategy for `Pull`ing -->
+    e.  Both the Collaborator and the Owner run `git config pull.rebase false` in the Terminal to set the Git default strategy for pulling. -->
+
 
 \*\*Step 2 and Step 3 are meant <u>to be completed at the same
 time</u>. - Collaborator completes Step 2 - Owner completes Step 3
 
-#### 2. **Collaborator** {#create-files -}
-Create new files for exercise
-    a.  The Collaborator creates the following directory (folder):
-        i.  `analysis`
+#### 2. **Collaborator** {#create-files .unnumbered}
+    Create new files for exercise
+    a.  The Collaborator creates the following directory (folder): `analysis`
     b.  After creating the directories, create the following Quarto
         Documents and store them in the listed folders:
         i.  Title it: "Owner Analysis", save it as:
@@ -72,7 +72,7 @@ Create new files for exercise
     d.  The Owner `pull`s the changes and Quarto Documents into their
         local repository (their workspace)
         
-#### 3. **Owner** {#data-provenance - }
+#### 3. **Owner** {#data-provenance .unnumbered}
     Download data from the EDI Data Portal [SBC LTER: Reef:
     Abundance, size and fishing effort for California Spiny Lobster
     (Panulirus interruptus), ongoing since
@@ -816,7 +816,7 @@ reviews](https://en.wikibooks.org/wiki/Introduction_to_Software_Engineering/Qual
 
 ## Assignment a07
 
-Make sure your Quarto Document is well organized and includes the
+Make sure your Quarto Document (lobster-report.qmd) is well organized and includes the
 following elements:
 
 -   a title and your names
