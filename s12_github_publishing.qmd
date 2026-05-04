@@ -23,13 +23,42 @@ So far in this course, we've introduced a small set of powerful tools for doing 
 Quarto, in particular, is amazingly powerful for creating scientific reports but, so far, we haven't tapped its full potential for sharing our work with others.
 
 In this lesson, we're going to take our `import-template-{USERNAME}` GitHub repository and turn it into a beautiful and easy to read web page using the tools listed above.
+We will learn to use `git clone` and `git checkout` so that you will be the owner or your repository.
 
 ::: callout-note
-## Set up
+## Clone your repository, so you can own it
 
-1.  Make sure you are in your `import-template-{USERNAME}` project
+1.  From RStudio's File drop-down menu, select **New Project**.
 
-2.  Add a new Quarto file at the top level called `index.qmd`
+2.  Choose **Version Control** -\> Git: Clone a Project from a Git repository
+
+3. In GitHub: Go to their repo (from Classroom) -\> Click Code → HTTPS -\> Copy the URL
+
+4. Paste the URL when requested in RStudio
+
+5. Name your repo something different than your assignments repo, owned by your instructors
+
+6. Now we will make your repo public, so that GitHub pages will host your portfolio
+
+7.  Open your web browser to the [github.com](https://github.com/) and navigate to the page for your newly cloned repository
+
+8.  Activate GitHub Pages for the `main` branch
+
+    a.  First make your repo **public**: Settings -\> Danger Zone -\> Change repository visibility
+    b.  Go to Settings -\> Pages (underneath the Code and Automation section)
+    c.  Keep the "Source" as "Deploy from a branch"
+    d.  Under "Branch" you'll see a message that says "GitHub Pages is currently disabled". To change this, change the branch from "None" to `main`. Keep the folder as the `root` and then click "Save"
+    e.  You should see the message change to "Your GitHub Pages site is currently being built from the `main` branch"
+
+**Note:** `index.html` represents the default file for a web site, and is returned whenever you visit the web site but doesn't specify an explicit file to be returned.
+:::
+
+::: callout-note
+## Set up homepage for your public GitHub page
+
+1.  Make sure you are in your newly cloned and owned Project
+
+2.  Find and open `index.qmd`. If you don't find it, add a new Quarto file at the top level called `index.qmd`
 
     a.  Go to the RStudio menu File -\> New File -\> Quarto Document
     b.  This will bring up a dialog box. Add the title "GitHub Pages Example", keep the Default Output Format as "HTML", and then click "OK"
@@ -48,15 +77,6 @@ In this lesson, we're going to take our `import-template-{USERNAME}` GitHub repo
 
     a.  If you have a folder called `index_files`, commit this as well. This folder contains the all the formatting and display settings for your html page.
 
-6.  Open your web browser to the [github.com](https://github.com/) and navigate to the page for your `import-template-{USERNAME}` repository
-
-7.  Activate GitHub Pages for the `main` branch
-
-    a.  First make your repo **public**: Settings -\> Danger Zone -\> Change repository visibility
-    b.  Go to Settings -\> Pages (underneath the Code and Automation section)
-    c.  Keep the "Source" as "Deploy from a branch"
-    d.  Under "Branch" you'll see a message that says "GitHub Pages is currently disabled". To change this, change the branch from "None" to `main`. Keep the folder as the `root` and then click "Save"
-    e.  You should see the message change to "Your GitHub Pages site is currently being built from the `main` branch"
 
 **Note:** `index.qmd` represents the default file for a web site, and is returned whenever you visit the web site but doesn't specify an explicit file to be returned.
 :::
