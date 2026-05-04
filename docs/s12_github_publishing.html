@@ -628,6 +628,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#assignment-a09" id="toc-assignment-a09" class="nav-link" data-scroll-target="#assignment-a09"><span class="header-section-number">2</span> Assignment a09</a></li>
   </ul>
 </nav>
     </div>
@@ -761,20 +762,16 @@ Update content in your published page
 </div>
 </div>
 <p>Next, we will show how you can link different <code>qmd</code>’s rendered into <code>html</code> so you can easily share different parts of your work.</p>
-<div class="callout callout-style-default callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+</section>
+<section id="assignment-a09" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="assignment-a09"><span class="header-section-number">2</span> Assignment a09</h2>
+<div class="callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Exercise 1
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>In this exercise, you’ll create a table of contents with the lessons of this course on the main page, and link some of the files we have work on so far.</p>
+<div class="callout-body-container">
+<p>Now you’ll create a table of contents with the lessons of this course on the main page, and link some of the files we have work on so far.</p>
 <ul>
 <li><p>Go back to the RStudio server and to your <code>index.qmd</code> file</p></li>
 <li><p>Create a table of contents with the names of the main technical lessons of this course, like so:</p></li>
@@ -782,16 +779,13 @@ Exercise 1
 <pre><code>## Course Lessons
 
 - Introduction to Literate Analysis Using Quarto 
+- Tidy Data
 - Cleaning and Wrangling data
 - Data Visualization
-- Functions and packages
-
-## Course Practice Session
-
-- Practice I
-- Practice II
-- Practice III</code></pre>
+</code></pre>
 <ul>
+<li><p>Your list can contain only the html that you want to share, or a list of all the lessons</p></li>
+<li><p>You must share at a minimum two assignments</p></li>
 <li><p>Make sure you have the <code>html</code> versions of your <code>intro-to-qmd.qmd</code> and <code>data-cleaning.qmd</code> files. If you only see the <code>qmd</code> version, you need to “Render” your files first</p></li>
 <li><p>In your <code>index.qmd</code> let’s add the links to the <code>html</code> files we want to show on our webpage. Do you remember the Markdown syntax to create a link?</p></li>
 </ul>
@@ -814,8 +808,30 @@ Markdown syntax to create a link:
 </div>
 </div>
 </div>
+<div class="callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p>Quarto web pages are a great way to share work in progress with your colleagues. Here we showed an example with the materials we have created in this course. However, you can use these same steps to share the different files and progress of a project you’ve been working on. To do so simply requires thinking through your presentation so that it highlights the workflow to be reviewed. You can include multiple pages and build a simple web site and make your work accessible to people who aren’t set up to open your project in R. Your site could look something like this:</p>
+<div class="callout-body-container">
+<p>You need to commit and push all the <code>*.qmd</code>, <code>*.html</code>, and <code>*_files/</code> directories to GitHub that you want to link on your table of contents homepage.</p>
+<p>GitHub pages will host your website ONLY from your <code>main</code> branch (or whichever branch you select). Thus you need to move your assignments from other branches into your main branch.</p>
+<p>You can <code>merge</code> the branches, or just copy (<code>checkout</code>) the files. We recommend that you <code>checkout</code> the files. Let’s say that you want to share the Geospatial Vector Analysis assignment.</p>
+<p>Navigate to the terminal and type (example for a08, Geospatial Vector Analysis):</p>
+<ul>
+<li><code>git checkout main</code> If you get any errors, fix them!</li>
+<li><code>git checkout a08 -- assignments/a08.qmd assignments/a08.html assignments/a08_files/</code></li>
+<li><code>git add .</code></li>
+<li><code>git commit -m "Add page and supporting assets from branch a08"</code></li>
+</ul>
+<p>If you get errors, it might be because 1) you did not check out the main branch 2) your a08 files were not in the directory <code>assignments</code> or they were named something else 3) you have some other git error, which you need to fix.</p>
+<p>Once all the files for your assignment are in the <code>main</code> branch, check that your GitHub pages table of contents link actually works.</p>
+<p>Copy the URL to your Porfolio table of contents to Canvas, to submit your assignment! Congrats you’re done.</p>
+</div>
+</div>
+</div>
+<p>Quarto web pages are a great way to share work in progress with your colleagues. However, if you don’t want your work to be public after this course is over, you can stop hosting your GitHub page after grades have been posted by changing your repo to Private (from Public).</p>
+<p>Here we showed an example with the materials we have created in this course. However, you can use these same steps to share the different files and progress of a project you’ve been working on. To do so simply requires thinking through your presentation so that it highlights the workflow to be reviewed. You can include multiple pages and build a simple web site and make your work accessible to people who aren’t set up to open your project in R. Your site could look something like this:</p>
 <p><img src="images/github_publishing/github-pages-index-coreR.png" class="img-fluid"></p>
 
 

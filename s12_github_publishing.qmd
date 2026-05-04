@@ -32,13 +32,13 @@ We will learn to use `git clone` and `git checkout` so that you will be the owne
 
 2.  Choose **Version Control** -\> Git: Clone a Project from a Git repository
 
-3. In GitHub: Go to their repo (from Classroom) -\> Click Code → HTTPS -\> Copy the URL
+3.  In GitHub: Go to their repo (from Classroom) -\> Click Code → HTTPS -\> Copy the URL
 
-4. Paste the URL when requested in RStudio
+4.  Paste the URL when requested in RStudio
 
-5. Name your repo something different than your assignments repo, owned by your instructors
+5.  Name your repo something different than your assignments repo, owned by your instructors
 
-6. Now we will make your repo public, so that GitHub pages will host your portfolio
+6.  Now we will make your repo public, so that GitHub pages will host your portfolio
 
 7.  Open your web browser to the [github.com](https://github.com/) and navigate to the page for your newly cloned repository
 
@@ -58,7 +58,8 @@ We will learn to use `git clone` and `git checkout` so that you will be the owne
 
 1.  Make sure you are in your newly cloned and owned Project
 
-2.  Find and open `index.qmd`. If you don't find it, add a new Quarto file at the top level called `index.qmd`
+2.  Find and open `index.qmd`.
+    If you don't find it, add a new Quarto file at the top level called `index.qmd`
 
     a.  Go to the RStudio menu File -\> New File -\> Quarto Document
     b.  This will bring up a dialog box. Add the title "GitHub Pages Example", keep the Default Output Format as "HTML", and then click "OK"
@@ -76,7 +77,6 @@ We will learn to use `git clone` and `git checkout` so that you will be the owne
 5.  Commit your changes (for both `index.qmd` and `index.html`) with a commit message, and `push` to GitHub
 
     a.  If you have a folder called `index_files`, commit this as well. This folder contains the all the formatting and display settings for your html page.
-
 
 **Note:** `index.qmd` represents the default file for a web site, and is returned whenever you visit the web site but doesn't specify an explicit file to be returned.
 :::
@@ -107,8 +107,10 @@ Now that we've successfully published a web page from an Quarto Document, let's 
 
 Next, we will show how you can link different `qmd`'s rendered into `html` so you can easily share different parts of your work.
 
-::: callout-exercise
-In this exercise, you'll create a table of contents with the lessons of this course on the main page, and link some of the files we have work on so far.
+## Assignment a09
+
+::: callout
+Now you'll create a table of contents with the lessons of this course on the main page, and link some of the files we have work on so far.
 
 -   Go back to the RStudio server and to your `index.qmd` file
 
@@ -118,16 +120,15 @@ In this exercise, you'll create a table of contents with the lessons of this cou
 ## Course Lessons
 
 - Introduction to Literate Analysis Using Quarto 
+- Tidy Data
 - Cleaning and Wrangling data
 - Data Visualization
-- Functions and packages
 
-## Course Practice Session
-
-- Practice I
-- Practice II
-- Practice III
 ```
+
+- Your list can contain only the html that you want to share, or a list of all the lessons
+
+- You must share at a minimum two assignments
 
 -   Make sure you have the `html` versions of your `intro-to-qmd.qmd` and `data-cleaning.qmd` files.
     If you only see the `qmd` version, you need to "Render" your files first
@@ -151,7 +152,30 @@ In this exercise, you'll create a table of contents with the lessons of this cou
 Now when you visit your web site, you'll see the table of contents, and can navigate to the others file you linked.
 :::
 
-Quarto web pages are a great way to share work in progress with your colleagues.
+::: callout
+You need to commit and push all the `*.qmd`, `*.html`, and `*_files/` directories to GitHub that you want to link on your table of contents homepage. 
+
+GitHub pages will host your website ONLY from your `main` branch (or whichever branch you select). Thus you need to move your assignments from other branches into your main branch. 
+
+You can `merge` the branches, or just copy (`checkout`) the files. We recommend that you `checkout` the files. Let's say that you want to share the Geospatial Vector Analysis assignment. 
+
+Navigate to the terminal and type (example for a08, Geospatial Vector Analysis):
+
+ - `git checkout main`  If you get any errors, fix them!
+ - `git checkout a08 -- assignments/a08.qmd assignments/a08.html assignments/a08_files/ `
+ - `git add . `
+ - `git commit -m "Add page and supporting assets from branch a08"`
+ 
+ If you get errors, it might be because 1) you did not check out the main branch 2) your a08 files were not in the directory `assignments` or they were named something else 3) you have some other git error, which you need to fix. 
+ 
+ Once all the files for your assignment are in the `main` branch, check that your GitHub pages table of contents link actually works.
+ 
+ Copy the URL to your Porfolio table of contents to Canvas, to submit your assignment! Congrats you're done. 
+::: 
+
+Quarto web pages are a great way to share work in progress with your colleagues. However, if you don't want your work to be public after this course is over, you can stop hosting your GitHub page after grades have been posted by changing your repo to Private (from Public).
+
+
 Here we showed an example with the materials we have created in this course.
 However, you can use these same steps to share the different files and progress of a project you've been working on.
 To do so simply requires thinking through your presentation so that it highlights the workflow to be reviewed.
