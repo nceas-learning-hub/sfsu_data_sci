@@ -38,13 +38,15 @@ We will learn to use `git clone` and `git checkout` so that you will be the owne
 
 5.  Name your repo something different than your assignments repo, owned by your instructors. Unfortunately, your cloned repo is still owned by us...
 
-6. Create your own repository on GitHub (maybe call it portfolio): Click New Repository -\> Choose Public -\> Don't add a .gitignore -\> Copy the new URL
+6. So you have all your branches, in Terminal, type: `git fetch --all`
 
-7.  Type in the terminal on RStudio for your cloned project and replace the default https with the URL you copied for the repo you own (portfolio)
+7. Create your own repository on GitHub (maybe call it portfolio): Click New Repository -\> Choose Public -\> Don't add a .gitignore -\> Copy the new URL
+
+8.  Type in the terminal on RStudio for your cloned project and replace the default https with the URL you copied for the repo you own (portfolio)
 - `git remote set-url origin https://github.com/YOUR-USERNAME/YOUR-NEW-REPO.git`
 - `git push -u origin main`
 
-8.  Activate GitHub Pages for the `main` branch
+9.  Activate GitHub Pages for the `main` branch
 
     a.  First make your repo **public**: Settings -\> Danger Zone -\> Change repository visibility
     b.  Go to Settings -\> Pages (underneath the Code and Automation section)
