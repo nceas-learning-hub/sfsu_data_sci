@@ -40,7 +40,7 @@ We will learn to use `git clone` and `git checkout` so that you will be the owne
 
 6. Create your own repository on GitHub (maybe call it portfolio): Click New Repository -\> Choose Public -\> Don't add a .gitignore -\> Copy the new URL
 
-6.  Type in the terminal on RStudio for your cloned project and replace the default https with the URL you copied for the repo you own (portfolio)
+7.  Type in the terminal on RStudio for your cloned project and replace the default https with the URL you copied for the repo you own (portfolio)
 - `git remote set-url origin https://github.com/YOUR-USERNAME/YOUR-NEW-REPO.git`
 - `git push -u origin main`
 
