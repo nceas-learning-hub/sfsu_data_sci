@@ -1,0 +1,561 @@
+---
+title: "AI for Coding Support"
+subtitle: "BIO/CHEM 806 — Live-Coding Companion"
+author: "Gretchen LeBuhn"
+date: today
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    code-fold: false
+    theme: flatly
+    highlight-style: github
+execute:
+  echo: true
+  eval: false
+  warning: false
+  message: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+::: {.callout-note icon="false"}
+## 📌 How to use this document
+
+This is your live-coding companion. Type (or accept Copilot suggestions)
+directly into the code chunks below — don't paste in the answers ahead
+of time. The callout boxes link each exercise back to the lecture
+slides. Set `eval: true` on any chunk you want to run and see output.
+:::
+
+------------------------------------------------------------------------
+
+# Part 1 — GitHub Copilot {#copilot}
+
+> **Concept:** Copilot is a real-time, in-editor pair programmer. It
+> reads everything in your document — prose, comments, previous code —
+> and predicts the next line.
+
+::: {.callout-tip icon="false"}
+## 🔧 Setup check (do this before the session)
+
+``` r
+# Run this in your R console to confirm the package is installed
+install.packages("palmerpenguins")   # if needed
+library(palmerpenguins)
+head(penguins)
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 1 — tidyverse penguin analysis {#ex1}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Using Copilot to assist with coding tasks"
+
+Write the pseudocode below as Markdown prose *first*, then open the code
+chunk and let Copilot suggest each line. Accept with **Tab**. Point out
+how Copilot picks up package and function names from the prose you wrote
+above the chunk.
+:::
+
+Load the `palmerpenguins` package and the `penguins` dataset. Drop any
+rows with missing values. Filter to keep only Chinstrap and Adelie
+species. Create a scatter plot of bill length vs. bill depth, colored by
+species. Then run a Welch two-sample t-test comparing bill length
+between the two species and print the results.
+
+```{r}
+#| label: ex1-copilot-tidyverse
+
+#load the palmerpenguins package and load the penguins data
+#drop any incomplete observations (any NA values)
+#filter to just keep the Chinstrap and Adelie species
+#generate a scatter plot of bill length vs. bill depth for each species then, for the two species, 
+# run a t-test to determine whether the bill lengths are statistically different between the two species. 
+#Print a summary of the t test results.
+
+
+
+
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ Reference answer (expand only if needed)
+
+``` r
+library(tidyverse)
+library(palmerpenguins)
+
+penguins_filtered <- penguins |>
+  drop_na() |>
+  filter(species %in% c("Chinstrap", "Adelie"))
+
+ggplot(penguins_filtered, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point(alpha = 0.7, size = 2) +
+  labs(title = "Bill Length vs. Bill Depth",
+       x = "Bill Length (mm)", y = "Bill Depth (mm)") +
+  theme_minimal()
+
+t_test_result <- t.test(bill_length_mm ~ species, data = penguins_filtered)
+print(t_test_result)
+broom::tidy(t_test_result)
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 2 — Base R version {#ex2}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Exercise 2"
+
+Below the previous chunk, add a sentence saying "Repeat using only base
+R functions and plotting." Then open a new chunk and let Copilot figure
+out the style shift from context.
+:::
+
+Repeat the previous analysis using only base R functions and plotting.
+No tidyverse packages.
+
+```{r}
+#| label: ex2-copilot-baseR
+
+# use only base R — load palmerpenguins
+
+
+# drop NA rows
+
+
+# filter to Chinstrap and Adelie
+
+
+# base R scatter plot with legend
+
+
+# t-test
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ Reference answer
+
+``` r
+library(palmerpenguins)
+
+penguins_clean <- na.omit(penguins)
+penguins_clean <- penguins_clean[penguins_clean$species %in% c("Chinstrap", "Adelie"), ]
+
+plot(penguins_clean$bill_length_mm, penguins_clean$bill_depth_mm,
+     col = ifelse(penguins_clean$species == "Chinstrap", "steelblue", "tomato"),
+     pch = 19, xlab = "Bill Length (mm)", ylab = "Bill Depth (mm)",
+     main = "Bill Length vs. Bill Depth")
+legend("topright", legend = c("Chinstrap", "Adelie"),
+       col = c("steelblue", "tomato"), pch = 19)
+
+t.test(bill_length_mm ~ species, data = penguins_clean)
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 3 — Writing a function with Copilot {#ex3}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Copilot to write a function"
+
+Write the pseudocode as prose, open a chunk, write a comment naming the
+function, and let Copilot build it line by line. After it's done,
+discuss: Does it pull the right p-value (slope, not intercept)? Would
+you structure the output differently?
+:::
+
+Write a function called `calc_lm()` that:
+
+- Takes a dataframe `data` and column name strings `y` (outcome) and `x`
+  (predictor)
+- Fits a linear regression `y ~ x`
+- Returns the slope, intercept, and p-value of the slope in a dataframe
+
+```{r}
+#| label: ex3-calc-lm-function
+
+# function to calculate slope, intercept, and p-value for a linear regression
+
+
+# test on the penguins data
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ Reference answer
+
+``` r
+calc_lm <- function(data, y, x) {
+  y_vals <- data[[y]]
+  x_vals <- data[[x]]
+  lm_model <- lm(y_vals ~ x_vals)
+  data.frame(
+    slope     = coef(lm_model)[2],
+    intercept = coef(lm_model)[1],
+    p_value   = summary(lm_model)$coefficients[2, 4]
+  )
+}
+
+# test
+calc_lm(penguins_filtered, "bill_length_mm", "bill_depth_mm")
+
+# alternative: broom is cleaner
+# broom::tidy(lm(bill_length_mm ~ bill_depth_mm, data = penguins_filtered))
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 4 — Nested loop with Copilot {#ex4}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Copilot to write a loop"
+
+This one Copilot will struggle with. Let it try, then help it along —
+this is intentional. Point out the specific bugs as you encounter them
+(single vs. double brackets, missing index increment, incorrect filter
+syntax). Emphasize: for complex logic, ChatGPT (Part 2) is often the
+better tool.
+:::
+
+For each combination of species and sex in `penguins_filtered`, apply
+`calc_lm()` to model `bill_length_mm ~ bill_depth_mm`. Store results in
+a list, then combine into a single dataframe.
+
+```{r}
+#| label: ex4-nested-loop
+
+# create empty list to store results
+
+
+# iterate over species
+  # iterate over sex
+    # apply calc_lm() to the filtered subset
+    # add species and sex to the result
+    # store in results list
+
+
+# combine all results into a single dataframe
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ Reference answer (manual version — Copilot-assisted)
+
+``` r
+results <- list()
+i <- 1
+
+for (sp in unique(penguins_filtered$species)) {
+  for (sx in unique(penguins_filtered$sex)) {
+    subset_df <- penguins_filtered[
+      penguins_filtered$species == sp & penguins_filtered$sex == sx, ]
+    result <- calc_lm(subset_df, "bill_length_mm", "bill_depth_mm")
+    result$species <- sp
+    result$sex <- sx
+    results[[i]] <- result
+    i <- i + 1
+  }
+}
+
+results_df <- do.call(rbind, results)
+results_df
+```
+:::
+
+------------------------------------------------------------------------
+
+# Part 2 — Iterative Coding with ChatGPT {#chatgpt}
+
+> **Concept:** ChatGPT (or Claude) is a conversational coding
+> collaborator. You write prompts, it returns complete code blocks, you
+> test them, then iterate through follow-up messages. Unlike Copilot, it
+> can revise and rewrite earlier code.
+
+------------------------------------------------------------------------
+
+## Exercise 5 — Pseudocode → code {#ex5}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Pseudocode into code"
+
+Switch to the browser (chat.openai.com or claude.ai). Paste the prompt
+below into a NEW chat. Copy the response back here and run it. Compare
+to Exercise 1.
+:::
+
+**Prompt to paste into ChatGPT:**
+
+```         
+Here is a sequence of steps I want to carry out in R using a tidyverse workflow.
+Please write the R code:
+
+- Load the palmerpenguins package and the penguins dataset
+- Drop any rows with NA values
+- Filter to keep only Chinstrap and Adelie species
+- Create a scatter plot of bill length vs. bill depth, colored by species
+- Run a Welch t-test comparing bill length between the two species and print the results
+```
+
+```{r}
+#| label: ex5-chatgpt-code
+
+# Paste the code ChatGPT returns here and run it
+
+
+```
+
+------------------------------------------------------------------------
+
+## Exercise 6 — Follow-up: no tidyverse {#ex6}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Exercise 6"
+
+In the SAME ChatGPT chat (do NOT start a new one), send the follow-up
+below. Point out that ChatGPT remembers the previous context — it knows
+the dataset, species, and variables without being told again.
+:::
+
+**Follow-up message in the same chat:**
+
+```         
+Now rewrite that code using only base R functions — no tidyverse packages.
+```
+
+```{r}
+#| label: ex6-chatgpt-baseR
+
+# Paste ChatGPT's base R response here
+
+```
+
+------------------------------------------------------------------------
+
+## Exercise 7 — Commenting unfamiliar code {#ex7}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Commenting existing code"
+
+Open a NEW chat. Navigate to the URL below and copy the raw Python
+script. Paste it into ChatGPT with the prompt below. Scroll through the
+commented version together — discuss what ChatGPT added and whether any
+code was changed.
+
+URL:
+https://raw.githubusercontent.com/convei-wwf/NLParty/refs/heads/main/abstract_classifier.py
+:::
+
+**Prompt to paste into a NEW ChatGPT chat:**
+
+```         
+Please add detailed inline comments to the following Python script to explain what each
+section does. Assume I am an R user who is familiar with data analysis but new to Python.
+
+[paste the Python script here]
+```
+
+```{python}
+#| label: ex7-commented-python
+#| eval: false
+
+# Paste the commented Python code here for reference
+# (We are not running this in R — it's Python, displayed for reference)
+
+```
+
+------------------------------------------------------------------------
+
+## Exercise 8 — Refactoring code {#ex8}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Suggesting improvements to code (refactoring)"
+
+Open a new chat. Paste the nested loop from Exercise 4 and use the
+prompt below. After ChatGPT responds, copy the refactored code here and
+verify it gives the same result as the original nested loop.
+:::
+
+**Prompt to paste into a NEW ChatGPT chat:**
+
+```         
+Here is some R code that works but could be improved. Can you suggest improvements
+for readability and efficiency? Please explain the changes before showing the code.
+
+[paste your nested loop code from Exercise 4 here]
+```
+
+```{r}
+#| label: ex8-refactored
+
+# Paste ChatGPT's refactored code here and run it
+# Verify it matches the results_df from Exercise 4
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ What ChatGPT typically suggests
+
+``` r
+library(dplyr)
+
+results_df <- penguins_filtered |>
+  split(list(.$species, .$sex), drop = TRUE) |>
+  lapply(function(df) {
+    result <- calc_lm(df, "bill_length_mm", "bill_depth_mm")
+    result$species <- unique(df$species)
+    result$sex     <- unique(df$sex)
+    result
+  }) |>
+  bind_rows()
+
+results_df
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 9 — Unit tests {#ex9}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Writing unit tests"
+
+Paste calc_lm() and the prompt into a new chat. Run the test. It will
+likely fail due to a perfect-collinearity warning. Paste the error back
+into ChatGPT and ask it to fix the test — this demonstrates the
+iterative back-and-forth workflow.
+:::
+
+**Prompt to paste into a NEW ChatGPT chat:**
+
+```         
+Please write a unit test for the following R function using the testthat package.
+The function takes a dataframe and column names for y and x, fits a linear regression,
+and returns slope, intercept, and p-value as a dataframe.
+
+[paste calc_lm() code here]
+```
+
+```{r}
+#| label: ex9-unit-test
+
+# Paste ChatGPT's unit test here and run it
+# If it fails, paste the error/warning back into ChatGPT and ask for a fix
+
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## ✅ What a working unit test looks like
+
+``` r
+library(testthat)
+
+# Slightly noisy data avoids perfect-collinearity warning
+set.seed(123)
+test_data <- data.frame(
+  x = 1:5,
+  y = c(2, 4, 6, 8, 10) + rnorm(5, mean = 0, sd = 0.1)
+)
+
+test_that("calc_lm returns correct slope, intercept, and p-value", {
+  result <- calc_lm(test_data, "y", "x")
+  expect_equal(result$slope,     2, tolerance = 0.1)
+  expect_equal(result$intercept, 0, tolerance = 0.1)
+  expect_lt(result$p_value, 0.05)
+})
+```
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 10 — Translating to Python {#ex10}
+
+::: {.callout-tip icon="false"}
+## 🎯 Instructor cue — Slide: "Translating code from one language to another"
+
+Paste the nested loop into a new chat with the prompt below. Point out:
+the translated code is not stand-alone (it calls calc_lm() and
+penguins_filtered which don't exist in Python yet). Ask students: what
+would you need to do to make it runnable? As a bonus, ask ChatGPT to
+also refactor the Python version.
+:::
+
+**Prompt to paste into a NEW ChatGPT chat:**
+
+```         
+Please translate the following R code into Python using pandas where appropriate.
+Note that calc_lm() and penguins_filtered need to be defined separately in Python —
+just translate the loop structure for now.
+
+[paste the nested loop from Exercise 4 here]
+```
+
+```{python}
+#| label: ex10-python-translation
+#| eval: false
+
+# Paste the Python translation here for reference
+
+```
+
+**Bonus — refactor in Python:**
+
+```         
+Now refactor this Python version for better readability and efficiency.
+```
+
+```{python}
+#| label: ex10-python-refactored
+#| eval: false
+
+# Paste the refactored Python code here
+
+```
+
+------------------------------------------------------------------------
+
+# Wrap-Up Notes {#wrapup}
+
+::: {.callout-important icon="false"}
+## ⚠️ Things to remember about AI coding tools
+
+**Hallucinations:** LLMs can confidently generate wrong code. Always
+test it. If you couldn't write the code yourself given the time, be
+extra careful trusting the output.
+
+**Privacy:** Don't paste sensitive or private data into a public LLM.
+Prompts may be stored and reviewed by the provider.
+
+**Attribution:** AI-generated code may reproduce patterns from
+open-source repositories without proper attribution. Check licenses for
+your use case.
+
+**You are responsible:** Both tools make you faster at writing code —
+they don't replace understanding it. Always verify that the output is
+scientifically correct, not just syntactically valid.
+:::
+
+::: {.callout-tip icon="false"}
+## 💡 Quick decision guide: Copilot vs. ChatGPT
+
+| Situation                               | Better tool |
+|-----------------------------------------|-------------|
+| Writing code line-by-line in real time  | **Copilot** |
+| Well-defined task with clear pseudocode | **Either**  |
+| Complex logic that needs revision       | **ChatGPT** |
+| Commenting unfamiliar code              | **ChatGPT** |
+| Refactoring a block of code             | **ChatGPT** |
+| Debugging with an error message         | **ChatGPT** |
+| Translating between languages           | **ChatGPT** |
+| Writing unit tests                      | **ChatGPT** |
+:::

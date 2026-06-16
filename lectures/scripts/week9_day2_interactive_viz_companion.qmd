@@ -1,0 +1,375 @@
+---
+title: "Interactive Visualization — Live Coding Companion"
+subtitle: "DT and leaflet with the Sacramento Delta Dataset"
+author: "BIO/CHEM 806"
+date: today
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    number-sections: false
+    theme: cosmo
+execute:
+  echo: true
+  eval: true
+editor:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(forcats)
+library(ggplot2)
+library(leaflet)
+library(DT)
+library(scales)
+library(janitor)
+library(viridis)
+```
+
+::: callout-tip
+## Instructor Note — Before Class (Slide 1)
+
+Have students open their existing Quarto document from the ggplot2
+activity, or create a new one inside the same project. They should
+already have `visits_long` and `daily_visits_totals` in their
+environment from last time. If not, the data-prep section below rebuilds
+everything from scratch.
+
+Confirm that all packages in the setup chunk above are installed. `DT`
+and `leaflet` are the new ones — students may need to run
+`install.packages(c("DT", "leaflet"))` in the console.
+:::
+
+------------------------------------------------------------------------
+
+## Data Preparation
+
+Rebuild `visits_long` if students don't have it from the ggplot2
+session. If they do, skip to the next section.
+
+```{r load-data, message=FALSE, warning=FALSE}
+delta_visits_raw <- read_csv(
+  here::here("data/r_data_visualization/Socioecological_monitoring_data.csv")
+)
+
+delta_visits <- delta_visits_raw %>%
+  janitor::clean_names()
+
+visits_long <- delta_visits %>%
+  pivot_longer(
+    cols = c(sm_boat, med_boat, lrg_boat,
+             bank_angler, scientist, cars),
+    names_to = "visitor_type",
+    values_to = "quantity"
+  ) %>%
+  rename(restore_loc = eco_restore_approximate_location) %>%
+  select(-notes)
+```
+
+::: callout-tip
+## Instructor Note — Data Setup (Slide 5)
+
+If anyone gets a file-not-found error, they either haven't downloaded
+the EDI data yet, or they're not in their R project. The most common
+fix: File → Open Project → navigate to their `import_template_USERNAME`
+folder and open the `.Rproj` file.
+
+Don't spend more than 3 minutes on this — have students pair up if
+they're stuck.
+:::
+
+------------------------------------------------------------------------
+
+## Part 1: Interactive Tables with DT
+
+### Getting one row per site
+
+The `visits_long` data has many rows per site — one for each visit ×
+visitor type combination. Before building a location table, we need
+exactly one row per site.
+
+```{r distinct-locations}
+locations <- visits_long %>%
+  distinct(restore_loc, .keep_all = TRUE) %>%
+  select(restore_loc, latitude, longitude)
+
+locations
+```
+
+::: callout-tip
+## Instructor Note — `distinct()` (Slide 9)
+
+Ask the chat: "What happens if we run `distinct(restore_loc)` without
+`.keep_all = TRUE`? Try it." Give 30 seconds.
+
+The answer: you only get one column back. `.keep_all = TRUE` is what
+preserves the latitude and longitude columns. This is a genuinely common
+mistake — worth surfacing before the activity.
+:::
+
+### Basic `datatable()`
+
+```{r basic-datatable}
+datatable(locations)
+```
+
+### Customized for scientific communication
+
+```{r custom-datatable}
+datatable(
+  locations,
+  options = list(
+    pageLength = 5,
+    dom = 'ftp'
+  ),
+  colnames = c("Restoration Site", "Latitude", "Longitude"),
+  caption = "Sampling locations, Sacramento–San Joaquin Delta."
+)
+```
+
+::: callout-tip
+## Instructor Note — DT Demo (Slides 10–11)
+
+Run the basic version first, then the customized one. Point out:
+
+1.  Click a column header to sort — ask "what does sorting by latitude
+    tell us about the north–south arrangement of these sites?"
+2.  Type "Island" in the search box — instant filter
+3.  The `dom = 'ftp'` argument: `f` = filter, `t` = table, `p` =
+    pagination. Removing the default buttons keeps it clean for a
+    supplementary document.
+
+Chat prompt (Slide 11): "Think about a table in your thesis or a paper
+you've read. What would have been easier to find if it was searchable?"
+Give 90 seconds, call on 2–3 people.
+:::
+
+------------------------------------------------------------------------
+
+## Part 2: Interactive Maps with leaflet
+
+### Simplest possible map
+
+```{r basic-map}
+leaflet(locations) %>%
+  addTiles() %>%
+  addMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ restore_loc
+  )
+```
+
+::: callout-tip
+## Instructor Note — First leaflet Map (Slide 15)
+
+Run this live, click one of the markers to show the popup working. Ask:
+"How does the `~longitude` syntax feel familiar? Where have you seen `~`
+used to reference a column in data?" (Answer: `aes()` in ggplot2,
+`facet_wrap(~variable)` — the formula interface.)
+
+Zoom in on the Delta region to show the geographic context. Most
+students won't have spent much time looking at this area.
+:::
+
+### Switching base maps
+
+```{r topo-map}
+leaflet(locations) %>%
+  addProviderTiles(providers$Esri.WorldTopoMap) %>%
+  addCircleMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ restore_loc,
+    radius = 5,
+    fillColor = "#167B62",
+    fillOpacity = 0.8,
+    stroke = FALSE
+  )
+```
+
+```{r satellite-map}
+leaflet(locations) %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addCircleMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ restore_loc,
+    radius = 5,
+    fillColor = "salmon",
+    fillOpacity = 0.9,
+    stroke = FALSE
+  )
+```
+
+::: callout-tip
+## Instructor Note — Provider Tiles (Slide 17)
+
+Run both maps back to back. Ask: "For studying restoration ecology in
+the Delta, which base map tells you more — topographic or satellite
+imagery?" Pause for chat responses.
+
+This is not a trick question — satellite is often more useful for
+habitat context. But for sites spanning an elevation gradient (e.g., a
+mountain watershed), topographic would win. This connects to the
+decision log framing: base map choice is a defensible scientific
+decision.
+
+Mention: there are hundreds of provider tiles available.
+`leaflet::providers` is a list you can explore.
+:::
+
+### Layered base maps (imagery + labels)
+
+```{r layered-map}
+leaflet(locations) %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addProviderTiles(providers$CartoDB.PositronOnlyLabels) %>%
+  addCircleMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ restore_loc,
+    radius = 5,
+    fillColor = "yellow",
+    fillOpacity = 1,
+    stroke = TRUE,
+    weight = 0.5,
+    color = "white",
+    opacity = 1
+  )
+```
+
+::: callout-tip
+## Instructor Note — Layered Tiles (Slide 18)
+
+Run this. Note that you're calling `addProviderTiles()` twice — the
+second call stacks on top of the first. The white-on-dark circle markers
+are the most legible against satellite imagery.
+:::
+
+### Informative popups
+
+```{r popup-map}
+leaflet(locations) %>%
+  addProviderTiles(providers$Esri.WorldTopoMap) %>%
+  addCircleMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ paste0(
+      "<b>", restore_loc, "</b><br>",
+      "Lat: ", round(latitude, 3), "<br>",
+      "Lon: ", round(longitude, 3)
+    ),
+    radius = 6,
+    fillColor = "#167B62",
+    fillOpacity = 0.85,
+    stroke = TRUE,
+    weight = 1,
+    color = "white",
+    opacity = 1
+  )
+```
+
+::: callout-tip
+## Instructor Note — HTML Popups (Slide 20)
+
+Walk through the `paste0()` call:
+
+-   `<b>...</b>` = bold in HTML
+-   `<br>` = line break
+-   `round(latitude, 3)` = 3 decimal places is appropriate precision for
+    field GPS coordinates
+
+Chat prompt (Slide 20): "What three variables from your thesis dataset
+would be most valuable in a popup?" Give 2 minutes. Call on 2–3 students
+— this usually surfaces really interesting domain variation between the
+bio and chem students.
+:::
+
+------------------------------------------------------------------------
+
+## Putting It Together
+
+A complete workflow: wrangle → table → map, all in one document.
+
+```{r full-workflow}
+# Step 1: Prepare unique locations
+locations <- visits_long %>%
+  distinct(restore_loc, .keep_all = TRUE) %>%
+  select(restore_loc, latitude, longitude)
+
+# Step 2: Searchable table for supplementary methods
+datatable(
+  locations,
+  colnames = c("Site", "Latitude", "Longitude"),
+  caption = "Table S1. Restoration monitoring locations."
+)
+
+# Step 3: Interactive map for GitHub Pages / supplementary report
+leaflet(locations) %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addProviderTiles(providers$CartoDB.PositronOnlyLabels) %>%
+  addCircleMarkers(
+    lng = ~ longitude,
+    lat = ~ latitude,
+    popup = ~ paste0("<b>", restore_loc, "</b>"),
+    radius = 5,
+    fillColor = "salmon",
+    fillOpacity = 1,
+    stroke = TRUE, weight = 0.5,
+    color = "white", opacity = 1
+  )
+```
+
+------------------------------------------------------------------------
+
+## Breakout Activity (8 min)
+
+::: callout-tip
+## Instructor Note — Breakout (Slide 22)
+
+Put students in pairs in breakout rooms. Prompt:
+
+"Thinking about your own thesis data or a dataset you'd plausibly use:
+(1) What are your coordinate columns, or how would you get coordinates?
+(2) What one additional variable — beyond just location — would most
+useful to see in a popup? (3) Which base map — topo, satellite, or
+street — would best show the scientific context of your sites?"
+
+After 7 minutes, bring everyone back and call on 2–3 pairs to share.
+This typically takes 3–4 more minutes. Budget 12 minutes total. Cut to 6
+minutes if you're running behind; this can continue as an activity
+warm-up.
+:::
+
+------------------------------------------------------------------------
+
+## Key Concepts Recap
+
+| Concept | What to remember |
+|-------------------------|----------------------------------------------|
+| `distinct(.keep_all = TRUE)` | One row per site; keep lat/lon |
+| `datatable()` | Searchable/sortable with one function call |
+| `leaflet() %>% addTiles()` | Canvas + base map |
+| `addProviderTiles()` | Swap base map for scientific context |
+| `addCircleMarkers()` | Styleable markers: radius, color, popup |
+| `~column` | References data frame column (same as `aes()` logic) |
+| `paste0()` in popup | HTML string — bold, line breaks, rounded values |
+
+::: callout-tip
+## Instructor Note — Wrap-Up (Slide 24)
+
+The most important conceptual takeaway for thesis students: ggplot2 is
+for your chapters; DT + leaflet are for your GitHub Pages supplementary
+materials and advisor-facing exploratory reports. They serve different
+audiences and different stages of the workflow.
+
+Remind them that in Week 13 they'll revisit spatial data with `sf`
+objects and `geom_sf()` — today's lat/lon columns will become properly
+georeferenced spatial objects with CRS metadata.
+:::

@@ -1,0 +1,326 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  code-line-numbers: false
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Data Science as Scientific Practice]{.custom-title}
+
+[Week 1, Day 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome!]{.slide-title}
+
+::: body-text
+**Instructors:** Dr. Gretchen LeBuhn & Dr. Nicole Adelstein
+
+**Today's Focus:** Thinking clearly about data
+
+**What to expect:** - Get to know each other - Surface big ideas in data science - Establish course norms
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-this-is data-menu-title="What This Course Is"}
+
+[What This Course Is About]{.slide-title}
+
+::: body-text
+This is a course about **thinking clearly with data**.
+
+**Not about:** - Being a coder already - Memorizing functions - Learning statistics in isolation
+
+**About:** - Explaining your reasoning - Spotting your assumptions - Revising when things don't make sense
+:::
+
+------------------------------------------------------------------------
+
+##  {#prior-experience data-menu-title="Prior Experience"}
+
+[You Belong Here]{.slide-title}
+
+::: body-text
+**Prior coding experience is not what matters.**
+
+What matters: - Willingness to ask "why" - Explaining your choices - Revising when things are unclear
+
+**That's science. We're applying it to data work.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#today-plan data-menu-title="Today's Plan"}
+
+[How Today Will Work]{.slide-title}
+
+::: body-text
+1.  **Get to know each other** through noticing patterns in data
+
+2.  **Surface big data science ideas** without code
+
+3.  **Talk about norms** for working together
+
+**I'm noticing *how* you think, not *what* you already know.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#intro-activity data-menu-title="Introductions"}
+
+[Introductions as Data]{.slide-title}
+
+::: body-text
+**Put three things in the chat:**
+
+1.  Your name
+2.  Your field or program
+3.  One kind of data you work with (or hope to work with)
+
+**Not sure what counts as data?** Just write what comes to mind.
+
+**Never worked with data?** Write that.
+
+**All answers are useful.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#data-question data-menu-title="Data Question"}
+
+[A Question]{.slide-title}
+
+::: {.body-text .center-text}
+**Did everyone interpret "data" the same way?**
+
+(Answer in chat or unmute)
+:::
+
+------------------------------------------------------------------------
+
+##  {#syllabus-review data-menu-title="Syllabus"}
+
+[Syllabus review]{.slide-title}
+
+::: {.body-text .center-text}
+**Let's take a look at the syllabus on canvas**
+:::
+
+------------------------------------------------------------------------
+
+##  {#ambiguity data-menu-title="Ambiguity"}
+
+[Ambiguity in "Data"]{.slide-title}
+
+::: body-text
+Some people answered with:
+
+\- **Format**
+
+\- **Content**
+
+\- **Collection method**
+
+**The ambiguity doesn't go away when you start coding.**
+
+It just gets buried under syntax.
+
+**The hardest part of data science?** Deciding what you're even measuring.
+:::
+
+------------------------------------------------------------------------
+
+##  {#class-dataset data-menu-title="Class as Dataset"}
+
+[This Class as a Dataset]{.slide-title}
+
+::: body-text
+**Breakout Activity (10 minutes):**
+
+Imagine describing this class as a dataset for someone who wasn't here.
+
+-   What **variables** would you include?
+-   How would you **define** them?
+-   What information do you **wish you had**?
+
+**Write your reasoning**, not just a list.
+
+Google Doc link in chat →
+:::
+
+------------------------------------------------------------------------
+
+##  {#report-out data-menu-title="Report Out"}
+
+[What Did We Learn?]{.slide-title}
+
+::: body-text
+Three groups will share:
+
+**One interesting decision you made**
+
+OR
+
+**One place where you got stuck**
+:::
+
+------------------------------------------------------------------------
+
+##  {#experience-example data-menu-title="Experience Example"}
+
+[Example: Measuring "Experience"]{.slide-title}
+
+::: body-text
+"Experience" could mean:
+
+\- Time in grad program
+
+\- Prior statistics courses
+
+\- Comfort with ambiguity
+
+\- Years working with data
+
+**You didn't fail because you couldn't agree.**
+
+You succeeded because you **noticed the decision you'd have to make.**
+
+**That's data science.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-we-did data-menu-title="What We Did"}
+
+[What We Just Did]{.slide-title}
+
+::: body-text
+Without writing a single line of code, you:
+
+✓ Defined variables
+
+✓ Noticed ambiguity
+
+✓ Made decisions and justified them
+
+✓ Realized others might make different decisions
+
+**This is the foundation of everything we'll do this semester.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#course-norms data-menu-title="Course Norms"}
+
+[Course Norms]{.slide-title}
+
+::: body-text
+**My commitments to you:**
+
+1.  I will not assume you know things
+2.  I will not mistake speed for understanding
+3.  I will not treat "I don't know" as failure
+4.  I will give you time to think
+:::
+
+------------------------------------------------------------------------
+
+##  {#your-norms data-menu-title="Your Commitments"}
+
+[What I Need From You]{.slide-title}
+
+::: body-text
+1.  **Ask questions out loud** — if you're confused, someone else is too
+
+2.  **Try things when you're not sure** — messy reasoning \> polished guessing
+
+3.  **Be kind** to each other and yourselves
+:::
+
+------------------------------------------------------------------------
+
+##  {#your-goals data-menu-title="Your Goals"}
+
+[Your Turn]{.slide-title}
+
+::: {.body-text .center-text}
+**Two questions** (chat or unmute):
+
+1.  What do you want to accomplish this semester?
+
+2.  What do you need from me or from each other to make that happen?
+:::
+
+------------------------------------------------------------------------
+
+##  {#themes data-menu-title="Themes"}
+
+What I think I'm hearing
+
+::: body-text
+-   You want to feel **competent**, not just compliant
+
+-   You want to **understand**, not just copy
+
+-   You want **space to struggle** without judgment
+
+**We can work with that.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#before-wednesday data-menu-title="Before Wednesday"}
+
+[Before Wednesday]{.slide-title}
+
+::: body-text
+**Think about this question:**
+
+What decisions did we make today that felt invisible at the time?
+
+We're not writing code yet, but we're already making choices about what counts, what matters, and how to define things.
+:::
+
+------------------------------------------------------------------------
+
+##  {#closing data-menu-title="Closing"}
+
+[Final Thought]{.slide-title}
+
+::: {.body-text .center-text}
+Everything we did today — thinking, struggling with definitions, noticing ambiguity —
+
+**That's not "pre-data-science."**
+
+**That IS data science.**
+
+The coding is just execution.
+
+**The thinking is the work.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#see-you data-menu-title="See You"}
+
+::: {.body-text .center-text}
+**See you Wednesday!**
+
+Come ready to learn about decision logs.
+:::

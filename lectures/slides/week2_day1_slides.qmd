@@ -1,0 +1,655 @@
+---
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+
+  revealjs-pdf:
+    toc: false
+    number-sections: false
+
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+
+editor:
+  markdown:
+    wrap: 72
+---
+
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Projects as the Unit of Scientific Work]{.custom-title}
+
+[Week 2, Day 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome to Week 2!]{.slide-title}
+
+::: body-text
+**Today's focus:** How you organize your work
+
+**Why this matters:** A graduate student spent 3 weeks coding, tried to
+re-run after changing one file, and nothing worked.
+
+Had to start over from scratch.
+
+**That's what we're preventing today.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#recap data-menu-title="Last Week"}
+
+[Last Week Recap]{.slide-title}
+
+::: body-text
+**Week 1:** Data science as a way of thinking
+
+-   Being explicit with reasoning
+-   Documenting decisions
+
+**Today's question:** Where do you actually DO that work?
+
+**Answer:** In a **project**.
+:::
+
+------------------------------------------------------------------------
+
+## {#data-menu-title="Projects"}
+
+## Today's Class {#today data-menu-title="Projects"}
+
+::: body-text
+-   What a project is and why it matters
+-   How to structure project folders
+-   Why relative paths are crucial
+-   How to document your project so others can use it
+:::
+
+------------------------------------------------------------------------
+
+## The Messy Desktop Problem {#messy-problem data-menu-title="The Problem"}
+
+::: code-text
+```         
+Desktop/
+├── bee_data_final.csv
+├── bee_data_final_FINAL.csv
+├── bee_data_v3_USE_THIS_ONE.csv
+├── analysis_draft.R
+├── analysis_new.R
+├── richness_plot.png
+├── richness_plot_good.png
+└── notes.txt
+```
+:::
+
+::: body-text
+**Questions you can't answer:**
+
+\- Which data file is "real"?
+
+\- Which script generated which plot?
+
+\- How do you reproduce this?
+
+**Recognize this pattern?**
+:::
+
+------------------------------------------------------------------------
+
+##  {#cost data-menu-title="Cost"}
+
+[The Cost of Disorganization]{.slide-title}
+
+::: body-text.scenario-block
+**Scenario 1 — Reviewer requests changes**\
+→ Can’t figure out what you did 6 months ago
+
+------------------------------------------------------------------------
+
+**Scenario 2 — Lab partner needs your code**\
+→ `Error: cannot open 'C:/Users/YourName/...'`
+
+------------------------------------------------------------------------
+
+**Scenario 3 — Journal requires code deposit**\
+→ Week writing documentation for code you barely remember
+
+------------------------------------------------------------------------
+
+**All solved by:** **Well-organized projects**
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-is data-menu-title="What Is Project"}
+
+[What Is a Project?]{.slide-title}
+
+::: body-text
+**A self-contained folder containing everything needed to reproduce an
+analysis**
+
+-   **Self-contained** = All files in one folder
+
+-   **Everything needed** = Data, scripts, outputs, documentation
+
+-   **Organized logically** = Clear structure
+
+-   **For someone else** = Collaborator, reviewer, future-you
+
+**Projects answer:**
+
+1\. What data? → `data/` folder
+
+2\. What did I do? → documented in scripts
+
+3\. What did I produce? → saved in `figures/`
+:::
+
+------------------------------------------------------------------------
+
+##  {#good-structure data-menu-title="Good Structure"}
+
+[A Well-Organized Project]{.slide-title}
+
+::: code-text
+```         
+bee_diversity_analysis/
+├── data/
+│   ├── raw/                # Original, untouched
+│   └── processed/          # Cleaned data
+├── scripts/
+│   ├── 01_clean_data.R     # Numbered = order
+│   ├── 02_calculate_richness.R
+│   └── 03_make_figures.R
+├── figures/
+├── README.md               # START HERE
+└── bee_diversity.Rproj     # RStudio project
+```
+:::
+
+::: body-text
+✅ Clear hierarchy \| ✅ Protected raw data \| ✅ Numbered scripts \| ✅
+Self-documenting
+:::
+
+------------------------------------------------------------------------
+
+##  {#raw-vs-processed data-menu-title="Raw vs Processed"}
+
+[Raw vs. Processed Data]{.slide-title}
+
+::: code-text
+```         
+data/
+├── raw/         # What you started with
+└── processed/   # What you created
+```
+:::
+
+::: body-text
+**Raw data** = from field/lab/instrument\
+→ **Never changes. Ever.**
+
+**Processed data** = created by cleaning raw data\
+→ **Result of running a script**
+
+**Golden rule:**\
+Delete processed data and regenerate it by running scripts.
+
+### **From now on: Raw data is read-only.**
+
+### **All changes in code.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#paths-intro data-menu-title="Paths Introduction"}
+
+[Why Paths Matter]{.slide-title}
+
+![Artwork by Allison
+Horst](../../images/allison-horst-pathways.png){width="80%"
+fig-align="center"}
+
+::: body-text
+**The problem:** Hardcoding file locations breaks everything
+:::
+
+------------------------------------------------------------------------
+
+##  {#paths-explained data-menu-title="Paths Explained"}
+
+[Absolute vs. Relative Paths]{.slide-title}
+
+![Artwork by Allison
+Horst](../../images/allison-horst-pathways.png){width="65%"
+fig-align="center"}
+
+::: body-text
+**The broken cube** = `setwd()` and absolute paths (fragile!)\
+**The strong cube** = R Projects (robust!)\
+**The skilled cube** = `here` package (even better!)
+:::
+
+------------------------------------------------------------------------
+
+##  {#paths-bad data-menu-title="Absolute Paths Bad"}
+
+[Absolute Paths (BAD)]{.slide-title}
+
+::: body-text
+**This only works on MY computer:**
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+
+# BAD - Absolute path
+data <- read.csv("/Users/gretchen/Desktop/bee_analysis/data/raw/bees.csv")
+```
+
+::: body-text
+**Error on your computer:**
+
+```         
+Error: cannot open file '/Users/gretchen/Desktop/...': 
+No such file or directory
+```
+
+**Why?** You don't have a user named "gretchen"
+:::
+
+------------------------------------------------------------------------
+
+##  {#paths-good data-menu-title="Relative Paths Good"}
+
+[Relative Paths (GOOD)]{.slide-title}
+
+::: body-text
+**This works on ANYONE's computer:**
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+
+# GOOD - Relative path
+data <- read.csv("data/raw/bees.csv")
+```
+
+::: body-text
+**Why it works:**\
+"Starting from the project folder, go into `data/`, then `raw/`, read
+`bees.csv`"
+
+Works on any computer, any operating system!
+:::
+
+------------------------------------------------------------------------
+
+##  {#paths-scenario data-menu-title="Path Scenarios"}
+
+[Why Relative Paths Save Your Life]{.slide-title}
+
+::: body-text
+**With absolute paths:**
+
+1.  Analysis at school: `C:/Users/Student/.../data.csv`
+2.  Work at home → **ERROR** (different path)
+3.  Fix all paths manually
+4.  Back at school → **ERROR** (wrong again)
+5.  Email advisor → **ERROR** (doesn't have your folders)
+
+**With relative paths:**
+
+1.  Analysis at school: `"data/raw/data.csv"`
+2.  Work at home → ✅ **Works**
+3.  Back at school → ✅ **Works**
+4.  Email advisor → ✅ **Works**
+:::
+
+------------------------------------------------------------------------
+
+##  {#rstudio-demo-1 data-menu-title="Demo - Create Project"}
+
+[Live Demo: Creating an RStudio Project]{.slide-title}
+
+::: body-text
+**Follow along visually:**
+
+**Step 1:** Create project folder `water_quality_analysis/`
+
+**Step 2:** Create subfolders:
+:::
+
+::: code-text
+```         
+water_quality_analysis/
+├── data/
+│   ├── raw/
+│   └── processed/
+├── scripts/
+└── figures/
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#rstudio-demo-2 data-menu-title="Demo - RStudio"}
+
+[Creating the RStudio Project]{.slide-title}
+
+::: body-text
+**Step 3:** In RStudio:\
+`File > New Project > Existing Directory`
+
+**Step 4:** Create script `scripts/01_load_data.R`
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+
+# Load water quality data
+water <- read.csv("data/raw/water_samples.csv")
+
+# Check it loaded
+head(water)
+```
+
+::: body-text
+**Notice:** Path is `"data/raw/..."` not full path!
+:::
+
+------------------------------------------------------------------------
+
+##  {#rstudio-demo-3 data-menu-title="Demo - Test Portability"}
+
+[Testing Portability]{.slide-title}
+
+::: body-text
+**Step 5:** The test
+
+1.  Close RStudio
+2.  Move entire project folder to Desktop (or anywhere!)
+3.  Double-click `.Rproj` file
+4.  Run script again
+
+**Result:** ✅ Still works!
+
+**Why?** Relative paths are relative to project root
+:::
+
+------------------------------------------------------------------------
+
+##  {#readme-importance data-menu-title="README Importance"}
+
+[Every Project Needs a README]{.slide-title}
+
+::: body-text
+**README.md is the first thing anyone reads**
+
+Answers four questions:
+
+1.  What is this project about?
+
+2.  What data does it use?
+
+3.  How do I run the analysis?
+
+4.  Who do I contact?
+
+    **Without README:** Confusion and frustration\
+    **With README:** Clear path forward
+:::
+
+------------------------------------------------------------------------
+
+##  {#readme-bad data-menu-title="README Bad"}
+
+[Bad README Example]{.slide-title}
+
+::: code-text
+``` markdown
+# My Project
+
+This is my analysis.
+```
+:::
+
+::: body-text
+**This tells you nothing:**
+
+\- What's the research question?
+
+\- What data?
+
+-   How to run it?
+
+\- Who made it?
+
+**Useless!**
+:::
+
+------------------------------------------------------------------------
+
+##  {#readme-good data-menu-title="README Good"}
+
+[Good README Example]{.slide-title}
+
+::: code-text
+``` markdown
+# Bee Diversity in Urban Gardens
+
+## Overview
+Analysis of bee species richness across 45 urban garden 
+sites in San Francisco, May–August 2023.
+
+Research question: Does richness differ between 
+community gardens and private yards?
+
+## Data
+- Raw: `data/raw/bee_surveys.csv` (field surveys)
+- Processed: `data/processed/bee_clean.csv` 
+
+## Scripts (run in order)
+1. `01_clean_data.R` - Removes incomplete surveys
+2. `02_calculate_richness.R` - Rarefied richness
+3. `03_make_figures.R` - Generates figures
+
+## Contact
+Gretchen LeBuhn (lebuhn@sfsu.edu)
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#breakout data-menu-title="Breakout Activity"}
+
+[Breakout Activity - 15 minutes]{.slide-title}
+
+::: body-text
+**Scenario:** Water quality data from 10 sites, monthly for one year
+
+Measured: pH, dissolved oxygen, nitrate
+
+**You need to:**
+
+\- Clean data (remove sensor errors)
+
+\- Calculate monthly averages per site
+
+\- Compare to EPA standards
+
+\- Make time series plot
+
+\- Write summary report
+
+**Your job:** Design complete project structure
+
+**Google Doc in chat →**
+:::
+
+------------------------------------------------------------------------
+
+##  {#checklist data-menu-title="Checklist"}
+
+[Project Structure Checklist]{.slide-title}
+
+::: body-text
+**Every project needs:**
+
+**Folders:**
+
+\- \[ \] `data/raw/` — original, never modified
+
+\- \[ \] `data/processed/` — cleaned/transformed
+
+\- \[ \] `scripts/` — numbered if order matters
+
+\- \[ \] `figures/` — all plots
+
+**Files:**
+
+\- \[ \] `.Rproj` file - \[ \] `README.md`
+
+\- \[ \] Descriptive file names
+
+**Code:**
+
+\- \[ \] Relative paths only
+
+\- \[ \] Scripts numbered
+
+\- \[ \] Comments explain decisions
+:::
+
+------------------------------------------------------------------------
+
+##  {#mistakes data-menu-title="Common Mistakes"}
+
+[Common Mistakes to Avoid]{.slide-title}
+
+::: body-text
+❌ **Working outside project folder**\
+Quick plot saved to Desktop → lost forever
+
+❌ **Using absolute paths**\
+`C:/Users/You/...` → won't work for others
+
+❌ **Editing raw data**\
+Fix typo in Excel, save → reproducibility destroyed
+
+❌ **No README**\
+6 months later, no idea what anything does
+
+❌ **Too many versions**\
+`analysis_final_REALLY_final_v3.R`
+:::
+
+------------------------------------------------------------------------
+
+##  {#git-preview data-menu-title="Git Preview"}
+
+[Git Setup Preview]{.slide-title}
+
+::: body-text
+**This week's activity:** Set up Git and GitHub
+
+**Git** = Version control system\
+Tracks every change to files
+
+**GitHub** = Website to host repositories
+
+**Why?** One file (`analysis.R`) with all versions tracked
+
+No more: - `analysis_final_v3.R` - `analysis_final_REALLY_final.R`
+
+**We'll cover Git concepts in Week 4**
+:::
+
+------------------------------------------------------------------------
+
+##  {#homework data-menu-title="Homework"}
+
+[Before Wednesday]{.slide-title}
+
+::: body-text
+**Homework:**
+
+1.  Create a project folder (real or toy data)
+2.  Organize with proper structure
+3.  Create RStudio Project (`.Rproj` file)
+4.  Write `README.md`
+5.  Create one script using relative paths
+6.  **Test:** Move project → run script → confirm it works
+
+**Post screenshot of structure to discussion board**
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket (Canvas) - 2-3 minutes]{.slide-title}
+
+::: body-text
+**Complete before you leave:**
+
+1.  **Define:** What is a "project" in data science? (2-3 sentences)
+
+2.  **Diagnose:** Lab partner's script gives error:
+
+    ```         
+    Error: cannot open 'C:/Users/Maria/Documents/Lab/data.csv'
+    ```
+
+    What's the problem? How to fix?
+
+3.  **Design:** Outline project structure for analyzing gene expression
+    data from 5 tissue samples
+
+**Submit in Canvas →**
+:::
+
+------------------------------------------------------------------------
+
+##  {#summary data-menu-title="Summary"}
+
+[Key Concepts to Remember]{.slide-title}
+
+::: body-text
+1.  **Projects = unit of scientific work**
+
+2.  **Good structure = reproducibility**
+
+3.  **Raw data never changes** — modifications in code
+
+4.  **Relative paths = portable code**
+
+5.  **Documentation required**
+
+6.  **Organization IS doing science**
+
+**Questions? → Discussion board or office hours**
+
+**See you Wednesday!**
+:::

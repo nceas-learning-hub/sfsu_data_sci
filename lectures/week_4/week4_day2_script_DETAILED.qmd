@@ -1,0 +1,801 @@
+---
+title: "Week 4 Day 2 Lecture Script: Git, GitHub, and the Scientific Audit Trail"
+subtitle: "BIO/CHEM 806 - Detailed Instructor Guide"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Lecture Overview
+
+**Duration:** 75 minutes  
+**Format:** Online synchronous  
+**Students:** ~30 graduate students
+
+## Learning Objectives
+
+By the end of this lecture, students will be able to:
+
+1. Distinguish between Git (version control software) and GitHub (hosting service)
+2. Explain how Git solves reproducibility problems identified Monday
+3. Describe the basic Git workflow: stage, commit, push, pull
+4. Write effective commit messages
+5. Use Git via both RStudio GUI and command line
+6. Understand merge conflicts and how to resolve them
+7. Explain Git as a scientific audit trail
+
+## Materials Needed
+
+- [ ] Slide deck rendered
+- [ ] Git installed and configured
+- [ ] GitHub account ready
+- [ ] Demo repository prepared
+- [ ] RStudio with Git integration working
+- [ ] Breakout scenario ready
+- [ ] Exit ticket in Canvas
+
+---
+
+# Pre-Class Setup
+
+## Verify Git Configuration
+
+Test that Git works:
+
+```bash
+git --version
+git config --global user.name
+git config --global user.email
+```
+
+## Create Demo Repository
+
+On GitHub, create public repo: `water-quality-demo`
+
+Clone locally for live demonstration.
+
+---
+
+# Introduction (5 minutes)
+
+## Slides 1-2: Welcome
+
+**[00:00-00:02]**
+
+**Say:**
+
+> "Welcome! Today we're learning Git and GitHub—the tools that make reproducibility actually work at scale."
+
+> "Monday you learned WHY reproducibility fails. Today: the HOW to fix it."
+
+**Not just for programmers:**
+
+> "I want to be clear: Git is NOT just for programmers. Git is for SCIENTISTS."
+
+> "Version control is a scientific tool, just like a lab notebook or field journal."
+
+---
+
+## Slide 3: Monday Recap
+
+**[00:02-00:05]**
+
+**Connect to Monday.**
+
+**Say:**
+
+> "Monday we identified five reproducibility problems:"
+> "1. Undocumented decisions"
+> "2. Fragile computational environments"
+> "3. Manual steps"
+> "4. Ambiguous workflows"
+> "5. Time pressure"
+
+**Git solves these:**
+
+> "Git provides:"
+> "- Complete history of changes (documents decisions)"
+> "- Who changed what, when, and why"
+> "- Ability to undo mistakes"
+> "- Scientific accountability"
+> "- Collaboration infrastructure"
+
+**Preview:**
+
+> "By the end of today, you'll understand how Git creates an audit trail for your science."
+
+---
+
+# Git vs. GitHub (8 minutes)
+
+## Slide 4: Git vs. GitHub
+
+**[00:05-00:08]**
+
+**This distinction is crucial—emphasize clearly.**
+
+**Say:**
+
+> "First, let's be crystal clear about Git versus GitHub. They're different things."
+
+**Git:**
+
+> "Git is version control SOFTWARE. It runs on YOUR computer."
+
+> "Git tracks changes to files over time. It's like Track Changes in Word, but for any file, and much more powerful."
+
+**GitHub:**
+
+> "GitHub is a WEBSITE. It's a hosting service for Git repositories."
+
+> "GitHub stores your Git repositories online and provides collaboration tools."
+
+**The analogy:**
+
+> "Git is like Word's 'Track Changes' feature."
+> "GitHub is like Google Drive—a place to store and share."
+
+> "You can use Git without GitHub. But GitHub makes Git much more useful for collaboration."
+
+**Emphasize:**
+
+> "Today we'll learn both: Git (the tracking) and GitHub (the sharing)."
+
+---
+
+## Slide 5: Why Scientists Need Version Control
+
+**[00:08-00:13]**
+
+**Make it relatable.**
+
+**Say:**
+
+> "Why do YOU need version control?"
+
+**The old way:**
+
+```
+analysis_v1.R
+analysis_v2.R
+analysis_final.R
+analysis_FINAL_ACTUALLY.R
+analysis_FINAL_REALLY_USE_THIS.R
+```
+
+**Ask:**
+
+> "How many of you have files like this? Raise hand."
+
+**Instructor note:** *Most hands should go up. Laugh together.*
+
+**Problems:**
+
+> "- What changed between versions?"
+> "- Why did you make that change?"
+> "- Which version did you use for the paper?"
+> "- Can you go back to v2 if you need to?"
+
+**With Git:**
+
+> "One file: `analysis.R`"
+
+> "Complete history of all changes tracked behind the scenes."
+
+> "You can see any version from any point in time."
+
+> "Commit messages explain WHY each change was made."
+
+---
+
+# The Git Workflow (20 minutes)
+
+## Slides 6-7: Git Workflow (Allison Horst Image)
+
+**[00:13-00:15]**
+
+**Show Allison Horst git-workflow image (full screen).**
+
+**Say:**
+
+> "Before I explain the technical workflow, look at Allison Horst's brilliant illustration."
+
+**Let it sit 2-3 seconds.**
+
+**Say:**
+
+> "What do you see? Bunnies? Rowboats?"
+
+---
+
+**[00:15-00:18]**
+
+**Show image with explanation.**
+
+**Say:**
+
+> "Allison shows us exactly what Git does with these helpful bunnies!"
+
+**Point to image:**
+
+> "You have a LOCAL REPO on your computer. That's your workspace."
+
+> "You have a REMOTE REPO on GitHub. That's the online copy."
+
+> "The bunnies in rowboats? That's Git moving changes back and forth!"
+
+**The two directions:**
+
+> "PUSH = Send your changes from local to GitHub (upload)"
+> "PULL = Get changes from GitHub to local (download)"
+
+**Key message:**
+
+> "Git is those bunnies, safely ferrying your work back and forth. They never drop anything!"
+
+**Instructor note:** *This metaphor really helps students remember push vs. pull.*
+
+---
+
+## Slides 8-9: Local Workflow (Stage and Commit)
+
+**[00:18-00:23]**
+
+**Explain the local workflow carefully.**
+
+**Say:**
+
+> "Let's start with working locally, before we even think about GitHub."
+
+**Three areas:**
+
+> "1. Working Directory - Where you edit files"
+> "2. Staging Area - Files you're about to save permanently"
+> "3. Local Repository - Permanently saved changes"
+
+**The workflow:**
+
+> "You edit a file. Maybe you fix a bug in `analysis.R`."
+
+> "You STAGE that file: `git add analysis.R`"
+
+> "This says: 'I want to include this change in my next permanent save.'"
+
+> "You COMMIT with a message: `git commit -m 'Fixed temperature threshold bug'`"
+
+> "This permanently saves the change to your local repository."
+
+**The key insight:**
+
+> "Staging lets you be selective. You might have edited 5 files, but only want to commit changes to 2."
+
+**Analogy:**
+
+> "Think of staging like putting items in a shopping cart. Committing is like checking out."
+
+---
+
+## Slide 10: Writing Good Commit Messages
+
+**[00:23-00:27]**
+
+**This is important—spend time here.**
+
+**Say:**
+
+> "Commit messages are CRUCIAL. They're your explanation of why you made changes."
+
+**Bad commit messages:**
+
+> "'fixed stuff'"
+> "'update'"
+> "'changes'"
+> "'asdf' (yes, people do this)"
+
+**Ask:**
+
+> "What's wrong with these?"
+
+**Students respond:** "Too vague, no information, unhelpful."
+
+**Good commit messages:**
+
+> "'Removed outliers < -50°C from temperature data'"
+> "'Added EPA water quality standards to comparison'"
+> "'Fixed bug in species name standardization'"
+
+**What makes them good:**
+
+> "- Specific action (removed, added, fixed)"
+> "- What changed"
+> "- Sometimes: why (if not obvious)"
+
+**Future you:**
+
+> "You'll read these messages 6 months from now. Write for that person!"
+
+**Commit message best practices:**
+
+> "- Use present tense: 'Add feature' not 'Added feature'"
+> "- Be specific and concise"
+> "- Explain the WHAT and WHY, not the how (code shows how)"
+
+---
+
+## Slides 11-12: Remote Workflow (Push and Pull)
+
+**[00:27-00:31]**
+
+**Explain syncing with GitHub.**
+
+**Say:**
+
+> "Once you've committed locally, you can sync with GitHub."
+
+**Push:**
+
+> "After you commit, you PUSH to send your commits to GitHub."
+
+```bash
+git push
+```
+
+> "This uploads your local commits to the remote repository."
+
+> "Now your changes are backed up online and visible to collaborators."
+
+**Pull:**
+
+> "Before you START working, you PULL to get any changes from GitHub."
+
+```bash
+git pull
+```
+
+> "This downloads commits others might have made."
+
+**The golden rule:**
+
+> "Always PULL before you PUSH."
+
+> "Pull first → Make changes → Commit → Push."
+
+**Why:**
+
+> "If someone else pushed changes, you need those first. Otherwise you'll have conflicts."
+
+---
+
+# Collaboration with Git (12 minutes)
+
+## Slides 13-14: Collaboration (Allison Horst Jenny Bryan Image)
+
+**[00:31-00:33]**
+
+**Show Jenny Bryan quote image (full screen).**
+
+**Say:**
+
+> "Git enables scientific collaboration at scale. Here's what Jenny Bryan from RStudio says about it."
+
+**Let image sit briefly.**
+
+---
+
+**[00:33-00:36]**
+
+**Show image with explanation.**
+
+**Say:**
+
+> "Jenny Bryan says: 'Git/GitHub is like agreeing that we will all use Microsoft Word...'"
+
+**Explain the analogy:**
+
+> "She doesn't mean Word is perfect. She means: Having everyone use the SAME SYSTEM makes collaboration possible."
+
+> "Without Git: Everyone has their own version control system (or none). Chaos."
+
+> "With Git: Everyone speaks the same language. Smooth collaboration."
+
+---
+
+## Slide 15: Collaborative Workflow
+
+**[00:36-00:39]**
+
+**Explain how collaboration works.**
+
+**Say:**
+
+> "Here's how Git collaboration actually works."
+
+**Repository owner:**
+
+> "1. Creates repository on GitHub"
+> "2. Adds collaborators (gives them permission)"
+> "3. Pushes and pulls changes"
+
+**Collaborator:**
+
+> "1. Clones the repository to their computer"
+> "2. Makes changes locally"
+> "3. Commits changes"
+> "4. Pushes to GitHub"
+
+**Both people:**
+
+> "- Pull frequently to get each other's changes"
+> "- Communicate about who's working on what"
+> "- Use commit messages to explain changes"
+
+**The beauty:**
+
+> "Multiple people can work on the same project simultaneously. Git handles merging the changes."
+
+---
+
+## Slide 16: Merge Conflicts
+
+**[00:39-00:43]**
+
+**Demystify conflicts.**
+
+**Say:**
+
+> "Let's talk about something that scares beginners: merge conflicts."
+
+**What is a merge conflict:**
+
+> "When two people edit the SAME LINE of a file differently."
+
+**Example:**
+
+> "You change line 45 to: `temperature_cutoff <- -45`"
+> "Partner changes line 45 to: `temperature_cutoff <- -55`"
+> "Git says: 'I don't know which to keep!'"
+
+**How Git marks conflicts:**
+
+```
+<<<<<<< HEAD
+temperature_cutoff <- -45  # Your version
+=======
+temperature_cutoff <- -55  # Their version
+>>>>>>> main
+```
+
+**How to resolve:**
+
+> "1. Look at both versions"
+> "2. Decide which to keep (or combine them)"
+> "3. Delete the markers (<<<, ===, >>>)"
+> "4. Commit the resolved version"
+
+**Conflicts are okay:**
+
+> "Conflicts aren't errors—they're Git being careful. They're a COMMUNICATION opportunity."
+
+> "Talk to your collaborator: 'Hey, we both changed the threshold. Which should we use?'"
+
+---
+
+# Git in Practice: Two Interfaces (15 minutes)
+
+## Slides 17-18: GUI vs. CLI
+
+**[00:43-00:46]**
+
+**Explain both approaches.**
+
+**Say:**
+
+> "You can use Git two ways: Graphical interface (GUI) or command line (CLI)."
+
+**Command Line:**
+
+```bash
+git status
+git add analysis.R
+git commit -m "Updated analysis"
+git push
+```
+
+> "Typing commands in terminal. More powerful, works everywhere, better for troubleshooting."
+
+**Graphical Interface:**
+
+> "- RStudio Git pane"
+> "- GitHub Desktop"
+> "- GitKraken"
+
+> "Click buttons instead of type commands. Easier for beginners."
+
+**Today:**
+
+> "I'll show you BOTH. You can choose which you prefer."
+
+**My advice:**
+
+> "Start with RStudio GUI for simplicity. Learn CLI as you get comfortable. Both do the same thing."
+
+---
+
+## Slides 19-20: Git in RStudio
+
+**[00:46-00:49]**
+
+**Show RStudio interface.**
+
+**Say:**
+
+> "RStudio has beautiful Git integration built in."
+
+**The Git pane:**
+
+> "Shows:"
+> "- Modified files (yellow M)"
+> "- New files (green A for 'added')"
+> "- Deleted files (red D)"
+
+**The workflow in RStudio:**
+
+> "1. Make changes to files"
+> "2. Check the boxes next to files you want to stage"
+> "3. Click 'Commit' button"
+> "4. Write commit message in dialog"
+> "5. Click 'Commit' button in dialog"
+> "6. Click 'Push' button"
+
+**That's it!**
+
+> "Point and click. Very beginner-friendly."
+
+---
+
+## Slide 21: Git Command Line Basics
+
+**[00:49-00:52]**
+
+**Show essential commands.**
+
+**Say:**
+
+> "If you use command line, here are the essential commands."
+
+**Essential Git commands:**
+
+```bash
+git status              # What changed?
+git add filename.R      # Stage one file
+git add .               # Stage all files
+git commit -m "message" # Commit with message
+git push                # Send to GitHub
+git pull                # Get from GitHub
+git log                 # See commit history
+```
+
+**Why learn CLI:**
+
+> "- More powerful for complex operations"
+> "- Works everywhere (servers, etc.)"
+> "- Better error messages for troubleshooting"
+> "- Necessary for some advanced features"
+
+**Reassurance:**
+
+> "Don't need to memorize these. You'll use the same 5-6 commands 90% of the time."
+
+---
+
+# Best Practices & Advanced Topics (10 minutes)
+
+## Slides 22-25: Best Practices, .gitignore, Tags, Audit Trail
+
+**[00:52-01:02]**
+
+**Cover key best practices.**
+
+**Best Practices (Slide 22):**
+
+> "DO:"
+> "✅ Commit often (small, logical changes)"
+> "✅ Write clear commit messages"
+> "✅ Pull before you start work"
+> "✅ Push at end of work session"
+> "✅ Use .gitignore for large data files"
+
+> "DON'T:"
+> "❌ Commit huge changes all at once"
+> "❌ Use vague messages"
+> "❌ Commit passwords or API keys"
+> "❌ Commit 100MB data files"
+
+---
+
+**.gitignore (Slide 23):**
+
+> "A .gitignore file tells Git what NOT to track."
+
+**Example .gitignore:**
+
+```
+# Large data files
+data/raw/big_dataset.csv
+
+# Temporary files
+*.tmp
+
+# System files
+.DS_Store
+
+# Secrets
+.env
+secrets.R
+```
+
+> "Keeps repositories small and secure."
+
+---
+
+**Tags (Slide 24):**
+
+> "Tags mark important versions."
+
+**Use tags for:**
+
+> "- Paper submission: `v1.0-submitted`"
+> "- After revisions: `v1.1-revision1`"
+> "- Final publication: `v2.0-published`"
+
+```bash
+git tag v1.0-published
+git push --tags
+```
+
+> "Always know exactly what code produced published results."
+
+---
+
+**Git as Audit Trail (Slide 25):**
+
+> "Git provides a complete scientific audit trail:"
+
+> "📝 Every change documented"
+> "👤 Who made each change"
+> "📅 When changes were made"
+> "💬 Why (via commit messages)"
+> "🏷️ Milestones (via tags)"
+
+> "This is what reviewers and funders want to see!"
+
+---
+
+# Breakout Activity (10 minutes)
+
+## Slide 26: Understanding Conflicts
+
+**[01:02-01:03]**
+
+**Present scenario.**
+
+**Say:**
+
+> "Into breakout rooms for 10 minutes."
+
+**Scenario:**
+
+> "You and partner both edited line 45 of `analysis.R`"
+
+> "Your version: `temperature_cutoff <- -45  # More conservative`"
+> "Partner's: `temperature_cutoff <- -55  # Based on sensor specs`"
+
+**Questions:**
+
+> "1. Why did Git create a conflict?"
+> "2. How would you resolve it?"
+> "3. What should you communicate to your partner?"
+
+**Send to breakout rooms.**
+
+**Instructor note:** *Visit rooms. Guide discussion toward: conflicts happen when same line changes, need to discuss which is better, commit messages explain decisions.*
+
+---
+
+## Debrief
+
+**[01:13-01:16]**
+
+**Bring back.**
+
+**Say:**
+
+> "What did you conclude?"
+
+**Good answers:**
+
+> "- Conflict because same line changed"
+> "- Need to discuss which threshold is correct for the science"
+> "- Maybe need to check original data or sensor specs"
+> "- Commit message should explain final decision"
+
+**Key lesson:**
+
+> "Conflicts force scientific discussion. That's good! Better than silently using different thresholds."
+
+---
+
+# Wrap-Up (4 minutes)
+
+## Slides 27-29: Homework, Exit Ticket, Summary
+
+**[01:16-01:20]**
+
+**Homework:**
+
+> "This week's activity: Git collaboration exercise (details on Canvas)."
+
+> "You'll:"
+> "1. Clone shared repository"
+> "2. Make changes to assigned file"
+> "3. Commit with good message"
+> "4. Push to GitHub"
+> "5. Pull partner's changes"
+> "6. Resolve any conflicts"
+
+> "Practice both RStudio GUI and command line."
+
+---
+
+**Exit Ticket:**
+
+> "1. What's the difference between Git and GitHub?"
+> "2. Put these in order: Push, Edit file, Pull, Commit, Stage"
+> "3. You're submitting a paper. What Git tag would you create?"
+
+---
+
+**Summary:**
+
+> "1. Git = version control, GitHub = hosting"
+> "2. Push/Pull sync local and remote"
+> "3. Commits are snapshots with messages"
+> "4. Tags mark important versions"
+> "5. Version control = scientific audit trail"
+
+> "Next week: Bringing it all together!"
+
+---
+
+# Post-Lecture Checklist
+
+- [ ] Upload recording
+- [ ] Post collaboration exercise details
+- [ ] Review exit tickets
+- [ ] Prepare Week 5 materials
+
+---
+
+# Common Questions
+
+**Q: "What if I mess up and want to undo?"**
+A: Git has many undo options. `git revert` for published commits, `git reset` for local changes.
+
+**Q: "Should I commit after every tiny change?"**
+A: Commit when you reach a logical stopping point. Could be every 15 minutes or every hour.
+
+**Q: "What if my collaborator pushes bad code?"**
+A: Git tracks everything. You can always go back to previous versions.
+
+---
+
+# Timing Notes
+
+If ahead: More detailed CLI demo, show GitHub website interface
+If behind: Shorter breakout (8 min), quick summary
+
+**Target: End with time for questions**

@@ -1,0 +1,472 @@
+---
+title: "Week 10, Lecture 2"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+editor:
+  markdown:
+    wrap: 72
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Structured Collaboration with GitHub]{.custom-title}
+
+[BIO/CHEM 806 · Week 10]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**NCEAS Learning Hub**]{.custom-subtitle2}
+
+---
+
+## {#learning-objectives data-menu-title="Learning Objectives"}
+
+[Learning objectives]{.slide-title}
+
+::: {.body-text}
+By the end of today you will be able to:
+
+- Identify the coordination problems that arise in unstructured collaboration
+- Explain the purpose of branches and pull requests
+- Use GitHub Issues to claim and define work
+- Use a project board to track team progress
+- Follow the full ten-step structured collaboration workflow
+:::
+
+---
+
+## {#reflection-prompt data-menu-title="Reflection Prompt"}
+
+[What happened Monday?]{.slide-title}
+
+::: {.body-text}
+**Monday cohort — in the chat:**
+
+One word or short phrase: what was the **hardest part** of Monday's activity?
+:::
+
+::: {.body-text}
+*(Thursday cohort: you will do the activity today — this slide will make more sense at the end.)*
+:::
+
+---
+
+## {#four-problems data-menu-title="Four Problems"}
+
+[Four things that went wrong]{.slide-title}
+
+::: {.body-text}
+**No clear ownership**
+Multiple people touched the same file — nobody claimed it
+
+**Duplicate work**
+Several PRs fixed the same problem — wasted effort
+
+**Hard to track progress**
+Who is working on what? Is that PR ready to merge?
+
+**Confusing pull requests**
+"Made some changes" — the reviewer has no idea what to look for
+:::
+
+---
+
+## {#reframe data-menu-title="Reframe"}
+
+[Git is not a save button]{.slide-title}
+
+::: {.body-text}
+Git is a **coordination system**.
+
+| Git concept | What it really is |
+|---|---|
+| Commit | A record of a decision |
+| Branch | A personal workspace with a purpose |
+| Pull request | A conversation about whether a change belongs |
+| Issue | A defined unit of work with an owner |
+| Project board | A shared view of the project's state |
+:::
+
+---
+
+## {#five-people data-menu-title="Five People"}
+
+[The five-people problem]{.slide-title}
+
+::: {.body-text}
+Imagine five people editing the same document at once:
+
+**Who owns what?**
+If everyone can edit everything, nobody is responsible for anything.
+
+**What if two people change the same sentence?**
+Both versions exist — who decides which is right?
+
+**How do you know what changed?**
+Without a record, you cannot trace a decision back to its source.
+:::
+
+::: {.body-text}
+GitHub solves all three — but only if you use it with intention.
+:::
+
+---
+
+## {#branches-intro data-menu-title="Branches Intro"}
+
+[Main branch = the official version]{.slide-title}
+
+::: {.columns}
+
+:::: {.column width="55%"}
+![](../../images/github_collaboration/allison-horst-jenny-bryan-quote.png){width=100%}
+::::
+
+:::: {.column width="45%"}
+::: {.body-text}
+**`main`** is the published version — clean, reviewed, trusted.
+
+You do not edit `main` directly.
+
+**Branches** are personal workspaces.
+Create one when you start a task.
+Work there safely.
+Nothing touches `main` until it has been reviewed.
+:::
+::::
+
+:::
+
+---
+
+## {#branch-workflow data-menu-title="Branch Workflow"}
+
+[The five-step branch workflow]{.slide-title}
+
+::: {.body-text}
+1. **Create a branch**
+2. **Make your changes**
+3. **Open a pull request**
+4. **Review**
+5. **Merge**
+
+Everything we add today is in service of making
+these five steps *intentional* rather than chaotic.
+:::
+
+---
+
+## {#what-is-pr data-menu-title="What Is a PR"}
+
+[What a pull request actually is]{.slide-title}
+
+::: {.body-text}
+You are **not** saying:
+
+> *"I changed the file."*
+
+You are **asking**:
+
+> *"Here is my version — should we accept it?"*
+:::
+
+::: {.body-text}
+A pull request is a proposal. It invites review, discussion,
+and a deliberate decision about whether the change belongs.
+
+**The commit is the work. The pull request is the conversation about the work.**
+:::
+
+---
+
+## {#pr-writing data-menu-title="Writing a PR"}
+
+[Writing and reviewing pull requests]{.slide-title}
+
+::: {.body-text}
+**If you are writing a PR:**
+
+Make the case for your change.
+What did you do? Why? What should the reviewer look for?
+
+**If you are reviewing a PR:**
+
+Actually engage with the change.
+Does it do what it claims? Is there a better approach?
+Are there side effects?
+
+"Looks good" is not a review.
+:::
+
+---
+
+## {#chat-commit-pr data-menu-title="Commit vs PR"}
+
+[In the chat]{.slide-title}
+
+::: {.body-text}
+**In your own words:**
+
+What is the difference between a commit and a pull request?
+
+One sentence.
+:::
+
+---
+
+## {#issues-intro data-menu-title="Issues Intro"}
+
+[Issues: defining the work]{.slide-title}
+
+::: {.body-text}
+An **issue** is a defined unit of work.
+
+- Has a title, a description, and an assignee
+- One issue = one task
+- Specific, bounded, completable
+
+**The rule: no work without an issue.**
+
+Before you touch a file, there is an issue that describes what
+you are doing and why — and it is assigned to you.
+
+This solves the ownership problem.
+:::
+
+---
+
+## {#issue-examples data-menu-title="Issue Examples"}
+
+[What makes a good issue?]{.slide-title}
+
+::: {.body-text}
+❌ Too vague
+
+> "Improve the analysis"
+
+✅ Specific and completable
+
+> "Add axis labels to the species richness plot"
+
+> "Fix the broken file path in the data loading script"
+
+> "Add a methods section to the draft report"
+:::
+
+---
+
+## {#project-board data-menu-title="Project Board"}
+
+[Project board: seeing the whole picture]{.slide-title}
+
+::: {.body-text}
+Four columns track every piece of work:
+
+| Column | Meaning |
+|---|---|
+| **To Do** | Available — not yet claimed |
+| **In Progress** | Claimed — someone is working on it |
+| **In Review** | PR is open — waiting for review |
+| **Done** | Merged — issue closed |
+:::
+
+::: {.body-text}
+At any moment, anyone can see the full state of the project
+without asking anyone.
+:::
+
+---
+
+## {#full-workflow data-menu-title="Full Workflow"}
+
+[The structured workflow — ten steps]{.slide-title}
+
+::: {.body-text}
+1. Go to Issues → choose one → assign yourself
+2. Move to **In Progress** on the board
+3. Create a branch: `issue-#-short-description`
+4. Make your change — one task only
+5. Commit with a clear message
+6. Push and open a PR — write `Closes #[issue number]`
+7. Move to **In Review** on the board
+8. Partner reviews PR — leaves at least 2 specific comments
+9. Revise if needed → merge
+10. Move issue to **Done**
+:::
+
+---
+
+## {#closes-syntax data-menu-title="Closes Syntax"}
+
+[What does `Closes #3` do?]{.slide-title}
+
+::: {.body-text}
+In the chat: **take a guess**.
+:::
+
+. . .
+
+::: {.body-text}
+When the PR merges, GitHub **automatically closes issue #3**.
+
+It also links the PR to the issue in the UI — you can
+click from one to the other.
+
+This is the automation payoff for using issues and PRs together.
+:::
+
+---
+
+## {#branch-naming data-menu-title="Branch Naming"}
+
+[Branch naming is communication]{.slide-title}
+
+::: {.body-text}
+Name your branch: `issue-#-short-description`
+
+Examples:
+
+- `issue-3-fix-readme`
+- `issue-7-add-axis-labels`
+- `issue-12-fix-data-path`
+
+The issue number in the branch name tells anyone on the
+team exactly what the branch is for — without asking.
+
+Compare to: `my-edits`, `updates`, `patch-1`
+:::
+
+---
+
+## {#workflow-rules data-menu-title="Workflow Rules"}
+
+[The rules]{.slide-title}
+
+::: {.body-text}
+**No work without an issue**
+Claim it before you start.
+
+**No direct edits to `main`**
+Always work on a branch.
+
+**One issue per branch**
+If you notice another problem, open a new issue.
+
+**Every PR must be reviewed before merging**
+"Looks good" is not a review.
+:::
+
+---
+
+## {#demo data-menu-title="Demo"}
+
+[Live demo: the full workflow]{.slide-title}
+
+::: {.body-text}
+Watch the ten steps end-to-end in `806-collaboration-practice`:
+
+1. Choose and assign an issue
+2. Move to In Progress
+3. Create a branch
+4. Edit, commit
+5. Push, open PR with `Closes #X`
+6. Move to In Review
+7. Review and comment
+8. Merge
+9. Issue closes automatically
+:::
+
+---
+
+## {#workflow-summary data-menu-title="Workflow Summary"}
+
+[The structured workflow — summary]{.slide-title}
+
+::: {.body-text}
+```
+Issue → Assign → In Progress
+    ↓
+Branch (issue-#-name)
+    ↓
+Edit → Commit → Push
+    ↓
+Pull Request (Closes #X) → In Review
+    ↓
+Review → Revise → Merge
+    ↓
+Done
+```
+:::
+
+---
+
+## {#key-takeaways-wed data-menu-title="Key Takeaways Wednesday"}
+
+[Three things to remember]{.slide-title}
+
+::: {.body-text}
+**1.** Git is a coordination system, not a save button.
+Every branch, commit, PR, and issue is a communication tool.
+
+**2.** Structure prevents chaos.
+Monday felt messy because there was no structure —
+not because the tools are hard.
+
+**3.** Pull requests are conversations.
+Write them so the reviewer knows what to look for.
+Review them so the author knows what you actually looked at.
+:::
+
+---
+
+## {#assignment-slide data-menu-title="Assignment"}
+
+[This week's assignment]{.slide-title}
+
+::: {.body-text}
+**Thursday cohort**
+Do the structured workflow in Nicole's activity section today.
+Submit: link to your merged PR.
+
+**Monday cohort**
+Do the structured workflow with your partner on your own time,
+before next Monday.
+Submit: link to your merged PR.
+
+**Both:** each partner submits their own PR link.
+Each of you goes through every step.
+:::
+
+---
+
+## {#exit-ticket-wed data-menu-title="Exit Ticket Wednesday"}
+
+[Exit ticket]{.slide-title}
+
+::: {.body-text}
+In Canvas:
+
+**Describe the structured GitHub workflow in pseudocode.**
+
+Include:
+
+- How a task gets claimed
+- How the work happens
+- How the change gets reviewed
+- How the project board reflects all of this
+:::
+
+::: {.body-text}
+Not the ten steps — the *logic*.
+What does each step accomplish, and why does the order matter?
+:::

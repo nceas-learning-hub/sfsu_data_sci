@@ -1,0 +1,181 @@
+---
+title: "Week 6 Lecture 2 — Complete Code Script"
+format: html
+execute:
+  echo: true
+  warning: true
+  message: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(comment = "#>")
+library(tidyverse)
+```
+
+# Load Data
+
+```{r}
+# Adjust path as needed
+# catch_original <- read_csv("data/salmon_catch.csv")
+glimpse(catch_original)
+```
+
+# SELECT
+
+```{r}
+catch_data <- catch_original %>%
+  select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+
+catch_data <- catch_original %>%
+  select(-All, -notesRegCode)
+
+glimpse(catch_data)
+```
+
+# MUTATE – Type Conversion
+
+```{r}
+catch_clean <- catch_data %>%
+  mutate(Chinook = as.numeric(Chinook))
+
+i <- which(is.na(catch_clean$Chinook))
+i
+catch_data[i, ]
+```
+
+# MUTATE with if_else Fix
+
+```{r}
+catch_clean <- catch_data %>%
+  mutate(
+    Chinook = if_else(Chinook == "I", "1", Chinook),
+    Chinook = as.numeric(Chinook)
+  )
+
+catch_clean[i, ]
+```
+
+# PIVOT LONGER
+
+```{r}
+catch_long <- catch_clean %>%
+  pivot_longer(
+    cols = -c(Region, Year),
+    names_to = "species",
+    values_to = "catch"
+  )
+
+catch_long
+```
+
+# PIVOT WIDER
+
+```{r}
+catch_wide <- catch_long %>%
+  pivot_wider(
+    names_from = species,
+    values_from = catch
+  )
+
+catch_wide
+```
+
+# RENAME
+
+```{r}
+catch_long <- catch_long %>%
+  rename(catch_thousands = catch)
+
+catch_long
+```
+
+# UNIT CONVERSION
+
+```{r}
+catch_long <- catch_long %>%
+  mutate(catch = catch_thousands * 1000) %>%
+  select(-catch_thousands)
+
+catch_long
+```
+
+# GROUP BY + SUMMARIZE
+
+```{r}
+mean_region <- catch_long %>%
+  group_by(Region) %>%
+  summarize(mean_catch = mean(catch))
+
+mean_region
+```
+
+# COUNTING
+
+```{r}
+catch_long %>%
+  group_by(Region) %>%
+  summarize(n = n())
+
+catch_long %>% count(Region)
+```
+
+# FILTER
+
+```{r}
+sse_catch <- catch_long %>%
+  filter(Region == "SSE")
+
+chinook_sse <- catch_long %>%
+  filter(Region == "SSE",
+         species == "Chinook")
+
+sse_catch
+chinook_sse
+```
+
+# ARRANGE
+
+```{r}
+mean_region %>% arrange(mean_catch)
+mean_region %>% arrange(desc(mean_catch))
+```
+
+# SEPARATE
+
+```{r}
+sites_df <- tibble(site = c("HAW-101", "MOL-023"))
+
+sites_df %>%
+  separate(site, c("island", "site_number"), "-")
+```
+
+# UNITE
+
+```{r}
+dates_df <- tibble(year = 1930, month = 12, day = 14)
+
+dates_df %>%
+  unite(date, year, month, day, sep = "-")
+```
+
+# COMPLETE PIPELINE
+
+```{r}
+mean_region_pipeline <- catch_original %>%
+  select(-All, -notesRegCode) %>%
+  mutate(Chinook = if_else(Chinook == "I", "1", Chinook)) %>%
+  mutate(Chinook = as.numeric(Chinook)) %>%
+  pivot_longer(
+    -c(Region, Year),
+    names_to = "species",
+    values_to = "catch"
+  ) %>%
+  mutate(catch = catch * 1000) %>%
+  group_by(Region) %>%
+  summarize(mean_catch = mean(catch)) %>%
+  arrange(desc(mean_catch))
+
+mean_region_pipeline
+```

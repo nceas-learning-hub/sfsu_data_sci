@@ -1,0 +1,887 @@
+---
+title: "Week 3 Day 2 Lecture Script: Advanced Quarto Features"
+subtitle: "BIO/CHEM 806 - Detailed Instructor Guide"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+# Lecture Overview
+
+**Duration:** 75 minutes
+**Format:** Online synchronous
+**Students:** ~30 graduate students
+
+## Pedagogical Approach
+
+This lecture leads with the **Visual Editor** for all features. Students learn what to click and where, then see the source code as "Under the Hood" context. This makes advanced Quarto features accessible to students who are not comfortable writing raw markup, while still building their literacy in what the Visual Editor generates.
+
+**Key Visual Editor tools students will learn today:**
+
+- **Chunk gear icon** ⚙️ — for figure/table labels, captions, sizing, code folding
+- **`@` autocomplete** — for inserting cross-references
+- **Insert menu** — for callouts, citations, equations, divs, tables
+- **Document properties gear** ⚙️ (next to Render button) — for TOC, themes, output format, bibliography
+
+## Learning Objectives
+
+By the end of this lecture, students will be able to:
+
+1. Create professional figures with proper captions and labels using the Visual Editor
+2. Generate formatted tables from data frames and label them for cross-referencing
+3. Use the `@` autocomplete to insert cross-references to figures, tables, and equations
+4. Add callout blocks, citations, and equations via the Insert menu
+5. Customize document layout and appearance using document properties
+6. Output Quarto documents to multiple formats (HTML, PDF, Word)
+
+## Materials Needed
+
+- [ ] Slide deck rendered
+- [ ] RStudio with Visual Editor open and sample data ready
+- [ ] Example documents showing different output formats
+- [ ] Breakout Google Doc link
+- [ ] Exit ticket in Canvas (updated to ask about Visual Editor steps)
+
+---
+
+# Pre-Class Setup
+
+## Sample Data
+
+Create `analysis_data.csv`:
+
+```csv
+site,richness,latitude
+North,15,38.5
+Central,12,38.0
+South,18,37.5
+North,14,38.5
+Central,13,38.0
+South,17,37.5
+```
+
+## RStudio Setup
+
+- Open RStudio with a `.qmd` file in **Visual Editor mode** (toggle at top-left of the editor pane)
+- Have the sample data loaded so you can create figures/tables live
+- Have a second `.qmd` file open in **Source mode** so you can toggle between the two during the demo to show what the Visual Editor generates
+
+---
+
+# Introduction (5 minutes)
+
+## Slide 1: Title Slide
+
+**[00:00-00:01]**
+
+*No narration needed — students read the title as they join.*
+
+---
+
+## Slide 2: Welcome
+
+**[00:01-00:04]**
+
+**Say:**
+
+> "Welcome back! On Monday you learned Quarto basics — YAML, Markdown, code chunks, and rendering. Today we're leveling up to create PROFESSIONAL-QUALITY documents."
+
+> "We're going to learn how to add proper figures with captions, formatted tables, cross-references that update automatically, and a bunch of layout features that make your documents look publication-ready."
+
+**Draw attention to the new line on the slide:**
+
+> "Notice the approach listed here: 'Visual Editor first, source code for reference.' Today I'm going to show you how to do everything through the Visual Editor's menus and dialogs. You won't need to memorize any raw syntax. The slides have 'Under the Hood' boxes that show you what the Visual Editor is writing for you — that's there for your reference, but you don't need to type any of it yourself."
+
+**Why this matters:**
+
+> "The reason I'm teaching it this way is that the Visual Editor is genuinely faster for these features. Professionals use it. It's not training wheels — it's just a better interface for things like setting figure options, inserting citations, and building cross-references. If you prefer source mode later, great, but there's no reason to struggle with syntax when there's a dialog box that does it for you."
+
+---
+
+## Slide 3: Creating Professional Figures (intro)
+
+**[00:04-00:05]**
+
+**Say:**
+
+> "Let's start with figures. In research, your figures need three things: proper captions, consistent sizing, and the ability to reference them in your text — like 'As shown in Figure 1...' Quarto handles all of this automatically."
+
+> "Think about your current workflow. You probably make a plot in R, save it as an image, paste it into Word, resize it, write a caption underneath, and then manually type 'see Figure 3.' If you add a figure earlier in the document, you have to renumber everything. Quarto eliminates all of that."
+
+> "Your figures are created directly from your code, captioned automatically, numbered automatically, and cross-referenced automatically. If you reorder them, the numbers update. If you change the data, the figure updates."
+
+---
+
+# Professional Figures (15 minutes)
+
+## Slide 4: Basic Figure Creation
+
+**[00:05-00:10]**
+
+**Say:**
+
+> "Here's how you create a figure in the Visual Editor. There are five steps, and they're all point-and-click."
+
+**Walk through each step on the slide:**
+
+> "Step 1: Write your plotting code inside a code chunk. You already know how to do this from Monday — just your normal ggplot or base R plotting code."
+
+> "Step 2: Click the gear icon on the code chunk. You'll see it in the upper-right corner of the chunk — it's a little ⚙️. This opens the chunk options dialog."
+
+> "Step 3: In the dialog, set the Label field. This is critical — type something that starts with `fig-`. For example, `fig-richness`. The `fig-` prefix is what tells Quarto 'this is a figure, please number it and let me cross-reference it.' If you forget the `fig-` prefix, Quarto will still show the plot, but it won't be numbered or cross-referenceable."
+
+> "Step 4: Set the Caption field. Write a complete sentence that describes what the figure shows. This is what appears below the figure in your rendered document. Think of it as the caption you'd write in a journal article."
+
+> "Step 5: Set the Width and Height. These are in inches. A good default for a full-width figure is 8 wide by 6 tall. For side-by-side figures, you'd go narrower."
+
+**Point to the callout box on the slide:**
+
+> "See the 'Under the Hood' box at the bottom? That shows you what the gear icon is actually writing into your code chunk. Those `#|` lines — label, fig-cap, fig-width, fig-height — that's the source code equivalent. You never need to type these yourself if you use the gear icon, but it's useful to recognize them when you see them."
+
+**Common mistake to flag:**
+
+> "The number one mistake I see: forgetting the `fig-` prefix on the label. If you write `label: richness` instead of `label: fig-richness`, your cross-references won't work and you'll get question marks instead of figure numbers."
+
+---
+
+## Slide 5: Figure Chunk Options
+
+**[00:10-00:12]**
+
+**Say:**
+
+> "Let's look at all the options available in that gear dialog. There are four main ones for figures."
+
+**Walk through the list:**
+
+> "Width and Height — size in inches. These control how big the figure is in your rendered document. If your figure looks squished or stretched, this is where you fix it."
+
+> "Aspect ratio — this is an alternative to setting both width and height. If you set width to 8 and aspect ratio to 0.75, the height will be 6 automatically. Some people find this easier than specifying both dimensions."
+
+> "Caption — the text below the figure. Write a complete, descriptive sentence. Good captions are specific: 'Species richness across three urban garden sites in San Francisco, 2024' is much better than 'Figure showing richness.'"
+
+> "Alignment — center, left, or right. This is a dropdown in the gear dialog. Center is the default and usually what you want for full-width figures."
+
+> "The key message here: use the dialog instead of memorizing syntax. That's what it's for."
+
+---
+
+## Slide 6: Multiple Figures in One Chunk
+
+**[00:12-00:14]**
+
+**Say:**
+
+> "Sometimes you want to show two related plots side by side — maybe pH and dissolved oxygen from the same water sampling study. You can do this in a single code chunk."
+
+**Walk through the steps:**
+
+> "In the gear dialog, you'll set three things. First, the main Caption — this is the overall caption that describes the whole panel. Something like 'Comparison of water quality metrics across sampling sites.'"
+
+> "Second, you add Subcaptions — one for each plot in the chunk. These label the individual panels. 'pH by site' and 'Dissolved oxygen by site', for example."
+
+> "Third, set Layout columns to 2. This tells Quarto to arrange the plots in two columns — side by side."
+
+> "The result is a professional-looking panel figure, like what you'd see in a journal article, with (a) and (b) labels, individual subcaptions, and one shared overall caption. And the whole thing is generated from a single code chunk."
+
+**When to use this:**
+
+> "This is really common in ecology and chemistry papers — any time you have related measurements that you want to compare visually. The alternative is making two separate figures, which takes up more space and doesn't show the comparison as clearly."
+
+---
+
+## Slide 7: Cross-Referencing Figures
+
+**[00:14-00:17]**
+
+**This is one of the most important slides in the deck. Spend time here.**
+
+**Say:**
+
+> "This is where it gets powerful. Cross-references are the feature that makes Quarto a genuine improvement over your current workflow."
+
+> "Step 1: Make sure your figure chunk has a `fig-` label. You set this in the gear icon, and we just covered that."
+
+> "Step 2: Put your cursor where you want to reference the figure in your text. Now type the `@` symbol. Just a single at-sign."
+
+**Pause for effect:**
+
+> "When you type `@`, an autocomplete menu drops down. It lists every labeled element in your document — all your `fig-` figures, all your `tbl-` tables, all your `eq-` equations. Just scroll to the one you want and click it. Done."
+
+> "Quarto inserts the reference, and when you render, it becomes 'Figure 1' or 'Figure 3' or whatever the correct number is. If you later add a new figure before this one, the number updates automatically. You never manually type 'Figure 1.' You always use the `@` autocomplete."
+
+**Drive home the key insight:**
+
+> "Think about what this saves you. In a manuscript with 8 figures and 5 tables, if a reviewer asks you to add a figure near the beginning, you'd normally have to renumber every figure and table reference in the entire document. With Quarto, you add the figure, and everything updates. This is what reproducible writing actually looks like."
+
+**Common mistake:**
+
+> "I cannot stress this enough: never type 'see Figure 1' manually. Always use `@fig-label`. If someone in your breakout room types 'see Figure 1,' please gently redirect them."
+
+---
+
+# Tables (12 minutes)
+
+## Slide 8: Creating Tables in Quarto (intro)
+
+**[00:17-00:18]**
+
+**Say:**
+
+> "Now let's talk about tables. There are three approaches in Quarto."
+
+> "First, markdown tables. If you just need a simple static table — like a glossary or a methods summary — the Visual Editor makes this incredibly easy. Go to Table → Insert Table and you get a spreadsheet-like grid. You can type right into the cells and add/remove rows and columns. It works just like a table in Word or Google Docs."
+
+> "Second, `kable()` from the knitr package. This is what you'll use most of the time — it takes an R data frame and converts it to a formatted table. So your summary statistics, your ANOVA results, your model coefficients — anything you've computed in R can go straight into a table."
+
+> "Third, the gt package, which gives you really fine-grained control over formatting. We won't cover gt today, but it's worth knowing about for publication-quality tables."
+
+> "Today we're focusing on kable, because it's the most practical for the work you're doing."
+
+---
+
+## Slide 9: Basic Table with kable
+
+**[00:18-00:21]**
+
+**Say:**
+
+> "Creating a cross-referenceable table with kable follows the exact same pattern as figures. The Visual Editor makes it simple."
+
+**Walk through the steps:**
+
+> "Step 1: Write your R code that produces a data frame and pipes it to `kable()`. Your code might compute summary statistics with `aggregate()` or `group_by() %>% summarize()`, then pass the result to `kable()` to format it as a table."
+
+> "Step 2: Click the gear icon on the chunk."
+
+> "Step 3: Set the Label to something starting with `tbl-`. For example, `tbl-summary`. Same pattern as `fig-` for figures — the prefix tells Quarto what kind of element this is."
+
+> "Step 4: Set the Caption. Again, a complete sentence: 'Summary statistics for species richness across three urban garden sites.'"
+
+> "The `digits` argument inside `kable()` controls decimal places. `digits = 2` gives you two decimal places, which is usually appropriate for ecological data."
+
+**Emphasize the pattern:**
+
+> "Notice the pattern? Figures use `fig-` prefix, tables use `tbl-` prefix. Same gear icon, same workflow. Labels, captions, and cross-references all work identically. Once you learn the pattern for figures, you already know how to do tables."
+
+---
+
+## Slide 10: Formatting Tables with kableExtra
+
+**[00:21-00:23]**
+
+**Say:**
+
+> "For more polished tables, the `kableExtra` package gives you styling options. This part is done in R code, not the Visual Editor — it's how you control the visual appearance of the table itself."
+
+**Walk through the code on the slide:**
+
+> "`kable_styling()` adds Bootstrap styling — 'striped' gives alternating row colors, 'hover' highlights the row when you mouse over it. Both of these make tables much easier to read."
+
+> "`column_spec(1, bold = TRUE)` makes the first column bold — useful for row labels like site names."
+
+> "`row_spec(0, bold = TRUE, background = '#D3D3D3')` styles the header row — row 0 is the header. Here we're making it bold with a light gray background."
+
+> "You don't need to memorize these. The kableExtra package has excellent documentation, and you'll develop a template of table styling code that you reuse. The point is: you can get publication-quality tables directly from R without any manual formatting."
+
+---
+
+## Slide 11: Cross-Referencing Tables
+
+**[00:23-00:25]**
+
+**Say:**
+
+> "Cross-referencing tables works exactly the same as figures. I want to emphasize this because the consistency is one of Quarto's best design decisions."
+
+**Walk through the steps:**
+
+> "Step 1: Make sure your table chunk has a `tbl-` label — you set this in the gear icon."
+
+> "Step 2: In your text, type `@`. The autocomplete menu appears, and this time it lists your `tbl-` labels alongside your `fig-` labels and any `eq-` labels."
+
+> "Step 3: Select your table reference. Quarto renders it as 'Table 1' or whatever the correct number is."
+
+> "Same automatic numbering. Same automatic updating if you reorder. Same `@` autocomplete. One pattern to learn, and it works for figures, tables, and equations."
+
+**Example in context:**
+
+> "So your results section might read: 'Statistical analysis (Table 1) revealed significant differences among sites (p < 0.001). Species richness was highest at southern sites (Figure 2).' And every one of those references was inserted with the `@` autocomplete, so they'll always be correct."
+
+---
+
+# Equations, Callouts, Citations (15 minutes)
+
+## Slide 12: Adding Equations
+
+**[00:25-00:28]**
+
+**Say:**
+
+> "For scientific writing, you often need equations. The Visual Editor has a built-in equation editor that makes this much easier than writing raw LaTeX."
+
+**Walk through inline math:**
+
+> "For inline equations — the kind that appear within a sentence — go to Insert → Inline Math. Or click the Sigma button (Σ) on the toolbar. A small pop-up appears where you type your LaTeX. As you type, you see a live preview of the rendered equation right there in the editor. So if you're writing the Shannon diversity formula, you type `H' = -\sum p_i \ln(p_i)` and you can see immediately whether it looks right."
+
+**Walk through display math:**
+
+> "For display equations — the big centered ones — go to Insert → Display Math. This opens a larger editor. Same live preview, more room to work. These are the equations that get their own line in the document."
+
+> "Both use LaTeX syntax for the actual math. If you've never used LaTeX, don't worry — for common ecological and chemical formulas, you'll find templates online. And the live preview means you can experiment without rendering the whole document."
+
+**Practical tip:**
+
+> "A lot of you will use this for diversity indices, population growth equations, or chemical formulas. The Insert menu handles the formatting — you just need to know the LaTeX symbols for your specific equation."
+
+---
+
+## Slide 13: Numbered & Cross-Referenced Equations
+
+**[00:28-00:30]**
+
+**Say:**
+
+> "Just like figures and tables, you can number and cross-reference equations. The workflow is slightly different because the equation label has to be added manually."
+
+**Walk through the steps:**
+
+> "Step 1: Insert a display equation using Insert → Display Math."
+
+> "Step 2: After the closing dollar signs, you add a label. This part you do need to type: `{#eq-shannon}`. The `eq-` prefix is the equation equivalent of `fig-` and `tbl-`."
+
+> "Step 3: Reference it in your text by typing `@` and selecting `eq-shannon` from the autocomplete. Same pattern!"
+
+> "The result is a numbered equation — Equation 1, Equation 2 — that you can reference in your text. 'As defined in Equation 1, Shannon diversity depends on the proportion of each species.'"
+
+> "This is particularly valuable in methods sections where you define a formula and then reference it multiple times in your results and discussion."
+
+---
+
+## Slide 14: Callout Blocks
+
+**[00:30-00:32]**
+
+**Say:**
+
+> "Callout blocks are colored boxes that highlight important information. They're incredibly useful in scientific documents for flagging caveats, limitations, tips, and key points."
+
+**Walk through the Visual Editor workflow:**
+
+> "Go to Insert → Callout. A dialog opens where you choose the type from a dropdown. You have five options:"
+
+> "Note — for additional context. 'Species identifications were confirmed by expert taxonomist.'"
+
+> "Warning — for caveats or limitations. 'Sample sizes varied by site due to weather cancellations.'"
+
+> "Tip — for suggested approaches. 'Consider rarefaction when comparing sites with unequal sample sizes.'"
+
+> "Important — for critical information that readers must not miss."
+
+> "Caution — for potential pitfalls or errors to avoid."
+
+> "After you choose the type, the Visual Editor creates the callout block for you. You just type your title and content inside it. No fenced div syntax to remember."
+
+**When to use them:**
+
+> "I use callouts in every analysis document I write. Data limitations go in a Warning callout. Methods notes go in a Note callout. In your homework, I'm asking for at least two callout blocks — start thinking about what caveats or notes apply to your analysis."
+
+---
+
+## Slide 15: Adding Citations
+
+**[00:32-00:35]**
+
+**Say:**
+
+> "Citations are where the Visual Editor really shines. If you've ever struggled with BibTeX files or citation managers, this will feel magical."
+
+**Walk through the workflow:**
+
+> "Go to Insert → Citation. A dialog opens with several options for finding your reference."
+
+> "Option 1: Search by DOI. Paste in a DOI, and Quarto looks up the full citation metadata automatically. This is my favorite method — you don't need a .bib file at all to start."
+
+> "Option 2: Browse your .bib file. If you already have a bibliography file, the dialog lets you search through it and select references."
+
+> "Option 3: Connect to Zotero. If you use Zotero as your reference manager, the Visual Editor connects directly to your Zotero library. You search your Zotero database right from the dialog."
+
+> "Whichever method you use, when you select a reference, the Visual Editor inserts the citation syntax for you — something like `[@Smith2020]` — and adds the entry to your bibliography file automatically."
+
+**Setting up the bibliography:**
+
+> "For the bibliography file itself, click the gear icon next to the Render button — that's the document properties dialog. There's a Bibliography field where you point to your .bib file. You don't need to edit the YAML by hand."
+
+> "When you render, Quarto generates a formatted reference list at the end of your document automatically. It handles the formatting, the sorting, everything."
+
+**Why this matters:**
+
+> "In your careers, you're going to write papers with 30, 50, 100 references. Having a system that manages them automatically — and that can switch citation styles with one line of YAML — is transformative. You'll set this up once and use it for every paper."
+
+---
+
+## Slide 16: Page Layout Options
+
+**[00:35-00:37]**
+
+**Say:**
+
+> "You can control page layout through the Visual Editor's Insert → Div menu. This is how you create multi-column layouts and margin content."
+
+**Walk through two-column layout:**
+
+> "For a two-column layout: Insert → Div, and set the class to `.columns`. Inside that div, you nest two more divs with class `.column` and set their width attributes — usually 50% each. The Visual Editor handles the fenced div syntax — those triple colons that are easy to miscount in source mode."
+
+**Walk through margin content:**
+
+> "For margin notes — content that appears in the side margin — Insert → Div with class `.column-margin`. This is great for supplementary information, small figures, or notes that relate to the main text without interrupting the flow."
+
+> "The Visual Editor is especially helpful here because fenced divs in source mode — with their nested colons — are one of the most common sources of syntax errors. The Insert → Div dialog eliminates that entirely."
+
+---
+
+## Slide 17: Code Folding for Readers
+
+**[00:37-00:39]**
+
+**Say:**
+
+> "When you're writing for readers who aren't coders — your advisor, a policy audience, collaborators from other fields — you probably want to show the results but not overwhelm them with code. Code folding lets you hide the code behind a clickable button."
+
+**Walk through document-level setting:**
+
+> "Click the gear icon next to the Render button — that's the document properties dialog. Enable Code Fold, which hides all code by default, and Code Tools, which adds a menu at the top of the document for showing/hiding all code at once."
+
+**Walk through per-chunk setting:**
+
+> "You can also control this on individual chunks. Click the gear icon on a specific chunk, toggle Code Fold on, and set a Code Summary label. The label is the text on the button — something descriptive like 'Show data cleaning code' or 'Show statistical model.'"
+
+> "This is perfect for technical reports where some readers want to see the analysis code and others just want the results. Everyone gets what they need from the same document."
+
+---
+
+## Slide 18: Document Themes
+
+**[00:39-00:40]**
+
+**Say:**
+
+> "Quarto has many built-in themes that change the overall look of your HTML documents. You set these in the document properties dialog."
+
+> "Click the gear icon next to the Render button. Set the Theme field. Popular options are cosmo (clean and modern), flatly (flat design), journal (academic feel), litera (light and readable), and minty (subtle green accents)."
+
+> "You can also add a custom CSS file if your program or lab has specific styling requirements."
+
+> "I'd encourage you to try a few different themes on your homework — it's a one-click change and it can make your document look dramatically different."
+
+---
+
+## Slide 19: Table of Contents
+
+**[00:40-00:42]**
+
+**Say:**
+
+> "For any document longer than a page or two, you'll want a table of contents. The Visual Editor makes this a one-click setup."
+
+> "Click the gear icon next to the Render button. Enable Table of Contents. Set the Depth — how many heading levels to include. Level 3 is usually good, which means your `#`, `##`, and `###` headings all appear in the TOC."
+
+> "Set the Location. 'Left' puts the TOC in a sidebar that stays visible as you scroll — this is my favorite for long documents because readers can always see the structure. 'Right' puts it on the other side. 'Body' puts it at the top of the document."
+
+> "Sections become clickable links, so readers can jump directly to the section they need. For a long analysis document or a final report, this is essential."
+
+---
+
+## Slide 20: Tabbed Content
+
+**[00:42-00:43]**
+
+**Say:**
+
+> "Tabbed content lets you organize information in clickable tabs — like browser tabs within your document. This is great when you have a plot, the underlying data, and the analysis code, and you want readers to flip between them."
+
+> "In the Visual Editor: Insert → Div with class `.panel-tabset`. Inside the div, add `##` headings for each tab. Put your content under each heading."
+
+> "For example, you might have three tabs: Plot, Data, and Code. The reader clicks whichever one they want to see. It saves vertical space and lets different audiences find what they need."
+
+---
+
+## Slide 21: Complete Analysis Workflow
+
+**[00:43-00:44]**
+
+**Say:**
+
+> "Let me put it all together. A typical analysis document has six sections: Introduction, Methods, Results, Discussion, Conclusion, and References."
+
+> "Every one of those sections benefits from what we learned today. Your Results section has figures and tables with labels and captions, cross-referenced from your text. Your Methods section might have equations and callout blocks for important caveats. Your References section is generated automatically from your citations."
+
+> "And all of it lives in a single `.qmd` file, all manageable in the Visual Editor. You render it once and get a complete, professional document."
+
+---
+
+# Live Demo (12 minutes)
+
+**[00:44-00:56]**
+
+**Switch to RStudio. Make sure Visual Editor mode is active.**
+
+**Say:**
+
+> "Let me show you all of this in action. I'm going to build a professional document using the Visual Editor, and I want you to watch where I click."
+
+**Demo outline:**
+
+### 1. Start with Monday's document
+
+- Open existing .qmd in Visual Editor mode
+- Point out the Visual Editor toggle at the top of the editor pane
+
+> "I'm in Visual Editor mode — see this toggle up here? The document looks like a rich text editor, similar to Word or Google Docs. This is where we'll do everything."
+
+### 2. Add a figure with label and caption using the gear icon
+
+- Write a simple ggplot in a code chunk
+- Click the gear icon ⚙️ on the chunk
+- Fill in: Label = `fig-richness-site`, Caption = "Species richness by site", Width = 8, Height = 6
+- Close the dialog
+
+> "I click the gear icon... here's the dialog. I set the label — notice I start with `fig-`. I type my caption as a complete sentence. Width 8, height 6. Done. That's all five steps from the slide."
+
+### 3. Create a table with kable using the gear icon
+
+- Write R code with `kable(summary_stats, digits = 2)`
+- Click the gear icon
+- Fill in: Label = `tbl-site-summary`, Caption = "Site summary statistics"
+
+> "Same pattern for the table. Gear icon, label starts with `tbl-`, caption is a complete sentence."
+
+### 4. Add cross-references using `@` autocomplete
+
+- Click in the text area below the code chunks
+- Type a sentence: "As shown in " then type `@`
+- Show the autocomplete dropdown with both `fig-richness-site` and `tbl-site-summary`
+- Select the figure reference, finish the sentence
+- Type another sentence using the table reference
+
+> "Now watch this — I type `@` and look: there are my labels! I select `fig-richness-site` and Quarto inserts the reference. Let me do the same for the table..."
+
+### 5. Add a callout block via Insert menu
+
+- Go to Insert → Callout
+- Choose "Warning" from the dropdown
+- Type title: "Data Limitation"
+- Type content: "Sample sizes varied by weather conditions."
+
+> "Insert → Callout, I pick Warning, give it a title and content. The Visual Editor creates the whole callout block for me."
+
+### 6. Set document properties via the gear next to Render
+
+- Click the gear icon next to the Render button
+- Enable Table of Contents
+- Enable Code Fold
+- Set theme to "cosmo"
+
+> "The gear next to Render opens document properties. I turn on TOC, turn on code folding, set the theme to cosmo. All without touching the YAML."
+
+### 7. Render and show the result
+
+- Click Render
+- Point out: automatic figure/table numbering, clickable cross-references, code folding, table of contents, theme
+
+> "Let's render... and look at this. Figure 1, Table 1 — automatically numbered. Watch what happens when I click the cross-reference — it jumps to the figure! The code is folded by default but I can click to show it. And there's our table of contents on the left."
+
+### 8. Toggle to Source mode to show what the Visual Editor generated
+
+- Toggle from Visual to Source mode
+- Point out the `#|` options in the chunks, the `@fig-` references in the text, the YAML changes
+
+> "Now let me toggle to Source mode so you can see what the Visual Editor was doing behind the scenes. See these `#|` lines in the chunks? The gear icon wrote those. See `@fig-richness-site` in the text? The autocomplete wrote that. See the YAML — `toc: true`, `code-fold: true`? The document properties dialog wrote that. Everything connects."
+
+**Key teaching moments during demo:**
+
+> "See how Figure 1 and Table 1 appear automatically? You didn't type those numbers."
+
+> "Watch the cross-reference — click it, and it scrolls right to the figure. That's what `@` gives you."
+
+> "The code is folded. Your advisor sees the results. You can expand to see the code. Same document, different experiences."
+
+> "Switching to Source mode — this is what the Visual Editor writes for you. You can always switch back and forth."
+
+---
+
+# Multiple Output Formats (5 minutes)
+
+## Slide 22: Best Practices
+
+**[00:56-00:58]**
+
+**Say:**
+
+> "Before we get to output formats, let me highlight the best practices. These are all framed in terms of the Visual Editor tools you just learned."
+
+**Walk through the list:**
+
+> "Label everything via the gear icon. Use descriptive labels — `fig-temperature` not `fig-plot1`. A label should tell you what the figure shows without looking at it."
+
+> "Write clear captions — complete sentences, in the gear dialog. A good caption should be understandable without reading the surrounding text."
+
+> "Cross-reference liberally. Every time you mention a figure or table in your text, use `@` to insert the reference. Readers follow cross-references — they help people navigate your document."
+
+> "Keep code chunks focused — one plot per chunk. This makes debugging easier and keeps your labels clean."
+
+> "Use Insert → Callout for anything readers need to notice — limitations, caveats, tips."
+
+> "Set code-folding in document properties if you're writing for a mixed audience."
+
+---
+
+## Slide 23: Debugging Complex Documents
+
+**[00:58-00:59]**
+
+**Say:**
+
+> "A few tips for when things go wrong."
+
+> "Render frequently. Don't write for 30 minutes and then render — render every few minutes so you catch errors when they're small and easy to find."
+
+> "If something breaks, comment out sections to isolate the problem. The error is usually in the last thing you changed."
+
+> "Check chunk labels in the gear dialog — duplicate labels are the most common cause of mysterious failures. Every label must be unique."
+
+> "And here's my pro tip: switch to Source mode when you're debugging tricky problems. Sometimes seeing the raw markdown makes it obvious what went wrong — a missing colon, a misplaced closing tag, an indentation error."
+
+---
+
+## Slide 24-25: PDF and Word Output
+
+**[00:59-01:01]**
+
+**Say:**
+
+> "One of Quarto's most powerful features: the same `.qmd` file can produce HTML, PDF, and Word output. You write once and render to whatever format you need."
+
+**PDF output:**
+
+> "For PDF output, you first need to install tinytex. Run `quarto install tinytex` in your terminal — just once. Then in the Visual Editor, click the gear next to Render, change the format to PDF, and set options like document class and margins."
+
+> "PDF is what you'll use for journal submissions. The output looks like a LaTeX document because it IS a LaTeX document under the hood — Quarto converts your markdown to LaTeX and then to PDF."
+
+**Word output:**
+
+> "For Word, same process: gear next to Render, change format to Word. You can optionally set a reference template — that's a `.docx` file that defines your styles. If your journal has a Word template, you point to it here."
+
+> "Word output is great for sharing with collaborators who don't use Quarto, or when a journal specifically requires Word format. And the best part — your cross-references still work! Figure 1 is still Figure 1, Table 1 is still Table 1. The references don't break when you change output formats."
+
+> "You can even render to all three formats at once by listing them in your YAML."
+
+---
+
+# Breakout Activity (15 minutes)
+
+## Slide 26: Breakout Activity
+
+**[01:01-01:02]**
+
+**Say:**
+
+> "Time to practice! You're going into breakout rooms, and I want you to use the Visual Editor for everything."
+
+**Read through the tasks, emphasizing which Visual Editor tool to use for each:**
+
+> "Task 1: Add at least 2 figures with labels and captions. Use the gear icon on each code chunk."
+
+> "Task 2: Add at least 1 table with label and caption. Same gear icon, but with a `tbl-` prefix."
+
+> "Task 3: Cross-reference at least one figure and one table. Type `@` in your text and select from the autocomplete."
+
+> "Task 4: Add one callout block. Insert → Callout, pick a type."
+
+> "Task 5: Turn on table of contents. Document properties gear next to Render."
+
+> "Your goal is a professional-looking document. Help each other — if someone's stuck, walk them through the clicks. You have 15 minutes."
+
+**Send to breakout rooms.**
+
+**Instructor note:** *Visit rooms. Most common issues will be:*
+
+- *Forgetting the `fig-` or `tbl-` prefix on labels (cross-references show ?? )*
+- *Not finding the gear icon on chunks (it's the ⚙️ in the upper-right corner of the chunk)*
+- *Not finding the document properties gear (it's next to the Render button, not on a chunk)*
+- *Typing `@` in Source mode instead of Visual Editor (autocomplete only works in Visual Editor)*
+
+---
+
+## Breakout Debrief
+
+**[01:17-01:22]**
+
+**Bring everyone back.**
+
+**Say:**
+
+> "Welcome back! Let's see how it went."
+
+**Ask:**
+
+> "Who successfully used the `@` autocomplete for cross-references? What did it feel like compared to typing 'Figure 1'?"
+
+> "Who added a callout block? What type did you choose and why?"
+
+> "Did anyone try the table of contents? How does it look?"
+
+> "Did anyone switch to Source mode to peek at what the Visual Editor generated?"
+
+**Common issues to address:**
+
+> "If your cross-references showed question marks: check that your label starts with `fig-` or `tbl-`. Open the gear icon and verify."
+
+> "If your table of contents didn't appear: make sure you clicked the gear next to the *Render* button, not the gear on a code chunk. They're different dialogs."
+
+**Celebrate successes:**
+
+> "Raise your hand if your document looks more professional than Monday. That's the power of labels, captions, cross-references, and a table of contents — five minutes of work in the Visual Editor."
+
+---
+
+# Wrap-Up (5 minutes)
+
+## Slide 27: Homework
+
+**[01:22-01:24]**
+
+**Say:**
+
+> "Homework before Monday of Week 4. I want a complete professional analysis document."
+
+**Walk through requirements:**
+
+> "All the basic Quarto elements from Monday — headings, text, code chunks, inline code."
+
+> "At least 3 labeled figures. Use the gear icon, `fig-` prefix, complete caption sentences."
+
+> "At least 2 labeled tables. Same gear icon, `tbl-` prefix."
+
+> "Multiple cross-references. Every time you mention a figure or table in your text, use `@`."
+
+> "At least 2 callout blocks. Think about what caveats or notes apply to your analysis."
+
+> "Table of contents. Document properties gear."
+
+> "Try rendering to both HTML and PDF. If PDF doesn't work, that's okay — just try it and note what happened."
+
+**Highlight the challenge:**
+
+> "The bonus challenge: switch between Visual Editor and Source mode to see what the Visual Editor creates for you. This builds your understanding of the underlying syntax, which will help when you need to debug things later."
+
+**Submit:**
+
+> "Submit both rendered files plus your .qmd source."
+
+---
+
+## Slide 28: Exit Ticket
+
+**[01:24-01:26]**
+
+**Say:**
+
+> "Exit ticket before you go. Three questions in Canvas."
+
+**Read the questions — note these are updated from the original to focus on Visual Editor:**
+
+> "Question 1: Describe the steps to create a labeled, captioned figure using the Visual Editor. What do you click? What do you fill in?"
+
+> "Question 2: How do you insert a cross-reference in Visual Editor? What happens when you type the at-sign?"
+
+> "Question 3: Why are cross-references better than writing 'see Figure 1' manually? Think about what happens when you add or reorder figures."
+
+> "Take 2-3 minutes. Submit in Canvas before you sign off."
+
+---
+
+## Slide 29: Summary
+
+**[01:26-01:28]**
+
+**Say:**
+
+> "Let me leave you with the key tools from today. Everything comes down to three Visual Editor tools."
+
+> "The chunk gear icon for figures and tables — labels, captions, sizing, code folding."
+
+> "The `@` autocomplete for cross-references — figures, tables, equations, all from one keystroke."
+
+> "The Insert menu for everything else — callouts, citations, equations, layout divs."
+
+> "And the document properties gear next to Render — for TOC, themes, output format, bibliography."
+
+> "Next week we tackle a critical question: why does reproducibility fail? And we'll learn Git and GitHub as the solution. Have a great weekend!"
+
+---
+
+# Post-Lecture Checklist
+
+- [ ] Upload recording
+- [ ] Review exit tickets (check that students describe Visual Editor steps, not raw syntax)
+- [ ] Check for questions on discussion board
+- [ ] Prepare Week 4 materials
+
+---
+
+# Common Questions
+
+**Q: "I can't find the gear icon on my code chunk."**
+A: It's in the upper-right corner of the chunk, only visible in Visual Editor mode. If you're in Source mode, switch to Visual Editor first.
+
+**Q: "My cross-references show ?? instead of numbers."**
+A: The label must start with `fig-`, `tbl-`, or `eq-`. Open the gear icon on the chunk and check the label field. Also make sure the label is unique — no two chunks can share a label.
+
+**Q: "The `@` autocomplete isn't showing my labels."**
+A: The autocomplete works in Visual Editor mode, not Source mode. Also, make sure you've already set the label on the chunk — the autocomplete can only find labels that exist.
+
+**Q: "My PDF won't render."**
+A: You need to install tinytex first: `quarto install tinytex` in the terminal. This only needs to be done once.
+
+**Q: "Where is the document properties dialog?"**
+A: Click the gear icon ⚙️ next to the **Render** button (top of the editor pane). This is different from the gear icon on individual code chunks.
+
+**Q: "How do I cite references?"**
+A: Insert → Citation. You can search by DOI, browse a .bib file, or connect to Zotero. The bibliography file path is set in the document properties dialog.
+
+**Q: "Can I have figures side-by-side?"**
+A: Yes — in the chunk gear dialog, add subcaptions and set layout columns to 2.
+
+**Q: "I prefer Source mode. Do I have to use Visual Editor?"**
+A: No! Everything we taught today can be done in Source mode by typing the `#|` options and `@` references directly. The Visual Editor is a convenience, not a requirement. The "Under the Hood" boxes on the slides show you the exact syntax.
+
+**Q: "Can I switch between Visual and Source mode?"**
+A: Absolutely, and I encourage it. Toggle the button at the top of the editor pane. Switching modes doesn't change your file — they're two views of the same document.
+
+---
+
+# Timing Notes
+
+| Section | Target Time | Slides |
+|---------|-------------|--------|
+| Introduction | 00:00-00:05 | 1-3 |
+| Professional Figures | 00:05-00:17 | 4-7 |
+| Tables | 00:17-00:25 | 8-11 |
+| Equations, Callouts, Citations | 00:25-00:43 | 12-20 |
+| Live Demo | 00:44-00:56 | (RStudio) |
+| Best Practices & Output Formats | 00:56-01:01 | 22-25 |
+| Breakout Activity + Debrief | 01:01-01:22 | 26 |
+| Wrap-Up | 01:22-01:28 | 27-29 |
+
+**If ahead:** Longer demo time, try rendering to multiple formats live, show Zotero citation integration
+**If behind:** Shorter demo (skip Source mode toggle), 10-min breakout, quick summary
+**Target: 2-3 minutes for questions at end**

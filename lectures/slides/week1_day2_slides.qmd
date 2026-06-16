@@ -1,0 +1,560 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  code-line-numbers: false
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Reproducibility & Decision Logs]{.custom-title}
+
+[Week 1, Day 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome-back data-menu-title="Welcome Back"}
+
+[Welcome Back]{.slide-title}
+
+::: body-text
+**Monday:** We noticed how ambiguity shows up in simple questions
+
+**Today:** How do we work with data in ways we can defend, reproduce, and share?
+:::
+
+------------------------------------------------------------------------
+
+##  {#monday-recap data-menu-title="Monday Recap"}
+
+[What Monday Was About]{.slide-title}
+
+::: body-text
+When you defined variables like "experience" or "field," you were making **data decisions**:
+
+-   What counts
+-   What doesn't count
+-   How to measure fuzzy concepts
+
+**Those decisions get embedded in your work.**
+
+**Today's question:** How do we make those decisions visible, defensible, and reproducible?
+:::
+
+------------------------------------------------------------------------
+
+##  {#today-plan data-menu-title="Today's Plan"}
+
+[Today's Plan]{.slide-title}
+
+::: body-text
+1.  What is **reproducibility**?
+
+2.  What is a **decision log**?
+
+3.  **Practice** writing one entry
+
+4.  **Critique** each other's writing
+
+5.  Connect to **project organization**
+:::
+
+------------------------------------------------------------------------
+
+##  {#messy-workflow data-menu-title="Messy Workflow"}
+
+[Sound Familiar?]{.slide-title}
+
+::: body-text
+You work in Excel...
+
+Calculate something...
+
+Copy to Word...
+
+Make a figure...
+
+Paste it...
+
+Email yourself a version...
+
+Save: `Analysis_Final_v2_REAL_final.xlsx`
+:::
+
+------------------------------------------------------------------------
+
+##  {#oh-no data-menu-title="The Problem"}
+
+[Then Your Advisor Emails]{.slide-title}
+
+::: {.body-text .center-text}
+"Can you redo this with the updated data?"
+
+**And you think:**
+
+"...I have no idea what I did."
+:::
+
+------------------------------------------------------------------------
+
+##  {#reproducibility-def data-menu-title="Reproducibility Definition"}
+
+[What Is Reproducibility?]{.slide-title}
+
+::: body-text
+**Someone else — or future you — can take your data and your process and arrive at the same results.**
+
+Not just the same numbers.
+
+**The same reasoning.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#types-repro data-menu-title="Types of Reproducibility"}
+
+[Three Types of Reproducibility]{.slide-title}
+
+::: body-text
+**Computational:** Your code runs the same way on different computers
+
+**Empirical:** Your data collection is documented well enough to repeat
+
+**Conceptual:** Your *decisions* are clear enough to understand *why*
+
+**Today's focus:** Conceptual reproducibility
+:::
+
+------------------------------------------------------------------------
+
+##  {#future-you data-menu-title="Future You"}
+
+[Why This Matters]{.slide-title}
+
+::: {.body-text .center-text}
+**You're always collaborating with future-you.**
+
+And past-you doesn't respond to emails.
+:::
+
+::: body-text
+If you don't write down why you made a decision:
+
+\- You won't remember it in two weeks
+
+\- You can't defend it
+
+\- You can't reproduce it
+:::
+
+------------------------------------------------------------------------
+
+##  {#decision-log data-menu-title="Decision Log"}
+
+[Tool: The Data Decision Log]{.slide-title}
+
+::: body-text
+A running document where you write:
+
+-   What you decided
+-   Why you decided it
+-   What else you considered
+-   What trade-offs you made
+
+Google Design Docs - How engineers document decisions: https://www.industrialempathy.com/posts/design-docs-at-google/
+
+Google Documentation Best Practices: https://google.github.io/styleguide/docguide/best_practices.html
+:::
+
+##  {#raw-data-example data-menu-title="Raw Data Example"}
+
+[Sample Field Data (Before Decisions)]{.slide-title-smaller}
+
+::: body-text
+| time  | water_potential | site     |
+|-------|-----------------|----------|
+| 06:15 | -0.45           | Riparian |
+| 08:30 | -0.62           | Riparian |
+| dawn  | -0.38           | Riparian |
+| 12:00 | -1.10           | Upland   |
+| 15:45 | -1.35           | Upland   |
+| dawn  | -0.92           | Upland   |
+| 18:20 | -0.88           | Coastal  |
+| dawn  | -0.70           | Coastal  |
+
+*Field notes as recorded. No cleaning or interpretation yet.*
+:::
+
+------------------------------------------------------------------------
+
+##  {#example-log data-menu-title="Example Log"}
+
+[Example Decision Log Entry]{.slide-title-smaller}
+
+::: body-text
+**Decision:** Converted all "dawn" entries to 6:00 AM.
+
+**Reasoning:** Dawn in our study area ranges from 5:45–6:15 AM. Using 6:00 introduces \<30 minutes of error, acceptable given our 2-hour observation windows.
+
+**Alternative considered:** Exclude "dawn" entries entirely. Rejected because it removes 18% of early-season observations.
+
+**Trade-off:** Slight temporal imprecision in exchange for retaining sample size.
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-it-does data-menu-title="What It Does"}
+
+[What This Entry Does]{.slide-title}
+
+::: body-text
+-   **Transparent** — not hiding reasoning
+
+-   **Shows alternatives** — not just first idea
+
+-   **Acknowledges trade-offs** — doesn't pretend the decision was obvious
+
+**This is scientific thinking applied to data work.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#your-turn data-menu-title="Your Turn"}
+
+[Your Turn: Writing Practice]{.slide-title}
+
+::: body-text
+**10 minutes of silent, independent writing**
+
+Use the same structure:
+
+\- Decision
+
+\- Reasoning
+
+\- Alternative considered
+
+\- Trade-off
+
+Google Doc template in chat → <https://docs.google.com/document/d/1eOaHbS_YalUxA_vojhBwR24AaEviGyA5oGFcWPlVhIM/edit?tab=t.0>
+:::
+
+------------------------------------------------------------------------
+
+##  {#scenario data-menu-title="Scenario"}
+
+[The Scenario]{.slide-title-smaller}
+
+::: body-text
+You're analyzing bee diversity data from urban gardens. Your dataset has a "Garden Type" column with:
+
+-   Community garden
+-   Community Garden
+-   community garden
+-   Comm. garden
+-   School garden
+-   school garden (community-maintained)
+-   Private yard
+-   private yard (open to public)
+
+**Task:** Write a decision log entry explaining how you would standardize these categories — and why.
+:::
+
+------------------------------------------------------------------------
+
+##  {#silent-writing data-menu-title="Silent Writing"}
+
+[Silent Writing Time]{.slide-title}
+
+::: {.body-text .center-text}
+**10 minutes**
+
+Start now.
+:::
+
+------------------------------------------------------------------------
+
+##  {#peer-review data-menu-title="Peer Review"}
+
+[Peer Review]{.slide-title}
+
+::: body-text
+**Breakout rooms of 3 (12 minutes):**
+
+1.  Each person **reads** their entry aloud (1-2 min)
+
+2.  Others give feedback:
+
+    -   One thing that was **clear**
+    -   One place you wanted **more explanation**
+
+**Goal:** Help each other see where clarity breaks down
+:::
+
+------------------------------------------------------------------------
+
+##  {#debrief data-menu-title="Debrief"}
+
+[What Made Writing Hard?]{.slide-title}
+
+::: {.body-text .center-text}
+Not the specifics of your scenarios—
+
+**What made clarity hard?**
+
+What made writing difficult?
+
+(Chat or unmute)
+:::
+
+------------------------------------------------------------------------
+
+##  {#detail-question data-menu-title="Detail Question"}
+
+["How much detail should I include?"]{.slide-title-smaller}
+
+::: body-text
+**Guideline:**
+
+Write enough that a colleague could understand your reasoning **without asking follow-up questions**.
+
+If they'd need you there to explain it, you didn't write enough.
+:::
+
+------------------------------------------------------------------------
+
+##  {#reasoning-quality data-menu-title="Reasoning Quality"}
+
+["Is my reasoning good enough?"]{.slide-title-smaller}
+
+::: body-text
+There's no "good enough" in the abstract.
+
+There's reasoning that's **defensible given your constraints** and reasoning that's **not defensible**.
+
+**Not defensible:** "I combined them because they seemed similar"
+
+**Defensible:** "I combined community and school gardens into 'public gardens' because both involve shared maintenance and open access, even though governance structures differ"
+:::
+
+------------------------------------------------------------------------
+
+##  {#writing-reveals data-menu-title="Writing Reveals"}
+
+["I hadn't thought through alternatives"]{.slide-title-smaller}
+
+::: {.body-text .center-text}
+**That's the value of writing it down.**
+
+Writing reveals what you haven't thought about yet.
+
+That's not a bug — that's a feature.
+:::
+
+------------------------------------------------------------------------
+
+##  {#tradeoffs data-menu-title="Trade-offs"}
+
+["It was hard to admit trade-offs"]{.slide-title-smaller}
+
+::: body-text
+We're trained to present **conclusions**, not **uncertainty**.
+
+But science IS trade-offs.
+
+Pretending they don't exist doesn't make your work stronger—
+
+**It makes it fragile.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#core-pattern data-menu-title="Core Pattern"}
+
+[The Core Pattern]{.slide-title}
+
+::: {.body-text .center-text}
+**Writing forces you to be explicit about things you thought you'd already decided.**
+
+That's uncomfortable.
+
+That's essential.
+:::
+
+------------------------------------------------------------------------
+
+##  {#when-to-use data-menu-title="When to Use"}
+
+[When Do You Use This?]{.slide-title}
+
+::: body-text
+Write in your decision log when:
+
+1.  Choosing between **two reasonable options**
+2.  **Combining or recoding categories**
+3.  **Excluding data** (ALWAYS)
+4.  Making an **assumption** that could be challenged
+5.  Something **didn't work** (so future-you doesn't repeat it)
+:::
+
+------------------------------------------------------------------------
+
+##  {#the-test data-menu-title="The Test"}
+
+[The Test]{.slide-title}
+
+::: {.body-text .center-text}
+If someone asked in a meeting:
+
+**"Why did you do it that way?"**
+
+And your honest answer is:
+
+**"Um... I'm not sure"**
+
+**→ You should have written it down.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#project-structure data-menu-title="Project Structure"}
+
+[How This Connects to Structure]{.slide-title}
+
+::: body-text
+Decision logs record your **reasoning**.
+
+But they only work if your **files and workflow** are also reproducible.
+
+**Organized project:**
+
+\- One folder per project (RProject)
+
+\- Organized subfolders (raw data, processed data, scripts, figures)
+
+\- Relative file paths (works on anyone's computer)
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-structure data-menu-title="Why Structure"}
+
+[Why Structure Matters]{.slide-title}
+
+::: {.body-text .center-text}
+If I can't **find** your data
+
+and I can't **run** your code,
+
+your decision log is just a story.
+
+**It's not reproducible.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#workflow-promise data-menu-title="Workflow Promise"}
+
+[What We're Building Toward]{.slide-title}
+
+::: body-text
+A way of working where:
+
+-   Your **data stays raw** (never overwrite originals)
+-   Your **process is scripted** (no manual copy-paste)
+-   Your **decisions are documented**
+-   Your **file paths are robust** (work on any computer)
+
+**Everything connects.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#before-next data-menu-title="Before Next Class"}
+
+[Before Next Class]{.slide-title}
+
+::: body-text
+**Low-stakes assignment:**
+
+1.  Open R or RStudio
+2.  Just **look** at the interface
+3.  Open a blank script file
+4.  Type your name
+5.  Save it
+6.  Close it
+
+**That's it.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-simple data-menu-title="Why So Simple"}
+
+[Why Such a Simple Task?]{.slide-title}
+
+::: body-text
+Coding anxiety comes from learning **the tool** and **the concepts** at the same time.
+
+Get comfortable with what RStudio *looks like* before we ask it to do anything.
+
+**Separate the fears. Tackle them one at a time.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#resources data-menu-title="Resources"}
+
+[Resources]{.slide-title}
+
+::: body-text
+**In the chat:**
+
+1.  Decision log template (use all semester)
+2.  R/RStudio installation troubleshooting guide
+:::
+
+------------------------------------------------------------------------
+
+##  {#final-thought data-menu-title="Final Thought"}
+
+[Final Thought]{.slide-title}
+
+::: {.body-text .center-text}
+Everything we did today — writing, peer review, struggling with clarity —
+
+**That's not "pre-data-science."**
+
+**That IS data science.**
+
+The coding is just execution.
+
+**The thinking is the work.**
+
+Each week we will have an exit ticket on canvas. Here is this week's
+
+<https://sfsu.instructure.com/courses/64795/discussion_topics/520397>
+
+Please take a moment to answer on your way out- these are due by 2 pm.
+:::
+
+------------------------------------------------------------------------
+
+##  {#see-you data-menu-title="See You"}
+
+::: {.body-text .center-text}
+**See you next time!**
+
+Come ready to look at R with curiosity, not fear.
+:::

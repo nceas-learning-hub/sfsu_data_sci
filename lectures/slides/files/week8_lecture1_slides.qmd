@@ -1,0 +1,580 @@
+---
+title: "Data Visualization"
+subtitle: "Week 8 · Lecture 1"
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Data Visualization]{.custom-title}
+
+[Making data visible · Week 8 · Lecture 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Gretchen LeBuhn**]{.custom-subtitle2}
+
+---
+
+## {#learning-obj data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+<br>
+
+:::{.body-text}
+By the end of this week, you will be able to:
+
+- Understand Tufte's principles of graphical excellence and integrity
+- Explain how the **Grammar of Graphics** underlies `ggplot2`
+- Identify the **four essential components** of every `ggplot`
+- Recognize when to use different **geom types**
+- Use `pivot_longer()` to prepare data for plotting
+:::
+
+---
+
+## {#tufte-who data-menu-title="Who Is Tufte?"}
+
+[Edward Tufte]{.slide-title}
+
+:::{.columns}
+
+:::{.column width="60%"}
+:::{.body-text}
+**Statistician, artist, and Professor Emeritus**  
+Political Science, Statistics & Computer Science · Yale University
+
+<br>
+
+> *"The Leonardo da Vinci of data."*  
+> — The New York Times
+
+> *"The Galileo of graphics."*  
+> — Bloomberg
+
+<br>
+
+**The Visual Display of Quantitative Information** (1983)  
+Self-published after taking a second mortgage on his house  
+→ One of Amazon's top 100 non-fiction books of the 20th century
+:::
+:::
+
+:::{.column width="40%"}
+![Artwork by Allison Horst](../../images/r_data_visualization/ggplot2_masterpiece.png){fig-align="center" width="100%"}
+:::
+
+:::
+
+---
+
+## {#tufte-ethics data-menu-title="Visualization as Ethics"}
+
+[Visualization is an Ethical Practice]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Tufte's central argument:
+
+> Charts **shape how people think, reason, and make decisions.**  
+> Therefore, how you present data is a **moral responsibility** — not just an aesthetic choice.
+:::
+
+. . .
+
+:::{.body-text}
+Three big themes:
+
+| Theme | Core idea |
+|---|---|
+| **Graphical Excellence** | Information-rich; complex ideas with clarity, precision, efficiency |
+| **Graphical Integrity** | Represent quantities honestly and proportionally |
+| **Analytical Design** | Support serious thinking: comparisons, patterns, layered detail |
+:::
+
+---
+
+## {#challenger data-menu-title="The Challenger"}
+
+[When Visualization Fails: The Challenger]{.slide-title}
+
+:::{.body-text}
+**January 28, 1986.** Engineers had data showing O-ring failure rates increased at lower temperatures. The launch forecast was colder than any prior launch.
+
+The data was spread across **13 disconnected charts.** The pattern was invisible. The launch was approved. Seven astronauts died.
+:::
+
+. . .
+
+:::{.body-text}
+Tufte's analysis: a single scatter plot of **temperature vs. O-ring damage** across all prior launches would have made the risk immediately visible.
+
+<br>
+
+> *"Clarity, precision, and efficiency"* — these are not just aesthetics.  
+> They determine whether evidence can actually be **seen and used.**
+:::
+
+---
+
+## {#tufte-concepts data-menu-title="Tufte's Key Concepts"}
+
+[Tufte's Three Concepts to Know]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Data-Ink Ratio**  
+Maximize the share of ink devoted to actual data.  
+Erase anything that can be removed without losing information.
+
+→ In `ggplot2`: `theme_minimal()`, `theme_classic()`
+
+<br>
+
+**Chartjunk**  
+Decorative elements that add visual noise without adding information.  
+3D effects · unnecessary gridlines · rainbow fills · decorative shadows
+
+→ Avoid: 3D charts, overly colorful default themes
+
+<br>
+
+**Small Multiples**  
+The same chart repeated for different subgroups — enables comparison across categories simultaneously.
+
+→ In `ggplot2`: `facet_wrap()` — this is *literally* Tufte's small multiples
+:::
+
+---
+
+## {#tufte-ggplot data-menu-title="Tufte + ggplot2"}
+
+[Tufte's Ideas Live Inside `ggplot2`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+The Grammar of Graphics framework and Tufte's principles emerged from the **same intellectual tradition**.
+
+When you use:
+
+- `theme_minimal()` → you are maximizing the **data-ink ratio**
+- `facet_wrap()` → you are making **small multiples**
+- `scale_fill_viridis_d()` → you are serving **graphical integrity** (accessibility)
+- `labs(title = ..., subtitle = ...)` → you are following **clear, detailed labeling**
+
+<br>
+
+*Understanding Tufte helps you understand* **why** *ggplot2 is designed the way it is.*
+:::
+
+---
+
+## {#three-ways data-menu-title="Ways to Plot in R"}
+
+[Three Ways to Plot in R]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Base R graphics** — `plot()`, `hist()`, `boxplot()`  
+Quick exploratory plots. No packages needed. Good for fast checks.
+
+<br>
+
+**`ggplot2`** — our focus this week  
+Excels at making complicated plots easy and easy plots simple enough.  
+Works within the tidyverse ecosystem you already know.
+
+<br>
+
+**Others** — plotly, lattice, etc.  
+Exist! But `ggplot2` is the community standard for scientific visualization in R.
+:::
+
+. . .
+
+:::{.body-text}
+*"ggplot2 excels at making complicated plots easy and easy plots simple enough."*  
+— NCEAS Learning Hub textbook
+:::
+
+---
+
+## {#grammar-of-graphics data-menu-title="Grammar of Graphics"}
+
+[The Grammar of Graphics]{.slide-title}
+
+:::{.columns}
+
+:::{.column width="55%"}
+:::{.body-text}
+`ggplot2` is a system for **declaratively** creating graphics.
+
+You provide:
+
+- The **data**
+- How to **map variables to aesthetics**
+- What **graphical primitives** to use
+
+...and it takes care of the details.
+
+<br>
+
+**Declarative** = describe *what* you want,  
+not *how* to draw it step by step.
+:::
+:::
+
+:::{.column width="45%"}
+![Artwork by Allison Horst](../../images/r_data_visualization/ggplot2_masterpiece.png){fig-align="center" width="95%"}
+:::
+
+:::
+
+---
+
+## {#four-components data-menu-title="Four Essential Components"}
+
+[Four Essential Components — Every `ggplot`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**1. `ggplot()`** — tells R we are making a ggplot
+
+**2. `data =`** — what data frame are we using?
+
+**3. `aes()`** — aesthetics mapping: which variables map to x, y, color, fill, size...?
+
+**4. `geom_*()`** — geometry: what type of plot are we making?
+:::
+
+. . .
+
+<br>
+
+:::{.body-text}
+Layers are added with **`+`** — different from the pipe `%>%`
+
+```{r}
+ggplot(data = my_data, aes(x = var1, y = var2)) +
+    geom_point()
+```
+:::
+
+---
+
+## {#dataset-intro data-menu-title="The Dataset"}
+
+[The Dataset: Sacramento-San Joaquin Delta]{.slide-title}
+
+:::{.body-text}
+**Socioecological Monitoring on the Sacramento-San Joaquin Delta**
+
+Data from the [EDI Data Repository](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.587.1)
+
+- 55 observations across restoration sites in the Delta (2017–2018)
+- Tracks **who uses these spaces**: small boats, medium boats, large boats, bank anglers, scientists, cars
+- Real ecological data — needs real wrangling before it can be visualized
+:::
+
+. . .
+
+:::{.body-text}
+**Packages we'll use this week:**
+
+```{r}
+library(readr);  library(dplyr);  library(tidyr)
+library(forcats)   # categorical variables
+library(ggplot2)   # visualization
+library(leaflet)   # interactive maps
+library(DT)        # interactive tables
+library(viridis)   # colorblind-friendly palettes
+library(janitor)   # column name cleanup
+```
+:::
+
+---
+
+## {#explore-data data-menu-title="Explore the Data"}
+
+[Step 1: Explore Before You Plot]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Always understand your data's structure before visualizing it.
+:::
+
+```{r}
+delta_visits_raw <- read_csv(here::here("data/Socioecological_monitoring_data.csv"))
+
+colnames(delta_visits_raw)   # what are the columns?
+glimpse(delta_visits_raw)    # shape and data types
+range(delta_visits_raw$Date) # time range
+unique(delta_visits_raw$Time_of_Day)
+```
+
+. . .
+
+:::{.body-text}
+**`janitor::clean_names()`** — transforms all column names to consistent `snake_case` in one line:
+:::
+
+```{r}
+delta_visits <- delta_visits_raw %>%
+    janitor::clean_names()
+
+colnames(delta_visits)
+```
+
+---
+
+## {#is-it-tidy data-menu-title="Is This Tidy?"}
+
+[Is This Data Tidy?]{.slide-title}
+
+:::{.body-text}
+Recall the three tidy data principles:
+
+1. Every **column** is a variable
+2. Every **row** is an observation  
+3. Every **cell** is a single value
+:::
+
+. . .
+
+:::{.body-text}
+Look at these columns: `sm_boat`, `med_boat`, `lrg_boat`, `bank_angler`, `scientist`, `cars`
+
+These are all **values** of a single variable: **visitor type**  
+Their counts are all values of another variable: **quantity**
+
+→ This is **wide** format. We need **long** format for `ggplot2`.
+
+*"`ggplot2` for the most part likes data input to be in a long format."*
+:::
+
+---
+
+## {#pivot-longer data-menu-title="pivot_longer()"}
+
+[`pivot_longer()` — Wide to Long]{.slide-title}
+
+<br>
+
+```{r}
+visits_long <- delta_visits %>%
+    pivot_longer(
+        cols = c(sm_boat, med_boat, lrg_boat,
+                 bank_angler, scientist, cars),
+        names_to  = "visitor_type",
+        values_to = "quantity"
+    ) %>%
+    rename(restore_loc = eco_restore_approximate_location) %>%
+    select(-notes)
+```
+
+. . .
+
+:::{.body-text}
+**Result:** 55 rows × 13 columns → **330 rows × 8 columns**
+
+Same information — better organized for plotting.
+
+When `visitor_type` is a **variable**, we can map it to color.  
+When it's a column name, we can't.
+:::
+
+---
+
+## {#exercise-1 data-menu-title="Exercise 1"}
+
+[Exercise 1: Calculate Daily Visit Totals]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Calculate the **daily visits** by `restore_loc`, `date`, and `visitor_type`.
+:::
+
+. . .
+
+```{r}
+daily_visits_loc <- visits_long %>%
+    group_by(restore_loc, date, visitor_type) %>%
+    summarise(daily_visits = sum(quantity))
+
+head(daily_visits_loc)
+```
+
+. . .
+
+:::{.body-text}
+`daily_visits_loc` is our plotting data frame for the rest of the week. Every geom layer, every color mapping, every facet draws from this tidy, summarized object.
+:::
+
+---
+
+## {#first-plot data-menu-title="First Plot"}
+
+[Our First `ggplot`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Three equivalent ways to write the same plot — **all produce the same result:**
+:::
+
+```{r}
+# Option 1 — data and mapping in ggplot() [preferred]
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits)) +
+    geom_col()
+
+# Option 2 — mapping in geom
+ggplot(data = daily_visits_loc) +
+    geom_col(aes(x = restore_loc, y = daily_visits))
+
+# Option 3 — everything in geom
+ggplot() +
+    geom_col(data = daily_visits_loc,
+             aes(x = restore_loc, y = daily_visits))
+```
+
+---
+
+## {#plus-operator data-menu-title="The + Operator"}
+
+[The `+` Operator — Layering Logic]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Each `+` adds a new **layer** on top of the previous one.
+
+Think of it like overlays in GIS, or adding stains to a microscopy slide — each layer adds information.
+:::
+
+. . .
+
+:::{.body-text}
+**General layer order:**
+
+```
+ggplot()  +  geoms  +  scales  +  labs  +  theme
+```
+
+<br>
+
+⚠️ **Common error:** Using `%>%` instead of `+` between ggplot layers.  
+`%>%` passes data between functions.  
+`+` adds layers to a plot.
+:::
+
+---
+
+## {#geom-types data-menu-title="Geom Types"}
+
+[Changing Geoms — Same Grammar, Different Plot]{.slide-title}
+
+:::{.body-text}
+Once you know the grammar, **changing plot type is trivial** — swap the `geom_*()`.
+:::
+
+. . .
+
+```{r}
+# Boxplot — distributions across categories
+daily_visits_loc %>%
+    filter(daily_visits < 30,
+           visitor_type %in% c("sm_boat", "med_boat", "lrg_boat")) %>%
+    ggplot(aes(x = visitor_type, y = daily_visits)) +
+    geom_boxplot()
+```
+
+```{r}
+# Violin — same data, shape of distribution
+    ggplot(aes(x = visitor_type, y = daily_visits)) +
+    geom_violin()
+```
+
+```{r}
+# Line + Point — time series (two geoms, one plot)
+daily_visits_loc %>%
+    filter(restore_loc == "Decker Island",
+           visitor_type == "med_boat") %>%
+    ggplot(aes(x = date, y = daily_visits)) +
+    geom_line() +
+    geom_point()
+```
+
+---
+
+## {#geom-catalog data-menu-title="Geom Catalog"}
+
+[Geoms for Scientific Work]{.slide-title}
+
+<br>
+
+:::{.body-text}
+| Geom | Use for |
+|---|---|
+| `geom_col()` / `geom_bar()` | Categorical counts or values |
+| `geom_point()` | Scatter plots |
+| `geom_line()` | Connected series, time trends |
+| `geom_boxplot()` | Distributions across groups |
+| `geom_violin()` | Distribution shape across groups |
+| `geom_histogram()` | Single variable distribution |
+| `geom_smooth()` | Trend lines with confidence intervals |
+| `geom_errorbar()` | Uncertainty / error bars |
+
+<br>
+
+**Reference:** Search *"ggplot cheat sheet"* — bookmark it!
+:::
+
+---
+
+## {#coming-up data-menu-title="Coming Up"}
+
+[Coming Up]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Lecture 2** — Making plots *great*:
+
+- The `aes()` boundary: the most important ggplot2 concept
+- Labels with `labs()` and built-in themes
+- Custom `theme()` and reusable theme objects
+- Reordering factors with `forcats::fct_reorder()`
+- Accessible color with `viridis`
+- Small multiples with `facet_wrap()`
+- Saving publication-ready figures with `ggsave()`
+- Interactive tables (`DT`) and maps (`leaflet`)
+
+<br>
+
+**Activity** — You'll execute the full pipeline with Nicole using the Delta dataset.
+
+⚠️ *Make sure you've downloaded the data from EDI before the activity section!*
+:::

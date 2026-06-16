@@ -1,0 +1,693 @@
+---
+title: "Week 4 Day 1 Lecture Script: Why Reproducibility Fails (And How to Fix It)"
+subtitle: "BIO/CHEM 806 - Detailed Instructor Guide"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Lecture Overview
+
+**Duration:** 75 minutes  
+**Format:** Online synchronous  
+**Students:** ~30 graduate students
+
+## Learning Objectives
+
+By the end of this lecture, students will be able to:
+
+1. Define reproducibility and distinguish it from replicability
+2. Identify the five main reasons reproducibility fails in scientific research
+3. Explain the consequences of non-reproducibility for science and individual researchers
+4. Apply reproducibility principles to evaluate their own workflows
+5. Design reproducible workflows using tools learned in previous weeks
+6. Articulate why version control (Git) is essential for reproducibility
+
+## Materials Needed
+
+- [ ] Slide deck rendered
+- [ ] Breakout Google Doc with scenario
+- [ ] Examples of good/bad project structures
+- [ ] Exit ticket in Canvas
+- [ ] Reading on Git/GitHub ready to post
+
+---
+
+# Pre-Class Setup
+
+## Prepare Breakout Scenario
+
+In Google Doc, create detailed scenario:
+
+> **PhD Student Reproducibility Crisis**
+> 
+> Files found:
+> - data_final.csv
+> - data_final_v2.csv  
+> - analysis_old.R
+> - analysis_NEW.R
+> - analysis_NEWEST.R
+> - figure1.png, figure1_v2.png, figure1_final.png
+> - notes.txt (contains: "removed outliers, made graphs")
+> 
+> Methods section says: "Data were cleaned to remove outliers and errors. Statistical analysis was performed in R. Figures were generated showing the results."
+>
+> Task: List everything missing for reproducibility. Design better workflow.
+
+---
+
+# Introduction (5 minutes)
+
+## Slides 1-3: Welcome & Recap
+
+**[00:00-00:05]**
+
+**Say:**
+
+> "Welcome to Week 4! This week is about reproducibility and version control."
+
+> "Monday: WHY reproducibility fails. Wednesday: Git and GitHub as solutions."
+
+**The uncomfortable truth:**
+
+> "Most scientific analyses aren't reproducible. Including, probably, some of yours. Including some of MINE from years ago."
+
+> "That's not a moral failing—it's a systems problem. Today we talk about why, and how to fix it."
+
+**Recap previous weeks:**
+
+> "Week 1: Thinking explicitly about data science."
+> "Week 2: Organizing projects, planning with pseudocode."
+> "Week 3: Documenting with Quarto."
+
+> "Today: The gap between theory and practice. Why even when we try, reproducibility still fails."
+
+---
+
+# What IS Reproducibility? (8 minutes)
+
+## Slides 3-5: Reproducibility Definition & Image
+
+**[00:05-00:07]**
+
+**Show Allison Horst reproducibility image (full screen).**
+
+**Say:**
+
+> "Before we talk about why it fails, let's be clear what reproducibility IS."
+
+**Let image sit for 2-3 seconds.**
+
+---
+
+**[00:07-00:10]**
+
+**Show image with explanation text.**
+
+**Say:**
+
+> "Allison Horst illustrates why reproducibility matters for scientific integrity."
+
+**Point to image:**
+
+> "Without reproducibility, you can't verify results. You can't build on prior work. You can't trust conclusions."
+
+**Key message:**
+
+> "Reproducibility isn't optional—it's your scientific alibi. It's how you prove you did what you said you did."
+
+---
+
+**[00:10-00:13]**
+
+**Slide 5: Define reproducibility formally.**
+
+**Say:**
+
+> "Let me define reproducibility precisely."
+
+**Definition:**
+
+> "Reproducibility means someone else can take your data and code and get the EXACT SAME results you got."
+
+**What it's NOT:**
+
+> "It's NOT replicability—that's collecting new data and testing the same hypothesis."
+
+> "It's NOT just having data available somewhere."
+
+> "It's NOT describing methods in prose."
+
+**What it IS:**
+
+> "Same data + same code → same results. Every time. No exceptions."
+
+> "Including all intermediate steps. Including data cleaning. Including figure generation."
+
+**With clear documentation:**
+
+> "And with documentation so clear that 'someone else' could be a reviewer, a collaborator, or you six months from now."
+
+---
+
+## Slide 6: The Reproducibility Crisis
+
+**[00:13-00:15]**
+
+**Present the statistics.**
+
+**Say:**
+
+> "Let me share some sobering statistics from reproducibility studies."
+
+**Read each:**
+
+> "70% of researchers have tried and FAILED to reproduce another scientist's work."
+
+> "50% have failed to reproduce their OWN work."
+
+> "Less than 30% of published studies share both data AND code."
+
+**Pause for impact:**
+
+> "Let that sink in. HALF of researchers can't reproduce their own work."
+
+**In our fields:**
+
+> "In biology and ecology specifically:"
+> "- Many published analyses are impossible to reproduce"
+> "- Methods sections are insufficient"
+> "- Code is rarely shared"
+> "- When code IS shared, it often doesn't run"
+
+**Not finger-pointing:**
+
+> "I'm not sharing this to shame anyone. I'm sharing it because it's a SYSTEMIC problem we need to fix."
+
+---
+
+# Why Reproducibility Fails: 5 Reasons (25 minutes)
+
+**[00:15-00:40]**
+
+**This is the heart of the lecture. Take time here.**
+
+## Reason 1: Undocumented Decisions (Slides 7-8)
+
+**[00:15-00:20]**
+
+**Tell the story vividly.**
+
+**Say:**
+
+> "Reason 1: Undocumented decisions."
+
+**Scenario:**
+
+> "Picture this: You're analyzing temperature data. You try different outlier thresholds: 2 SD, 2.5 SD, 3 SD."
+
+> "You settle on 2.5 SD. It seems reasonable. You move on."
+
+**The mistake:**
+
+> "You don't write down that you chose 2.5 SD. You don't write down WHY you chose it."
+
+**Six months later:**
+
+> "A reviewer asks: 'How did you define outliers?' You genuinely don't remember."
+
+> "Your methods section says: 'Outliers were removed.' That's it."
+
+**The question you can't answer:**
+
+> "Which threshold did you actually use? How did you decide? Can you recreate your exact results?"
+
+**Pause:**
+
+> "This happens ALL THE TIME. Type in chat: Has this happened to you?"
+
+**Instructor note:** *Most will say yes. Normalize it.*
+
+**The fix:**
+
+> "Document EVERY decision in your code with comments."
+
+**Example:**
+
+```r
+# Remove outliers defined as > 2.5 SD from mean
+# Threshold chosen after visual inspection of Q-Q plots
+# (see diagnostics.qmd for plots supporting this choice)
+data_clean <- data %>%
+  filter(abs(scale(value)) <= 2.5)
+```
+
+> "Future you (and reviewers) can see exactly what you did and why."
+
+---
+
+## Reason 2: Fragile Computational Environments (Slides 9-10)
+
+**[00:20-00:25]**
+
+**Explain the version problem.**
+
+**Say:**
+
+> "Reason 2: Fragile computational environments."
+
+**The scenario:**
+
+> "Your analysis works perfectly on your computer. Your setup:"
+> "- R version 4.2.1"
+> "- ggplot2 version 3.4.0"
+> "- macOS"
+
+**Collaborator has:**
+
+> "- R version 4.3.0"
+> "- ggplot2 version 3.4.2"
+> "- Windows"
+
+**Result:**
+
+> "Different results. Or errors. Or different default behaviors."
+
+**Why:**
+
+> "Package versions matter. R versions matter. Even operating systems can matter."
+
+> "A function that worked one way in ggplot2 3.4.0 might work differently in 3.4.2."
+
+**Real example:**
+
+> "dplyr changed how it handles grouped data between versions. Code that worked in version 0.8 broke in version 1.0."
+
+**The fix:**
+
+> "Document your computational environment. At minimum:"
+
+```r
+# R version 4.3.1
+# tidyverse 2.0.0
+# ggplot2 3.4.3
+# vegan 2.6-4
+```
+
+> "Better: use `sessionInfo()` at the end of your script."
+
+> "Best: use tools like renv (advanced) that capture exact versions."
+
+---
+
+## Reason 3: Manual Steps (Slides 11-12)
+
+**[00:25-00:30]**
+
+**This resonates with students—emphasize heavily.**
+
+**Say:**
+
+> "Reason 3: Manual steps in your workflow."
+
+**The typical workflow:**
+
+> "1. Export data from instrument to Excel"
+> "2. Open in Excel, visually scan it, delete rows that 'look wrong'"
+> "3. Save as CSV"
+> "4. Run R script"
+> "5. Make a plot, export it"
+> "6. Open in Photoshop, adjust colors to match journal requirements"
+> "7. Insert into Word document"
+
+**Ask:**
+
+> "How many steps here are manual? Type a number in chat."
+
+**They'll say 4-5.**
+
+**The problem:**
+
+> "Which rows did you delete? What made them 'look wrong'? What colors did you adjust to what values?"
+
+**Six months later:**
+
+> "Can you remember? Can you recreate it exactly? No."
+
+**The iron rule:**
+
+> "If you touch data by hand, it's not reproducible."
+
+**The fix:**
+
+> "EVERYTHING in code."
+
+**Example of automated version:**
+
+```r
+# Remove contaminated samples from July 15
+# (Sensor malfunction documented in field notes 7/15/23)
+data <- data %>%
+  filter(!(date == "2023-07-15" & site == "B"))
+```
+
+> "This is reproducible. Someone can see exactly what you removed and why."
+
+**Photoshop example:**
+
+> "Don't adjust colors in Photoshop. Do it in ggplot2:"
+
+```r
+scale_color_manual(values = c("#E41A1C", "#377EB8"))
+```
+
+> "Now the exact colors are in your code."
+
+---
+
+## Reasons 4-5: Ambiguous Workflows & Time Pressure (Slides 13-14)
+
+**[00:30-00:35]**
+
+**Cover these more briefly.**
+
+**Reason 4: Ambiguous workflows**
+
+**Say:**
+
+> "Reason 4: Ambiguous workflows. Look at this file structure:"
+
+```
+analysis/
+├── data_v1.csv
+├── data_v2.csv
+├── data_final.csv
+├── script.R
+├── script_old.R
+├── script_new.R
+└── plot.png
+```
+
+> "Which script made the plot? Which data did it use? No one knows. Not even you."
+
+**The fix:**
+
+> "Clear structure, numbered scripts, documented workflow. Like we learned in Week 2."
+
+---
+
+**Reason 5: Time pressure**
+
+**Say:**
+
+> "Reason 5: Time pressure."
+
+**The story:**
+
+> "Deadline approaching. You think: 'I'll document this later.'"
+
+> "Later never comes. You move on to next project."
+
+> "Six months later: What did I do?"
+
+**Compounded by:**
+
+> "- No training in reproducibility"
+> "- No institutional support"
+> "- 'Just get results' culture"
+
+**The honest truth:**
+
+> "I'm not going to pretend time pressure doesn't exist. It does."
+
+**The reframe:**
+
+> "But reproducibility SAVES time in the long run. Investing 30 minutes now saves HOURS later."
+
+---
+
+## Interactive Discussion
+
+**[00:35-00:40]**
+
+**Engage students.**
+
+**Say:**
+
+> "Type in chat: Which of these five reasons is YOUR biggest challenge?"
+
+**Tally responses:**
+
+> "Looks like manual steps and undocumented decisions are the top two."
+
+**Normalize:**
+
+> "These are normal. You're not alone. They're systemic problems, not personal failures."
+
+**Ask:**
+
+> "Has anyone experienced consequences from non-reproducibility? Reviewer requests, can't recreate results, etc.?"
+
+**Share 1-2 stories from chat if students volunteer them.**
+
+---
+
+# Consequences & Solutions (12 minutes)
+
+## Slides 15-18: Consequences
+
+**[00:40-00:45]**
+
+**Make it real.**
+
+**Say:**
+
+> "What does non-reproducibility actually cost?"
+
+**For science broadly:**
+
+> "- Wasted research effort building on false findings"
+> "- Inability to build on correct findings"
+> "- Erosion of public trust"
+> "- Slowed scientific progress"
+
+**For YOU personally:**
+
+> "- Reviewer requests you can't fulfill"
+> "- Collaborators can't use your work"
+> "- Can't build on your own past work"
+> "- Hours wasted re-doing analyses"
+> "- Increased stress and uncertainty"
+
+**Real scenario:**
+
+> "Reviewer asks: 'How did you handle missing data in Figure 3?'"
+
+> "If your work isn't reproducible, you genuinely don't know. You can't answer."
+
+**Another scenario:**
+
+> "You want to extend your Chapter 2 analysis for a follow-up paper. You can't figure out what you did 18 months ago."
+
+---
+
+## Slides 19-22: Solutions
+
+**[00:45-00:52]**
+
+**Connect to previous weeks.**
+
+**Say:**
+
+> "The solution: Reproducible workflows. And you already know the pieces!"
+
+**Core principle:**
+
+> "Everything in code + version control."
+
+**This solves:**
+
+> "✅ Undocumented decisions → Comments in code explain why"
+> "✅ Fragile environments → Document versions"
+> "✅ Manual steps → Automate in code"
+> "✅ Ambiguous workflows → Clear structure (Week 2!)"
+> "✅ Time pressure → Build habits now so it's automatic"
+
+**You already know:**
+
+> "1. Projects (Week 2) - Organized structure"
+> "2. Documentation (Week 2) - READMEs, comments"
+> "3. Code-based analysis (Week 3) - Quarto documents"
+> "4. Version control (Week 4 Wednesday) - Git/GitHub"
+
+**Slide 20: Checklist**
+
+**Go through reproducibility checklist:**
+
+> "Before sharing or publishing, check:"
+> "- [ ] All steps in code"
+> "- [ ] Decisions documented"
+> "- [ ] Relative paths only"
+> "- [ ] README explains workflow"
+> "- [ ] Package versions documented"
+> "- [ ] Runs start-to-finish without errors"
+> "- [ ] Someone else has tested it"
+
+> "If you can't check all boxes, it's not reproducible."
+
+---
+
+# Breakout Activity (12 minutes)
+
+## Slide 23: Breakout Activity
+
+**[00:52-00:53]**
+
+**Present the scenario.**
+
+**Say:**
+
+> "Into breakout rooms. You have a scenario in the Google Doc."
+
+**Scenario summary:**
+
+> "PhD student's work can't be reproduced. Files are a mess. Methods are vague."
+
+**Your tasks:**
+
+> "1. List everything missing for reproducibility"
+> "2. Redesign the workflow to be reproducible"
+> "3. What specific documentation is needed?"
+
+**Time:**
+
+> "12 minutes. Add your group's answers to the doc."
+
+**Send to breakout rooms.**
+
+**Instructor note:** *Visit rooms. Guide discussion. Common insights: need numbered scripts, documented thresholds, README, clear data provenance, version control.*
+
+---
+
+## Breakout Debrief
+
+**[01:05-01:10]**
+
+**Bring back and discuss.**
+
+**Say:**
+
+> "What did your groups identify as missing?"
+
+**Common responses:**
+
+> "- Which data file is final?"
+> "- What does 'cleaned' mean?"
+> "- Which script produced which figure?"
+> "- No documentation of decisions"
+> "- No README"
+
+**Ask:**
+
+> "How would you redesign this?"
+
+**Good solutions students typically suggest:**
+
+> "- One data file in data/raw, document cleaning in code"
+> "- Numbered scripts showing order"
+> "- README explaining workflow"
+> "- Comments explaining thresholds"
+> "- Use Git for version control (Wednesday!)"
+
+**Validate:**
+
+> "These are exactly right. You've identified the solutions."
+
+---
+
+# Wrap-Up (6 minutes)
+
+## Slides 24-27: Homework, Exit Ticket, Summary
+
+**[01:10-01:16]**
+
+**Homework (Slide 24):**
+
+> "Before Wednesday: Read the Git/GitHub introduction on Canvas."
+
+> "Also: Review YOUR current project. Ask yourself:"
+> "1. Could someone else reproduce my analysis?"
+> "2. What manual steps do I have?"
+> "3. What decisions are undocumented?"
+> "4. Is my workflow clear?"
+
+> "Be honest. Bring questions to Wednesday."
+
+---
+
+**Exit Ticket (Slide 25):**
+
+> "Three questions:"
+> "1. Name three reasons reproducibility fails"
+> "2. A methods section says 'outliers were removed.' What's missing?"
+> "3. Think of YOUR research. What's one manual step you should code?"
+
+---
+
+**Summary (Slide 26):**
+
+> "Key concepts:"
+> "1. Reproducibility = same data + code → same results"
+> "2. Most research isn't reproducible (systemic problem)"
+> "3. Five reasons: undocumented decisions, fragile environments, manual steps, ambiguous workflows, time pressure"
+> "4. Solution: Everything in code + version control"
+> "5. Wednesday: Git/GitHub as the infrastructure"
+
+---
+
+**[01:16-01:18]**
+
+**Final thoughts:**
+
+> "I know this lecture might have been uncomfortable. Realizing your work isn't as reproducible as you thought."
+
+> "But awareness is the first step. You can't fix what you don't acknowledge."
+
+> "And the good news: You have the tools. You've been learning them for three weeks."
+
+> "Wednesday we add the final piece: Git and GitHub."
+
+---
+
+# Post-Lecture Checklist
+
+- [ ] Upload recording
+- [ ] Review exit tickets
+- [ ] Post Git reading
+- [ ] Prepare Git demo for Wednesday
+
+---
+
+# Common Questions
+
+**Q: "Is it okay if only my code is reproducible but data is too big to share?"**
+A: Yes, as long as you document how to access the data and your code is complete.
+
+**Q: "What about proprietary data I can't share?"**
+A: Share your code and document data structure. Reproducibility is about METHOD even if data can't be public.
+
+**Q: "Isn't this just for computational work?"**
+A: No! Lab protocols should be reproducible too. Same principles apply.
+
+---
+
+# Timing Notes
+
+If ahead: More discussion time, more examples, longer breakout
+If behind: Combine some reason slides, 10-min breakout, quick summary
+
+**Target: End with 2 minutes for final thoughts and questions**

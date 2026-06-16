@@ -1,0 +1,476 @@
+---
+title: "Wrangling as Analysis"
+subtitle: "Week 6 · Lecture 1"
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Wrangling as Analysis]{.custom-title}
+
+[Cleaning and transforming data with `dplyr` and `tidyr`]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 6 · Lecture 1**]{.custom-subtitle2}
+
+---
+
+## {#learning-obj data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+:::{.body-text}
+By the end of this lecture, you will be able to:
+
+- Explain why data rarely arrives in the format needed for analysis
+- Describe what `dplyr` and `tidyr` do and when to use them
+- Read data wrangling code as a narrative of analytical decisions
+- Use the pipe operator `%>%` to chain operations together
+- Explore a new dataset using basic exploration functions
+:::
+
+---
+
+## {#data-never-ready data-menu-title="Data Is Never Ready"}
+
+[Data is rarely in the format we need]{.slide-title}
+
+:::{.body-text}
+The data we get to work with are **rarely, if ever, in the format we 
+need** to do our analyses.
+
+It's often the case that:
+
+- One package requires data in one format
+- Another package requires it in a different format
+- The shape of the data doesn't match our research question
+
+To be **efficient analysts**, we need good tools for reformatting data.
+:::
+
+---
+
+## {#dplyr-tidyr data-menu-title="dplyr and tidyr"}
+
+[Enter `dplyr` and `tidyr`]{.slide-title}
+
+:::{.body-text}
+The `dplyr` and `tidyr` R packages provide a **fairly complete and 
+extremely powerful** set of functions for reformatting data quickly.
+
+Learning these tools well will greatly **increase your efficiency** as 
+an analyst.
+:::
+
+. . .
+
+:::{.body-text}
+**`dplyr`** — for transforming rows and columns
+
+**`tidyr`** — for reshaping the structure of data frames
+:::
+
+---
+
+## {#motivating-ex1 data-menu-title="Motivating Example 1"}
+
+[Motivating Example 1: Summarizing]{.slide-title}
+
+:::{.body-text}
+Suppose you have salmon length data and want to calculate the **average 
+length per year**.
+:::
+
+:::{.smaller}
+| year | length_cm |
+|------|-----------|
+| 1990 | 5.6773318 |
+| 1991 | 3.081224 |
+| 1991 | 4.526969 |
+| 1992 | 4.381523 |
+| 1992 | 5.597777 |
+| 1992 | 4..900052|
+:::
+
+. . .
+
+:::{.body-text}
+Before writing code — **what are the steps?** (think pseudocode)
+:::
+
+---
+
+## {#motivating-ex1-code data-menu-title="Example 1 Code"}
+
+[Motivating Example 1: The Code]{.slide-title}
+
+:::{.body-text}
+The `dplyr` package lets us express those steps as a **readable 
+pipeline**:
+:::
+
+```r
+length_data %>% 
+  group_by(year) %>% 
+  summarize(mean_length_cm = mean(length_cm))
+```
+
+:::{.body-text}
+Read it as: *"Take the data, **then** group by year, **then** 
+summarize by calculating mean length."*
+:::
+
+---
+
+## {#motivating-ex2 data-menu-title="Motivating Example 2"}
+
+[Motivating Example 2: Reshaping]{.slide-title}
+
+:::{.body-text}
+Consider this **wide format** table — a common data entry format:
+:::
+
+:::{.smaller}
+| site   | 1990 | 1991 | … | 1993 |
+|--------|------|------|---|------|
+| gold   | 100  | 118  | … | 112  |
+| lake   | 100  | 118  | … | 112  |
+| …    |  …   |  … | … | …   |
+| dredge | 100  | 118  | … | 112  |
+:::
+
+. . .
+
+:::{.body-text}
+**Problem:** How would you fit a model with year as a predictor?
+
+`lm(length ~ year)` won't work — `year` isn't a column, it's a set of 
+column names.
+:::
+
+---
+
+## {#motivating-ex2-code data-menu-title="Example 2 Code"}
+
+[Motivating Example 2: The Code]{.slide-title}
+
+:::{.body-text}
+`tidyr` lets us reshape from wide to long:
+:::
+
+```r
+site_data %>% 
+  pivot_longer(-site, 
+               names_to = "year", 
+               values_to = "length")
+```
+
+:::{.smaller}
+| site   | year | length |
+|--------|------|--------|
+| gold   | 1990 | 101    |
+| lake   | 1990 | 104    |
+| dredge | 1990 | 144    |
+| …      | …    | …      |
+| dredge | 1993 | 145    |
+:::
+
+---
+
+## {#function-tables data-menu-title="Function Reference"}
+
+[Key Functions We'll Use]{.slide-title}
+
+:::{.columns}
+:::{.column width="50%"}
+**`dplyr` functions**
+
+| Function | What it does |
+|----------|-------------|
+| `select()` | Keep or drop columns |
+| `filter()` | Keep rows by condition |
+| `mutate()` | Create or change columns |
+| `rename()` | Rename a column |
+| `group_by()` | Group data |
+| `summarize()` | Summarize each group |
+| `arrange()` | Sort rows |
+:::
+
+:::{.column width="50%"}
+**`tidyr` functions**
+
+| Function | What it does |
+|----------|-------------|
+| `pivot_longer()` | Wide → long |
+| `pivot_wider()` | Long → wide |
+| `separate()` | Split one column into many |
+| `unite()` | Combine columns into one |
+:::
+:::
+
+---
+
+## {#dataset-intro data-menu-title="The Dataset"}
+
+[Our Dataset: Alaska Salmon Catches]{.slide-title}
+
+:::{.body-text}
+We'll use a tidied version of commercial catch data from the **Alaska 
+Department of Fish & Game, 1878–1997**.
+
+Available from the [KNB Data Repository](https://knb.ecoinformatics.org/#view/df35b.304.2).
+:::
+
+```r
+library(dplyr)
+library(tidyr)
+library(readr)
+
+catch_original <- read_csv(
+  "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1"
+)
+```
+
+---
+
+## {#package-masking data-menu-title="A Note on Package Masking"}
+
+[A Note on Package Masking]{.slide-title}
+
+:::{.body-text}
+When you load `dplyr`, you'll see this message:
+:::
+
+```
+Attaching package: 'dplyr'
+The following objects are masked from 'package:stats':
+    filter, lag
+```
+
+. . .
+
+:::{.body-text}
+This means `dplyr`'s `filter()` now takes precedence over `stats`'s 
+`filter()`.
+
+To be explicit about which package's function you want, use:
+
+`package_name::function_name()`
+
+Example: `stats::filter()` vs `dplyr::filter()`
+:::
+
+---
+
+## {#data-exploration data-menu-title="Data Exploration"}
+
+[Step 1: Explore Before You Transform]{.slide-title}
+
+:::{.body-text}
+Before wrangling, always **familiarize yourself with the data**.
+:::
+
+```r
+## Column names
+colnames(catch_original)
+
+## First 6 rows
+head(catch_original)
+
+## Summary of each column
+summary(catch_original)
+
+## Unique values in a column
+unique(catch_original$Region)
+
+## Open in viewer (use in console)
+View(catch_original)
+```
+
+---
+
+## {#explore-why data-menu-title="Why Explore First"}
+
+[Why Explore First?]{.slide-title}
+
+:::{.body-text}
+Data exploration helps you:
+
+- Confirm the data was **read in correctly**
+- Identify **unexpected data types** (numeric stored as character?)
+- Spot **missing values** or obvious errors
+- Understand the **structure** before deciding how to reshape
+
+Think of it as reading a paper's methods section before jumping to 
+the results — context matters.
+:::
+
+---
+
+## {#pipe-intro data-menu-title="The Pipe Operator"}
+
+[The Pipe Operator `%>%`]{.slide-title}
+
+:::{.body-text}
+The pipe `%>%` takes the **output** of one step and passes it as the 
+**input** to the next.
+:::
+
+. . .
+
+:::{.body-text}
+**Without the pipe:**
+:::
+
+```r
+df_filtered <- filter(df, ...)
+df_selected <- select(df_filtered, ...)
+```
+
+. . .
+
+:::{.body-text}
+**With the pipe:**
+:::
+
+```r
+df_cleaned <- df %>% 
+    filter(...) %>%
+    select(...)
+```
+
+---
+
+## {#pipe-reading data-menu-title="Reading the Pipe"}
+
+[Reading Code with the Pipe]{.slide-title}
+
+:::{.body-text}
+Think of `<-` as **"gets"** and `%>%` as **"then"**.
+:::
+
+```r
+df_cleaned <- df %>% 
+    filter(...) %>%
+    select(...)
+```
+
+. . .
+
+:::{.body-text}
+> *"The cleaned data frame **gets** the original data, **then** a 
+> filter, **then** a select."*
+
+Each step in the pipeline is an **analytical decision**. 
+The code reads like a narrative of your reasoning.
+:::
+
+---
+
+## {#pipe-benefits data-menu-title="Pipe Benefits and Tradeoffs"}
+
+[Benefits and Tradeoffs of Pipes]{.slide-title}
+
+:::{.body-text}
+**Benefits:**
+
+- No need to track or overwrite intermediate data frames
+- Code reads sequentially — easier to follow the logic
+- Easy to add or remove steps
+
+**Tradeoffs:**
+
+- Many chained steps can be harder to debug
+- Harder to inspect intermediate results
+
+Strike a balance: **chain related steps**, but **save intermediate 
+objects** when they're meaningful checkpoints.
+:::
+
+---
+
+## {#pipe-shortcut data-menu-title="Pipe Shortcut"}
+
+[Keyboard Shortcut for `%>%`]{.slide-title}
+
+:::{.body-text .center-text}
+RStudio has a built-in shortcut for the pipe:
+
+**Windows:** `Ctrl` + `Shift` + `M`
+
+**Mac:** `Cmd` + `Shift` + `M`
+:::
+
+. . .
+
+:::{.body-text}
+You'll use this constantly. Worth memorizing now.
+:::
+
+---
+
+## {#document-outline data-menu-title="Document Outline Exercise"}
+
+[Setting Up Your Analysis Document]{.slide-title}
+
+:::{.body-text}
+Before we get too much further — **outline your Quarto document** 
+with the sections we'll work through:
+
+- Data Sources
+  - Read in the data
+  - Explore data
+- Clean and Reshape Data
+  - `select()` · quality check · `mutate()` · `pivot_longer()` / `pivot_wider()`
+  - `rename()` · `mutate()` · `group_by()` + `summarize()`
+  - `filter()` · `arrange()` · `separate()` / `unite()`
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+:::{.body-text}
+Without writing R code, write **pseudocode** for a pipeline that:
+
+1. Filters a dataset to rows where `species == "Chinook"`
+2. Creates a new variable that converts catch from thousands to 
+   individual fish
+3. Summarizes the result by calculating mean catch per region
+
+**Write it as steps in plain language first, then express it 
+using the pipe `%>%` structure.**
+:::
+
+---
+
+## {#next-time data-menu-title="Next Time"}
+
+[Coming Up]{.slide-title}
+
+:::{.body-text}
+In the **Activity**, you'll work through the full wrangling pipeline 
+hands-on using the salmon dataset. Use the textbook as your reference 
+as you work through each function.
+
+In **Lecture 2**, we'll focus on reshaping data — pivoting between 
+wide and long formats — and explore why the shape of your data 
+affects what analyses are possible.
+:::

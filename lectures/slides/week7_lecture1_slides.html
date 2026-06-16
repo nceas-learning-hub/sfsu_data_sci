@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="week7_lecture1_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week7_lecture1_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="week7_lecture1_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="week7_lecture1_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="week7_lecture1_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week7_lecture1_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="week7_lecture1_slides_files/libs/quarto-html/quarto-syntax-highlighting-bb1cd4028f63a369ab283e072cb7d572.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
+
+  <title>Relational Data in Practice</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="week7_lecture1_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="week7_lecture1_slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #767676;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #767676;  padding-left: 4px; }
+    div.sourceCode
+      { color: #545454; background-color: #fefefe; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #545454; } /* Normal */
+    code span.al { color: #7928a1; } /* Alert */
+    code span.an { color: #696969; } /* Annotation */
+    code span.at { color: #a55a00; } /* Attribute */
+    code span.bn { color: #7928a1; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #d91e18; } /* ControlFlow */
+    code span.ch { color: #008000; } /* Char */
+    code span.cn { color: #d91e18; } /* Constant */
+    code span.co { color: #696969; } /* Comment */
+    code span.cv { color: #696969; font-style: italic; } /* CommentVar */
+    code span.do { color: #696969; font-style: italic; } /* Documentation */
+    code span.dt { color: #7928a1; } /* DataType */
+    code span.dv { color: #7928a1; } /* DecVal */
+    code span.er { color: #7928a1; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #a55a00; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #696969; } /* Information */
+    code span.kw { color: #d91e18; } /* Keyword */
+    code span.op { color: #00769e; } /* Operator */
+    code span.ot { color: #d91e18; } /* Other */
+    code span.pp { color: #7928a1; } /* Preprocessor */
+    code span.sc { color: #00769e; } /* SpecialChar */
+    code span.ss { color: #008000; } /* SpecialString */
+    code span.st { color: #008000; } /* String */
+    code span.va { color: #a55a00; } /* Variable */
+    code span.vs { color: #008000; } /* VerbatimString */
+    code span.wa { color: #696969; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="week7_lecture1_slides_files/libs/revealjs/dist/theme/quarto-418e6820dd9bb0d436bb38906ae8b7a2.css">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="week7_lecture1_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Relational Data in Practice</h1>
+  <p class="subtitle">Week 7 · Lecture 1</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="title-slide" class="slide level2" data-menu-title="Title Slide">
+<h2></h2>
+<p><span class="custom-title">Relational Data in Practice</span></p>
+<p><span class="custom-subtitle">Joins as scientific decisions</span></p>
+<hr class="hr-red">
+<p><span class="custom-subtitle2"><strong>BIO/CHEM 806 · Week 7 · Lecture 1</strong></span></p>
+</section>
+<section id="learning-obj" class="slide level2" data-menu-title="Learning Objectives">
+<h2></h2>
+<p><span class="slide-title">Learning Objectives</span></p>
+<div class="body-text">
+<p>By the end of this lecture, you will be able to:</p>
+<ul>
+<li>Explain why data lives in multiple tables and what that structure encodes</li>
+<li>Read an entity-relationship diagram for a real dataset</li>
+<li>Identify primary and foreign keys in a multi-table dataset</li>
+<li>Choose a join type based on your scientific question</li>
+<li>Predict row counts before executing a join</li>
+</ul>
+</div>
+</section>
+<section id="week5-recap" class="slide level2" data-menu-title="Week 5 Recap">
+<h2></h2>
+<p><span class="slide-title">You already know the four join types</span></p>
+<div class="body-text">
+<p>In Week 5 we covered:</p>
+<ul>
+<li><strong>Inner join</strong> — only rows with matches in both tables</li>
+<li><strong>Left join</strong> — all rows from the left, matched rows from the right</li>
+<li><strong>Right join</strong> — all rows from the right, matched rows from the left</li>
+<li><strong>Full outer join</strong> — all rows from both, NAs where no match</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>Today’s question is not <em>what are the join types?</em></p>
+<p>Today’s question is: <strong>how do you decide which one to use — and how do you know if it worked?</strong></p>
+</div>
+</div>
+</section>
+<section id="why-multiple-tables" class="slide level2" data-menu-title="Why Multiple Tables">
+<h2></h2>
+<p><span class="slide-title">Why does data live in multiple tables?</span></p>
+<div class="body-text">
+<p>This is not a limitation. It is a <strong>design decision</strong>.</p>
+<p>Separating data into tables means:</p>
+<ul>
+<li>Each table describes one <em>kind of thing</em> (observations, sites, species)</li>
+<li>Information is recorded once, not duplicated across rows</li>
+<li>Tables can be updated independently</li>
+<li>Relationships between entities are made explicit</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>A join is not “fixing” a problem. It is <strong>making a relationship explicit</strong> for a specific analytical purpose.</p>
+</div>
+</div>
+</section>
+<section id="our-dataset" class="slide level2" data-menu-title="Our Dataset">
+<h2></h2>
+<p><span class="slide-title">This week’s dataset: urban bird surveys</span></p>
+<div class="body-text">
+<p>Bird surveys from parks in the <strong>central Arizona-Phoenix metropolitan area</strong><br>
+(Arizona State University, via the EDI Data Portal)</p>
+<p>Four tables:</p>
+</div>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Table</th>
+<th>What it describes</th>
+<th>Rows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>bird_observations</code></td>
+<td>Individual bird counts per survey</td>
+<td>595</td>
+</tr>
+<tr class="even">
+<td><code>surveys</code></td>
+<td>Each survey event (date, location, observer)</td>
+<td>269</td>
+</tr>
+<tr class="odd">
+<td><code>sites</code></td>
+<td>Park locations and characteristics</td>
+<td>80</td>
+</tr>
+<tr class="even">
+<td><code>taxalist</code></td>
+<td>Species names and identifiers</td>
+<td>58</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="er-diagram-intro" class="slide level2" data-menu-title="ER Diagrams: What and Why">
+<h2></h2>
+<p><span class="slide-title">Entity-Relationship diagrams</span></p>
+<div class="body-text">
+<p>An <strong>ER diagram</strong> is a compact map of how tables connect.</p>
+<p>Before writing any join code, read the ER diagram first.</p>
+<p><strong>Four steps to build one:</strong></p>
+<ol type="1">
+<li>Identify entities → one box per table</li>
+<li>List variables → mark primary and foreign keys</li>
+<li>Draw relationships → label with a verb</li>
+<li>Add cardinality → how many rows on each side?</li>
+</ol>
+</div>
+</section>
+<section id="er-diagram-keys" class="slide level2" data-menu-title="ER Diagram: Keys">
+<h2></h2>
+<p><span class="slide-title">Step 2: Primary keys and foreign keys</span></p>
+<div class="body-text">
+<p><strong>Primary key (PK)</strong> — uniquely identifies each row in its own table</p>
+<p><strong>Foreign key (FK)</strong> — references the primary key of another table</p>
+<p>The table that <em>holds</em> the foreign key is always on the <strong>many</strong> side of a relationship.</p>
+</div>
+<div class="fragment">
+<div class="body-text">
+<pre><code>taxalist                    bird_observations
+──────────────────          ──────────────────────────
+species_id  (PK) ◄───────── species_id  (FK)
+common_name                 survey_id   (FK)
+asu_itis                    site_id     (FK)
+                            bird_count
+                            notes</code></pre>
+<p>One species in <code>taxalist</code> ← many observations in <code>bird_observations</code></p>
+</div>
+</div>
+</section>
+<section id="er-diagram-cardinality" class="slide level2" data-menu-title="Crow's Foot Notation">
+<h2></h2>
+<p><span class="slide-title">Step 4: Cardinality with crow’s foot notation</span></p>
+<div class="body-text">
+<p>Crow’s foot symbols describe <strong>how many rows</strong> can participate on each side:</p>
+</div>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>——\|</code></td>
+<td>One and only one</td>
+<td>Exactly one row must match</td>
+</tr>
+<tr class="even">
+<td><code>——O\|</code></td>
+<td>Zero or one</td>
+<td>Optional: zero or one match</td>
+</tr>
+<tr class="odd">
+<td><code>——&lt;</code></td>
+<td>One or many</td>
+<td>At least one match required</td>
+</tr>
+<tr class="even">
+<td><code>——O&lt;</code></td>
+<td>Zero or many</td>
+<td>Any number, including none</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>Example: <code>bird_observations</code> → <code>taxalist</code></p>
+<ul>
+<li>A bird observation identifies <strong>one and only one</strong> species <code>——|</code> at the <code>taxalist</code> end</li>
+<li>A species may have <strong>zero or many</strong> observations <code>——O&lt;</code> at the <code>bird_observations</code> end</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="er-diagram" class="slide level2" data-menu-title="ER Diagram: Bird Dataset">
+<h2></h2>
+<p><span class="slide-title">The bird dataset ER diagram</span></p>
+<div class="body-text">
+<pre><code>bird_observations                surveys
+─────────────────────────        ──────────────────────────
+survey_id  (FK) O&lt;────────|──── survey_id (PK)
+site_id    (FK) O&lt;───────────┐  site_id  (FK) O&lt;────────|─┐
+species_id (FK) O&lt;──────┐    │                            │ │
+bird_count               │    │  sites                    │ │
+notes                    │    │  ──────────────────────   │ │
+                         │    └─ site_id    (PK) ─────────┘ │
+                         │       park_name                   │
+                         │       park_district  ◄────────────┘
+                         │       park_acreage
+                         │
+                         │    taxalist
+                         │    ──────────────────────────
+                         └─── species_id  (PK)
+                              common_name
+                              asu_itis</code></pre>
+</div>
+<div class="body-text">
+<p><code>bird_observations</code> sits at the center — three foreign keys, zero primary key columns of its own. Its identity is a <strong>compound key</strong>: <code>survey_id</code> + <code>site_id</code> + <code>species_id</code>.</p>
+</div>
+</section>
+<section id="practice1" class="slide level2" data-menu-title="Practice 1">
+<h2></h2>
+<p><span class="slide-title">Practice: Reading the structure</span></p>
+<div class="body-text">
+<p><strong>Take 5 minutes — answer in the chat when ready</strong></p>
+<p>Look at this simplified version of the four tables:</p>
+<pre><code>bird_observations: survey_id, site_id, species_id, bird_count, notes
+surveys:           survey_id, site_id, survey_date, observer, notes  
+sites:             site_id, park_name, park_district, park_acreage
+taxalist:          species_id, common_name, asu_itis</code></pre>
+<ol type="1">
+<li>What is the primary key of <code>taxalist</code>?</li>
+<li>What is the primary key of <code>bird_observations</code>? (Hint: is it a single column or compound?)</li>
+<li><code>site_id</code> appears in three tables. In which table is it a primary key? In which is it a foreign key?</li>
+</ol>
+</div>
+</section>
+<section id="practice1-debrief" class="slide level2" data-menu-title="Practice 1 Debrief">
+<h2></h2>
+<p><span class="slide-title">Practice debrief</span></p>
+<div class="body-text">
+<p><strong>Primary key of <code>taxalist</code>:</strong> <code>species_id</code> — each species appears exactly once</p>
+<p><strong>Primary key of <code>bird_observations</code>:</strong> compound key — <code>survey_id</code> + <code>site_id</code> + <code>species_id</code> together uniquely identify each row</p>
+<p><strong><code>site_id</code>:</strong> - Primary key in <code>sites</code> (each park appears once) - Foreign key in <code>bird_observations</code> (links to which park the observation occurred at) - Foreign key in <code>surveys</code> (links to which park the survey was conducted at)</p>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p><strong>Why does this matter before joining?</strong><br>
+If you’re unclear on keys, you don’t know what the join is actually doing.</p>
+</div>
+</div>
+</section>
+<section id="choosing-join" class="slide level2" data-menu-title="Choosing a Join">
+<h2></h2>
+<p><span class="slide-title">Choosing a join: start with your question</span></p>
+<div class="body-text">
+<p>The join type should follow from what you need scientifically:</p>
+</div>
+<div class="body-text">
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Join to use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>I only want observations I can fully describe</td>
+<td><code>inner_join</code></td>
+</tr>
+<tr class="even">
+<td>I want all my observations, even if some metadata is missing</td>
+<td><code>left_join</code></td>
+</tr>
+<tr class="odd">
+<td>I want to know what’s in <em>both</em> datasets, including gaps</td>
+<td><code>full_join</code></td>
+</tr>
+<tr class="even">
+<td>I want to check what <em>won’t</em> match before I commit</td>
+<td><code>anti_join</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p><strong>The most dangerous join</strong> is the one you choose without thinking.<br>
+A <code>left_join</code> when you needed an <code>inner_join</code> silently introduces NAs.<br>
+An <code>inner_join</code> when you needed a <code>left_join</code> silently drops data.</p>
+</div>
+</div>
+</section>
+<section id="predicting-rows" class="slide level2" data-menu-title="Predicting Row Counts">
+<h2></h2>
+<p><span class="slide-title">The most important question before every join</span></p>
+<div class="body-text">
+<p><strong>“How many rows do I expect in the result — and why?”</strong></p>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>Rules of thumb:</p>
+<ul>
+<li><strong>Left join:</strong> result has ≥ rows than the left table (never fewer)</li>
+<li><strong>Inner join:</strong> result has ≤ rows than the smaller table</li>
+<li><strong>Full join:</strong> result has ≥ rows than the larger table</li>
+<li><strong>Any join:</strong> if a key matches <em>multiple</em> rows on the other side, you get <strong>row multiplication</strong></li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>Row multiplication is not always wrong — but it’s always worth noticing.</p>
+</div>
+</div>
+</section>
+<section id="row-multiplication" class="slide level2" data-menu-title="Row Multiplication">
+<h2></h2>
+<p><span class="slide-title">Row multiplication: a concrete example</span></p>
+<div class="body-text">
+<p>Suppose <code>bird_observations</code> has <strong>3 rows</strong> for <code>site_id = "LI-W"</code>:</p>
+</div>
+<div class="body-text">
+<pre><code>bird_observations (left)    sites (right)
+────────────────────────    ─────────────────────
+site_id  species  count     site_id  park_name
+LI-W     BHCO     2         LI-W     Lindo Lake
+LI-W     RWBL     5
+LI-W     MODO     1</code></pre>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>After <code>left_join(by = "site_id")</code>:</p>
+<pre><code>site_id  species  count  park_name
+LI-W     BHCO     2      Lindo Lake
+LI-W     RWBL     5      Lindo Lake
+LI-W     MODO     1      Lindo Lake</code></pre>
+<p><strong>3 rows in, 3 rows out</strong> — each observation gets its site’s metadata. This is correct and expected.</p>
+</div>
+</div>
+</section>
+<section id="when-mult-wrong" class="slide level2" data-menu-title="When Multiplication Goes Wrong">
+<h2></h2>
+<p><span class="slide-title">When row multiplication is a problem</span></p>
+<div class="body-text">
+<p>Row multiplication becomes a problem when the <strong>right table also has multiple matches</strong>:</p>
+</div>
+<div class="body-text">
+<pre><code>table_A (left)    table_B (right)
+──────────────    ───────────────
+id   value        id   category
+X    10            X    cat1
+X    20            X    cat2   ← two rows with same key!</code></pre>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p>After <code>left_join(by = "id")</code>:</p>
+<pre><code>id   value   category
+X    10       cat1
+X    10       cat2     ← value 10 appears twice!
+X    20       cat1
+X    20       cat2     ← value 20 appears twice!</code></pre>
+<p><strong>2 rows in → 4 rows out.</strong> Your row count has doubled and your summary statistics are now wrong.</p>
+</div>
+</div>
+</section>
+<section id="practice2" class="slide level2" data-menu-title="Practice 2">
+<h2></h2>
+<p><span class="slide-title">Practice: Predict before you join</span></p>
+<div class="body-text">
+<p><strong>Take 5 minutes — type your answers in the chat</strong></p>
+<pre><code>birds_subset: 3 rows
+  site_id  species_id  bird_count
+  LI-W     BHCO        2
+  LI-W     RWBL        5
+  NU-C     BHCO        1
+
+sites: 80 rows  (one row per site)
+taxalist: 58 rows  (one row per species)</code></pre>
+<p>Predict the row count for each of these joins:</p>
+<ol type="1">
+<li><code>left_join(birds_subset, sites, by = "site_id")</code></li>
+<li><code>inner_join(birds_subset, taxalist, by = "species_id")</code></li>
+<li><code>full_join(birds_subset, sites, by = "site_id")</code></li>
+</ol>
+</div>
+</section>
+<section id="practice2-debrief" class="slide level2" data-menu-title="Practice 2 Debrief">
+<h2></h2>
+<p><span class="slide-title">Practice 2 debrief</span></p>
+<div class="body-text">
+<p><strong>1. <code>left_join(birds_subset, sites, by = "site_id")</code></strong><br>
+→ <strong>3 rows</strong> — all rows from <code>birds_subset</code> are kept; each gets its site’s metadata. No multiplication because <code>sites</code> has one row per <code>site_id</code>.</p>
+<p><strong>2. <code>inner_join(birds_subset, taxalist, by = "species_id")</code></strong><br>
+→ <strong>3 rows</strong> — both BHCO and RWBL exist in <code>taxalist</code>, so all three observations match and are kept.</p>
+<p><strong>3. <code>full_join(birds_subset, sites, by = "site_id")</code></strong><br>
+→ <strong>81 rows</strong> — 3 bird observation rows + 78 site rows that have no matching observations (NAs introduced for bird columns).</p>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p><strong>The habit:</strong> before every join, write down your expectation. If the result doesn’t match, stop and investigate.</p>
+</div>
+</div>
+</section>
+<section id="syntax" class="slide level2" data-menu-title="Join Syntax">
+<h2></h2>
+<p><span class="slide-title">Join syntax in R</span></p>
+<div class="body-text">
+<p>All four mutating joins follow the same pattern:</p>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># with pipe</span></span>
+<span id="cb9-2"><a href=""></a>left_table <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">left_join</span>(<span class="at">y =</span> right_table, <span class="at">by =</span> <span class="st">"key_column"</span>)</span>
+<span id="cb9-4"><a href=""></a></span>
+<span id="cb9-5"><a href=""></a><span class="co"># without pipe  </span></span>
+<span id="cb9-6"><a href=""></a><span class="fu">left_join</span>(<span class="at">x =</span> left_table, <span class="at">y =</span> right_table, <span class="at">by =</span> <span class="st">"key_column"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
+<div class="body-text">
+<p><strong>Always name the <code>by</code> argument explicitly</strong> — even when R would guess correctly.<br>
+It documents your intent and catches mismatches early.</p>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="co"># compound key: two columns must match</span></span>
+<span id="cb10-2"><a href=""></a>bird_observations <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href=""></a>  <span class="fu">left_join</span>(<span class="at">y =</span> surveys, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"survey_id"</span>, <span class="st">"site_id"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="filtering-joins" class="slide level2" data-menu-title="Filtering Joins">
+<h2></h2>
+<p><span class="slide-title">A new tool: filtering joins</span></p>
+<div class="body-text">
+<p>Unlike mutating joins, <strong>filtering joins</strong> don’t add columns — they filter rows based on matches.</p>
+</div>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>semi_join(x, y)</code></td>
+<td>Keep rows in x that <strong>have</strong> a match in y</td>
+</tr>
+<tr class="even">
+<td><code>anti_join(x, y)</code></td>
+<td>Keep rows in x that <strong>do not have</strong> a match in y</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="body-text">
+<p><code>anti_join</code> is your <strong>diagnostic tool</strong>: run it before committing to a join to see what won’t match.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="co"># What observations have no matching site?</span></span>
+<span id="cb11-2"><a href=""></a><span class="fu">anti_join</span>(bird_observations, sites, <span class="at">by =</span> <span class="st">"site_id"</span>)</span>
+<span id="cb11-3"><a href=""></a></span>
+<span id="cb11-4"><a href=""></a><span class="co"># What species have no observations?</span></span>
+<span id="cb11-5"><a href=""></a><span class="fu">anti_join</span>(taxalist, bird_observations, <span class="at">by =</span> <span class="st">"species_id"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="exit-ticket" class="slide level2" data-menu-title="Exit Ticket">
+<h2></h2>
+<p><span class="slide-title">Exit Ticket</span></p>
+<div class="body-text">
+<p><strong>In the chat (or Canvas — check for the link):</strong></p>
+<p>Write pseudocode that:</p>
+<ol type="1">
+<li>Joins <code>bird_observations</code> to <code>taxalist</code> by <code>species_id</code></li>
+<li>Checks whether the result has the expected number of rows</li>
+<li>If not, runs <code>anti_join</code> to identify what didn’t match</li>
+</ol>
+<p>You do not need to write real R code — describe the steps in plain language.</p>
+</div>
+</section>
+<section id="coming-up" class="slide level2" data-menu-title="Coming Up">
+<h2></h2>
+<p><span class="slide-title">Coming up</span></p>
+<div class="body-text">
+<p><strong>Activity (Monday/Thursday sections):</strong><br>
+Work through the s09 bird observation exercises — four tables, real data, predict before you join.</p>
+<p><strong>Lecture 2 (Wednesday):</strong><br>
+What happens when joins go wrong — mismatched keys, row duplication, silent data loss — and how to diagnose them systematically.</p>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="week7_lecture1_slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

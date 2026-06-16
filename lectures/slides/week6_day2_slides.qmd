@@ -1,0 +1,706 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Reshaping and Its Consequences]{.custom-title}
+
+[Week 6, Day 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome Back!]{.slide-title}
+
+::: body-text
+**Monday:** Core wrangling verbs (filter, select, mutate, summarize)
+
+**Today:** Reshaping data structure
+
+**The big idea:** Same data, different shapes → different analyses possible
+
+**This is where tidy data principles really pay off**
+:::
+
+------------------------------------------------------------------------
+
+##  {#recap data-menu-title="Recap"}
+
+[Monday Recap]{.slide-title}
+
+::: body-text
+**Wrangling as analysis:**
+- filter() → scope decisions
+- select() → focus decisions
+- mutate() → derivation decisions
+- group_by() + summarize() → comparison decisions
+
+**Pipelines:** Linear, readable sequence of transformations
+
+**Today:** One more transformation type that changes everything
+:::
+
+------------------------------------------------------------------------
+
+##  {#wide-vs-long data-menu-title="Wide vs Long"}
+
+[Wide vs. Long Data]{.slide-title}
+
+::: columns
+::: {.column width="48%"}
+**Wide format:**
+```
+site  species1  species2  species3
+A     5         12        0
+B     8         3         15
+```
+
+Multiple observations per row  
+Species as column names
+:::
+
+::: {.column width="48%"}
+**Long format:**
+```
+site  species    count
+A     species1   5
+A     species2   12
+A     species3   0
+B     species1   8
+...
+```
+
+One observation per row  
+Species as data values
+:::
+:::
+
+::: body-text
+**Same data, completely different structure**
+:::
+
+------------------------------------------------------------------------
+
+##  {#tidy-reminder data-menu-title="Tidy Reminder"}
+
+[Tidy Data Principle Reminder]{.slide-title}
+
+::: body-text
+**Recall Week 5:** Three principles of tidy data
+1. Each column is a variable
+2. Each row is an observation
+3. Each cell is a single value
+
+**Wide format often violates principle 1:**  
+Column names (`species1`, `species2`) are VALUES, not variables
+
+**Long format is usually (not always!) tidy:**  
+`species` is a variable, values are data
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-reshape data-menu-title="Why Reshape"}
+
+[Why Reshape?]{.slide-title}
+
+::: body-text
+**Different shapes enable different operations**
+
+**Long format good for:**
+- Grouping by the "wide" variable (e.g., species)
+- Plotting with color/facets by that variable
+- Modeling with that variable as predictor
+- Calculating summaries across that variable
+
+**Wide format good for:**
+- Comparing values across columns
+- Correlation matrices
+- Some specific statistical tests
+- Human readability (sometimes)
+:::
+
+------------------------------------------------------------------------
+
+##  {#pivot-longer data-menu-title="Pivot Longer"}
+
+[Reshaping: Wide to Long]{.slide-title}
+
+::: body-text
+**Function:** `pivot_longer()`
+
+**What it does:** Collapses multiple columns into two:
+- One with former column names (now data values)
+- One with the values from those columns
+
+**Mental model:** Stacking columns on top of each other
+
+**Conceptual pseudocode:**
+```
+FOR each row:
+  FOR each specified column:
+    create new row with:
+      - original row's ID variables
+      - column name as value in "names_to" column
+      - cell value as value in "values_to" column
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#pivot-longer-example data-menu-title="Pivot Longer Example"}
+
+[Pivot Longer Example]{.slide-title}
+
+::: code-text
+```r
+# Wide format
+catch_wide
+#   Year  Chinook  Sockeye  Coho
+#   2020  100      150      80
+#   2021  120      140      90
+
+# Make long
+catch_long <- catch_wide %>%
+  pivot_longer(
+    cols = c(Chinook, Sockeye, Coho),  # which columns to pivot
+    names_to = "species",               # new column for column names
+    values_to = "catch"                 # new column for values
+  )
+
+# Result:
+#   Year  species  catch
+#   2020  Chinook  100
+#   2020  Sockeye  150
+#   2020  Coho     80
+#   2021  Chinook  120
+#   ...
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#pivot-longer-arguments data-menu-title="Pivot Longer Arguments"}
+
+[Understanding `pivot_longer()` Arguments]{.slide-title}
+
+::: body-text
+**`cols =`** Which columns to pivot?
+- `c(col1, col2, col3)` — list explicitly
+- `col1:col10` — range
+- `starts_with("sp")` — pattern matching
+- `-c(id, year)` — everything except these
+
+**`names_to =`** What to name the column that will hold old column names?
+- Character string (e.g., `"species"`)
+
+**`values_to =`** What to name the column that will hold values?
+- Character string (e.g., `"count"`)
+:::
+
+------------------------------------------------------------------------
+
+##  {#pivot-wider data-menu-title="Pivot Wider"}
+
+[Reshaping: Long to Wide]{.slide-title}
+
+::: body-text
+**Function:** `pivot_wider()`
+
+**What it does:** Spreads two columns into multiple columns:
+- Values from one column become new column names
+- Values from another column fill those new columns
+
+**Mental model:** Unstacking rows into side-by-side columns
+
+**Conceptual pseudocode:**
+```
+FOR each unique value in "names_from" column:
+  create new column with that name
+  fill with corresponding values from "values_from" column
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#pivot-wider-example data-menu-title="Pivot Wider Example"}
+
+[Pivot Wider Example]{.slide-title}
+
+::: code-text
+```r
+# Long format
+catch_long
+#   Year  species  catch
+#   2020  Chinook  100
+#   2020  Sockeye  150
+#   2020  Coho     80
+
+# Make wide
+catch_wide <- catch_long %>%
+  pivot_wider(
+    names_from = species,    # column with new column names
+    values_from = catch      # column with values to spread
+  )
+
+# Result:
+#   Year  Chinook  Sockeye  Coho
+#   2020  100      150      80
+#   2021  120      140      90
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#when-to-use data-menu-title="When to Use"}
+
+[When to Use Each Shape]{.slide-title}
+
+::: body-text
+**Use long format for:**
+- Most tidyverse operations
+- ggplot2 visualizations
+- Group-wise operations
+- Modeling
+
+**Use wide format for:**
+- Some human readers
+- Correlation matrices
+- Specific statistical functions
+- Pivot tables
+
+**General rule:** Work in long format, convert to wide only when needed
+:::
+
+------------------------------------------------------------------------
+
+##  {#reshaping-decisions data-menu-title="Reshaping Decisions"}
+
+[Reshaping as Analytical Decision]{.slide-title}
+
+::: body-text
+**Reshaping changes what's possible**
+
+**Example: Species abundance data**
+
+**Wide format:**
+- Can't easily plot all species on one plot
+- Can't calculate mean abundance across species
+- CAN calculate species correlations
+
+**Long format:**
+- Easy to plot all species
+- Easy to calculate cross-species statistics
+- Can group by species
+
+**The shape encodes your analytical intent**
+:::
+
+------------------------------------------------------------------------
+
+##  {#consequences data-menu-title="Consequences"}
+
+[Consequences of Reshaping]{.slide-title}
+
+::: body-text
+**Creating new rows:**
+- Increases row count
+- May introduce NAs if data are sparse
+- Changes what "one observation" means
+
+**Creating new columns:**
+- May reduce row count
+- Column names now contain data values
+- Harder to add new categories later
+
+**Both are reversible, but:**  
+You need to understand what the transformation means for your data
+:::
+
+------------------------------------------------------------------------
+
+##  {#example-scenario data-menu-title="Example Scenario"}
+
+[Example Scenario]{.slide-title}
+
+::: code-text
+```r
+# Start with wide
+plants_wide
+#   site  plot  oak_count  maple_count  birch_count
+#   A     1     5          2            0
+#   A     2     3          4            1
+
+# Go long for analysis
+plants_long <- plants_wide %>%
+  pivot_longer(
+    cols = ends_with("_count"),
+    names_to = "species",
+    values_to = "count"
+  ) %>%
+  mutate(species = str_remove(species, "_count"))
+
+# Now can easily:
+# - Plot all species
+# - Calculate mean count by species  
+# - Filter to species of interest
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#values-fill data-menu-title="Values Fill"}
+
+[Handling Missing Values in Pivot]{.slide-title}
+
+::: code-text
+```r
+# If not all combinations exist
+sparse_data
+#   site  species  count
+#   A     oak      5
+#   A     maple    2
+#   B     oak      3
+#   # Note: No B-maple observation
+
+# Pivot wider introduces NA
+sparse_wide <- sparse_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = count
+  )
+#   site  oak  maple
+#   A     5    2
+#   B     3    NA
+
+# Can specify default fill value
+sparse_wide <- sparse_data %>%
+  pivot_wider(
+    names_from = species,
+    values_from = count,
+    values_fill = 0      # Fill NAs with 0
+  )
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#separate-unite data-menu-title="Separate Unite"}
+
+[Bonus: `separate()` and `unite()`]{.slide-title}
+
+::: body-text
+**Sometimes:** One column contains multiple pieces of information
+
+**`separate()`** splits one column into multiple
+
+```r
+data %>%
+  separate(site_date, 
+           into = c("site", "date"), 
+           sep = "-")
+# "A-2024" becomes site: "A", date: "2024"
+```
+
+**`unite()`** combines multiple columns into one
+
+```r
+data %>%
+  unite(site_date, site, date, sep = "-")
+# site: "A", date: "2024" becomes "A-2024"
+```
+
+**Useful for cleaning messy column structures**
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-exercise data-menu-title="Thinking Exercise"}
+
+[Thinking Exercise]{.slide-title}
+
+::: body-text
+**You have this data:**
+```
+plot  Jan_temp  Feb_temp  Mar_temp  Apr_temp
+1     -2        0         5         12
+2     -1        2         7         14
+```
+
+**Research question:**  
+"What's the relationship between temperature and month?"
+
+**Questions:**
+1. Is this tidy?
+2. What shape do you need for analysis?
+3. How would you reshape it?
+
+**Think before advancing**
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-answer data-menu-title="Thinking Answer"}
+
+[Thinking Exercise: Answer]{.slide-title}
+
+::: body-text
+**1. Is this tidy?**  
+No — month names are data values in column names
+
+**2. What shape do you need?**  
+Long format with columns: `plot`, `month`, `temperature`
+
+**3. How to reshape:**
+```r
+temp_long <- temp_wide %>%
+  pivot_longer(
+    cols = ends_with("_temp"),
+    names_to = "month",
+    values_to = "temperature"
+  ) %>%
+  mutate(month = str_remove(month, "_temp"))
+```
+
+**Now you can plot temperature vs month!**
+:::
+
+------------------------------------------------------------------------
+
+##  {#names-pattern data-menu-title="Names Pattern"}
+
+[Advanced: Complex Pivots]{.slide-title}
+
+::: code-text
+```r
+# Sometimes columns encode MULTIPLE variables
+messy
+#   site  obs_Jan_2024  obs_Feb_2024  temp_Jan_2024  temp_Feb_2024
+
+# Can pivot multiple variables at once
+tidy <- messy %>%
+  pivot_longer(
+    cols = -site,
+    names_to = c(".value", "month", "year"),
+    names_sep = "_"
+  )
+
+# Result:
+#   site  month  year  obs  temp
+#   A     Jan    2024  5    -2
+#   A     Feb    2024  7    0
+```
+
+**`.value`** is special: creates multiple value columns
+
+**This is advanced — we'll mostly use simpler pivots**
+:::
+
+------------------------------------------------------------------------
+
+##  {#pipeline-with-pivot data-menu-title="Pipeline with Pivot"}
+
+[Complete Pipeline with Reshaping]{.slide-title}
+
+::: code-text
+```r
+# Research question: Mean abundance by species in recent years
+abundance_summary <- species_wide %>%
+  # Convert to long format
+  pivot_longer(
+    cols = -c(site, year),
+    names_to = "species",
+    values_to = "count"
+  ) %>%
+  # Focus on recent years
+  filter(year >= 2020) %>%
+  # Remove zeros (analyzing presences)
+  filter(count > 0) %>%
+  # Calculate mean by species
+  group_by(species) %>%
+  summarize(
+    mean_abundance = mean(count),
+    n_observations = n()
+  ) %>%
+  # Sort by abundance
+  arrange(desc(mean_abundance))
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#common-mistakes data-menu-title="Common Mistakes"}
+
+[Common Reshaping Mistakes]{.slide-title}
+
+::: body-text
+**1. Forgetting to remove ID columns from pivot**
+```r
+# Wrong: pivots site column too
+pivot_longer(cols = everything())
+
+# Right: keep site as ID
+pivot_longer(cols = -site)
+```
+
+**2. Wrong column in `names_from` or `values_from`**
+```r
+# Check: does names_from have the categories you want as columns?
+# Check: does values_from have the numeric data to fill?
+```
+
+**3. Not handling NAs appropriately**
+```r
+# Decide: Are NAs true missingness or implicit zeros?
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#debugging data-menu-title="Debugging"}
+
+[Debugging Reshape Operations]{.slide-title}
+
+::: body-text
+**If pivot doesn't work as expected:**
+
+1. **Check input structure:**
+   - `View()` the data before reshaping
+   - `glimpse()` to see column types
+
+2. **Test with small subset:**
+   - `slice(1:5)` to see what happens with just a few rows
+
+3. **Check intermediate result:**
+   - Don't pipe immediately — save result and inspect
+
+4. **Common issue:** Columns not all same type
+   - `pivot_longer()` needs compatible types to stack
+:::
+
+------------------------------------------------------------------------
+
+##  {#best-practices data-menu-title="Best Practices"}
+
+[Reshaping Best Practices]{.slide-title}
+
+::: body-text
+**1. Start in long format when possible**  
+Easier to keep tidy from the start
+
+**2. Document why you're reshaping**  
+Comment explaining what analysis requires this shape
+
+**3. Validate after reshaping**  
+Check that row counts and values make sense
+
+**4. Keep both versions if needed**  
+Sometimes you need both for different purposes
+
+**5. Name wisely**  
+`data_long`, `data_wide` make intent clear
+:::
+
+------------------------------------------------------------------------
+
+##  {#real-world data-menu-title="Real World"}
+
+[Real-World Reshaping]{.slide-title}
+
+::: body-text
+**In practice:**
+- You'll reshape back and forth multiple times
+- Different visualizations need different shapes
+- Different models need different shapes
+- Some collaborators prefer wide format
+
+**Workflow:**
+1. Import data (often wide)
+2. Reshape to long (for tidyverse operations)
+3. Wrangle in long format
+4. Reshape to wide only for specific needs
+5. Save cleaned long-format data for future use
+
+**Long format is your "working" format**
+:::
+
+------------------------------------------------------------------------
+
+##  {#looking-ahead data-menu-title="Looking Ahead"}
+
+[Looking Ahead to Week 7]{.slide-title}
+
+::: body-text
+**This week:** Transforming WITHIN tables
+
+**Next week:** Combining ACROSS tables
+
+**Joins** will use the keys we learned about (Week 5) to merge:
+- Plant data + site data
+- Observations + metadata
+- Multiple related tables
+
+**Reshaping + joining = complete data wrangling toolkit**
+
+**Activity today:** Hands-on with real datasets
+:::
+
+------------------------------------------------------------------------
+
+##  {#activity-preview data-menu-title="Activity Preview"}
+
+[Today's Activity]{.slide-title}
+
+::: body-text
+**You'll practice:**
+1. Identifying when data needs reshaping
+2. Using `pivot_longer()` and `pivot_wider()`
+3. Building complete wrangling pipelines
+4. Handling missing values during reshapes
+
+**Real dataset:** Water quality monitoring data
+
+**Partners:** Work in pairs
+
+**Goal:** Transform messy wide data into analyzable long data
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+::: body-text
+**Write pseudocode that pivots data from wide to long and explains why the new structure is preferable**
+
+Should include:
+- Description of the wide format
+- What columns to pivot
+- What the long format enables
+- How this supports your research question
+
+**Submit on Canvas**
+
+**See you Monday for JOINS!**
+:::

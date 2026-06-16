@@ -1,0 +1,605 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Variables, Observations, and Meaning]{.custom-title}
+
+[Week 5, Day 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome to Week 5!]{.slide-title}
+
+::: body-text
+**This week:** How data structure encodes meaning
+
+**Today:** Understanding tidy data principles
+
+**Why this matters:** A single mistaken column header can invalidate an entire analysis
+
+**The structure of your data IS your research question**
+:::
+
+------------------------------------------------------------------------
+
+##  {#recap data-menu-title="Recap"}
+
+[Where We've Been]{.slide-title}
+
+::: body-text
+**Weeks 1-2:** Projects and planning
+
+**Week 3:** Combining code and narrative with Quarto
+
+**Week 4:** Reproducibility and version control
+
+**Today:** The data itself—how you structure tables affects what you can analyze
+
+**Next two weeks:** Cleaning, transforming, and combining data
+:::
+
+------------------------------------------------------------------------
+
+##  {#problem data-menu-title="The Problem"}
+
+[The Messy Spreadsheet Problem]{.slide-title}
+
+::: body-text
+**Scenario:** You inherit a dataset
+
+Looks fine in Excel...
+
+But when you try to analyze it:
+- R can't understand it
+- Plotting fails mysteriously  
+- Group calculations give wrong answers
+
+**Why?** The data isn't **tidy**
+:::
+
+------------------------------------------------------------------------
+
+##  {#tidy-matters data-menu-title="Why Tidy Matters"}
+
+[Why Structure Matters]{.slide-title}
+
+![Artwork by Allison Horst](../../images/lecture_tidy_data/tidy_data.png){width="75%" fig-align="center"}
+
+------------------------------------------------------------------------
+
+##  {#tidy-explained data-menu-title="Tidy Explained"}
+
+[Tidy Data Makes Analysis Possible]{.slide-title}
+
+![Artwork by Allison Horst](../../images/lecture_tidy_data/tidy_data.png){width="55%" fig-align="center"}
+
+::: body-text
+**With tidy data:**
+- Functions work as expected
+- Grouping operations are straightforward
+- Visualization is simple
+- Analysis code is readable
+
+**Tidy data isn't a tool—it's a way of thinking**
+:::
+
+------------------------------------------------------------------------
+
+##  {#three-principles data-menu-title="Three Principles"}
+
+[The Three Principles of Tidy Data]{.slide-title}
+
+::: body-text
+**1. Every column is a variable**
+- One type of information per column
+- Example: `height`, `species`, `site_id`
+
+**2. Every row is an observation**  
+- One individual/unit per row
+- Example: One plant, one measurement event
+
+**3. Every cell is a single value**
+- No merged cells
+- No lists within cells
+- No "see notes" references
+:::
+
+------------------------------------------------------------------------
+
+##  {#building-blocks data-menu-title="Building Blocks"}
+
+[Building Blocks: Definitions]{.slide-title}
+
+::: body-text
+**Variable:** A characteristic being measured, counted, or described
+- Examples: `temperature`, `species_code`, `plot_number`
+
+**Observation:** A single "data point" for which variables are recorded
+- Example: One plant at one time
+
+**Value:** The specific measurement, count, or description
+- Example: `3.2`, `"ACRU"`, `42`
+
+**Entity:** Each type of observation  
+- Example: If measuring plants AND sites, you have two entities
+:::
+
+------------------------------------------------------------------------
+
+##  {#tidy-example data-menu-title="Tidy Example"}
+
+[Example: Tidy Data]{.slide-title}
+
+::: code-text
+```
+id    date        site   species  height_cm
+1     2024-01-15  A      ACRU     120
+2     2024-01-15  A      PIST     85
+3     2024-01-16  B      ACRU     142
+4     2024-01-16  B      QURU     98
+```
+:::
+
+::: body-text
+✅ Each column = one variable  
+✅ Each row = one plant observation  
+✅ Each cell = one value
+
+**This structure makes analysis straightforward**
+:::
+
+------------------------------------------------------------------------
+
+##  {#variable-principle data-menu-title="Variable Principle"}
+
+[Principle 1: Each Column is a Variable]{.slide-title}
+
+![](../../images/lecture_tidy_data/tidy_variables.png){width="70%" fig-align="center"}
+
+::: body-text
+**Test:** Look down a column. Is it all the same TYPE of information?
+
+**Good:** All dates, all species codes, all heights  
+**Bad:** Mix of dates and temperatures in one column
+:::
+
+------------------------------------------------------------------------
+
+##  {#observation-principle data-menu-title="Observation Principle"}
+
+[Principle 2: Each Row is an Observation]{.slide-title}
+
+![](../../images/lecture_tidy_data/tidy_observations.png){width="70%" fig-align="center"}
+
+::: body-text
+**Test:** Look across a row. Does it describe ONE thing?
+
+**Good:** All measurements from one plant at one time  
+**Bad:** Measurements from multiple plants in one row
+:::
+
+------------------------------------------------------------------------
+
+##  {#value-principle data-menu-title="Value Principle"}
+
+[Principle 3: Each Cell is a Single Value]{.slide-title}
+
+![](../../images/lecture_tidy_data/tidy_values.png){width="70%" fig-align="center"}
+
+::: body-text
+**Test:** Look at each cell. Is it atomic?
+
+**Good:** `42`, `"oak"`, `2024-01-15`  
+**Bad:** `"42, 38, 45"`, `"oak/maple"`, `"see notes"`
+:::
+
+------------------------------------------------------------------------
+
+##  {#untidy-intro data-menu-title="Untidy Introduction"}
+
+[Recognizing Untidy Data]{.slide-title}
+
+::: body-text
+**Anything that violates the three principles is untidy**
+
+Common violations:
+1. Multiple tables in one spreadsheet
+2. Column headers are data values
+3. Multiple observations per row
+4. Variables stored in rows
+5. Same observation across multiple rows
+6. Multiple types of observational units in same table
+
+**Most real-world data is untidy when you first get it**
+:::
+
+------------------------------------------------------------------------
+
+##  {#multiple-tables data-menu-title="Multiple Tables"}
+
+[Untidy: Multiple Tables]{.slide-title}
+
+![](../../images/lecture_tidy_data/excel-org-01.png){width="70%" fig-align="center"}
+
+::: body-text
+**Problem:** Three separate tables embedded in one sheet
+
+**Why it's untidy:** Which rows belong to which table?
+
+**How to fix:** Separate into three distinct files or sheets
+:::
+
+------------------------------------------------------------------------
+
+##  {#inconsistent-columns data-menu-title="Inconsistent Columns"}
+
+[Untidy: Inconsistent Columns]{.slide-title}
+
+![](../../images/lecture_tidy_data/excel-org-04.png){width="70%" fig-align="center"}
+
+::: body-text
+**Problem:** Looking down a column reveals different types of information
+
+**Why it's untidy:** Violates "each column is ONE variable"
+
+**Test:** What units does this column have? If you can't answer, it's untidy
+:::
+
+------------------------------------------------------------------------
+
+##  {#inconsistent-rows data-menu-title="Inconsistent Rows"}
+
+[Untidy: Inconsistent Rows]{.slide-title}
+
+![](../../images/lecture_tidy_data/excel-org-03.png){width="70%" fig-align="center"}
+
+::: body-text
+**Problem:** Looking across a row reveals multiple observations
+
+**Why it's untidy:** Violates "each row is ONE observation"
+
+**Red flag:** Needing to skip rows when reading data
+:::
+
+------------------------------------------------------------------------
+
+##  {#marginal-stats data-menu-title="Marginal Stats"}
+
+[Untidy: Marginal Sums and Statistics]{.slide-title}
+
+![](../../images/lecture_tidy_data/excel-org-05.png){width="65%" fig-align="center"}
+
+::: body-text
+**Problem:** Totals, means, or summaries in the table
+
+**Why it's untidy:**  
+- Violates "each column is a variable" (summary ≠ same variable)
+- Violates "each row is an observation" (summary ≠ single observation)
+
+**Solution:** Calculate summaries in code, not in data
+:::
+
+------------------------------------------------------------------------
+
+##  {#wide-format data-menu-title="Wide Format"}
+
+[Untidy: Wide Format (Multiple Observations per Row)]{.slide-title}
+
+![](../../images/lecture_tidy_data/untidy_1.png){width="70%" fig-align="center"}
+
+::: body-text
+**Problem:** Two plants per row (`sp1code`, `sp2code`, `sp1height`, `sp2height`)
+
+**Why it's untidy:** Each row contains TWO observations (two plants)
+
+**Consequence:** Adding a third species requires new columns
+:::
+
+------------------------------------------------------------------------
+
+##  {#wide-to-long data-menu-title="Wide to Long"}
+
+[From Wide to Long]{.slide-title}
+
+::: columns
+::: {.column width="48%"}
+**Wide (untidy):**
+```
+site  sp1   sp2   height1  height2
+A     ACRU  PIST  120      85
+```
+
+Multiple observations per row
+:::
+
+::: {.column width="48%"}
+**Long (tidy):**
+```
+site  species  height
+A     ACRU     120
+A     PIST     85
+```
+
+One observation per row
+:::
+:::
+
+::: body-text
+**This transformation enables analysis**
+
+We'll learn how to do this in R next week
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-tidy data-menu-title="Why Tidy"}
+
+[Why Tidy Data Matters]{.slide-title}
+
+::: body-text
+**Efficiency:**  
+- Same tools work on different datasets
+- Less reinventing the wheel
+
+**Collaboration:**  
+- Others can use same workflows
+- Shared vocabulary
+
+**Reuse:**  
+- Techniques transfer across projects
+- Build on previous work
+
+**Generalizability:**  
+- Tools built for one dataset work on others
+- R's vectorized operations shine with tidy data
+:::
+
+------------------------------------------------------------------------
+
+##  {#normalization data-menu-title="Normalization"}
+
+[Data Normalization]{.slide-title}
+
+::: body-text
+**Normalization** = Removing redundancy to simplify analysis
+
+**In normalized data:**
+- Separate tables for each entity type
+- Observations (rows) are unique
+- Each column is either identifying or measured
+- Each table follows tidy principles
+
+**Example:** Plant measurements and site information in separate tables
+:::
+
+------------------------------------------------------------------------
+
+##  {#denormalized data-menu-title="Denormalized"}
+
+[Denormalized Data]{.slide-title}
+
+![](../../images/lecture_tidy_data/denormalized.png){width="65%" fig-align="center"}
+
+::: body-text
+**Problem:** Site information (`name`, `altitude`) repeated in every row
+
+**Red flag:** Same values appearing multiple times
+
+**Why it's problematic:**  
+- Wastes space
+- Increases error risk (typos in repeated data)
+- Update anomalies (change site name in one place but not others)
+:::
+
+------------------------------------------------------------------------
+
+##  {#normalized data-menu-title="Normalized"}
+
+[Normalized Data]{.slide-title}
+
+![](../../images/lecture_tidy_data/normalized.png){width="75%" fig-align="center"}
+
+::: body-text
+**Solution:** Two tables
+- **Plants table:** Plant observations
+- **Sites table:** Site information
+
+**Connect them using:** Site ID (a **key**)
+
+**Next lecture:** How to reconnect these tables when needed
+:::
+
+------------------------------------------------------------------------
+
+##  {#two-entities data-menu-title="Two Entities"}
+
+[Why Two Tables?]{.slide-title}
+
+![](../../images/lecture_tidy_data/two_entities.png){width="70%" fig-align="center"}
+
+::: body-text
+**Recognize two entities:**
+1. Plants (species, height measurements)
+2. Sites (location, altitude, site name)
+
+**Each entity gets its own table**
+
+**Different entities ≠ different tables**
+:::
+
+------------------------------------------------------------------------
+
+##  {#uncomfortable data-menu-title="Uncomfortable"}
+
+[This Might Feel Uncomfortable]{.slide-title}
+
+::: body-text
+**Common reaction:** "But I need site AND plant data together for analysis!"
+
+**You're right!** You will need them together
+
+**Solution:** We'll learn **joins** (Week 7)
+
+**For now:** Focus on recognizing whether data is normalized
+
+**Trust the process:** Normalized data + joins = powerful, flexible analysis
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-exercise data-menu-title="Thinking Exercise"}
+
+[Thinking Exercise]{.slide-title}
+
+::: body-text
+**Imagine you're studying:**
+- Birds observed at different sites
+- Each site has habitat characteristics
+- Multiple observations per site across dates
+
+**Question:** How many entities do you have?
+
+**Pause and think before advancing**
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-answer data-menu-title="Thinking Answer"}
+
+[Thinking Exercise: Answer]{.slide-title}
+
+::: body-text
+**Three entities:**
+
+1. **Bird observations** (species, count, date)
+2. **Sites** (location, habitat type, area)
+3. **Survey events** (date, time, observer)
+
+**That means:** Three tables
+
+**Connected by:** Site ID and survey ID (keys)
+
+**This is relational data modeling** (next lecture)
+:::
+
+------------------------------------------------------------------------
+
+##  {#best-practices data-menu-title="Best Practices"}
+
+[Tidy Data Best Practices Summary]{.slide-title}
+
+::: body-text
+**The Three Principles:**
+1. Every column is a variable
+2. Every row is an observation  
+3. Every cell is a single value
+
+**Additional guidelines:**
+- Design tables to add rows, not columns
+- Use descriptive column names (no spaces!)
+- Include a header row
+- No merged cells
+- No color-coding as data
+
+**Remember:** Tidy ≠ normalized (both are important!)
+:::
+
+------------------------------------------------------------------------
+
+##  {#diagnosis data-menu-title="Diagnosis"}
+
+[Diagnosing Untidy Data]{.slide-title}
+
+::: body-text
+**Before writing ANY code, ask:**
+
+1. What are the variables? (List them)
+2. What are the observations? (What's one row?)
+3. Are there multiple tables hidden here?
+4. Are there multiple entities mixed together?
+5. Is anything repeated unnecessarily?
+
+**Once you can answer these, you know what needs fixing**
+
+**Next week:** How to actually FIX untidy data using R
+:::
+
+------------------------------------------------------------------------
+
+##  {#real-world data-menu-title="Real World"}
+
+[Real-World Data Is Usually Untidy]{.slide-title}
+
+::: body-text
+**Don't be discouraged!**
+
+Most data you encounter will violate these principles
+
+**Why?**
+- Designed for human readability, not analysis
+- Created in Excel for manual inspection
+- Collected without analysis plan
+
+**Your job:** Recognize the issues and know how to fix them
+
+**Tools we'll use:** `tidyr` and `dplyr` (next week)
+:::
+
+------------------------------------------------------------------------
+
+##  {#wednesday-preview data-menu-title="Wednesday Preview"}
+
+[Wednesday Preview]{.slide-title}
+
+::: body-text
+**Today:** Recognized what tidy data is (and isn't)
+
+**Wednesday:** Keys and relational thinking
+- Primary and foreign keys
+- How tables relate to each other
+- Entity-relationship models
+- Setting up for joins (Week 7)
+
+**Activity Wednesday:** Hands-on with real messy data
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+::: body-text
+**Write pseudocode that outlines how to identify variables and observations in a messy table**
+
+Should include:
+- How to scan for repeated information
+- How to identify what constitutes ONE observation
+- How to recognize when multiple entities are present
+
+**Submit on Canvas**
+
+**See you Wednesday!**
+:::

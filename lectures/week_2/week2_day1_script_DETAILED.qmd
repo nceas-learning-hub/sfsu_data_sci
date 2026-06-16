@@ -1,0 +1,1053 @@
+---
+title: "Week 2 Day 1 Lecture Script: Projects as the Unit of Scientific Work"
+subtitle: "BIO/CHEM 806 - Detailed Instructor Guide"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+---
+
+# Lecture Overview
+
+**Duration:** 75 minutes  
+**Format:** Online synchronous via Zoom  
+**Students:** ~30 graduate students (biology and chemistry)
+
+## Learning Objectives
+
+By the end of this lecture, students will be able to:
+
+1. Define a "project" as the fundamental unit of scientific work
+2. Explain why project organization prevents reproducibility failures
+3. Create a well-organized project structure with appropriate folders
+4. Distinguish between absolute and relative file paths
+5. Write a comprehensive README file
+6. Demonstrate ability to create portable, reproducible project structures
+
+## Materials Needed
+
+- [ ] Zoom link ready and tested
+- [ ] Slide deck: `week2_day1_slides_FINAL.qmd` rendered
+- [ ] Breakout room Google Doc link in chat
+- [ ] RStudio open for live demo
+- [ ] Example "messy" and "clean" project folders ready to show
+- [ ] Exit ticket posted in Canvas
+
+---
+
+# Pre-Class Setup (5 minutes before)
+
+## Instructor Checklist
+
+- [ ] Log into Zoom 5 minutes early
+- [ ] Open slide deck in presentation mode
+- [ ] Open RStudio for demo
+- [ ] Have chat window visible
+- [ ] Post Google Doc link for breakout activity
+- [ ] Enable breakout rooms (preset to 5-6 rooms)
+- [ ] Start recording when class begins
+
+## Welcome Students as They Arrive
+
+**[00:00 - Class start time]**
+
+> "Good morning/afternoon everyone! Go ahead and get settled. We'll start in just a minute. If you have your camera on, that's great—it helps build community, but it's not required."
+
+**Check audio/video:**
+
+> "Can everyone hear me okay? Drop a thumbs up in the chat if you can hear me... Great! And can you see my screen with the title slide?"
+
+---
+
+# Introduction (5 minutes)
+
+## Slide 1: Title Slide
+
+**[00:00-00:01]**
+
+**Show title slide:** "Projects as the Unit of Scientific Work - Week 2, Day 1"
+
+**Say:**
+
+> "Welcome to Week 2! Today we're talking about something that might seem basic but is absolutely foundational to reproducible data science: how you organize your work."
+
+> "Before we dive in, quick reminder that I'm recording this session, and the recording will be available on Canvas by this evening."
+
+---
+
+## Slide 2: Welcome
+
+**[00:01-00:03]**
+
+**Read slide:** "Welcome to Week 2!"
+
+**Say:**
+
+> "Today's focus is HOW you organize your work. And I want to start with a real story."
+
+> "A few years ago, a graduate student came to me in a panic. They had spent three weeks writing code for their thesis analysis. Everything was working beautifully. Then they changed ONE data file—just updated it with corrected values—and tried to re-run their analysis."
+
+**Pause for effect.**
+
+> "Nothing worked. The code couldn't find the files. Error messages everywhere. They didn't know which scripts went with which data files. They had to start over from scratch."
+
+> "That student lost three weeks of work because of poor organization. That's what we're preventing today."
+
+**Instructor note:** *This story is deliberately dramatic to motivate students. Emphasize this happens to everyone, not just "bad" students.*
+
+---
+
+## Slide 3: Last Week Recap
+
+**[00:03-00:05]**
+
+**Say:**
+
+> "Let's quickly connect to last week. In Week 1, we talked about data science as a way of thinking—being explicit with your reasoning, documenting your decisions."
+
+> "Today's question is: WHERE do you actually DO that work? Where do you put all those files, all that code, all that documentation?"
+
+**Point to screen:**
+
+> "The answer is in a PROJECT. A well-organized, self-contained project."
+
+**Check for understanding:**
+
+> "Does everyone remember from Week 1 what we mean by 'being explicit'? Anyone want to remind us in the chat?"
+
+**Instructor note:** *Wait 10-15 seconds for chat responses. Acknowledge 1-2 responses by name.*
+
+---
+
+# The Problem: Disorganized Work (10 minutes)
+
+## Slide 4: The Messy Desktop Problem
+
+**[00:05-00:08]**
+
+**Show slide** with messy file structure.
+
+**Say:**
+
+> "Let me show you something that probably looks familiar."
+
+**Read the file names slowly:**
+
+> "bee_data_final.csv... bee_data_final_FINAL.csv... bee_data_v3_USE_THIS_ONE.csv..."
+
+**Pause, then:**
+
+> "How many of you have created files like this? Be honest—drop a yes or no in the chat."
+
+**Instructor note:** *Wait for responses. Usually 80%+ say yes. This normalizes the problem.*
+
+**Say:**
+
+> "Right! This is NORMAL. We've all done this. But let's think about the questions you can't answer when your files look like this:"
+
+**Point to each question:**
+
+> "Which data file is the 'real' one? The one that says FINAL? Or the one that says USE_THIS_ONE?"
+
+> "Which R script generated which plot? Was it analysis_draft or analysis_new?"
+
+> "Most importantly: how would you reproduce this analysis six months from now? Or how would you explain it to a reviewer?"
+
+**Pause for emphasis:**
+
+> "You can't. This is not reproducible. This is a recipe for disaster."
+
+---
+
+## Slide 5: The Cost of Disorganization
+
+**[00:08-00:11]**
+
+**Say:**
+
+> "Let's talk about what this actually costs you. I'm going to describe three scenarios, and I want you to think about whether you've experienced any of these."
+
+**Scenario 1:**
+
+> "A reviewer requests changes to your analysis. You open your files... and you genuinely cannot figure out what you did six months ago. You remember the RESULTS, but not the exact steps. You spend two days trying to reconstruct your own work."
+
+**Ask:**
+
+> "Raise your hand—or react with a checkmark—if this has happened to you."
+
+**Scenario 2:**
+
+> "Your lab partner asks for your code. You send it. They try to run it and get: 'Error: cannot open C:/Users/YourName/Documents/...' Your code only works on YOUR computer with YOUR exact folder structure."
+
+**Scenario 3:**
+
+> "A journal requires you to deposit your code. You spend an entire WEEK writing documentation for code you barely remember, trying to explain what each script does."
+
+**Conclude:**
+
+> "All three of these scenarios are solved by one thing: well-organized projects. That's what we're learning today."
+
+**Instructor note:** *These scenarios should feel very real to students. Emphasize you're not judging—this happens to everyone.*
+
+---
+
+# What IS a Project? (10 minutes)
+
+## Slide 6: What Is a Project?
+
+**[00:11-00:14]**
+
+**Say:**
+
+> "So what IS a project? Let me give you the formal definition, and then we'll break it down."
+
+**Read definition slowly:**
+
+> "A project is a self-contained folder containing EVERYTHING needed to reproduce an analysis."
+
+**Emphasize each part:**
+
+> "'Self-contained' means all the files are in ONE folder. You can move the entire folder to a different computer, a different location, anywhere—and it still works."
+
+> "'Everything needed' means the data, the scripts, the outputs, AND the documentation. If someone needs something to reproduce your work, it's in the project folder."
+
+> "'Reproduce an analysis' means someone else—a collaborator, a reviewer, or future you—can get the same results."
+
+**Key point:**
+
+> "Think of a project as a complete package. Like a scientific paper is a complete package of your argument, a project is a complete package of your computational work."
+
+---
+
+## Slide 7: A Well-Organized Project
+
+**[00:14-00:17]**
+
+**Show slide** with good folder structure.
+
+**Say:**
+
+> "Let me show you what a well-organized project looks like. And I want you to notice how OBVIOUS everything is."
+
+**Walk through structure:**
+
+> "At the top level, we have a folder called 'bee_diversity_analysis.' That name tells us exactly what this project is about—no guessing."
+
+> "Inside, we have DATA folder. And look—it's split into RAW and PROCESSED. We'll talk more about why this matters in a minute."
+
+> "We have a SCRIPTS folder. Notice the scripts are numbered: 01, 02, 03. This tells us the ORDER to run them. When you open this project, you know exactly where to start."
+
+> "We have a FIGURES folder for all our outputs."
+
+> "We have a README file. This is like the instruction manual for the project. It explains what everything is."
+
+> "And we have a .Rproj file. This is what makes it an RStudio project."
+
+**Ask:**
+
+> "What do you notice about this structure? Type one word in the chat that describes it."
+
+**Instructor note:** *Common responses: "clear," "organized," "logical," "simple." Acknowledge a few.*
+
+**Say:**
+
+> "Exactly. It's CLEAR. Someone could open this for the first time and understand it."
+
+---
+
+## Slide 8: Raw vs. Processed Data
+
+**[00:17-00:20]**
+
+**This is crucial—emphasize heavily.**
+
+**Say:**
+
+> "Let me talk about something that will change how you work: the distinction between RAW and PROCESSED data."
+
+**Point to structure:**
+
+> "RAW data is what you started with. It came from your field work, your lab instrument, your sensor, whatever. This is the original, untouched data."
+
+**Emphatic rule:**
+
+> "Raw data NEVER changes. EVER. You don't edit it. You don't 'fix' it. You don't open it in Excel and delete rows."
+
+**Pause, then:**
+
+> "I'm serious about this. Raw data is read-only. It's sacred."
+
+**Explain processed:**
+
+> "PROCESSED data is what you CREATE by running code on the raw data. It's the result of your cleaning script, your transformation script."
+
+**Key insight:**
+
+> "Here's the golden rule: You should be able to DELETE all your processed data and regenerate it exactly by running your scripts."
+
+> "If you can't do that, your analysis isn't reproducible."
+
+**Example:**
+
+> "So from now on, when you find a typo in your data, you don't open the CSV and fix it. You write code that fixes it. Document WHY you're fixing it. Then the fix is reproducible."
+
+**Check understanding:**
+
+> "This might feel weird at first. Type in chat: What questions do you have about this raw vs. processed distinction?"
+
+**Instructor note:** *Common questions: "What if I have a really obvious typo?" Answer: Still fix it in code with a comment explaining it.*
+
+---
+
+# File Paths: The Critical Detail (15 minutes)
+
+## Slide 9: Why Paths Matter (Allison Horst Image Intro)
+
+**[00:20-00:21]**
+
+**Show the Allison Horst pathways image (full slide).**
+
+**Say:**
+
+> "Now we're going to talk about something technical that breaks more projects than almost anything else: file paths."
+
+> "I want to show you this brilliant illustration by Allison Horst that explains why this matters so much."
+
+**Let the image sit on screen for 3-4 seconds.**
+
+**Instructor note:** *Don't explain yet—let students look at the image and wonder.*
+
+---
+
+## Slide 10: Absolute vs. Relative Paths (Allison Horst Image Explained)
+
+**[00:21-00:25]**
+
+**Show the same image with explanation text.**
+
+**Say:**
+
+> "This image shows three cubes, and they represent three ways of handling file paths in R."
+
+**Point to broken cube:**
+
+> "See this cracked cube with bandages and casts? This represents using `setwd()` and absolute paths. It's FRAGILE. It breaks."
+
+> "This is what happens when you hardcode paths like 'C:/Users/YourName/Documents/...'"
+
+**Point to strong cube:**
+
+> "This strong, intact cube represents R Projects using RELATIVE paths. It's robust. It doesn't break when you move things."
+
+**Point to skilled cube:**
+
+> "And this skilled cube with the helmet? That's the `here` package—even better for complex projects. We'll talk about that later in the semester."
+
+**Key message:**
+
+> "The lesson from Allison's illustration: Use relative paths with R Projects. Your future self will thank you."
+
+---
+
+## Slide 11: Absolute Paths (BAD)
+
+**[00:25-00:28]**
+
+**Show code example.**
+
+**Say:**
+
+> "Let me show you exactly what NOT to do."
+
+**Read the bad code:**
+
+> "data <- read.csv('/Users/gretchen/Desktop/bee_analysis/data/raw/bees.csv')"
+
+**Explain:**
+
+> "This is an ABSOLUTE path. It says: Start at the very top of my computer, go to Users, then gretchen, then Desktop, then bee_analysis..."
+
+> "This code works perfectly... on MY computer. On my computer right now, with these exact folders."
+
+**Show error:**
+
+> "But the moment you try to run this on YOUR computer, you get: 'Error: cannot open file. No such file or directory.'"
+
+**Why:**
+
+> "Because YOU don't have a user named 'gretchen.' You don't have a Desktop folder with bee_analysis on it."
+
+**Emphasize:**
+
+> "This is why you see 'Error: cannot open file' in probably 50% of the code people share. Because they used absolute paths."
+
+---
+
+## Slide 12: Relative Paths (GOOD)
+
+**[00:28-00:31]**
+
+**Show good code example.**
+
+**Say:**
+
+> "Now let me show you the right way."
+
+**Read code:**
+
+> "data <- read.csv('data/raw/bees.csv')"
+
+**Explain:**
+
+> "This is a RELATIVE path. Notice what it DOESN'T say. It doesn't say '/Users/gretchen/Desktop'... none of that."
+
+> "It just says: Starting from where the project is, go into 'data,' then 'raw,' then open 'bees.csv.'"
+
+**Why it works:**
+
+> "This works on ANYONE's computer. Mine, yours, your advisor's, a reviewer's. Doesn't matter where they save the project—it works."
+
+> "Because it's relative to the PROJECT ROOT, not to any specific computer's folder structure."
+
+**Analogy:**
+
+> "Think of it like giving directions. Absolute path says 'Drive to 123 Main Street, San Francisco, California.' Relative path says 'Go two doors down.' If you move your house, which directions still work?"
+
+**Instructor note:** *This analogy usually gets laughs and helps it stick.*
+
+---
+
+## Slide 13: Why Relative Paths Save Your Life
+
+**[00:31-00:34]**
+
+**Walk through scenario.**
+
+**Say:**
+
+> "Let me show you why this matters in practice."
+
+**Scenario with absolute paths:**
+
+> "You're at school. Your analysis is in C:/Users/Student/Documents/thesis/data.csv. You run your code—works great!"
+
+> "That night you work at home. Your computer at home has a DIFFERENT path: C:/Users/YourName/OneDrive/School/data.csv."
+
+> "Error. So you change all the paths in your code to match your home computer."
+
+> "Next day, back at school. Error. Now all your paths are wrong again."
+
+> "You email your advisor. Error. Their computer has completely different paths."
+
+**Count on fingers:**
+
+> "You've now broken your code three times, and you haven't done any actual science."
+
+**Scenario with relative paths:**
+
+> "With relative paths and R Projects: Works at school. Works at home. Works on advisor's computer. Works six months from now. Works on a different computer. ALWAYS works."
+
+> "Because the path is relative to the project, which travels with the files."
+
+**Instructor note:** *This is the "aha" moment for many students. Emphasize heavily.*
+
+---
+
+# Live Demo: Creating a Project (12 minutes)
+
+## Slide 14: Live Demo Introduction
+
+**[00:34-00:35]**
+
+**Say:**
+
+> "Okay, I'm going to do a live demo now. I'm going to show you exactly how to create a well-organized project in RStudio."
+
+> "I'll walk through this step-by-step. You can follow along if you want, or just watch. Either is fine."
+
+**Switch to RStudio:**
+
+> "I'm switching my screen share now to RStudio. Can everyone see RStudio?"
+
+**Instructor note:** *Wait for confirmation in chat.*
+
+---
+
+## Demo Step 1: Create Project Folder
+
+**[00:35-00:37]**
+
+**Show your computer's file browser.**
+
+**Say:**
+
+> "First, I'm going to create a folder for my project. I'm doing this OUTSIDE of R first, just in my regular file browser."
+
+**Create folder:**
+
+> "I'm creating a new folder called 'water_quality_analysis.' Notice I'm using underscores instead of spaces—that's a best practice for folder names."
+
+**Show where:**
+
+> "I'm putting this in my Documents folder, but you could put it anywhere. The whole point of relative paths is that the location doesn't matter."
+
+---
+
+## Demo Step 2: Create Subfolders
+
+**[00:37-00:40]**
+
+**Inside the project folder, create subfolders.**
+
+**Say:**
+
+> "Now inside water_quality_analysis, I'm creating the standard subfolder structure."
+
+**Create each folder, explaining:**
+
+> "First: 'data' folder. Inside data, I'm creating 'raw' and 'processed.'"
+
+> "Next: 'scripts' folder. This is where all my R code will live."
+
+> "Then: 'figures' folder for all my plots and visualizations."
+
+**Show the structure:**
+
+> "So now I have this nice clean structure. Let me show you what it looks like."
+
+**Show in file browser:**
+
+```
+water_quality_analysis/
+├── data/
+│   ├── raw/
+│   └── processed/
+├── scripts/
+└── figures/
+```
+
+---
+
+## Demo Step 3: Create RStudio Project
+
+**[00:40-00:43]**
+
+**Switch to RStudio.**
+
+**Say:**
+
+> "Now I'm going to make this folder an official RStudio Project."
+
+**Click through RStudio:**
+
+> "In RStudio, I go to File menu > New Project."
+
+> "I'm choosing 'Existing Directory' because I already created the folder."
+
+**Navigate:**
+
+> "I navigate to my water_quality_analysis folder... click Select."
+
+> "And RStudio creates a .Rproj file in that folder."
+
+**Show result:**
+
+> "Notice in my Files pane, there's now a file called 'water_quality_analysis.Rproj'. That's what makes this an official project."
+
+**Key point:**
+
+> "From now on, when I want to work on this project, I'll double-click that .Rproj file. It opens RStudio and sets the working directory automatically."
+
+---
+
+## Demo Step 4: Create a Script with Relative Path
+
+**[00:43-00:47]**
+
+**Create a new R script.**
+
+**Say:**
+
+> "Now let me create a script that uses a relative path."
+
+**In RStudio:**
+
+> "File > New File > R Script. I'm going to save this immediately in the scripts folder."
+
+**Save:**
+
+> "File > Save As > Navigate into scripts folder > Name it '01_load_data.R'"
+
+> "Notice I'm numbering it because this will be the first script to run."
+
+**Write code:**
+
+```r
+# Load water quality data
+# Data collected from 10 stream sites, January-December 2023
+
+library(readr)
+
+# Load the data using RELATIVE path
+water <- read_csv("data/raw/water_samples.csv")
+
+# Quick look at the data
+head(water)
+summary(water)
+```
+
+**Explain the path:**
+
+> "Look at this path: 'data/raw/water_samples.csv'. No absolute path. No C:/Users/anything. Just relative to the project root."
+
+> "RStudio knows where the project root is because we're working in a project."
+
+---
+
+## Demo Step 5: Test Portability
+
+**[00:47-00:50]**
+
+**Say:**
+
+> "Now let me show you the magic of this setup. I'm going to prove that this project is portable."
+
+**Close RStudio:**
+
+> "I'm closing RStudio completely."
+
+**In file browser:**
+
+> "Now I'm going to MOVE this entire folder. I'm dragging it to my Desktop."
+
+**Show it moved:**
+
+> "The folder is now in a completely different location. Different absolute path."
+
+**Open project:**
+
+> "Now I'm double-clicking the .Rproj file to open it."
+
+**Run the script:**
+
+> "And I'm running the script again..."
+
+**Point out:**
+
+> "Look—everything still works! The path 'data/raw/water_samples.csv' still finds the file because it's RELATIVE to the project."
+
+> "This is why relative paths are so powerful."
+
+**Instructor note:** *This demo really drives home the concept. Students often have "aha" moment here.*
+
+**Return to slides:**
+
+> "Okay, let me switch back to the slides."
+
+---
+
+# README Files (8 minutes)
+
+## Slide 15: Every Project Needs a README
+
+**[00:50-00:52]**
+
+**Say:**
+
+> "Let's talk about documentation. Specifically, README files."
+
+> "A README is the first thing anyone reads when they open your project. It's like the instruction manual."
+
+**Four questions:**
+
+> "A good README answers four questions:"
+
+**Point to each:**
+
+> "1. What is this project about? What's the research question?"
+
+> "2. What data does it use? Where did it come from?"
+
+> "3. How do I run the analysis? What order do I run scripts?"
+
+> "4. Who do I contact if I have questions?"
+
+**Emphasize:**
+
+> "Without a README, your project is a mystery box. With a README, it's documented and accessible."
+
+---
+
+## Slide 16: Bad README Example
+
+**[00:52-00:53]**
+
+**Show bad example.**
+
+**Say:**
+
+> "Here's an example of a bad README. Actually, this is worse than bad—it's useless."
+
+**Read it:**
+
+> "'My Project. This is my analysis.' That's it."
+
+**Ask rhetorically:**
+
+> "What does this tell you? Nothing. What's the project about? What data? How to run it? Who made it?"
+
+> "This is like writing a methods section that says 'We did science on things.'"
+
+**Pause for laughs.**
+
+> "Don't do this."
+
+---
+
+## Slide 17: Good README Example
+
+**[00:53-00:56]**
+
+**Show good example.**
+
+**Say:**
+
+> "Here's a GOOD README. Let me walk through what makes it good."
+
+**Point to each section:**
+
+> "Title: 'Bee Diversity in Urban Gardens'—immediately tells you what this is."
+
+> "Overview section: Research question stated clearly. Time period specified. Sample size mentioned."
+
+> "Data section: Lists the data files and what's in them."
+
+> "Scripts section: This is CRITICAL—it tells you to run them in order, and what each one does."
+
+> "Contact: Who to ask questions."
+
+**Emphasize:**
+
+> "Someone could open this project for the first time and know exactly what to do. That's the goal."
+
+> "A good README takes 10 minutes to write and saves hours of confusion later."
+
+---
+
+# Breakout Activity (15 minutes)
+
+## Slide 18: Breakout Activity
+
+**[00:56-00:57]**
+
+**Transition to activity.**
+
+**Say:**
+
+> "Alright, we're going to practice this with a real scenario. I'm putting you in breakout rooms."
+
+**Explain the scenario:**
+
+> "You have water quality data from 10 sites, sampled monthly for one year. You measured pH, dissolved oxygen, and nitrate."
+
+> "You need to clean the data, calculate monthly averages, compare to EPA standards, make a time series plot, and write a summary report."
+
+**The task:**
+
+> "Your job is to design a complete project structure. What folders do you need? What scripts? What would you put in the README?"
+
+**Logistics:**
+
+> "You'll be in groups of 5-6 for 15 minutes. There's a Google Doc linked in the chat—add your group's design to that doc."
+
+> "I'll drop into rooms to help. When we come back, we'll look at what different groups came up with."
+
+**Send to breakout rooms.**
+
+**Instructor note:** *Visit each room briefly. Common issues: forgetting README, unclear script names, no raw/processed distinction.*
+
+---
+
+## Breakout Debrief
+
+**[01:11-01:16]**
+
+**Bring everyone back.**
+
+**Say:**
+
+> "Welcome back! Let's see what you came up with."
+
+**Pull up the Google Doc.**
+
+**Look at 2-3 group structures.**
+
+**Say:**
+
+> "Let me look at Group 1's structure... Great! I like that you numbered your scripts. I also like that you put 'data_cleaning' as script 01—that makes sense."
+
+> "Let me look at Group 3... I notice you created a folder for 'epa_standards.' Smart! That's reference data that's separate from your collected data."
+
+**Point out common patterns:**
+
+> "I'm noticing most groups did these things:"
+
+> "- Separated raw and processed data"
+> "- Numbered scripts in order"  
+> "- Created a README"
+> "- Had a clear folder structure"
+
+**Address common mistakes:**
+
+> "A few things to watch out for:"
+
+> "- Some groups created folders for different analyses. Be careful—it's better to keep all scripts in one 'scripts' folder unless the project is huge."
+
+> "- Make sure your README explains what the project IS, not just lists files."
+
+**Instructor note:** *Celebrate what worked. Gently correct what didn't.*
+
+---
+
+# Common Mistakes & Best Practices (5 minutes)
+
+## Slide 19: Project Structure Checklist
+
+**[01:16-01:18]**
+
+**Go through checklist.**
+
+**Say:**
+
+> "Let me give you a checklist for every project you create from now on."
+
+**Folders:**
+
+> "You need: data/raw, data/processed, scripts, and figures at minimum."
+
+**Files:**
+
+> "You need a .Rproj file and a README.md."
+
+**Code:**
+
+> "Use ONLY relative paths. Number your scripts if order matters."
+
+**Advice:**
+
+> "Before you share a project with anyone—including future you—run through this checklist."
+
+---
+
+## Slide 20: Common Mistakes to Avoid
+
+**[01:18-01:20]**
+
+**Emphasize each mistake.**
+
+**Say:**
+
+> "Here are the top 5 mistakes I see students make with projects."
+
+**1. Working outside project folder:**
+
+> "You make a quick plot and save it to your Desktop. Now that plot is disconnected from the project. Don't do that."
+
+**2. Using absolute paths:**
+
+> "We've talked about this a lot. Don't use C:/Users/YourName/..."
+
+**3. Editing raw data:**
+
+> "Don't open your CSV in Excel, fix a typo, and save. Fix it in code."
+
+**4. No README:**
+
+> "Six months from now, you won't remember what anything does. Write the README now."
+
+**5. Too many versions:**
+
+> "Don't create analysis_final, analysis_final2, analysis_REALLY_final. Use Git for version control—which we'll learn in two weeks."
+
+---
+
+# Homework & Wrap-Up (5 minutes)
+
+## Slide 21: Git Preview
+
+**[01:20-01:21]**
+
+**Brief preview.**
+
+**Say:**
+
+> "Quick preview: this week's activity is setting up Git and GitHub."
+
+> "Git is a version control system. Instead of creating analysis_v1.R, analysis_v2.R, you keep ONE file and Git tracks all the versions."
+
+> "We'll cover Git concepts in depth in Week 4. For now, just know it's coming."
+
+---
+
+## Slide 22: Homework
+
+**[01:21-01:23]**
+
+**Explain assignment.**
+
+**Say:**
+
+> "Your homework before Wednesday:"
+
+**Walk through:**
+
+> "1. Create a project folder for your own research—or make up a toy project."
+
+> "2. Organize it with the proper folder structure we discussed."
+
+> "3. Create an RStudio Project."
+
+> "4. Write a README.md."
+
+> "5. Create at least one script that uses relative paths."
+
+> "6. Here's the TEST: Move your project folder somewhere else, open it, run your script. If it works, you did it right!"
+
+**Submission:**
+
+> "Post a screenshot of your project structure to the discussion board. That way you can see what others did too."
+
+---
+
+## Slide 23: Exit Ticket
+
+**[01:23-01:25]**
+
+**Assign exit ticket.**
+
+**Say:**
+
+> "Before you go, please complete the exit ticket in Canvas. It should take 2-3 minutes."
+
+**Read questions:**
+
+> "1. Define what a 'project' is in data science."
+
+> "2. Your lab partner's code gives an error about file paths. Diagnose and fix it."
+
+> "3. Design a project structure for gene expression data."
+
+**Emphasize:**
+
+> "Please do this before you leave—it helps me understand what landed and what needs clarification on Wednesday."
+
+---
+
+## Slide 24: Summary
+
+**[01:25-01:27]**
+
+**Summarize key points.**
+
+**Say:**
+
+> "Let's review what we covered today:"
+
+**Point to each:**
+
+> "1. Projects are the fundamental unit of scientific work. Everything goes in the project folder."
+
+> "2. Good structure equals reproducibility. Raw data never changes."
+
+> "3. Use relative paths ONLY. No absolute paths."
+
+> "4. Document everything. Your README is crucial."
+
+> "5. Organization IS doing science. This isn't separate from your research—it IS your research process."
+
+**Final thought:**
+
+> "I know some of this feels tedious. You might be thinking 'I just want to analyze my data!'"
+
+> "But I promise you: investing 30 minutes in project organization saves you HOURS of headaches later. This is how you prevent that panicked 'I can't reproduce my own work' moment."
+
+**Questions:**
+
+> "Any quick questions before we wrap up?"
+
+**Instructor note:** *Take 1-2 quick questions. Direct longer questions to discussion board or office hours.*
+
+---
+
+## Closing
+
+**[01:27-01:30]**
+
+**Say:**
+
+> "Great work today, everyone! Remember your homework: create and test a project structure."
+
+> "If you get stuck, post on the discussion board. I'll also have office hours posted on Canvas."
+
+> "See you Wednesday when we'll talk about pseudocode—planning your code before you write it."
+
+> "Have a great rest of your day!"
+
+**Stop recording.**
+
+---
+
+# Post-Lecture Checklist
+
+- [ ] Stop Zoom recording
+- [ ] Save chat log
+- [ ] Upload recording to Canvas (within 4 hours)
+- [ ] Check discussion board for questions
+- [ ] Review exit ticket responses (look for common misconceptions)
+- [ ] Adjust Wednesday's lecture based on exit ticket results
+
+---
+
+# Common Student Questions & Answers
+
+**Q: "Can I have multiple .Rproj files in one folder?"**
+
+A: No, one project = one .Rproj file. If you have multiple related projects, create separate folders for each.
+
+**Q: "What if my data file is too big for GitHub?"**
+
+A: Great question—we'll cover this in Week 4 with .gitignore files. For now, keep the data in data/raw but know we'll learn how to handle large files.
+
+**Q: "Do I have to use RStudio Projects? Can I just use setwd()?"**
+
+A: Technically you can, but you shouldn't. Projects make your code portable and reproducible. The whole point is that others (or future you) can run your code without changing paths.
+
+**Q: "What if I'm working with a collaborator who doesn't use R Projects?"**
+
+A: Gently encourage them! Show them how much easier it makes sharing code. But if they won't, at least YOU use relative paths on your end.
+
+**Q: "How many projects should I have?"**
+
+A: One per distinct research question/paper. Don't put your entire PhD in one project, but don't create a new project for every tiny analysis either.
+
+---
+
+# Timing Notes
+
+If running ahead of schedule (common sections that can expand):
+- Spend more time on the live demo
+- Let students try the demo themselves
+- More time for breakout room debrief
+- Take more questions
+
+If running behind schedule (sections that can compress):
+- Combine slides 4-5 (messy problem + cost)
+- Shorten the live demo (do Step 3 only, talk through rest)
+- Reduce breakout time to 12 minutes
+- Skip Git preview slide
+
+**Target: End with 3-5 minutes for questions and exit ticket**

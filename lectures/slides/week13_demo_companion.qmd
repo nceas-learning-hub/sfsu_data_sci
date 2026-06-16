@@ -1,0 +1,728 @@
+---
+title: "Week 13 Live Demo: Working with Spatial Data in R"
+subtitle: "BIO/CHEM 806 · Instructor Companion"
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    toc-title: "Demo sections"
+    number-sections: false
+    theme: cosmo
+    code-tools: true
+    self-contained: true
+execute:
+  echo: true
+  eval: false
+  warning: false
+  message: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+```{r}
+#| label: setup
+#| eval: false
+library(readr)
+library(here)
+library(sf)
+library(ggplot2)
+library(leaflet)
+library(scales)
+library(ggspatial)
+library(dplyr)
+```
+
+::: callout-tip
+## How to use this document
+
+This is your live-coding companion for the Week 13 demo and activity.
+Each section maps to a part of the student assignment and the textbook
+(s15). Green callout boxes are instructor cues — things to say or do
+before running the code. Run code chunks top to bottom; everything
+builds on what came before.
+
+**Before class:** download the KNB data (run the setup chunk below in
+your Console), confirm all packages load, and render this document once
+to check it works.
+:::
+
+------------------------------------------------------------------------
+
+## 0 · Setup — Get the data
+
+::: callout-tip
+## Before running this in class
+
+Run the chunk below **once in your Console** before the demo — not live,
+because the download takes time. Have the `data/` folder ready with the
+three files already in it.
+
+If a student asks how to download: share the code block below and tell
+them to run it in their Console, not inside their Quarto file.
+:::
+
+```{r}
+#| label: download-data
+#| eval: false
+
+# Run once in your Console — not inside your Quarto file
+knb_url <- "https://dev.nceas.ucsb.edu/knb/d1/mn/v2/object/urn%3Auuid%3Aaceaecb2-1ce0-4d41-a839-d3607d32bb58"
+
+download.file(url = knb_url, destfile = "shapefile_demo_data.zip")
+unzip("shapefile_demo_data.zip", exdir = "data")
+file.remove("shapefile_demo_data.zip")
+```
+
+After running, your `data/` folder should contain:
+
+- `ak_regions_simp.shp` — Alaska regional boundary polygons
+- `alaska_population.csv` — population by community (point data)
+- `ak_rivers_simp.shp` — Alaska river network (line data)
+
+------------------------------------------------------------------------
+
+## 1 · Read and explore the shapefile
+
+::: callout-tip
+## Say this
+
+"We read shapefiles with `read_sf()`. Notice the `_sf` suffix on the
+object name — that's our convention to remind us this object has a
+geometry column attached.
+
+A **shapefile** is a common format for storing vector spatial data.
+Think of it like a CSV for spatial objects — except instead of rows of
+numbers, it stores points, lines, or polygons. The `.shp` file always
+comes with companion files (`.dbf` for attribute data, `.prj` for
+projection info) — keep them together.
+
+The `plot()` call gives us a quick look at every attribute column mapped
+spatially. Does anything look off?"
+
+Let students respond. The map will look distorted — that's a CRS issue.
+Don't explain it yet; let the distortion sit as a question.
+:::
+
+```{r}
+#| label: read-shapefile
+
+ak_rgns_sf <- read_sf(here("data/ak_regions_simp.shp"))
+
+# Quick visual — one panel per attribute column, each shown as a map
+plot(ak_rgns_sf)
+```
+
+::: callout-tip
+## Say this
+
+"What two classes does this object have? Let's check."
+:::
+
+```{r}
+#| label: class-check
+
+class(ak_rgns_sf)
+```
+
+::: callout-tip
+## Say this
+
+"`sf` and `data.frame`. Two classes at once. That means everything you
+already know — `head()`, `glimpse()`, `select()`, `filter()` — works
+here, because it *is* a data frame. The `sf` class adds spatial
+awareness on top. Let's look at the structure."
+:::
+
+```{r}
+#| label: explore-sf
+
+head(ak_rgns_sf)
+glimpse(ak_rgns_sf)
+```
+
+::: callout-tip
+## Point out
+
+Highlight the `geometry` column at the end of the `head()` output.
+
+"This is what makes an `sf` object different from a plain data frame.
+The `geometry` column holds the actual shapes — lists of coordinates
+that define each polygon boundary. And it's **sticky** — if you
+`select()` just three of ten columns, the geometry column comes along
+anyway, even if you didn't ask for it. R makes it hard to accidentally
+lose your spatial information."
+
+Also point to the header lines printed above the data frame:
+`geometry type`, `bbox` (bounding box — the spatial extent, like the min
+and max x and y coordinates of the dataset), and `CRS`.
+:::
+
+------------------------------------------------------------------------
+
+## 2 · Check and transform the CRS
+
+::: callout-tip
+## Say this
+
+"Before we do anything spatial, we check the CRS. A **CRS — Coordinate
+Reference System** — is the system that tells R how to interpret the
+coordinate numbers. Think of it as the map's coordinate language. Two
+datasets speaking different coordinate languages can't be compared until
+you translate one to match the other.
+
+Make checking the CRS a reflex — always know what coordinate system your
+data is in before you start working with it."
+:::
+
+```{r}
+#| label: check-crs
+
+st_crs(ak_rgns_sf)
+```
+
+::: callout-tip
+## Say this
+
+"The output looks dense, but the key things to find: the CRS name
+(WGS84) and the EPSG code (4326). **WGS84** is a geographic CRS —
+coordinates are in degrees of latitude and longitude, not meters. No
+flattening has been applied to the sphere. That's why the plot looked
+distorted — Alaska spans a huge longitude range and the naïve lat/lon
+display squashes it.
+
+For Alaska, a much better choice is **Alaska Albers — EPSG 3338** — an
+equal-area projected CRS designed for Alaska. Equal-area means every
+polygon has the right relative size, which matters if you're ever
+calculating areas. Let's transform."
+:::
+
+```{r}
+#| label: transform-crs
+
+ak_rgns_3338_sf <- ak_rgns_sf %>%
+    st_transform(crs = 3338)
+
+# Plot again — notice the difference
+plot(ak_rgns_3338_sf)
+```
+
+::: callout-tip
+## Point out
+
+"Much better — Alaska isn't squashed across the dateline anymore. The
+proportions look right. Notice the naming convention: `_3338` in the
+object name tells anyone reading the code exactly what coordinate system
+this object is in. When you have multiple versions of the same data in
+different projections, this convention prevents confusion."
+:::
+
+------------------------------------------------------------------------
+
+## 3 · sf + tidyverse
+
+::: callout-tip
+## Say this
+
+"Because `sf` objects are data frames, your tidyverse skills transfer
+directly. Watch what happens to the geometry column."
+:::
+
+```{r}
+#| label: select-demo
+
+# select() — geometry stays even though we didn't ask for it
+ak_rgns_3338_sf %>%
+    select(region)
+```
+
+```{r}
+#| label: filter-demo
+
+# filter() works exactly as expected
+unique(ak_rgns_3338_sf$region)
+
+ak_rgns_3338_sf %>%
+    filter(region == "Southeast")
+```
+
+::: callout-tip
+## Chat prompt (optional)
+
+"Drop in chat: how many distinct regions does `unique()` return?"
+Answer: 13.
+:::
+
+------------------------------------------------------------------------
+
+## 4 · CSV with coordinates → sf object
+
+::: callout-tip
+## Say this
+
+"Most scientific data doesn't arrive as a shapefile — it arrives as a
+CSV. GPS exports from field instruments, GBIF species occurrence
+downloads, water quality monitoring tables, disease surveillance records
+from public health databases — if it has latitude and longitude columns,
+`st_as_sf()` promotes it to a spatial object in one step.
+
+This is often the first line of your own spatial analysis: you have a
+spreadsheet of locations, and you want to put them on a map."
+:::
+
+```{r}
+#| label: read-population
+
+# _df suffix: plain data frame for now — no geometry yet
+pop_df <- read_csv(here("data/alaska_population.csv"))
+
+head(pop_df)
+```
+
+```{r}
+#| label: csv-to-sf
+
+# _sf suffix: now spatial; _4326 tells us the CRS
+pop_4326_sf <- st_as_sf(pop_df,
+                        coords = c('lng', 'lat'),  # longitude first, then latitude
+                        crs = 4326,
+                        remove = FALSE)  # keep the raw lat/lng columns
+
+head(pop_4326_sf)
+```
+
+::: callout-tip
+## Point out
+
+"Three things to notice:
+
+1.  `coords` must be **longitude first, then latitude** — x before y,
+    even though we usually say 'lat/lon.' This trips people up.
+
+2.  `crs = 4326` tells R what coordinate system the numbers are in.
+    Almost all GPS data and most downloaded data uses WGS84 (4326)
+    unless told otherwise.
+
+3.  `remove = FALSE` keeps the original `lat` and `lng` columns in the
+    data frame. We need them later for `leaflet`, which wants raw
+    numeric columns, not just the geometry column."
+:::
+
+------------------------------------------------------------------------
+
+## 5 · Spatial join — hit the error on purpose
+
+::: callout-tip
+## Say this
+
+"Now we want to assign each community to its Alaska region — a spatial
+join. Instead of matching on a shared key column, we'll match by
+geography: which polygon does each point fall inside?
+
+Let's try it directly." Then run the code and let it fail.
+:::
+
+```{r}
+#| label: join-attempt-fails
+
+# This will fail — run it anyway so students see the error
+pop_joined_sf <- st_join(pop_4326_sf,
+                         ak_rgns_3338_sf,
+                         join = st_within)
+```
+
+::: callout-tip
+## Say this
+
+"`Error: st_crs(x) == st_crs(y) is not TRUE` — R is protecting us.
+
+We tried to spatially join two datasets in different coordinate systems:
+one in degrees (4326), one in meters (3338). Joining them directly would
+be like overlaying two maps printed at different scales — the result
+would be nonsense.
+
+This is not a bug. R caught a real problem. The message tells you
+exactly what went wrong and how to think about the fix: the CRS of x and
+y must be equal. The fix is always `st_transform()` — translate one to
+match the other, then join."
+:::
+
+```{r}
+#| label: transform-before-join
+
+pop_3338_sf <- st_transform(pop_4326_sf, crs = 3338)
+```
+
+```{r}
+#| label: join-success
+
+pop_joined_sf <- st_join(pop_3338_sf,
+                         ak_rgns_3338_sf,
+                         join = st_within)
+
+head(pop_joined_sf)
+```
+
+::: callout-tip
+## Point out
+
+"Each community row now has a `region` column — the Alaska region it
+falls inside. That's the spatial join. Now we can aggregate by region to
+get totals."
+:::
+
+------------------------------------------------------------------------
+
+## 6 · Aggregate by region
+
+::: callout-tip
+## Say this
+
+"We want total population per region. If we call `group_by()` and
+`summarize()` directly on an `sf` object, R tries to aggregate the
+geometries too — combining all the city points within each region into a
+single MULTIPOINT geometry. That's not what we want; we want a plain
+numeric sum. So we drop the geometry first, then summarize."
+:::
+
+```{r}
+#| label: drop-geometry-and-summarize
+
+# _df suffix: no longer spatial after st_drop_geometry()
+pop_rgn_df <- pop_joined_sf %>%
+    st_drop_geometry() %>%
+    group_by(region) %>%
+    summarize(total_pop = sum(population))
+
+head(pop_rgn_df)
+```
+
+```{r}
+#| label: rejoin-to-polygons
+
+# Regular left_join — not spatial
+# Join totals back to the polygon sf object so we can map them
+pop_rgn_3338_sf <- left_join(ak_rgns_3338_sf,
+                             pop_rgn_df,
+                             by = "region")
+
+# Quick check — color each polygon by total population
+plot(pop_rgn_3338_sf["total_pop"])
+```
+
+::: callout-tip
+## Summarize the pattern
+
+"Three steps — you'll use this constantly in your own spatial work:
+
+1.  `st_join()` — points get polygon attributes (the region they belong
+    to)
+2.  `st_drop_geometry()` + `group_by()` + `summarize()` — aggregate as a
+    plain data frame, avoiding geometry aggregation
+3.  `left_join()` — reattach the aggregated values to the polygon
+    geometry for mapping"
+:::
+
+------------------------------------------------------------------------
+
+## 7 · Save the spatial object
+
+```{r}
+#| label: write-sf
+
+write_sf(pop_rgn_3338_sf, here("data/ak_regions_population.shp"))
+```
+
+::: callout-tip
+## Say this
+
+"Save your processed spatial objects so you don't have to rebuild them
+every session. This belongs in your numbered script sequence — the same
+reproducibility practice we've followed all semester.
+
+A `.shp` file is the standard interoperable format — readable in QGIS,
+ArcGIS, and by collaborators who don't use R. A more modern alternative
+is **GeoPackage** (`.gpkg`) — a single file (no companion files needed)
+with no column-name length restrictions. Both read back with
+`read_sf()`."
+:::
+
+------------------------------------------------------------------------
+
+## 8 · Static map with ggplot2
+
+::: callout-tip
+## Say this
+
+"`geom_sf()` reads the geometry column automatically — no `x` and `y`
+aesthetics needed. R knows where the shapes are. Everything else —
+`aes()`, `scale_fill_*`, `labs()`, `theme_*` — works exactly like any
+other ggplot."
+:::
+
+```{r}
+#| label: ggplot-choropleth
+
+ggplot(pop_rgn_3338_sf) +
+    geom_sf(aes(fill = total_pop)) +
+    labs(fill = "Total Population") +
+    scale_fill_continuous(low = "khaki",
+                          high = "firebrick",
+                          labels = comma) +
+    theme_bw()
+```
+
+::: callout-tip
+## Say this
+
+"Now let's add the rivers and community locations. Three `geom_sf()`
+layers, three geometry types — polygons, lines, points — all in one
+plot. **Layer order matters: bottom layer renders first.** Polygons go
+first (they'd cover everything else), then lines, then points on top."
+:::
+
+```{r}
+#| label: read-rivers
+
+rivers_3338_sf <- read_sf(here("data/ak_rivers_simp.shp"))
+
+st_crs(rivers_3338_sf)
+```
+
+::: callout-tip
+## Point out
+
+"No explicit EPSG code is set on the rivers file — a common real-world
+situation. But the proj4 string contains enough information to identify
+it. Search the string on [epsg.io](https://epsg.io) and it confirms this
+is Alaska Albers (3338). We check before layering — same CRS rule as
+always."
+:::
+
+```{r}
+#| label: three-layer-map
+
+ggplot() +
+    geom_sf(data = pop_rgn_3338_sf,
+            aes(fill = total_pop)) +
+    geom_sf(data = pop_3338_sf,
+            size = 0.5) +
+    geom_sf(data = rivers_3338_sf,
+            aes(linewidth = StrOrder)) +
+    scale_linewidth(range = c(0.05, 0.5),
+                    guide = "none") +
+    labs(title = "Total Population by Alaska Region",
+         fill = "Total Population") +
+    scale_fill_continuous(low = "khaki",
+                          high = "firebrick",
+                          labels = comma) +
+    theme_bw()
+```
+
+::: callout-tip
+## Decision log moment
+
+"This map is a set of choices — which color scale, whether to show
+rivers at all, how to scale river width by stream order, whether to
+label the points. These are methods decisions. Note them in your
+decision log: not just *what* you chose, but *why*. 'Used a sequential
+color scale (khaki to firebrick) to show population magnitude; no
+diverging scale because there is no meaningful zero or reference
+point.'"
+:::
+
+------------------------------------------------------------------------
+
+## 9 · Basemap with ggspatial (optional)
+
+::: callout-tip
+## Say this
+
+"Web tile basemaps — like OpenStreetMap — use **Pseudo-Mercator (EPSG
+3857)**, the projection behind every major web mapping service including
+Google Maps. We need to transform our data to that same CRS before
+layering tiles on top of it.
+
+This step takes a minute or two to load tiles over the network — I'll
+run it now and explain while it loads."
+:::
+
+```{r}
+#| label: ggspatial-basemap
+
+pop_3857_sf <- st_transform(pop_3338_sf, crs = 3857)
+
+ggplot(data = pop_3857_sf) +
+    ggspatial::annotation_map_tile(type = "osm",
+                                   zoom = 4,
+                                   progress = "none") +
+    geom_sf(aes(color = population), fill = NA) +
+    scale_color_continuous(low = "darkkhaki",
+                           high = "firebrick",
+                           labels = comma)
+```
+
+::: callout-tip
+## Say this
+
+"Does the basemap add value here — or does it compete with the data?
+That's a genuine question and a design decision.
+
+A heuristic: use a basemap when your audience needs geographic context
+(roads, coastlines, city names help them orient) or when point locations
+relative to physical features matter for interpretation. Skip it when
+the basemap competes visually with your data or when you're making a
+publication figure that will be printed.
+
+For your activity: Part 5 is optional stretch. If tile loading hangs,
+skip it and note that in your decision log."
+:::
+
+------------------------------------------------------------------------
+
+## 10 · Interactive map with leaflet
+
+::: callout-tip
+## Say this
+
+"`leaflet` creates browser-rendered interactive maps — your audience can
+zoom, click, and hover over features. Two key differences from ggplot:
+it uses `%>%` pipes not `+`, and it needs your data in WGS84 (EPSG
+4326).
+
+For the Alaska Albers projection specifically, we define a custom CRS
+object so leaflet renders the map with the correct regional projection
+on the client side. This is boilerplate — copy it from the textbook, you
+don't need to memorize the proj4 string."
+:::
+
+```{r}
+#| label: leaflet-crs-setup
+
+epsg3338 <- leaflet::leafletCRS(
+    crsClass = "L.Proj.CRS",
+    code = "EPSG:3338",
+    proj4def = "+proj=aea +lat_1=55 +lat_2=65 +lat_0=50 +lon_0=-154
+                +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0
+                +units=m +no_defs",
+    resolutions = 2 ^ (16:7)
+)
+
+pop_rgn_4326_sf <- pop_rgn_3338_sf %>%
+    st_transform(crs = 4326)
+```
+
+::: callout-tip
+## Say this
+
+"Build leaflet maps in stages — start simple to confirm the plumbing
+works before adding visual complexity."
+:::
+
+```{r}
+#| label: leaflet-stage-1
+
+# Stage 1: confirm polygons render
+m <- leaflet(options = leafletOptions(crs = epsg3338)) %>%
+    addPolygons(data = pop_rgn_4326_sf,
+                fillColor = "gray",
+                weight = 1)
+m
+```
+
+```{r}
+#| label: leaflet-stage-2
+
+# Stage 2: add color scale and legend
+pal <- colorNumeric(palette = "Reds",
+                    domain = pop_rgn_4326_sf$total_pop)
+
+m <- leaflet(options = leafletOptions(crs = epsg3338)) %>%
+    addPolygons(
+        data = pop_rgn_4326_sf,
+        fillColor = ~pal(total_pop),   # ~ is leaflet's version of aes()
+        weight = 1,
+        color = "black",
+        fillOpacity = 1,
+        label = ~region
+    ) %>%
+    addLegend(
+        position = "bottomleft",
+        pal = pal,
+        values = range(pop_rgn_4326_sf$total_pop),
+        title = "Total Population"
+    )
+m
+```
+
+```{r}
+#| label: leaflet-stage-3
+
+# Stage 3: add community markers sized by population
+m <- leaflet(options = leafletOptions(crs = epsg3338)) %>%
+    addPolygons(
+        data = pop_rgn_4326_sf,
+        fillColor = ~pal(total_pop),
+        weight = 1,
+        color = "black",
+        fillOpacity = 1
+    ) %>%
+    addCircleMarkers(
+        data = pop_4326_sf,
+        lat = ~lat,
+        lng = ~lng,
+        radius = ~log(population / 500),   # log scale prevents huge outliers
+        fillColor = "gray",
+        fillOpacity = 1,
+        weight = 0.25,
+        color = "black",
+        label = ~paste0(city, ", population ", comma(population))
+    ) %>%
+    addLegend(
+        position = "bottomleft",
+        pal = pal,
+        values = range(pop_rgn_4326_sf$total_pop),
+        title = "Total Population"
+    )
+m
+```
+
+::: callout-tip
+## Point out
+
+"`radius = ~log(population / 500)` scales circle size logarithmically.
+Without the log, Anchorage would be enormous and tiny communities would
+be invisible — a common visualization problem with right-skewed data.
+That's an intentional design choice that belongs in your decision log.
+
+This interactive map, embedded in a Quarto HTML document and published
+to GitHub Pages, is a shareable portfolio piece. Your committee, a
+hiring manager, or a funding agency can open the link and explore it.
+That's what reproducible, open science communication looks like."
+:::
+
+------------------------------------------------------------------------
+
+## Wrap-up
+
+::: callout-tip
+## Closing remarks
+
+"You just ran the complete spatial workflow:
+
+- Read shapefiles and CSVs with coordinates
+- Check and transform CRS — and hit the mismatch error and fix it
+- Spatial join to assign points to polygons
+- Aggregate without geometry, then reattach to polygons for mapping
+- Three map types: static ggplot, basemap overlay, interactive leaflet
+
+The activity asks you to do exactly this sequence, following the
+textbook. The textbook has all the code. Your job is to run it,
+understand each step, and document at least two decisions in your
+decision log.
+
+Remember the submission convention — add your last name to each file:
+`Lastname_intro-to-spatial-data.html`,
+`Lastname_intro-to-spatial-data.qmd`, `Lastname_decision_log.html`."
+:::

@@ -1,0 +1,570 @@
+---
+title: "Writing functions"
+subtitle: "Week 14, Lecture 1"
+author: "BIO/CHEM 806"
+format:
+  revealjs:
+    theme: [default, lh_slides_style.scss]
+    chalkboard: true
+    slide-number: true
+    show-slide-number: all
+    preview-links: auto
+    editor:
+      markdown:
+        wrap: 72
+execute:
+  eval: false
+  echo: true
+  code-line-numbers: false
+---
+
+## Learning Objectives {.custom-title}
+
+::: {.body-text}
+By the end of today you will be able to:
+
+- Explain **why** functions reduce errors and improve reproducibility
+- Describe the **anatomy** of an R function
+- Write simple functions that accept input and return output
+- Apply a function **across a vector or data frame**
+- Return **multiple outputs** from a single function
+- Document functions with **roxygen2** comments
+:::
+
+---
+
+## Why Functions? The DRY Principle {.slide-title}
+
+::: {.body-text}
+**DRY: Don't Repeat Yourself**
+
+> "You should consider writing a function whenever you've copied
+> and pasted a block of code more than twice."
+>
+> — *R for Data Science*, Grolemund & Wickham
+
+Every time you copy-paste:
+
+- You create a new opportunity for a **typo**
+- A formula change means **finding every copy**
+- Your future self (and reviewers) must read the same logic **over and over**
+:::
+
+---
+
+## The Copy-Paste Trap {.slide-title}
+
+::: {.body-text}
+Imagine converting field temperature readings:
+:::
+
+```r
+airtemps <- c(212, 30.3, 78, 32)
+
+celsius1 <- (airtemps[1] - 32) * 5/9
+celsius2 <- (airtemps[2] - 32) * 5/9
+celsius3 <- (airtemps[3] - 32) * 5/9
+```
+
+::: {.body-text}
+Can you spot the problem before it becomes a manuscript error?
+What if you had 200 field sites?
+:::
+
+---
+
+## Anatomy of a Function {.slide-title}
+
+```r
+function_name <- function(argument1, argument2) {
+
+  # body: what the function does
+  result <- argument1 + argument2
+
+  return(result)
+}
+```
+
+::: {.body-text}
+Four parts every function has:
+
+- **Name** — verb that describes what it does
+- **Arguments** — inputs (nouns)
+- **Body** — the computation
+- **Return value** — what comes back out
+:::
+
+---
+
+## Naming Functions Well {.slide-title}
+
+::: {.body-text}
+**Best practices (R for Data Science):**
+
+- Names should be **verbs**; arguments should be **nouns**
+- Use `snake_case` for multi-word names
+- Use a **common prefix** for a family of related functions
+:::
+
+```r
+# Good names
+fahr_to_celsius()
+calc_gc_content()
+calc_primer_tm()
+calc_coulombic_efficiency()
+
+# Less good
+myfunction()
+convert()
+doTheThing()
+```
+
+---
+
+## 🌡️ Example 1: Temperature Conversion {.slide-title}
+
+::: {.body-text}
+**The ecological context**
+
+Field ecologists — botanists, watershed researchers, intertidal
+biologists — routinely collect temperature data in Fahrenheit from
+legacy sensors and need Celsius for analysis and publication.
+
+Instead of repeating the formula for every site or time point,
+we write it **once** and call it everywhere.
+:::
+
+---
+
+## Building `fahr_to_celsius()` {.slide-title}
+
+```r
+fahr_to_celsius <- function(fahr) {
+  celsius <- (fahr - 32) * 5/9
+  return(celsius)
+}
+```
+
+::: {.body-text}
+Test it on a single value, then a whole vector:
+:::
+
+```r
+# Single value
+fahr_to_celsius(212)    # expect 100
+
+# Vector of field readings
+airtemps <- c(212, 30.3, 78, 32)
+fahr_to_celsius(airtemps)
+```
+
+---
+
+## 💬 Your Turn: `celsius_to_fahr()` {.slide-title}
+
+::: {.body-text}
+**Chat your answer when ready**
+
+Write a function called `celsius_to_fahr()` that converts
+Celsius back to Fahrenheit.
+
+Formula: `celsius * 9/5 + 32`
+
+Then verify:
+:::
+
+```r
+airtemps <- c(212, 30.3, 78, 32)
+celsius  <- fahr_to_celsius(airtemps)
+result   <- celsius_to_fahr(celsius)
+
+airtemps == result   # should all be TRUE
+```
+
+---
+
+## 🔋 Battery Chemistry Context {.slide-title}
+
+::: {.body-text}
+**Coulombic Efficiency (CE) — a daily calculation**
+
+Every time a lithium-ion or other rechargeable battery completes
+a charge–discharge cycle, researchers calculate CE to assess
+how efficiently charge is stored and retrieved.
+
+CE tells you: *of all the charge I put in, how much came back out?*
+
+A Li-ion cell typically achieves >99% CE — but even a 99.0% vs.
+99.96% difference predicts whether a cell survives 500 cycles
+or fails at 200.
+
+Researchers calculate this **for every single cycle** across
+experiments with hundreds of cycles. This is exactly the
+copy-paste trap.
+:::
+
+---
+
+## Building `calc_coulombic_efficiency()` {.slide-title}
+
+```r
+#        discharge capacity
+# CE = ─────────────────────── × 100
+#         charge capacity
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh,
+                                      charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) * 100
+  return(ce)
+}
+```
+
+::: {.body-text}
+Apply it across a full cycling dataset in one line:
+:::
+
+```r
+cycling_data <- data.frame(
+  cycle         = 1:5,
+  charge_mAh    = c(3.01, 3.00, 2.99, 2.98, 2.97),
+  discharge_mAh = c(2.98, 2.97, 2.96, 2.95, 2.94)
+)
+
+cycling_data$CE <- calc_coulombic_efficiency(
+  cycling_data$discharge_mAh,
+  cycling_data$charge_mAh
+)
+```
+
+---
+
+## 🧬 Molecular Biology Context {.slide-title}
+
+::: {.body-text}
+**GC Content and Primer Design**
+
+Before every PCR experiment, molecular biologists calculate the
+**GC content** of their primers — the percentage of bases that
+are guanine (G) or cytosine (C).
+
+**Why it matters:**
+G–C base pairs form three hydrogen bonds; A–T pairs form two.
+GC-rich primers bind more tightly to template DNA. GC content
+directly determines:
+
+- Whether your primer will bind at your chosen temperature
+- The **melting temperature (Tm)** of the primer-template duplex
+- Whether your PCR will amplify the right product
+
+Designing 20 primers means doing this calculation 20 times.
+A function makes it **instant and error-free**.
+:::
+
+---
+
+## GC Content and Melting Temperature {.slide-title}
+
+::: {.body-text}
+**Wallace's Rule** for short oligonucleotides:
+
+`Tm = 2°C × (A + T) + 4°C × (G + C)`
+
+GC pairs contribute 4°C each; AT pairs contribute 2°C each,
+reflecting the difference in hydrogen bond strength.
+:::
+
+```r
+calc_gc_content <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_total  <- nchar(sequence)
+  n_gc     <- nchar(gsub("[^GC]", "", sequence))
+  return((n_gc / n_total) * 100)
+}
+
+calc_gc_content("ATGCGCATTAGC")   # 58.33333%
+calc_gc_content("GCGCGCGC")       # 100%
+calc_gc_content("AAAATTTT")       # 0%
+```
+
+---
+
+## Building `calc_primer_tm()` {.slide-title}
+
+```r
+calc_primer_tm <- function(sequence) {
+  sequence <- toupper(sequence)
+
+  n_a <- nchar(gsub("[^A]", "", sequence))
+  n_t <- nchar(gsub("[^T]", "", sequence))
+  n_g <- nchar(gsub("[^G]", "", sequence))
+  n_c <- nchar(gsub("[^C]", "", sequence))
+
+  tm <- 2 * (n_a + n_t) + 4 * (n_g + n_c)
+  return(tm)
+}
+
+calc_primer_tm("ATGCGCATTAGC")
+calc_primer_tm("GCGCGCGC")
+calc_primer_tm("AAAATTTT")
+```
+
+::: {.body-text}
+*This is the Wallace Rule — a standard quick estimate used
+in primer design worldwide.*
+:::
+
+---
+
+## Returning Multiple Outputs: Lists {.slide-title}
+
+::: {.body-text}
+What if we want **both** GC content and Tm from one call?
+We return a **list** — R's way of bundling multiple values together.
+:::
+
+```r
+calc_primer_stats <- function(sequence) {
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+
+  return(list(
+    sequence   = sequence,
+    gc_percent = gc,
+    tm_celsius = tm
+  ))
+}
+
+calc_primer_stats("ATGCGCATTAGC")
+```
+
+---
+
+## Using `calc_primer_stats()` on Many Primers {.slide-title}
+
+::: {.body-text}
+Apply across a vector of primers with `lapply()`:
+:::
+
+```r
+primers <- c(
+  "ATGCGCATTAGC",
+  "GCGCTTAAGCCT",
+  "AATATTTAATGG"
+)
+
+results <- lapply(primers, calc_primer_stats)
+
+# Pull into a data frame
+primer_df <- do.call(rbind, lapply(results, as.data.frame))
+primer_df
+```
+
+::: {.body-text}
+Three primers. One function call. No copy-paste.
+:::
+
+---
+
+## Function Families: Common Prefixes {.slide-title}
+
+::: {.body-text}
+Notice what we've built naturally:
+:::
+
+```r
+calc_gc_content()       # GC percentage from a sequence
+calc_primer_tm()        # melting temperature from a sequence
+calc_primer_stats()     # both, bundled as a list
+
+calc_coulombic_efficiency()   # battery: CE from cap values
+```
+
+::: {.body-text}
+The `calc_` prefix signals: *"these are all calculation
+functions"* — easier to discover, autocomplete, and remember.
+
+This is the **function family** pattern from R for Data Science.
+:::
+
+---
+
+## Documenting Functions with roxygen2 {.slide-title}
+
+::: {.body-text}
+A function with no documentation is a function your future self
+**cannot trust**. Use `roxygen2` comments — lines starting
+with `#'` — immediately before your function definition.
+:::
+
+```r
+#' Calculate GC content of a DNA sequence
+#'
+#' @param sequence Character string of nucleotide bases (A, T, G, C).
+#'   Case-insensitive.
+#'
+#' @return Numeric: percentage of bases that are G or C (0–100)
+#' @export
+#'
+#' @examples
+#' calc_gc_content("ATGCGCATTAGC")
+#' calc_gc_content("AAAAAA")
+
+calc_gc_content <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_total  <- nchar(sequence)
+  n_gc     <- nchar(gsub("[^GC]", "", sequence))
+  return((n_gc / n_total) * 100)
+}
+```
+
+---
+
+## roxygen2 Key Tags {.slide-title}
+
+::: {.body-text}
+
+| Tag | What it documents |
+|---|---|
+| `#' Title` | One-line description of what the function does |
+| `@param name` | Each argument: name and what it expects |
+| `@return` | What the function gives back |
+| `@examples` | Working code examples |
+| `@export` | Makes function available if packaged |
+
+Documentation is part of the function — not an afterthought.
+Write it **while the code is fresh**.
+:::
+
+---
+
+## What Students Need to Know: Coulombic Efficiency {.slide-title}
+
+::: {.body-text}
+A rechargeable battery is **charged** by putting electrical charge
+into it, then **discharged** when charge is taken back out.
+
+**Charge capacity** = how much charge goes into the battery
+**Discharge capacity** = how much charge comes back out
+
+Both are measured in **milliamp-hours (mAh)**.
+
+Coulombic efficiency asks:
+
+`(discharge capacity / charge capacity) * 100`
+
+Values near **100%** mean most stored charge was recovered.
+Lower values suggest some capacity was lost during the cycle.
+:::
+
+---
+
+## 💬 Document `calc_coulombic_efficiency()` {.slide-title}
+
+::: {.body-text}
+**Chat your answer when ready**
+
+Write a roxygen2 documentation block for
+`calc_coulombic_efficiency()`.
+
+Include:
+
+- A one-line title
+- `@param` for both arguments: type and units
+- `@return` describing the output
+- One `@examples` line
+
+*Think carefully about the `@param` descriptions —
+units matter in chemistry.*
+:::
+
+---
+
+## Model Answer: roxygen2 Documentation {.slide-title}
+
+```r
+#' Calculate coulombic efficiency for a battery charge-discharge cycle
+#'
+#' @param discharge_cap_mAh Numeric. Discharge capacity in
+#'   milliamp-hours (mAh). Must be positive.
+#' @param charge_cap_mAh Numeric. Charge capacity in milliamp-hours
+#'   (mAh). Must be positive.
+#'
+#' @return Numeric. Coulombic efficiency as a percentage. Values near
+#'   100 indicate efficient charge storage; values substantially below
+#'   100 indicate capacity loss.
+#' @export
+#'
+#' @examples
+#' calc_coulombic_efficiency(2.98, 3.01)
+#' calc_coulombic_efficiency(
+#'   discharge_cap_mAh = 2.94,
+#'   charge_cap_mAh    = 2.97
+#' )
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh,
+                                      charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) * 100
+  return(ce)
+}
+```
+
+---
+
+## How a Package Finds an Exported Function {.slide-title}
+
+::: {.body-text}
+If this function were part of a package, the package structure would look like:
+:::
+
+```text
+lebuhn/
+├── DESCRIPTION
+├── NAMESPACE
+├── R/
+│   └── calc_gc_content.R
+└── man/
+```
+
+::: {.body-text}
+The function lives in the `R/` folder. The `#' @export` tag tells
+`roxygen2` to add it to `NAMESPACE`, so users can call it after:
+:::
+
+```r
+library(lebuhn)
+calc_gc_content("ATGCGCATTAGC")
+```
+
+---
+
+## Workflow for Writing Functions {.slide-title}
+
+::: {.body-text}
+From the NCEAS textbook — four steps that always work:
+
+1. **Have a clear goal** — what goes in, what comes out?
+2. **Outline the plan** — write the steps as comments first
+3. **Build minimum viable** — get it working on one example before generalizing
+4. **Always check intermediates** — print values inside the body while developing
+
+Functions are for **humans and computers**.
+If you can't explain it in one sentence, the function is doing too much.
+:::
+
+---
+
+## Summary: Lecture 1 {.custom-title}
+
+::: {.body-text}
+Today we covered:
+
+- **DRY principle** — write once, call everywhere
+- **Function anatomy** — name, arguments, body, return
+- **Naming conventions** — verbs, snake_case, common prefixes
+- **Vectorization** — functions work on whole vectors, not just scalars
+- **Returning lists** — bundle multiple outputs
+- **roxygen2** — document while the code is fresh
+
+**Wednesday:** functions with conditionals, defensive coding
+with `warning()` and `stop()`, and wrapping ggplot in a function
+:::

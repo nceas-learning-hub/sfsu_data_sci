@@ -1,0 +1,427 @@
+---
+title: "Data Decision Log"
+subtitle: "Your Project Name Here"
+author: "Your Name"
+date: today
+date-format: "MMMM D, YYYY"
+format: 
+  # html:
+  #   toc: true
+  #   toc-depth: 3
+  #   toc-location: left
+  #   code-fold: true
+  #   code-summary: "Show code"
+  #   theme: cosmo
+  #   number-sections: true
+  #   embed-resources: true
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    colorlinks: true
+    keep-tex: false
+---
+
+# Overview
+
+This document records all major analytical decisions made during this project. Each entry documents what was decided, why, what alternatives were considered, and what trade-offs were involved.
+
+::: {.callout-tip}
+## How to Use This Template
+
+1. Copy this file to your R Project folder
+2. Rename it `decision_log.qmd`
+3. Update the YAML header above (title, subtitle, author)
+4. Delete this callout box and the example entries below
+5. Start adding your own decisions using the template in the Appendix
+:::
+
+**Project start date:** [Insert date]  
+**Last updated:** `r Sys.Date()`
+
+---
+
+# Data Cleaning Decisions
+
+## Entry 1: Example - Handling Missing Values {#entry-001}
+
+**Date:** YYYY-MM-DD  
+**Status:** ✅ Final
+
+### Decision
+
+[State clearly what you decided to do]
+
+Example: Removed all rows where the primary key variable `site_id` was NA.
+
+### Reasoning
+
+[Explain WHY you made this decision. Reference documentation, theory, or practical constraints.]
+
+Example: Cannot link observations to site characteristics without site identifiers. Checked with field team and confirmed these 3 observations were data entry errors where the site column was accidentally left blank during transcription.
+
+### Code Implementation
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Show the code that implements your decision
+# Set eval: false so it doesn't actually run in this template
+
+# Example:
+# original_data <- read_csv("data/raw_data.csv")
+# nrow(original_data)  # 615 observations
+# 
+# cleaned_data <- original_data %>%
+#   filter(!is.na(site_id))
+# 
+# nrow(cleaned_data)  # 612 observations
+```
+
+### Alternatives Considered
+
+1. **Alternative 1: [Describe alternative approach]**  
+   Reason for rejection: [Why you didn't choose this]
+
+2. **Alternative 2: [Describe another approach]**  
+   Reason for rejection: [Why you didn't choose this]
+
+Example alternatives:
+- Create "Unknown Site" category → Rejected because observations are unusable for site-level analysis
+- Try to reconstruct site from GPS coordinates → Rejected because GPS data also missing
+
+### Trade-offs
+
+- **Gain:** [What you gained from this decision]
+- **Lose:** [What you gave up or lost]
+- **Risk:** [Any risks or uncertainties]
+- **Acceptable because:** [Why the trade-off is reasonable]
+
+Example:
+- **Gain:** Data integrity for all site-level analyses
+- **Lose:** 3 observations (0.5% of total dataset)
+- **Risk:** Minimal - checked that excluded observations are randomly distributed across time periods
+- **Acceptable because:** Research questions focus on site-level patterns
+
+### References (if applicable)
+
+- Citation 1
+- Citation 2
+- Discussion with [person] on [date]
+
+---
+
+## Entry 2: [Your Second Decision Title] {#entry-002}
+
+**Date:** YYYY-MM-DD  
+**Status:** 🔄 Draft
+
+[Copy the structure from Entry 1 above]
+
+---
+
+# Variable Creation Decisions
+
+## Entry 3: [Decision About Creating/Recoding Variables] {#entry-003}
+
+**Date:** YYYY-MM-DD  
+**Status:** ✅ Final
+
+### Decision
+
+[What new variable did you create or how did you recode existing variables?]
+
+### Reasoning
+
+[Why was this necessary? What does this variable represent?]
+
+### Code Implementation
+
+```{r}
+#| eval: false
+
+# Example:
+# data <- data %>%
+#   mutate(
+#     new_variable = case_when(
+#       condition1 ~ "Category A",
+#       condition2 ~ "Category B",
+#       TRUE ~ "Other"
+#     )
+#   )
+```
+
+### Alternatives Considered
+
+[What other ways could you have created or defined this variable?]
+
+### Trade-offs
+
+[What information is gained or lost by this categorization/transformation?]
+
+---
+
+# Analytical Decisions
+
+## Entry 4: [Statistical Method Choice] {#entry-004}
+
+**Date:** YYYY-MM-DD  
+**Status:** ✅ Final
+
+### Decision
+
+[What statistical approach or model did you choose?]
+
+### Context
+
+[What problem are you trying to solve? What are the characteristics of your data?]
+
+### Reasoning
+
+[Why is this approach appropriate? What assumptions are you making?]
+
+### Code Implementation
+
+```{r}
+#| eval: false
+
+# Show the key analytical code
+# Example:
+# model <- lm(response ~ predictor1 + predictor2, data = data)
+# summary(model)
+```
+
+### Alternatives Considered
+
+[What other statistical approaches did you consider?]
+
+### Trade-offs
+
+[What are the strengths and limitations of this approach?]
+
+### Assumptions
+
+[List key assumptions and how you checked them]
+
+### References
+
+[Cite relevant statistical references or methodology papers]
+
+---
+
+# Visualization Decisions
+
+## Entry 5: [Figure Design Choice] {#entry-005}
+
+**Date:** YYYY-MM-DD  
+**Status:** ✅ Final
+
+### Decision
+
+[What type of visualization did you choose and why?]
+
+### Reasoning
+
+[What does this visualization show that others don't? What makes it effective for your audience?]
+
+### Implementation
+
+```{r}
+#| eval: false
+#| label: fig-example
+#| fig-cap: "Your figure caption here"
+
+# Example visualization code
+# library(ggplot2)
+# ggplot(data, aes(x = variable1, y = variable2)) +
+#   geom_point() +
+#   labs(title = "Your title",
+#        x = "X axis label",
+#        y = "Y axis label") +
+#   theme_minimal()
+```
+
+### Alternatives Considered
+
+[What other visualization types did you consider? Why didn't you use them?]
+
+### Trade-offs
+
+[What does this visualization show well? What doesn't it show?]
+
+---
+
+# Status Updates & Revisions
+
+## Entry 6: [Revisiting a Previous Decision] {#entry-006}
+
+**Date:** YYYY-MM-DD  
+**Status:** ⚠️ Supersedes Entry #[X]
+
+::: {.callout-warning}
+## Revision Notice
+This entry supersedes [Entry X](#entry-00X). The original decision has been revised based on new information or analysis results.
+:::
+
+### What Changed
+
+[What decision are you revising?]
+
+### Why the Revision
+
+[What did you learn that prompted this change?]
+
+### New Decision
+
+[What's your updated approach?]
+
+### Implications
+
+[How does this affect previous analyses? What needs to be redone?]
+
+### Lessons Learned
+
+[What did you learn from this experience? This is important scientific thinking!]
+
+---
+
+# Summary of Key Decisions
+
+::: {.callout-note}
+## Quick Reference
+
+Use this section to summarize the most important decisions that affect interpretation of your results:
+
+1. [Decision 1](#entry-001): Brief description
+2. [Decision 2](#entry-002): Brief description
+3. [Decision 3](#entry-003): Brief description
+4. [Decision 4](#entry-004): Brief description
+5. [Decision 5](#entry-005): Brief description
+
+Update this list as you add significant decisions throughout your project.
+:::
+
+---
+
+# Outstanding Questions / Future Decisions
+
+Use this section to track decisions you still need to make or questions you need to resolve:
+
+## To Decide
+
+1. **[Topic needing decision]**  
+   - What's the question?
+   - What information do you need?
+   - When will you decide?
+   - Who can you consult?
+
+2. **[Another pending decision]**  
+   - Context
+   - Next steps
+
+## Questions for Advisor/Collaborators
+
+1. [Question 1]
+2. [Question 2]
+
+---
+
+# Appendix: Entry Template
+
+Use this template when adding new entries to your decision log. Copy and paste it, fill in the sections, and delete this appendix from your final document.
+
+## Entry X: [Descriptive Title Goes Here] {#entry-00X}
+
+**Date:** YYYY-MM-DD  
+**Status:** 🔄 Draft / ✅ Final / ⚠️ Revised
+
+### Decision
+
+[One clear sentence: What did you decide?]
+
+### Reasoning
+
+[Why did you make this decision? What evidence or logic supports it?]
+
+### Code Implementation (if applicable)
+
+```{r}
+#| eval: false
+
+# Show relevant code here
+# Use eval: false so template code doesn't run
+```
+
+### Alternatives Considered
+
+1. **[Alternative 1]**  
+   Reason for rejection: 
+
+2. **[Alternative 2]**  
+   Reason for rejection:
+
+### Trade-offs
+
+- **Gain:** 
+- **Lose:** 
+- **Risk:** 
+- **Acceptable because:**
+
+### References (if applicable)
+
+- 
+- 
+
+---
+
+# Notes on Using This Template
+
+::: {.callout-tip}
+## Tips for Success
+
+1. **Write as you go** - Don't wait until the end to document decisions
+2. **Be honest** - Uncertainty is okay and should be documented
+3. **Use the test** - Could someone understand your reasoning without asking questions?
+4. **Update status badges** - 🔄 Draft → ✅ Final as decisions solidify
+5. **Link between entries** - Use cross-references when decisions relate
+6. **Render regularly** - Click "Render" to see your HTML output
+7. **Commit to Git** - Track evolution of your thinking over time
+:::
+
+## Status Badge Guide
+
+- 🔄 **Draft** - Still thinking about this decision
+- ✅ **Final** - Decision is made and implemented  
+- ⚠️ **Revised** - Decision changed after seeing results/new information
+- 📌 **Critical** - Particularly important decision that affects key results
+
+## When to Write an Entry
+
+Write a decision log entry when:
+
+- ✓ You're choosing between two reasonable options
+- ✓ You're combining or recoding categories
+- ✓ You're excluding data (ALWAYS document exclusions)
+- ✓ You're making an assumption that could be challenged
+- ✓ Something didn't work and you want to remember why
+- ✓ Someone might ask "why did you do it that way?"
+
+Don't document:
+
+- ✗ Obvious or trivial decisions
+- ✗ Standard procedures followed exactly as documented
+- ✗ Exploratory poking around (unless you learn something important)
+
+## The Quality Test
+
+**Could a colleague/classmate understand your reasoning without asking follow-up questions?**
+
+- If YES → You wrote enough
+- If NO → Add more explanation
+
+---
+
+*This decision log is version controlled with Git. Use commit messages like "Add decision about outlier handling" to track the evolution of your analytical thinking.*
+
+*Remember: The thinking is the work. The code is just execution.*

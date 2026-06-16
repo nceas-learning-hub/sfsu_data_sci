@@ -1,0 +1,693 @@
+---
+title: "Week 14, Lecture 2: Conditionals, Errors, and ggplot Functions"
+subtitle: "Integrated live-demo script with visible teaching cues"
+author: "BIO/CHEM 806"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contents"
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    embed-resources: true
+editor:
+  markdown:
+    wrap: 72
+execute:
+  eval: true
+  echo: true
+  warning: true
+  message: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+library(ggplot2)
+```
+
+# Wednesday setup: Monday functions and data
+
+::: callout-tip
+## Teaching cue
+
+Run this once at the start of class. Do not reteach Monday's lecture
+here; this simply restores the function family and example data needed
+for today's examples.
+:::
+
+```{r}
+#| label: monday-functions-and-data
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh, charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) * 100
+  return(ce)
+}
+
+cycling_data <- data.frame(
+  cycle         = 1:5,
+  charge_mAh    = c(3.01, 3.00, 2.99, 2.98, 2.97),
+  discharge_mAh = c(2.98, 2.97, 2.96, 2.95, 2.94)
+)
+
+cycling_data$CE <- calc_coulombic_efficiency(
+  cycling_data$discharge_mAh,
+  cycling_data$charge_mAh
+)
+
+calc_gc_content <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_total <- nchar(sequence)
+  n_gc <- nchar(gsub("[^GC]", "", sequence))
+  return((n_gc / n_total) * 100)
+}
+
+calc_primer_tm <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_a <- nchar(gsub("[^A]", "", sequence))
+  n_t <- nchar(gsub("[^T]", "", sequence))
+  n_g <- nchar(gsub("[^G]", "", sequence))
+  n_c <- nchar(gsub("[^C]", "", sequence))
+  tm <- 2 * (n_a + n_t) + 4 * (n_g + n_c)
+  return(tm)
+}
+
+calc_primer_stats <- function(sequence) {
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+  return(list(
+    sequence   = sequence,
+    gc_percent = gc,
+    tm_celsius = tm
+  ))
+}
+```
+
+```{r}
+#| label: check-setup
+
+cycling_data
+calc_primer_stats("ATGCGCATTAGC")
+```
+
+# Segment 1 - Warm-up: mental model check (5 min)
+
+::: callout-note
+## Read aloud
+
+"Welcome back. Before we add new tools, let's make sure Monday's mental
+model is solid."
+:::
+
+::: callout-tip
+## Chat prompt
+
+Post in chat:
+
+"What does `classify_temp(15)` return, and why? Take 60 seconds - type
+your answer before reading others."
+:::
+
+```{r}
+#| label: classify-temp
+
+classify_temp <- function(celsius) {
+  if (celsius > 30) {
+    return("hot")
+  } else if (celsius < 10) {
+    return("cold")
+  } else {
+    return("moderate")
+  }
+}
+```
+
+```{r}
+#| label: test-classify-temp
+
+classify_temp(35)    # "hot"
+classify_temp(5)     # "cold"
+classify_temp(20)    # "moderate"
+classify_temp(15)    # chat warm-up answer
+```
+
+::: callout-tip
+## Teaching cue
+
+Expected answer: `"moderate"`. The value 15 is not greater than 30 and
+not less than 10, so the function reaches the final `else` branch.
+
+Run each call one at a time. Before each call, ask: "What do you
+predict?" Wait a few seconds for chat responses, then run the line.
+
+Follow-up question if students answer correctly but cannot explain the
+logic: "At which line does the function stop executing? Why doesn't it
+reach the later branches?"
+:::
+
+# Segment 2 - Functions with conditionals (10 min)
+
+::: callout-note
+## Former slides 3-4: `if`/`else` inside functions
+
+Monday's functions all did the same thing every time. Today's functions
+make decisions.
+
+The key insight is that `return()` exits the function immediately. The
+first true branch wins.
+:::
+
+::: callout-tip
+## Teaching cue
+
+Say this after the prediction examples:
+
+"Notice that once the function hits `return()`, it is done. It never
+checks the remaining conditions. This early-exit pattern is exactly how
+we will write our error checks."
+:::
+
+# Segment 3 - Battery chemistry context: specific capacity (5 min)
+
+::: callout-note
+## Former slide 5: why inputs need validation
+
+"Before we write our next function, I want to motivate the
+error-handling tools we are about to learn. And I want to do it through
+a real research scenario in battery chemistry."
+
+Read these points aloud and pause on each:
+
+- Specific capacity is measured in mAh/g: how much charge is stored per
+  gram of active electrode material.
+- It is a primary metric for comparing battery materials.
+- The formula is simple: `specific_capacity = capacity_mAh / mass_g`.
+- Mistakes happen when mass is entered in milligrams instead of grams,
+  inactive material is included, zero is entered by mistake, or negative
+  capacity appears from instrument noise.
+- A silent wrong answer is worse than a loud error.
+
+"A function with proper input validation catches these mistakes before
+they become a wrong number in a table. Let's build it."
+:::
+
+# Segment 4 - `stop()` and `warning()` (15 min)
+
+## Stage 1 - naive version
+
+::: callout-tip
+## Teaching cue
+
+Build the function in three stages. Start with the naive version so
+students can see what goes wrong before you add protection.
+:::
+
+```{r}
+#| label: naive-specific-capacity
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: naive-specific-capacity-zero
+
+calc_specific_capacity(3.0, 0)       # Inf - wrong, no error
+calc_specific_capacity(3.0, 0.015)   # works: 200 mAh/g
+```
+
+```{r}
+#| label: naive-specific-capacity-bad-type
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")  # error, but cryptic
+```
+
+::: callout-tip
+## Teaching cue
+
+"Both examples fail in different ways. The text input fails with an
+unhelpful error. The `Inf` case is worse: it passes without complaint
+and produces a wrong answer that could make it into a paper."
+:::
+
+## Stage 2 - add `stop()` for impossible inputs
+
+::: callout-note
+## Former slides 6-7: hard errors
+
+Use `stop()` when the input is so wrong that the function cannot produce
+a meaningful result. The function halts and prints your message.
+
+A good `stop()` message tells the user what was wrong and, when
+possible, how to fix it.
+:::
+
+```{r}
+#| label: specific-capacity-with-stop
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value - check your units.")
+  }
+
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: test-specific-capacity-stop-text
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")  # stop: not numeric
+```
+
+```{r}
+#| label: test-specific-capacity-stop-zero
+#| error: true
+
+calc_specific_capacity(3.0, 0)           # stop: mass <= 0
+```
+
+```{r}
+#| label: test-specific-capacity-stop-good
+
+calc_specific_capacity(3.0, 0.015)       # works: 200 mAh/g
+```
+
+## Stage 3 - add `warning()` for suspicious but computable inputs
+
+::: callout-note
+## Former slide 8: soft warnings
+
+Use `warning()` when something is suspicious, but the calculation can
+still proceed. The user should see a flag, but the function does not
+need to halt.
+
+Here, zero mass is impossible for the calculation, so it gets `stop()`.
+Negative capacity is unusual, but it may reflect instrument behavior or
+a case the researcher needs to inspect, so it gets `warning()`.
+:::
+
+```{r}
+#| label: specific-capacity-with-warning
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value - check your units.")
+  }
+
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected - verify instrument output.")
+  }
+
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: test-specific-capacity-warning
+
+calc_specific_capacity(-0.5, 0.015)   # warning, but returns -33.3
+calc_specific_capacity(3.0, 0.015)    # clean: 200 mAh/g
+```
+
+::: callout-note
+## `stop()` versus `warning()` decision table
+
+| Situation | Use | Reason |
+|----|----|----|
+| Input type is wrong | `stop()` | The function cannot compute the intended result. |
+| Value is physically impossible | `stop()` | The result would be meaningless. |
+| Value is unexpected but computable | `warning()` | Flag it and let the user decide. |
+| Value is near the edge of a reasonable range | `warning()` | Worth noting, not fatal. |
+
+Rule of thumb: would the result mislead someone? If yes, stop. If it is
+suspicious but still interpretable, warn.
+:::
+
+::: callout-tip
+## Chat prompt
+
+Ask in chat:
+
+"Why did we use `warning()` for negative capacity but `stop()` for zero
+mass? What is the reasoning? 30 seconds."
+
+Expected answer: negative capacity is physically strange but may be real
+instrument noise worth investigating. Zero mass makes division
+impossible; no result is better than a wrong one.
+:::
+
+# Segment 5 - Default arguments (7 min)
+
+::: callout-note
+## Former slides 9-10: defaults make functions reusable
+
+"Arguments can have default values, set in the function definition. The
+user only provides them when they want something different. This is what
+makes functions reusable across research contexts."
+:::
+
+```{r}
+#| label: specific-capacity-with-defaults
+
+calc_specific_capacity <- function(capacity_mAh,
+                                   mass_g,
+                                   units = "mAh/g") {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be positive.")
+  }
+
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected - verify instrument output.")
+  }
+
+  result <- capacity_mAh / mass_g
+  message("Returning specific capacity in ", units)
+  return(result)
+}
+```
+
+```{r}
+#| label: test-specific-capacity-defaults
+
+calc_specific_capacity(3.0, 0.015)                  # uses default
+calc_specific_capacity(3.0, 0.015, units = "Ah/g") # override
+```
+
+::: callout-tip
+## Teaching cue
+
+"Sensible defaults mean your function works out of the box for the most
+common case. The override lets it adapt. This is the same pattern you've
+been using all semester: `ggplot2` geoms have defaults for color, size,
+and alpha. You only specify them when you need something different."
+
+Technical note: in this teaching example, `units` is only a label in the
+message. The function does not convert mAh/g to Ah/g.
+:::
+
+# Segment 6 - Molecular biology: `calc_primer_quality()` (8 min)
+
+::: callout-note
+## Former slides 11-12: primer quality context
+
+"Let's bring everything we've learned together in one function:
+conditionals, `warning()`, `stop()`, and default arguments. We'll do it
+in molecular biology."
+
+Read these points aloud:
+
+- GC content should often be about 40-60 percent for standard PCR.
+- GC below 40 percent: primer may not bind reliably.
+- GC above 60 percent: primer may form secondary structures or
+  non-specific products.
+- These thresholds are checked for every primer, which makes them a good
+  candidate for a function with built-in checks.
+:::
+
+```{r}
+#| label: calc-primer-quality
+
+calc_primer_quality <- function(sequence,
+                                gc_min = 40,
+                                gc_max = 60) {
+  if (!is.character(sequence)) {
+    stop("sequence must be a character string.")
+  }
+
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+
+  if (gc < gc_min | gc > gc_max) {
+    warning("GC content (", round(gc, 1), "%) is outside ",
+            gc_min, "-", gc_max, "% optimal range.")
+  }
+
+  return(list(
+    gc_percent  = gc,
+    tm_celsius  = tm,
+    gc_in_range = (gc >= gc_min & gc <= gc_max)
+  ))
+}
+```
+
+```{r}
+#| label: test-primer-quality
+
+# Standard PCR - use defaults.
+calc_primer_quality("ATGCGCATTAGC")
+
+# High-GC primer under standard PCR defaults - should warn.
+calc_primer_quality("GCGCGGCATGCC")
+
+# GC-rich organism or assay - override the acceptable range.
+calc_primer_quality("GCGCGATATGCC", gc_min = 50, gc_max = 70)
+```
+
+::: callout-tip
+## Teaching cue
+
+"Look at what this function does: it validates input, calls two
+functions we already wrote, checks the result against thresholds with a
+warning, and returns a named list. Every tool from today and Monday is
+in here."
+
+Thesis connection: "This is a real primer screening workflow. If you
+work in a molecular biology lab, add this pattern to your project
+repository. It replaces a manual spreadsheet."
+
+Note on the third example: the sequence was chosen so the 50-70 percent
+GC override actually demonstrates the value of changing the defaults.
+:::
+
+# Segment 7 - Wrapping `ggplot` in a function (8 min)
+
+::: callout-note
+## Former slides 13-15: DRY applies to plots too
+
+"The DRY principle applies equally to visualization code. If you are
+making the same style of plot 15 times in your thesis, you should write
+it once."
+:::
+
+```{r}
+#| label: custom-theme
+
+custom_theme <- function(base_size = 9) {
+  theme(
+    text = element_text(family = "Helvetica",
+                        color = "gray30",
+                        size = base_size),
+    plot.title = element_text(size = rel(1.25),
+                              hjust = 0.5,
+                              face = "bold"),
+    panel.background = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(colour = "grey90",
+                                    linewidth = 0.25),
+    axis.ticks = element_blank()
+  )
+}
+```
+
+```{r}
+#| label: plot-cycling
+
+plot_cycling <- function(df,
+                         point_size = 2,
+                         font_size = 10,
+                         ce_threshold = 99) {
+  ggplot(df, aes(x = cycle, y = CE)) +
+    geom_point(size = point_size, color = "#167B62") +
+    geom_line(color = "#167B62", alpha = 0.6) +
+    geom_hline(yintercept = ce_threshold,
+               linetype = "dashed",
+               color = "#A23923") +
+    labs(title = "Coulombic Efficiency by Cycle",
+         x = "Cycle Number",
+         y = "Coulombic Efficiency (%)") +
+    custom_theme(font_size)
+}
+```
+
+```{r}
+#| label: call-plot-cycling-default
+
+plot_cycling(cycling_data)
+```
+
+```{r}
+#| label: call-plot-cycling-custom
+
+plot_cycling(cycling_data, point_size = 3, ce_threshold = 98)
+```
+
+::: callout-tip
+## Teaching cue
+
+Ask students which parts are fixed and which parts are flexible.
+
+- Fixed: the columns, title, geoms, and overall style.
+- Flexible: point size, font size, and CE threshold.
+
+Then say:
+
+"Your advisor asks you to change the threshold line from 99 percent to
+98 percent across all 15 cycling plots in your thesis. Without the
+function: find and edit 15 plot blocks. With the function: change one
+default argument. Done."
+:::
+
+# Segment 8 - Synthesis and bridge to activity (5 min)
+
+::: callout-note
+## Former slide 16: bridge to Thursday activity
+
+"Thursday's activity walks you through a set of exercises from the NCEAS
+textbook - s18 in your course website. The exercises use a function
+called `find_max()` that you will build from scratch, break
+intentionally, and then harden with the exact same `stop()` and
+`warning()` patterns we used today."
+
+Today's lecture maps to the activity this way:
+
+- `double_it()` and `exclaim_age()` review Monday's function anatomy.
+- `find_max()` with conditionals reviews today's `if`/`else` pattern.
+- Adding `stop()` to `find_max()` follows the same pattern as
+  `calc_specific_capacity()`.
+- The default argument `equal_ok = FALSE` follows the same pattern as
+  `gc_min`, `gc_max`, and `ce_threshold`.
+
+"Everything from this week maps directly onto the activity. Keep this
+file open as a reference. The textbook page s18 has the full exercise
+set."
+:::
+
+```{r}
+#| label: bridge-to-activity
+#| eval: false
+
+# Function anatomy review.
+double_it <- function(x) {
+  return(2 * x)
+}
+
+exclaim_age <- function(age) {
+  return(paste("I am", age, "years old!"))
+}
+
+# Conditionals.
+find_max <- function(value_1, value_2) {
+  if (value_1 > value_2) {
+    return(value_1)
+  } else if (value_2 > value_1) {
+    return(value_2)
+  }
+}
+
+# Add validation.
+find_max <- function(value_1, value_2) {
+  if (!is.numeric(value_1) | !is.numeric(value_2)) {
+    stop("Values must be numeric.")
+  }
+
+  if (value_1 == value_2) {
+    stop("Values must be different from each other.")
+  }
+
+  if (value_1 > value_2) return(value_1)
+  if (value_2 > value_1) return(value_2)
+}
+
+# Add a default argument.
+find_max <- function(value_1, value_2, equal_ok = FALSE) {
+  if (!is.numeric(value_1) | !is.numeric(value_2)) {
+    stop("Values must be numeric.")
+  }
+
+  if (value_1 == value_2) {
+    if (equal_ok) return(value_1)
+    stop("Values must be different from each other.")
+  }
+
+  if (value_1 > value_2) return(value_1)
+  if (value_2 > value_1) return(value_2)
+}
+```
+
+# Segment 9 - Wrap-up (2 min)
+
+::: callout-note
+## Former slide 17: summary
+
+"The complete function toolkit is now in your hands. Write it once.
+Protect it with `stop()` and `warning()`. Make it flexible with default
+arguments. Apply it everywhere, including inside `ggplot`. That's
+reproducible, defensible, reusable science."
+
+Today we added:
+
+- conditionals: `if`, `else if`, and `else`;
+- hard errors: `stop()`;
+- soft warnings: `warning()`;
+- default arguments;
+- functions that call other functions;
+- plotting functions.
+
+The central judgment is this: would a bad input create a result that
+could mislead someone? If yes, stop. If the result is suspicious but
+still worth seeing, warn.
+:::
+
+```{r}
+#| label: final-function-list
+#| eval: false
+
+# Today's main functions.
+classify_temp()
+calc_specific_capacity()
+calc_primer_quality()
+custom_theme()
+plot_cycling()
+```
+
+# Exit ticket (1 minute)
+
+::: callout-tip
+## Before you leave
+
+Copy this into chat or Canvas and fill in the blanks:
+
+**One tool I can use from today:** `stop()` / `warning()` / default
+arguments / ggplot function
+
+**One thing I want to remember:**
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+:::
+
+::: callout-note
+## Teaching cue
+
+Keep this deliberately easy. The goal is not to grade them; it is to
+give students a tiny retrieval practice moment and give you a quick read
+on what stuck.
+:::

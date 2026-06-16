@@ -1,0 +1,665 @@
+---
+title: "Data Visualization"
+subtitle: "Week 8 · Lecture 2"
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Data Visualization]{.custom-title}
+
+[Customization, color & interactive outputs · Week 8 · Lecture 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Gretchen LeBuhn**]{.custom-subtitle2}
+
+---
+
+## {#recap data-menu-title="Recap"}
+
+[Recap: Where We Are]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Lecture 1** gave us the foundation:
+
+- Tufte's principles of graphical excellence and integrity
+- The Grammar of Graphics mental model
+- Tidy data for plotting — `pivot_longer()` + `summarise()`
+- The four essential `ggplot2` components
+- Geom types: `geom_col()`, `geom_boxplot()`, `geom_line()`, `geom_point()`
+
+<br>
+
+**Today** we make those plots *great*:  
+labels · themes · color · factor ordering · facets · saving · interactive outputs
+:::
+
+---
+
+## {#aes-question data-menu-title="aes() Question"}
+
+[Quick Recall]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Before we start — what's the difference between:
+
+```{r}
+# Version A
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits,
+           fill = "blue")) +
+    geom_col()
+```
+
+```{r}
+# Version B
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits)) +
+    geom_col(fill = "blue")
+```
+
+Type your prediction in **chat** before we run either one.
+:::
+
+---
+
+## {#salmon-moment data-menu-title="The Salmon Moment"}
+
+[The "Why Is It Salmon?" Moment]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Version A produces **salmon-colored** bars with a legend that says "blue."
+
+**Why?**
+
+Putting `fill = "blue"` inside `aes()` tells `ggplot2` that `"blue"` is a *variable in your data*. ggplot2 creates a new column filled with the word "blue" and maps it to fill — using its **default color** for that category.
+:::
+
+. . .
+
+:::{.body-text}
+**The fix:** move `fill` *outside* of `aes()`:
+
+```{r}
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits)) +
+    geom_col(fill = "blue")
+```
+
+This is now a **constant** — all bars are blue.
+:::
+
+---
+
+## {#aes-rule data-menu-title="The aes() Rule"}
+
+[The `aes()` Boundary — The Most Important Rule]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Inside `aes()`** → maps a **variable** to an aesthetic  
+The value changes per data point based on your data.
+
+```{r}
+aes(fill = visitor_type)   # different color per visitor type ✓
+```
+
+<br>
+
+**Outside `aes()`** → sets a **constant** for all data points
+
+```{r}
+geom_col(fill = "blue")    # all bars are blue ✓
+```
+:::
+
+. . .
+
+:::{.body-text}
+*"If you want to map a variable onto a graph aesthetic, put it within* `aes()`. *If you want to update your plot base with a constant, add it directly to the relevant* `geom_` *layer outside the* `aes()` *call."*
+
+— NCEAS Learning Hub textbook
+:::
+
+---
+
+## {#map-variable data-menu-title="Mapping a Variable"}
+
+[Mapping a Variable to Color]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`fill = visitor_type` **inside** `aes()` — correct, because it's a real column:
+:::
+
+```{r}
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits,
+           fill = visitor_type)) +
+    geom_col()
+```
+
+:::{.body-text}
+`ggplot2` assigns a different color to each visitor type and adds a legend **automatically**.
+
+That's the Grammar of Graphics at work.
+:::
+
+---
+
+## {#labs data-menu-title="labs()"}
+
+[Labels with `labs()` + Flip the Axes]{.slide-title}
+
+<br>
+
+```{r}
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+    geom_col() +
+    labs(
+        x        = "Number of Visits",
+        y        = "Restoration Location",
+        fill     = "Type of Visitor",
+        title    = "Total Visits to Delta Restoration Areas by Visitor Type",
+        subtitle = "Sum of all visits during July 2017 and March 2018"
+    ) +
+    theme_bw()
+```
+
+:::{.body-text}
+Swapping `x` and `y` → **horizontal bars** → overlapping labels solved in one line.
+:::
+
+---
+
+## {#builtin-themes data-menu-title="Built-in Themes"}
+
+[Built-in Themes]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`ggplot2` ships with several complete themes. Try them with auto-complete:  
+type `theme_` then **Tab** in RStudio.
+:::
+
+```{r}
+theme_bw()       # white background, dark grid — textbook standard
+theme_minimal()  # no background panel, just grid lines
+theme_light()    # light gray grid, white background
+theme_classic()  # no grid at all — publication classic
+```
+
+. . .
+
+
+---
+
+## {#custom-theme data-menu-title="custom theme()"}
+
+[Fine-Tuning with `theme()`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`theme()` gives fine-grained control over every visual element.  
+⚠️ Must come **after** built-in themes — otherwise `theme_bw()` overrides your settings.
+:::
+
+```{r}
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+    geom_col() +
+    labs(x = "Number of Visits", y = "Restoration Location",
+         fill = "Type of Visitor",
+         title = "Total Visits to Delta Restoration Areas by Visitor Type") +
+    theme_bw() +
+    theme(
+        legend.position = "bottom",
+        axis.ticks.y    = element_blank()
+    )
+```
+
+---
+
+## {#mytheme data-menu-title="my_theme object"}
+
+[Save Your Theme as an Object]{.slide-title}
+
+<br>
+
+:::{.body-text}
+When you have a set of theme settings you like — **save them once, use everywhere:**
+:::
+
+```{r}
+my_theme <- theme_bw(base_size = 16) +
+    theme(
+        legend.position = "bottom",
+        axis.ticks.y    = element_blank()
+    )
+```
+
+. . .
+
+```{r}
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+    geom_col() +
+    labs(x = "Number of Visits", y = "Restoration Location",
+         fill = "Type of Visitor",
+         title = "Total Visits to Delta Restoration Areas by Visitor Type",
+         subtitle = "Sum of all visits during study period") +
+    my_theme
+```
+
+:::{.body-text}
+`base_size = 16` scales **all text** proportionally — change in one place.
+:::
+
+---
+
+## {#exercise-2 data-menu-title="Exercise 2"}
+
+[Exercise 2: `scale_x_continuous()`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**Predict** what this line adds before running it:
+
+```{r}
+scale_x_continuous(breaks = seq(0, 120, 20))
+```
+
+Then add `expand = c(0, 0)` — what changes?
+
+```{r}
+scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0))
+```
+:::
+
+. . .
+
+:::{.body-text}
+- `breaks = seq(0, 120, 20)` → tick marks at 0, 20, 40, 60, 80, 100, 120  
+- `expand = c(0, 0)` → removes the gap between bars and the axis line  
+
+These polish details matter for publication figures.
+:::
+
+---
+
+## {#fct-reorder data-menu-title="fct_reorder()"}
+
+[Reordering — Defeating Alphabetical Order]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`ggplot2` loves alphabetical order. That's almost never the order you want.
+
+**`forcats::fct_reorder()`** reorders a factor by another variable.
+:::
+
+```{r}
+daily_visits_totals <- daily_visits_loc %>%
+    group_by(restore_loc) %>%
+    mutate(n = sum(daily_visits)) %>%
+    ungroup() %>%
+    mutate(restore_loc = fct_reorder(restore_loc, n))
+
+levels(daily_visits_totals$restore_loc)   # no longer alphabetical!
+```
+
+. . .
+
+:::{.body-text}
+To reverse — most visited at top — wrap `n` in `desc()`:
+
+```{r}
+mutate(restore_loc = fct_reorder(restore_loc, desc(n)))
+```
+
+**Pattern:** `mutate + fct_reorder` is one of the most frequent pre-plot steps.
+:::
+
+---
+
+## {#viridis data-menu-title="viridis colors"}
+
+[Accessible Color with `viridis`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+~1 in 12 men and 1 in 200 women have some form of **color vision deficiency.**
+
+If your visualization relies on red-green contrast, a significant portion of your audience can't read it.
+
+The `viridis` package provides palettes that are:
+
+- Perceptually uniform
+- Accessible to the most common forms of color blindness
+- Print well in grayscale
+:::
+
+. . .
+
+```{r}
+ggplot(data = daily_visits_totals,
+       aes(x = daily_visits, y = restore_loc,
+           fill = visitor_type)) +
+    geom_col() +
+    scale_fill_viridis_d() +   # _d = discrete variable
+    scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0)) +
+    labs(x = "Number of Visits", y = "Restoration Location",
+         fill = "Type of Visitor",
+         title = "Total Visits to Delta Restoration Areas by Visitor Type",
+         subtitle = "Sum of all visits during study period") +
+    my_theme
+```
+
+---
+
+## {#ggsave data-menu-title="ggsave()"}
+
+[Saving Plots with `ggsave()`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`ggsave()` saves the last plot you created — or any named plot object:
+:::
+
+```{r}
+# Save the last plot rendered
+ggsave("figures/visit_restore_site_delta.jpg",
+       width = 12, height = 6, units = "in")
+
+# Save a named object at publication resolution
+ggsave("figures/visit_restore_site_delta.png",
+       plot   = my_named_plot,
+       width  = 12,
+       height = 6,
+       units  = "in",
+       dpi    = 300)
+```
+
+:::{.body-text}
+`ggsave()` infers file format from the extension: `.jpg`, `.png`, `.pdf`, `.svg` all work.
+:::
+
+---
+
+## {#facet-wrap data-menu-title="facet_wrap()"}
+
+[Small Multiples with `facet_wrap()`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+The `~variable` syntax creates **one panel per unique value** of that variable.
+
+This is Tufte's *small multiples* — same chart repeated across subgroups.
+:::
+
+```{r}
+facet_plot <- ggplot(data = daily_visits_totals,
+       aes(x = visitor_type, y = daily_visits,
+           fill = visitor_type)) +
+    geom_col() +
+    facet_wrap(~restore_loc,
+               scales = "free_y",
+               ncol   = 5,
+               nrow   = 2) +
+    scale_fill_viridis_d() +
+    labs(x = "Type of Visitor", y = "Number of Visits",
+         title = "Total Visits to Delta Restoration Areas") +
+    theme_bw() +
+    theme(legend.position = "bottom",
+          axis.ticks.x    = element_blank(),
+          axis.text.x     = element_blank())
+
+ggsave("figures/visit_restore_site_facet.jpg",
+       plot = facet_plot, width = 12, height = 8, units = "in")
+```
+
+---
+
+## {#facet-args data-menu-title="facet_wrap() Arguments"}
+
+[`facet_wrap()` Key Arguments]{.slide-title}
+
+<br>
+
+:::{.body-text}
+| Argument | What it does |
+|---|---|
+| `~variable` | One panel per unique value of `variable` |
+| `scales = "free_y"` | Each panel gets its own y-axis scale |
+| `scales = "free"` | Both axes free per panel |
+| `ncol =` / `nrow =` | Control grid layout |
+
+<br>
+
+`scales = "free_y"` is important when sites have very different total counts — a shared scale would make small-count sites unreadable.
+
+<br>
+
+*When to use faceting:* across species, sites, treatments, time periods, experimental conditions...
+:::
+
+---
+
+## {#interactive-intro data-menu-title="Interactive Viz"}
+
+[From Static to Interactive]{.slide-title}
+
+<br>
+
+:::{.body-text}
+Two packages for interactive outputs — powerful when published to **GitHub Pages** (Week 11):
+
+<br>
+
+**`DT`** — interactive data tables  
+Sortable · searchable · paginated · built on the DataTables JavaScript library
+
+<br>
+
+**`leaflet`** — interactive maps  
+Pan · zoom · clickable markers · layerable tile sources
+
+<br>
+
+⚠️ These only render as **interactive HTML** — not in static PDFs or the RStudio viewer.  
+Render your Quarto document to HTML to see them.
+:::
+
+---
+
+## {#dt-tables data-menu-title="DT Tables"}
+
+[Interactive Tables with `DT`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+First, create a data frame of unique sampling locations using `dplyr::distinct()`:
+:::
+
+```{r}
+locations <- visits_long %>%
+    distinct(restore_loc, .keep_all = TRUE) %>%
+    select(restore_loc, latitude, longitude)
+```
+
+. . .
+
+:::{.body-text}
+`.keep_all = TRUE` retains all columns (without it, only `restore_loc` is returned).
+
+Then one function call creates a fully interactive table:
+:::
+
+```{r}
+datatable(locations)
+```
+
+:::{.body-text}
+Readers can **sort by any column, search, and paginate** — far more useful than a static table for a monitoring dataset with many sites.
+:::
+
+---
+
+## {#leaflet-basic data-menu-title="leaflet Maps"}
+
+[Interactive Maps with `leaflet`]{.slide-title}
+
+<br>
+
+:::{.body-text}
+`leaflet` uses **`%>%`** — not `+` like ggplot2. The `~` models columns to the map (similar to `facet_wrap()`).
+:::
+
+```{r}
+leaflet(locations) %>%
+    addTiles() %>%               # OpenStreetMap base layer
+    addMarkers(
+        lng   = ~longitude,
+        lat   = ~latitude,
+        popup = ~restore_loc     # clickable label
+    )
+```
+
+. . .
+
+```{r}
+# Circle markers with custom styling
+leaflet(locations) %>%
+    addTiles() %>%
+    addCircleMarkers(
+        lng         = ~longitude,
+        lat         = ~latitude,
+        popup       = ~restore_loc,
+        radius      = 5,
+        fillColor   = "salmon",
+        fillOpacity = 1,
+        stroke      = TRUE,
+        weight      = 0.5,
+        color       = "white",
+        opacity     = 1
+    )
+```
+
+---
+
+## {#leaflet-layers data-menu-title="Layering Base Maps"}
+
+[Layering Tile Sources]{.slide-title}
+
+<br>
+
+:::{.body-text}
+You can layer **USGS base maps** using `addWMSTiles()` — the same layering logic as ggplot2 geoms:
+:::
+
+```{r}
+leaflet(locations) %>%
+    addWMSTiles(
+        "https://basemap.nationalmap.gov/arcgis/services/USGSImageryTopo/MapServer/WmsServer",
+        layers  = "0",
+        options = WMSTileOptions(format = "image/png", transparent = TRUE)
+    ) %>%
+    addWMSTiles(
+        "https://basemap.nationalmap.gov/arcgis/services/USGSHydroCached/MapServer/WmsServer",
+        layers  = "0",
+        options = WMSTileOptions(format = "image/png", transparent = TRUE)
+    ) %>%
+    addCircleMarkers(
+        lng = ~longitude, lat = ~latitude, popup = ~restore_loc,
+        radius = 5, fillColor = "salmon", fillOpacity = 1,
+        stroke = TRUE, weight = 0.5, color = "white", opacity = 1
+    )
+```
+
+---
+
+## {#resources data-menu-title="Resources"}
+
+[Resources]{.slide-title}
+
+<br>
+
+:::{.body-text}
+**From the textbook — bookmark these:**
+
+[Why not to use two axes](https://blog.datawrapper.de/dualaxis/) — Lisa Charlotte Rost  
+*A compelling argument against dual-axis charts*
+
+[Customized Data Visualization in ggplot2](https://allisonhorst.github.io/eds221-day8-comp/data_viz.html) — Allison Horst  
+*Extremely detailed, beautiful examples*
+
+[A ggplot2 tutorial for beautiful plotting in R](https://www.cedricscherer.com/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/) — Cédric Scherer  
+*An epic reference — bookmark it*
+
+[R Color Cheatsheet](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf) — NCEAS  
+*Discrete vs. continuous palettes, viridis and beyond*
+
+<br>
+
+**And always:** search *"ggplot cheat sheet"* — your best friend during the activity.
+:::
+
+---
+
+## {#activity-preview data-menu-title="Activity Preview"}
+
+[Activity Preview]{.slide-title}
+
+<br>
+
+:::{.body-text}
+In Nicole's 2-hour section, you'll execute the **full pipeline**:
+
+1. `clean_names()` → `pivot_longer()` → `group_by()` + `summarise()`
+2. Build a bar chart — discover the `aes()` boundary firsthand
+3. `labs()`, `theme_bw()`, `theme()`, save `my_theme` object
+4. `fct_reorder()` to sort locations by total visits
+5. `scale_fill_viridis_d()` for accessible color
+6. `facet_wrap()` for small multiples
+7. `ggsave()` for publication-ready output
+8. `datatable()` and `leaflet()` for interactive outputs
+
+<br>
+
+**Textbook:** use Section 3 as your reference throughout — it mirrors the pipeline exactly.
+:::

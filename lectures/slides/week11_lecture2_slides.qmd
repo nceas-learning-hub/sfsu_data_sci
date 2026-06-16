@@ -1,0 +1,373 @@
+---
+title: "Week 11, Lecture 2"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+editor:
+  markdown:
+    wrap: 72
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Publishing to the Web, Part 2]{.custom-title}
+
+[BIO/CHEM 806 · Week 11, Lecture 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**NCEAS Learning Hub**]{.custom-subtitle2}
+
+---
+
+## {#learning-objectives data-menu-title="Learning Objectives"}
+
+[Learning objectives]{.slide-title}
+
+::: {.body-text}
+By the end of today you will be able to:
+
+- Reflect on analytical decisions made during the activity
+- Configure Quarto output with YAML options that affect
+  the published site
+- Use `_quarto.yml` to apply settings site-wide
+- Connect the publishing workflow to your thesis and
+  research communication
+- Describe what's coming next: spatial data with `sf`
+:::
+
+---
+
+## {#opening-reflection data-menu-title="Opening Reflection"}
+
+[How did the activity go?]{.slide-title}
+
+::: {.body-text .center-text}
+**Chat prompt:**
+
+What was one analytical decision you made during
+the lobster activity that you weren't sure about —
+a threshold, a filter, a plot choice?
+
+Take 60 seconds. Type it in chat.
+:::
+
+---
+
+## {#decisions-surface data-menu-title="Decisions Surface"}
+
+[What those decisions reveal]{.slide-title}
+
+::: {.body-text}
+The decisions you're describing — threshold at 70 mm,
+whether to drop NAs, stacked vs. dodged bars — are not
+wrong or right.
+
+**They are scientific choices that need to be documented.**
+
+This is exactly what a decision log is for.
+
+The MPA bonus question is a good example: adding
+`DESIGNATION` changes what you can ask. That's a
+modeling decision that belongs in your methods.
+:::
+
+---
+
+## {#quarto-yaml-options data-menu-title="YAML Options"}
+
+[Controlling your published output]{.slide-title}
+
+::: {.body-text}
+The YAML header of your `index.qmd` controls how your
+page looks and behaves. A few high-value options:
+
+```yaml
+---
+title: "My Research"
+author: "Your Name"
+date: today
+toc: true
+toc-depth: 2
+number-sections: true
+theme: cosmo
+---
+```
+
+- `toc: true` — adds a clickable table of contents
+- `theme:` — changes the visual appearance
+- `date: today` — auto-inserts the render date
+:::
+
+---
+
+## {#themes data-menu-title="Themes"}
+
+[Quarto HTML themes]{.slide-title}
+
+::: {.body-text}
+Quarto ships with the Bootswatch theme library. You can
+preview all of them at `bootswatch.com`.
+
+Popular options for scientific documents:
+
+| Theme | Character |
+|---|---|
+| `cosmo` | Clean, modern, readable |
+| `flatly` | Minimal, professional |
+| `journal` | Slightly more editorial |
+| `lumen` | Light and airy |
+| `sandstone` | Earthy, warm |
+
+Change one word in your YAML and re-render.
+:::
+
+---
+
+## {#quarto-yml data-menu-title="_quarto.yml"}
+
+[Site-wide settings with `_quarto.yml`]{.slide-title}
+
+::: {.body-text}
+When you have multiple `.qmd` files that should all
+look the same, don't repeat YAML in each file.
+
+Create `_quarto.yml` at the root of your project:
+
+```yaml
+project:
+  type: website
+
+website:
+  title: "My Research Project"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: analysis/data-cleaning.qmd
+        text: Data Cleaning
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+```
+
+Now all pages share the same settings.
+:::
+
+---
+
+## {#what-quarto-yml-enables data-menu-title="What _quarto.yml Enables"}
+
+[What a `_quarto.yml` unlocks]{.slide-title}
+
+::: {.body-text}
+With `_quarto.yml` and `type: website`, your repo
+becomes a proper multi-page site:
+
+- Consistent navigation bar across all pages
+- Shared theme, font, and layout
+- `quarto render` builds every page at once
+- `quarto preview` lets you see the full site locally
+
+**You don't need this for today's activity** — a single
+`index.qmd` with links is enough.
+
+But for a thesis project site, this is how it's done.
+:::
+
+---
+
+## {#thesis-connection data-menu-title="Thesis Connection"}
+
+[Connecting this to your thesis]{.slide-title}
+
+::: {.body-text}
+Imagine your thesis project as a GitHub Pages site:
+
+```
+index.qmd          ← Project overview and data description
+analysis/
+  01-clean.qmd     ← Data cleaning and decisions
+  02-explore.qmd   ← Exploratory analysis
+  03-model.qmd     ← Statistical modeling
+  04-figures.qmd   ← Publication figures
+
+data/              ← Raw data (or link to repository)
+figs/              ← Saved figure outputs
+```
+
+Your committee sees a URL. Your advisor can open it
+without installing R. Your methods are reproducible.
+:::
+
+---
+
+## {#sharing-work data-menu-title="Sharing Work"}
+
+[Who is your audience?]{.slide-title}
+
+::: {.body-text}
+Different audiences need different things from your site.
+
+**Advisor:** can they trace your logic from raw data
+to conclusion? Is the decision log visible?
+
+**Collaborator who doesn't use R:** can they see the
+visualizations and read your interpretations without
+running anything?
+
+**Future you:** can you pick this up in six months
+and understand what you did and why?
+
+**The site forces you to write for all three.**
+:::
+
+---
+
+## {#open-science data-menu-title="Open Science"}
+
+[Open science in practice]{.slide-title}
+
+::: {.body-text}
+Many journals now request or require:
+
+- Data availability statements
+- Analysis code shared openly
+- Reproducible workflows
+
+A GitHub Pages site with your Quarto analyses satisfies
+all three.
+
+Some journals will link directly to your GitHub repo
+or your published site in the supplementary materials.
+
+**You're not just learning a tool. You're building
+a practice.**
+:::
+
+---
+
+## {#common-issues data-menu-title="Common Issues"}
+
+[Troubleshooting GitHub Pages]{.slide-title}
+
+::: {.body-text}
+**Site shows "404" or won't load:**
+
+- Is `index.html` committed *and* pushed?
+- Did you activate Pages in Settings → Pages → main → root?
+- Wait 2 minutes and hard refresh
+
+**Link goes to a `.qmd` instead of `.html`:**
+
+- Your link must point to the rendered `.html` file
+- Render the file first, then commit the `.html`
+
+**Old content showing:**
+
+- GitHub sometimes caches aggressively
+- Try the URL in a private/incognito window
+:::
+
+---
+
+## {#thursday-prep data-menu-title="Thursday Prep"}
+
+[For Thursday's activity cohort]{.slide-title}
+
+::: {.body-text}
+Everything from Monday's lecture applies to you.
+
+**Before Thursday's section, make sure:**
+
+- ☐ GitHub Pages is activated for `training_{USERNAME}`
+- ☐ `index.html` is live at your URL
+- ☐ You have at least one link working
+
+The activity is identical for both cohorts.
+
+**If you ran into setup problems:** come a few minutes
+early to activity or post in the course discussion board.
+Nicole has seen all of the common errors.
+:::
+
+---
+
+## {#bridge-forward data-menu-title="Bridge Forward"}
+
+[What's next: spatial data with `sf`]{.slide-title}
+
+::: {.body-text}
+Next week we move into geospatial analysis.
+
+The same publishing workflow you learned this week
+applies directly — you'll render maps as HTML and
+publish them on GitHub Pages.
+
+**Week 12 preview:**
+
+- Vector data: points, lines, polygons
+- Coordinate reference systems (CRS)
+- Reading shapefiles and GeoJSON into R
+- Spatial joins and operations with `sf`
+
+The `leaflet` maps you saw in the visualization
+unit are a preview of the spatial thinking we'll
+build on next.
+:::
+
+---
+
+## {#sf-teaser data-menu-title="sf Teaser"}
+
+[From coordinates to geometry]{.slide-title}
+
+::: {.body-text}
+Right now you know how to plot points on a map
+using latitude and longitude columns in a data frame.
+
+`sf` objects go further:
+
+```r
+library(sf)
+
+# A data frame becomes spatial
+lobster_sf <- st_as_sf(lobster_data,
+                       coords = c("longitude", "latitude"),
+                       crs = 4326)
+
+# Now you can do spatial joins, buffering, and more
+```
+
+The coordinate reference system (CRS) is what makes
+"spatial" different from "just columns with numbers."
+:::
+
+---
+
+## {#wrap-up data-menu-title="Wrap Up"}
+
+[This week in one sentence]{.slide-title}
+
+::: {.body-text .center-text}
+You learned to close the loop between your analysis
+and the world:
+
+**Write in R → Render with Quarto →
+Publish with GitHub Pages → Share a URL.**
+
+That loop is reproducible, open, and professional.
+
+Next week: the same loop, with maps.
+:::

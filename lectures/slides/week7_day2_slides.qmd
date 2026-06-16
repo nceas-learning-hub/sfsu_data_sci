@@ -1,0 +1,856 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Diagnosing Join Failures]{.custom-title}
+
+[Week 7, Day 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome Back!]{.slide-title}
+
+::: body-text
+**Monday:** What joins are, how they work
+
+**Today:** What goes wrong and how to fix it
+
+**Reality check:** Joins often fail the first time
+
+**That's normal!** Learning to diagnose is part of the skill
+:::
+
+------------------------------------------------------------------------
+
+##  {#recap data-menu-title="Recap"}
+
+[Monday Recap]{.slide-title}
+
+::: body-text
+**Four join types:**
+- `inner_join()` — only matches
+- `left_join()` — all left + matching right
+- `right_join()` — all right + matching left
+- `full_join()` — everything
+
+**Key insight:** Joins make statements about data relationships
+
+**Today:** When those relationships don't match reality
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-joins-fail data-menu-title="Why Joins Fail"}
+
+[Why Joins Fail]{.slide-title}
+
+::: body-text
+**Joins fail due to:**
+
+1. **Mismatched keys** — values don't match exactly
+2. **Missing keys** — NAs in key columns
+3. **Duplicate keys** — unexpected one-to-many relationships
+4. **Wrong join type** — doesn't match data structure
+5. **Type mismatches** — numeric vs character keys
+
+**All are detectable before or after joining**
+
+**The key: ALWAYS validate your joins**
+:::
+
+------------------------------------------------------------------------
+
+##  {#validation-mindset data-menu-title="Validation Mindset"}
+
+[The Validation Mindset]{.slide-title}
+
+::: body-text
+**Never assume a join worked correctly**
+
+**Always check:**
+- Row counts (before vs after)
+- NA patterns (unexpected missingness?)
+- Duplicates (unexpected row multiplication?)
+- Key matches (did everything link?)
+
+**Think of it like:** Checking your field data sheets for errors
+
+**Defensive programming:** Catch problems early
+:::
+
+------------------------------------------------------------------------
+
+##  {#row-count-check data-menu-title="Row Count Check"}
+
+[Check 1: Row Counts]{.slide-title}
+
+::: code-text
+```r
+# Before join
+nrow(birds)     # e.g., 1000 rows
+nrow(sites)     # e.g., 20 rows
+
+# Do the join
+birds_joined <- birds %>%
+  left_join(sites, by = "site")
+
+# After join
+nrow(birds_joined)
+
+# Expected for left_join:
+# Same as left table (1000) OR more if one-to-many
+
+# If fewer: Something went wrong!
+# If much more: Unexpected duplication!
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#row-count-interpretation data-menu-title="Row Count Interpretation"}
+
+[Interpreting Row Count Changes]{.slide-title}
+
+::: body-text
+**For `left_join()`:**
+- Same rows? Good (one-to-one relationship)
+- More rows? Check if expected (one-to-many on right)
+- Fewer rows? ERROR — shouldn't happen with left join!
+
+**For `inner_join()`:**
+- Fewer rows? Expected (non-matches dropped)
+- BUT: Know how many you expect to lose!
+
+**For `full_join()`:**
+- At least as many as larger table
+- Could be more with multiple matches
+:::
+
+------------------------------------------------------------------------
+
+##  {#unexpected-nas data-menu-title="Unexpected NAs"}
+
+[Check 2: Unexpected NAs]{.slide-title}
+
+::: code-text
+```r
+# Check for NAs in joined columns
+birds_joined %>%
+  summarize(
+    n_rows = n(),
+    na_habitat = sum(is.na(habitat)),
+    na_altitude = sum(is.na(altitude)),
+    pct_na_habitat = mean(is.na(habitat)) * 100
+  )
+
+# Example result:
+#   n_rows  na_habitat  na_altitude  pct_na_habitat
+#   1000    150         150          15%
+
+# 15% of birds have no site info!
+# Question: Is this expected or an error?
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#na-interpretation data-menu-title="NA Interpretation"}
+
+[Interpreting NAs After Joins]{.slide-title}
+
+::: body-text
+**NAs in joined columns mean:** Key from left table didn't match anything in right table
+
+**Could be legitimate:**
+- New sites not yet in site database
+- Observations at uncharacterized sites
+
+**Could be an error:**
+- Typo in site code
+- Using wrong key column
+- Site info under different name
+
+**How to know:** Check WHICH sites have NAs
+:::
+
+------------------------------------------------------------------------
+
+##  {#which-nas data-menu-title="Which NAs"}
+
+[Finding Which Keys Didn't Match]{.slide-title}
+
+::: code-text
+```r
+# Which sites in birds have no match in sites?
+birds_joined %>%
+  filter(is.na(habitat)) %>%
+  distinct(site) %>%
+  pull(site)
+
+# Example output:
+# "site-C" "site-D" "sit_E"  "Site_F"
+
+# Aha! Inconsistent naming:
+# - "site-C" vs "site_C"  (dash vs underscore)
+# - "sit_E" (typo)
+# - "Site_F" (capitalization)
+```
+:::
+
+::: body-text
+**This tells you exactly what to fix!**
+:::
+
+------------------------------------------------------------------------
+
+##  {#anti-join-diagnostic data-menu-title="Anti Join Diagnostic"}
+
+[Using `anti_join()` for Diagnosis]{.slide-title}
+
+::: code-text
+```r
+# Which birds were observed at sites NOT in the sites table?
+unmatched_birds <- birds %>%
+  anti_join(sites, by = "site")
+
+# Check how many
+nrow(unmatched_birds)  # How many birds?
+
+# Which sites?
+unmatched_birds %>%
+  count(site)
+
+# Which birds were at sites we DO have?
+matched_birds <- birds %>%
+  semi_join(sites, by = "site")
+
+nrow(matched_birds)  # Should + above = total birds
+```
+:::
+
+::: body-text
+**Filtering joins reveal mismatches WITHOUT joining**
+:::
+
+------------------------------------------------------------------------
+
+##  {#duplicate-keys data-menu-title="Duplicate Keys"}
+
+[Check 3: Duplicate Keys]{.slide-title}
+
+::: code-text
+```r
+# Are there duplicate keys in the RIGHT table?
+sites %>%
+  count(site) %>%
+  filter(n > 1)
+
+# Example:
+#   site  n
+#   A     1
+#   B     3    <- B appears 3 times!
+#   C     1
+
+# This means:
+# Every bird at site B will be duplicated 3x in the join!
+```
+:::
+
+::: body-text
+**Unexpected duplication is a common problem**
+
+**Know your data structure!**
+:::
+
+------------------------------------------------------------------------
+
+##  {#expected-duplication data-menu-title="Expected Duplication"}
+
+[Expected vs Unexpected Duplication]{.slide-title}
+
+::: body-text
+**Expected one-to-many:**
+```r
+# Multiple observations per site
+observations %>% left_join(sites, by = "site")
+# Each site info repeated for each observation
+```
+
+**Unexpected duplication:**
+```r
+# Sites table has duplicates (data entry error)
+sites  # Should have unique site codes
+#   site  habitat
+#   A     forest
+#   A     meadow   <- Duplicate site A!
+```
+
+**Always check if right table keys are unique when you expect one-to-one**
+:::
+
+------------------------------------------------------------------------
+
+##  {#checking-uniqueness data-menu-title="Checking Uniqueness"}
+
+[Checking Key Uniqueness]{.slide-title}
+
+::: code-text
+```r
+# Check if keys are unique
+sites %>%
+  count(site) %>%
+  summarize(
+    total_rows = n(),
+    unique_keys = n_distinct(site),
+    has_duplicates = total_rows != unique_keys
+  )
+
+# OR with a helper function
+check_unique_keys <- function(data, key_col) {
+  data %>%
+    count({{key_col}}) %>%
+    filter(n > 1) %>%
+    nrow() == 0  # TRUE if unique, FALSE if duplicates
+}
+
+check_unique_keys(sites, site)
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#type-mismatches data-menu-title="Type Mismatches"}
+
+[Check 4: Key Column Types]{.slide-title}
+
+::: code-text
+```r
+# Check types of key columns
+glimpse(birds)
+# site: chr
+
+glimpse(sites)
+# site: num   <- Uh oh! Different types!
+
+# This join will fail or create unexpected results
+
+# Fix: Convert to same type
+sites <- sites %>%
+  mutate(site = as.character(site))
+
+# OR
+birds <- birds %>%
+  mutate(site = as.numeric(site))
+```
+:::
+
+::: body-text
+**Keys must be the same type to match**
+:::
+
+------------------------------------------------------------------------
+
+##  {#validation-checklist data-menu-title="Validation Checklist"}
+
+[Complete Join Validation Checklist]{.slide-title}
+
+::: body-text
+**Before joining:**
+1. ✓ Check key column types (same type?)
+2. ✓ Check for NAs in keys (will cause failed matches)
+3. ✓ Check key uniqueness in right table (if expecting one-to-one)
+4. ✓ Check for typos/inconsistencies in key values
+
+**After joining:**
+1. ✓ Check row count (expected change?)
+2. ✓ Check for unexpected NAs (non-matches?)
+3. ✓ Check for unexpected duplicates (row multiplication?)
+4. ✓ Spot-check a few joined rows (look reasonable?)
+:::
+
+------------------------------------------------------------------------
+
+##  {#validation-function data-menu-title="Validation Function"}
+
+[Building a Join Validation Function]{.slide-title}
+
+::: code-text
+```r
+validate_join <- function(left, right, result, by) {
+  cat("=== JOIN VALIDATION ===\n")
+  cat("Left table rows:", nrow(left), "\n")
+  cat("Right table rows:", nrow(right), "\n")
+  cat("Result rows:", nrow(result), "\n")
+  
+  # Check duplication
+  if(nrow(result) > nrow(left)) {
+    cat("WARNING: Result has more rows than left table!\n")
+  }
+  
+  # Check NAs
+  na_count <- sum(is.na(result))
+  if(na_count > 0) {
+    cat("WARNING:", na_count, "NA values in result\n")
+  }
+  
+  cat("======================\n")
+}
+
+# Use it:
+result <- left_join(birds, sites, by = "site")
+validate_join(birds, sites, result, "site")
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#fixing-typos data-menu-title="Fixing Typos"}
+
+[Fixing Key Mismatches: Typos]{.slide-title}
+
+::: code-text
+```r
+# Problem: Inconsistent capitalization
+birds %>% distinct(site)
+# "Site_A", "site_B", "SITE_C"
+
+sites %>% distinct(site)
+# "site_a", "site_b", "site_c"
+
+# Solution: Standardize case
+birds_clean <- birds %>%
+  mutate(site = tolower(site))
+
+sites_clean <- sites %>%
+  mutate(site = tolower(site))
+
+# Now join will work
+birds_clean %>%
+  left_join(sites_clean, by = "site")
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#fixing-formats data-menu-title="Fixing Formats"}
+
+[Fixing Key Mismatches: Formats]{.slide-title}
+
+::: code-text
+```r
+# Problem: Different separators
+birds %>% distinct(site)
+# "site-A", "site-B"
+
+sites %>% distinct(site)
+# "site_A", "site_B"
+
+# Solution: Standardize format
+birds_clean <- birds %>%
+  mutate(site = str_replace(site, "-", "_"))
+
+# OR fix the sites table
+sites_clean <- sites %>%
+  mutate(site = str_replace(site, "_", "-"))
+
+# Now they match!
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#fixing-nas data-menu-title="Fixing NAs"}
+
+[Handling NAs in Keys]{.slide-title}
+
+::: code-text
+```r
+# Problem: Some birds have NA for site
+birds %>%
+  count(is.na(site))
+#   is.na(site)  n
+#   FALSE        950
+#   TRUE         50
+
+# Option 1: Remove them before joining
+birds_clean <- birds %>%
+  filter(!is.na(site))
+
+# Option 2: Replace NAs with a placeholder
+birds_clean <- birds %>%
+  mutate(site = replace_na(site, "unknown"))
+
+# Then make sure sites table has "unknown"
+sites <- sites %>%
+  add_row(site = "unknown", habitat = NA, altitude = NA)
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#dealing-with-duplicates data-menu-title="Dealing with Duplicates"}
+
+[Dealing with Duplicate Keys]{.slide-title}
+
+::: code-text
+```r
+# Problem: Sites table has duplicates
+sites %>% count(site) %>% filter(n > 1)
+#   site  n
+#   A     2   <- Site A appears twice!
+
+# View the duplicates
+sites %>%
+  filter(site == "A")
+#   site  habitat    altitude
+#   A     forest     250
+#   A     forest     250    <- Exact duplicate? Remove it
+# OR
+#   A     forest     250
+#   A     meadow     180    <- Different values? Which is correct?
+
+# Solution 1: Remove exact duplicates
+sites_clean <- sites %>%
+  distinct()
+
+# Solution 2: Keep first occurrence
+sites_clean <- sites %>%
+  group_by(site) %>%
+  slice(1) %>%
+  ungroup()
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#compound-key-issues data-menu-title="Compound Key Issues"}
+
+[Issues with Compound Keys]{.slide-title}
+
+::: code-text
+```r
+# Compound key: site + date
+birds %>%
+  count(site, date) %>%
+  filter(n > 1)
+#   site  date        n
+#   A     2024-01-15  2    <- Two birds at A on this date
+
+# This is fine for one-to-many!
+# But if joining to survey-level data:
+
+surveys  # One row per site-date
+#   site  date        observer
+#   A     2024-01-15  Smith
+
+birds %>%
+  left_join(surveys, by = c("site", "date"))
+# Each bird gets matched to the survey
+# Both birds at site A on 2024-01-15 get observer = Smith
+# This is correct!
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#join-workflow data-menu-title="Join Workflow"}
+
+[Recommended Join Workflow]{.slide-title}
+
+::: body-text
+**1. Explore both tables**
+```r
+glimpse(left_table)
+glimpse(right_table)
+```
+
+**2. Check key columns**
+```r
+left_table %>% count(key) %>% filter(n > 1)
+right_table %>% count(key) %>% filter(n > 1)
+```
+
+**3. Test with small sample**
+```r
+left_table %>% slice(1:5) %>%
+  left_join(right_table, by = "key")
+```
+
+**4. Do full join and validate**
+```r
+result <- left_join(left_table, right_table, by = "key")
+validate_join(left_table, right_table, result, "key")
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#common-mistakes data-menu-title="Common Mistakes"}
+
+[Common Joining Mistakes]{.slide-title}
+
+::: body-text
+**1. Forgetting to specify `by =`**
+```r
+# R joins on ALL matching column names
+# Often not what you want!
+```
+
+**2. Not checking result**
+```r
+# Assuming it worked without validation
+```
+
+**3. Using inner_join() when you meant left_join()**
+```r
+# Silently drops non-matches
+```
+
+**4. Not handling NAs in keys**
+```r
+# NAs never match, even to other NAs
+```
+
+**5. Joining on wrong column**
+```r
+# site_id vs site_code — similar but different!
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#diagnosing-workflow data-menu-title="Diagnosing Workflow"}
+
+[Diagnosing Failed Joins]{.slide-title}
+
+::: body-text
+**When a join doesn't work:**
+
+**Step 1:** Check row counts
+- More/fewer than expected?
+
+**Step 2:** Look for NAs
+- Where are the non-matches?
+
+**Step 3:** Use `anti_join()` to find non-matching keys
+- Which keys don't match?
+
+**Step 4:** Check those specific keys in both tables
+- Typos? Format differences? Type mismatches?
+
+**Step 5:** Fix and re-join
+
+**Step 6:** Validate the fixed join
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-exercise data-menu-title="Thinking Exercise"}
+
+[Thinking Exercise]{.slide-title}
+
+::: body-text
+**You join bird observations to site data:**
+
+```r
+result <- birds %>% 
+  left_join(sites, by = "site")
+```
+
+**You find:**
+- 1000 birds → 1200 rows in result
+- Many habitat values are NA
+
+**What could be wrong?**
+
+Think through the diagnosis before advancing
+:::
+
+------------------------------------------------------------------------
+
+##  {#thinking-answer data-menu-title="Thinking Answer"}
+
+[Thinking Exercise: Answer]{.slide-title}
+
+::: body-text
+**1200 rows (more than 1000):** Unexpected duplication
+- Check: `sites %>% count(site) %>% filter(n > 1)`
+- Likely: Some sites appear multiple times in sites table
+
+**Many NAs in habitat:** Non-matches
+- Check: Which sites? `result %>% filter(is.na(habitat)) %>% count(site)`
+- Then: `birds %>% anti_join(sites, by = "site")`
+- Likely: Typos or sites not in sites table
+
+**Fix both issues:**
+- Remove duplicate sites (or figure out which is correct)
+- Fix site name typos in birds table
+:::
+
+------------------------------------------------------------------------
+
+##  {#real-world data-menu-title="Real World"}
+
+[Real-World Join Debugging]{.slide-title}
+
+::: body-text
+**In practice:**
+- First join attempt often reveals data quality issues
+- This is GOOD — you're finding problems!
+- Iterative process: join → diagnose → fix → re-join
+- Document fixes in your code
+- Keep original data unchanged (fix in pipeline)
+
+**Example comment:**
+```r
+# Fix known typo: site "site-C" should be "site_C"
+birds_clean <- birds %>%
+  mutate(site = if_else(site == "site-C", "site_C", site))
+```
+
+**The join IS data quality control**
+:::
+
+------------------------------------------------------------------------
+
+##  {#documentation data-menu-title="Documentation"}
+
+[Documenting Join Decisions]{.slide-title}
+
+::: body-text
+**Always document:**
+
+**Why this join type:**
+```r
+# Using left_join to keep all observations
+# even if site metadata is missing
+```
+
+**What you expect:**
+```r
+# Expect 1-to-1 relationship (no row duplication)
+# Sites table should have unique site codes
+```
+
+**Any data fixes:**
+```r
+# Standardized site codes to lowercase
+# to match sites table format
+```
+
+**Validation results:**
+```r
+# Validated: All 1000 observations matched
+# No unexpected NAs or duplication
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#looking-ahead data-menu-title="Looking Ahead"}
+
+[Looking Ahead: Week 8]{.slide-title}
+
+::: body-text
+**Weeks 5-7:** Complete data wrangling toolkit
+- Tidy data principles
+- Normalization and keys
+- Within-table transformations
+- Between-table joins
+
+**Week 8:** Collaboration + Visualization
+- Working with others using Git
+- Figures as scientific arguments
+
+**You now have all the core data skills!**
+
+**Today's activity:** Practice all join types with real messy data
+:::
+
+------------------------------------------------------------------------
+
+##  {#activity-preview data-menu-title="Activity Preview"}
+
+[Today's Activity]{.slide-title}
+
+::: body-text
+**You'll work with:**
+- Bird observation data
+- Site characteristic data  
+- Taxonomic information data
+
+**You'll practice:**
+1. All four join types
+2. Diagnosing join problems
+3. Fixing key mismatches
+4. Validating results
+
+**Real messy data:** Typos, duplicates, NAs included!
+
+**Partners:** Work in pairs to debug together
+:::
+
+------------------------------------------------------------------------
+
+##  {#join-mastery data-menu-title="Join Mastery"}
+
+[Path to Join Mastery]{.slide-title}
+
+::: body-text
+**You're now equipped to:**
+- Understand relational data structures
+- Choose appropriate join types
+- Diagnose join failures
+- Fix common joining problems
+- Validate join results
+
+**Joins are powerful**  
+**But require understanding your data**
+
+**The diagnostic skills matter as much as the syntax**
+
+**Practice with real data is essential**
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+::: body-text
+**Write pseudocode that detects and reports mismatched keys after a join**
+
+Should include:
+- How to check for unexpected NAs
+- How to identify which keys didn't match
+- How to check for unexpected row duplication
+- What to report to the user
+- What actions to take based on findings
+
+**Submit on Canvas**
+
+**Great work this week — you've learned a LOT!**
+:::

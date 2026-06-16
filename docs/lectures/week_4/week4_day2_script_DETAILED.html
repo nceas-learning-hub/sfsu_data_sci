@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein">
+<meta name="dcterms.date" content="2026-01-23">
+
+<title>Week 4 Day 2 Lecture Script: Git, GitHub, and the Scientific Audit Trail – sfsu_data_sci</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo_lh_hex.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-727819a61b461fb3761f83f0bc6d3628.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-a84ed7022e8a4693fc129125ca96c2d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-727819a61b461fb3761f83f0bc6d3628.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #44444444;
+      }
+</style>
+
+
+<link rel="stylesheet" href="../../site_libs/quarto-contrib/quarto-project/nceas-learning-hub/theme/banner/banner.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">sfsu_data_sci</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-instructors" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Instructors</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-instructors">    
+        <li>
+    <a class="dropdown-item" href="https://www.oharascience.com/">
+ <span class="dropdown-text">Gretchen LeBuhn and Nicole Adelstein</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/nceas-learning-hub/sfsu_data_sci"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Week 4 Day 2 Lecture Script: Git, GitHub, and the Scientific Audit Trail</h1>
+            <p class="subtitle lead">BIO/CHEM 806 - Detailed Instructor Guide</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 23, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lecture-overview" id="toc-lecture-overview" class="nav-link active" data-scroll-target="#lecture-overview"><span class="header-section-number">1</span> Lecture Overview</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">1.1</span> Learning Objectives</a></li>
+  <li><a href="#materials-needed" id="toc-materials-needed" class="nav-link" data-scroll-target="#materials-needed"><span class="header-section-number">1.2</span> Materials Needed</a></li>
+  </ul></li>
+  <li><a href="#pre-class-setup" id="toc-pre-class-setup" class="nav-link" data-scroll-target="#pre-class-setup"><span class="header-section-number">2</span> Pre-Class Setup</a>
+  <ul class="collapse">
+  <li><a href="#verify-git-configuration" id="toc-verify-git-configuration" class="nav-link" data-scroll-target="#verify-git-configuration"><span class="header-section-number">2.1</span> Verify Git Configuration</a></li>
+  <li><a href="#create-demo-repository" id="toc-create-demo-repository" class="nav-link" data-scroll-target="#create-demo-repository"><span class="header-section-number">2.2</span> Create Demo Repository</a></li>
+  </ul></li>
+  <li><a href="#introduction-5-minutes" id="toc-introduction-5-minutes" class="nav-link" data-scroll-target="#introduction-5-minutes"><span class="header-section-number">3</span> Introduction (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-1-2-welcome" id="toc-slides-1-2-welcome" class="nav-link" data-scroll-target="#slides-1-2-welcome"><span class="header-section-number">3.1</span> Slides 1-2: Welcome</a></li>
+  <li><a href="#slide-3-monday-recap" id="toc-slide-3-monday-recap" class="nav-link" data-scroll-target="#slide-3-monday-recap"><span class="header-section-number">3.2</span> Slide 3: Monday Recap</a></li>
+  </ul></li>
+  <li><a href="#git-vs.-github-8-minutes" id="toc-git-vs.-github-8-minutes" class="nav-link" data-scroll-target="#git-vs.-github-8-minutes"><span class="header-section-number">4</span> Git vs.&nbsp;GitHub (8 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-4-git-vs.-github" id="toc-slide-4-git-vs.-github" class="nav-link" data-scroll-target="#slide-4-git-vs.-github"><span class="header-section-number">4.1</span> Slide 4: Git vs.&nbsp;GitHub</a></li>
+  <li><a href="#slide-5-why-scientists-need-version-control" id="toc-slide-5-why-scientists-need-version-control" class="nav-link" data-scroll-target="#slide-5-why-scientists-need-version-control"><span class="header-section-number">4.2</span> Slide 5: Why Scientists Need Version Control</a></li>
+  </ul></li>
+  <li><a href="#the-git-workflow-20-minutes" id="toc-the-git-workflow-20-minutes" class="nav-link" data-scroll-target="#the-git-workflow-20-minutes"><span class="header-section-number">5</span> The Git Workflow (20 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-6-7-git-workflow-allison-horst-image" id="toc-slides-6-7-git-workflow-allison-horst-image" class="nav-link" data-scroll-target="#slides-6-7-git-workflow-allison-horst-image"><span class="header-section-number">5.1</span> Slides 6-7: Git Workflow (Allison Horst Image)</a></li>
+  <li><a href="#slides-8-9-local-workflow-stage-and-commit" id="toc-slides-8-9-local-workflow-stage-and-commit" class="nav-link" data-scroll-target="#slides-8-9-local-workflow-stage-and-commit"><span class="header-section-number">5.2</span> Slides 8-9: Local Workflow (Stage and Commit)</a></li>
+  <li><a href="#slide-10-writing-good-commit-messages" id="toc-slide-10-writing-good-commit-messages" class="nav-link" data-scroll-target="#slide-10-writing-good-commit-messages"><span class="header-section-number">5.3</span> Slide 10: Writing Good Commit Messages</a></li>
+  <li><a href="#slides-11-12-remote-workflow-push-and-pull" id="toc-slides-11-12-remote-workflow-push-and-pull" class="nav-link" data-scroll-target="#slides-11-12-remote-workflow-push-and-pull"><span class="header-section-number">5.4</span> Slides 11-12: Remote Workflow (Push and Pull)</a></li>
+  </ul></li>
+  <li><a href="#collaboration-with-git-12-minutes" id="toc-collaboration-with-git-12-minutes" class="nav-link" data-scroll-target="#collaboration-with-git-12-minutes"><span class="header-section-number">6</span> Collaboration with Git (12 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-13-14-collaboration-allison-horst-jenny-bryan-image" id="toc-slides-13-14-collaboration-allison-horst-jenny-bryan-image" class="nav-link" data-scroll-target="#slides-13-14-collaboration-allison-horst-jenny-bryan-image"><span class="header-section-number">6.1</span> Slides 13-14: Collaboration (Allison Horst Jenny Bryan Image)</a></li>
+  <li><a href="#slide-15-collaborative-workflow" id="toc-slide-15-collaborative-workflow" class="nav-link" data-scroll-target="#slide-15-collaborative-workflow"><span class="header-section-number">6.2</span> Slide 15: Collaborative Workflow</a></li>
+  <li><a href="#slide-16-merge-conflicts" id="toc-slide-16-merge-conflicts" class="nav-link" data-scroll-target="#slide-16-merge-conflicts"><span class="header-section-number">6.3</span> Slide 16: Merge Conflicts</a></li>
+  </ul></li>
+  <li><a href="#git-in-practice-two-interfaces-15-minutes" id="toc-git-in-practice-two-interfaces-15-minutes" class="nav-link" data-scroll-target="#git-in-practice-two-interfaces-15-minutes"><span class="header-section-number">7</span> Git in Practice: Two Interfaces (15 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-17-18-gui-vs.-cli" id="toc-slides-17-18-gui-vs.-cli" class="nav-link" data-scroll-target="#slides-17-18-gui-vs.-cli"><span class="header-section-number">7.1</span> Slides 17-18: GUI vs.&nbsp;CLI</a></li>
+  <li><a href="#slides-19-20-git-in-rstudio" id="toc-slides-19-20-git-in-rstudio" class="nav-link" data-scroll-target="#slides-19-20-git-in-rstudio"><span class="header-section-number">7.2</span> Slides 19-20: Git in RStudio</a></li>
+  <li><a href="#slide-21-git-command-line-basics" id="toc-slide-21-git-command-line-basics" class="nav-link" data-scroll-target="#slide-21-git-command-line-basics"><span class="header-section-number">7.3</span> Slide 21: Git Command Line Basics</a></li>
+  </ul></li>
+  <li><a href="#best-practices-advanced-topics-10-minutes" id="toc-best-practices-advanced-topics-10-minutes" class="nav-link" data-scroll-target="#best-practices-advanced-topics-10-minutes"><span class="header-section-number">8</span> Best Practices &amp; Advanced Topics (10 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-22-25-best-practices-.gitignore-tags-audit-trail" id="toc-slides-22-25-best-practices-.gitignore-tags-audit-trail" class="nav-link" data-scroll-target="#slides-22-25-best-practices-.gitignore-tags-audit-trail"><span class="header-section-number">8.1</span> Slides 22-25: Best Practices, .gitignore, Tags, Audit Trail</a></li>
+  </ul></li>
+  <li><a href="#breakout-activity-10-minutes" id="toc-breakout-activity-10-minutes" class="nav-link" data-scroll-target="#breakout-activity-10-minutes"><span class="header-section-number">9</span> Breakout Activity (10 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-26-understanding-conflicts" id="toc-slide-26-understanding-conflicts" class="nav-link" data-scroll-target="#slide-26-understanding-conflicts"><span class="header-section-number">9.1</span> Slide 26: Understanding Conflicts</a></li>
+  <li><a href="#debrief" id="toc-debrief" class="nav-link" data-scroll-target="#debrief"><span class="header-section-number">9.2</span> Debrief</a></li>
+  </ul></li>
+  <li><a href="#wrap-up-4-minutes" id="toc-wrap-up-4-minutes" class="nav-link" data-scroll-target="#wrap-up-4-minutes"><span class="header-section-number">10</span> Wrap-Up (4 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-27-29-homework-exit-ticket-summary" id="toc-slides-27-29-homework-exit-ticket-summary" class="nav-link" data-scroll-target="#slides-27-29-homework-exit-ticket-summary"><span class="header-section-number">10.1</span> Slides 27-29: Homework, Exit Ticket, Summary</a></li>
+  </ul></li>
+  <li><a href="#post-lecture-checklist" id="toc-post-lecture-checklist" class="nav-link" data-scroll-target="#post-lecture-checklist"><span class="header-section-number">11</span> Post-Lecture Checklist</a></li>
+  <li><a href="#common-questions" id="toc-common-questions" class="nav-link" data-scroll-target="#common-questions"><span class="header-section-number">12</span> Common Questions</a></li>
+  <li><a href="#timing-notes" id="toc-timing-notes" class="nav-link" data-scroll-target="#timing-notes"><span class="header-section-number">13</span> Timing Notes</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="lecture-overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Lecture Overview</h1>
+<p><strong>Duration:</strong> 75 minutes<br>
+<strong>Format:</strong> Online synchronous<br>
+<strong>Students:</strong> ~30 graduate students</p>
+<section id="learning-objectives" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1</span> Learning Objectives</h2>
+<p>By the end of this lecture, students will be able to:</p>
+<ol type="1">
+<li>Distinguish between Git (version control software) and GitHub (hosting service)</li>
+<li>Explain how Git solves reproducibility problems identified Monday</li>
+<li>Describe the basic Git workflow: stage, commit, push, pull</li>
+<li>Write effective commit messages</li>
+<li>Use Git via both RStudio GUI and command line</li>
+<li>Understand merge conflicts and how to resolve them</li>
+<li>Explain Git as a scientific audit trail</li>
+</ol>
+</section>
+<section id="materials-needed" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="materials-needed"><span class="header-section-number">1.2</span> Materials Needed</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Slide deck rendered</label></li>
+<li><label><input type="checkbox">Git installed and configured</label></li>
+<li><label><input type="checkbox">GitHub account ready</label></li>
+<li><label><input type="checkbox">Demo repository prepared</label></li>
+<li><label><input type="checkbox">RStudio with Git integration working</label></li>
+<li><label><input type="checkbox">Breakout scenario ready</label></li>
+<li><label><input type="checkbox">Exit ticket in Canvas</label></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="pre-class-setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Pre-Class Setup</h1>
+<section id="verify-git-configuration" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="verify-git-configuration"><span class="header-section-number">2.1</span> Verify Git Configuration</h2>
+<p>Test that Git works:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="create-demo-repository" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="create-demo-repository"><span class="header-section-number">2.2</span> Create Demo Repository</h2>
+<p>On GitHub, create public repo: <code>water-quality-demo</code></p>
+<p>Clone locally for live demonstration.</p>
+<hr>
+</section>
+</section>
+<section id="introduction-5-minutes" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Introduction (5 minutes)</h1>
+<section id="slides-1-2-welcome" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="slides-1-2-welcome"><span class="header-section-number">3.1</span> Slides 1-2: Welcome</h2>
+<p><strong>[00:00-00:02]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Welcome! Today we’re learning Git and GitHub—the tools that make reproducibility actually work at scale.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Monday you learned WHY reproducibility fails. Today: the HOW to fix it.”</p>
+</blockquote>
+<p><strong>Not just for programmers:</strong></p>
+<blockquote class="blockquote">
+<p>“I want to be clear: Git is NOT just for programmers. Git is for SCIENTISTS.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Version control is a scientific tool, just like a lab notebook or field journal.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-3-monday-recap" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="slide-3-monday-recap"><span class="header-section-number">3.2</span> Slide 3: Monday Recap</h2>
+<p><strong>[00:02-00:05]</strong></p>
+<p><strong>Connect to Monday.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Monday we identified five reproducibility problems:” “1. Undocumented decisions” “2. Fragile computational environments” “3. Manual steps” “4. Ambiguous workflows” “5. Time pressure”</p>
+</blockquote>
+<p><strong>Git solves these:</strong></p>
+<blockquote class="blockquote">
+<p>“Git provides:” “- Complete history of changes (documents decisions)” “- Who changed what, when, and why” “- Ability to undo mistakes” “- Scientific accountability” “- Collaboration infrastructure”</p>
+</blockquote>
+<p><strong>Preview:</strong></p>
+<blockquote class="blockquote">
+<p>“By the end of today, you’ll understand how Git creates an audit trail for your science.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="git-vs.-github-8-minutes" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Git vs.&nbsp;GitHub (8 minutes)</h1>
+<section id="slide-4-git-vs.-github" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="slide-4-git-vs.-github"><span class="header-section-number">4.1</span> Slide 4: Git vs.&nbsp;GitHub</h2>
+<p><strong>[00:05-00:08]</strong></p>
+<p><strong>This distinction is crucial—emphasize clearly.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“First, let’s be crystal clear about Git versus GitHub. They’re different things.”</p>
+</blockquote>
+<p><strong>Git:</strong></p>
+<blockquote class="blockquote">
+<p>“Git is version control SOFTWARE. It runs on YOUR computer.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Git tracks changes to files over time. It’s like Track Changes in Word, but for any file, and much more powerful.”</p>
+</blockquote>
+<p><strong>GitHub:</strong></p>
+<blockquote class="blockquote">
+<p>“GitHub is a WEBSITE. It’s a hosting service for Git repositories.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“GitHub stores your Git repositories online and provides collaboration tools.”</p>
+</blockquote>
+<p><strong>The analogy:</strong></p>
+<blockquote class="blockquote">
+<p>“Git is like Word’s ‘Track Changes’ feature.” “GitHub is like Google Drive—a place to store and share.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You can use Git without GitHub. But GitHub makes Git much more useful for collaboration.”</p>
+</blockquote>
+<p><strong>Emphasize:</strong></p>
+<blockquote class="blockquote">
+<p>“Today we’ll learn both: Git (the tracking) and GitHub (the sharing).”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-5-why-scientists-need-version-control" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="slide-5-why-scientists-need-version-control"><span class="header-section-number">4.2</span> Slide 5: Why Scientists Need Version Control</h2>
+<p><strong>[00:08-00:13]</strong></p>
+<p><strong>Make it relatable.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Why do YOU need version control?”</p>
+</blockquote>
+<p><strong>The old way:</strong></p>
+<pre><code>analysis_v1.R
+analysis_v2.R
+analysis_final.R
+analysis_FINAL_ACTUALLY.R
+analysis_FINAL_REALLY_USE_THIS.R</code></pre>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“How many of you have files like this? Raise hand.”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>Most hands should go up. Laugh together.</em></p>
+<p><strong>Problems:</strong></p>
+<blockquote class="blockquote">
+<p>“- What changed between versions?” “- Why did you make that change?” “- Which version did you use for the paper?” “- Can you go back to v2 if you need to?”</p>
+</blockquote>
+<p><strong>With Git:</strong></p>
+<blockquote class="blockquote">
+<p>“One file: <code>analysis.R</code>”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Complete history of all changes tracked behind the scenes.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You can see any version from any point in time.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Commit messages explain WHY each change was made.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="the-git-workflow-20-minutes" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> The Git Workflow (20 minutes)</h1>
+<section id="slides-6-7-git-workflow-allison-horst-image" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="slides-6-7-git-workflow-allison-horst-image"><span class="header-section-number">5.1</span> Slides 6-7: Git Workflow (Allison Horst Image)</h2>
+<p><strong>[00:13-00:15]</strong></p>
+<p><strong>Show Allison Horst git-workflow image (full screen).</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Before I explain the technical workflow, look at Allison Horst’s brilliant illustration.”</p>
+</blockquote>
+<p><strong>Let it sit 2-3 seconds.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“What do you see? Bunnies? Rowboats?”</p>
+</blockquote>
+<hr>
+<p><strong>[00:15-00:18]</strong></p>
+<p><strong>Show image with explanation.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Allison shows us exactly what Git does with these helpful bunnies!”</p>
+</blockquote>
+<p><strong>Point to image:</strong></p>
+<blockquote class="blockquote">
+<p>“You have a LOCAL REPO on your computer. That’s your workspace.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You have a REMOTE REPO on GitHub. That’s the online copy.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The bunnies in rowboats? That’s Git moving changes back and forth!”</p>
+</blockquote>
+<p><strong>The two directions:</strong></p>
+<blockquote class="blockquote">
+<p>“PUSH = Send your changes from local to GitHub (upload)” “PULL = Get changes from GitHub to local (download)”</p>
+</blockquote>
+<p><strong>Key message:</strong></p>
+<blockquote class="blockquote">
+<p>“Git is those bunnies, safely ferrying your work back and forth. They never drop anything!”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>This metaphor really helps students remember push vs.&nbsp;pull.</em></p>
+<hr>
+</section>
+<section id="slides-8-9-local-workflow-stage-and-commit" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="slides-8-9-local-workflow-stage-and-commit"><span class="header-section-number">5.2</span> Slides 8-9: Local Workflow (Stage and Commit)</h2>
+<p><strong>[00:18-00:23]</strong></p>
+<p><strong>Explain the local workflow carefully.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s start with working locally, before we even think about GitHub.”</p>
+</blockquote>
+<p><strong>Three areas:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Working Directory - Where you edit files” “2. Staging Area - Files you’re about to save permanently” “3. Local Repository - Permanently saved changes”</p>
+</blockquote>
+<p><strong>The workflow:</strong></p>
+<blockquote class="blockquote">
+<p>“You edit a file. Maybe you fix a bug in <code>analysis.R</code>.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You STAGE that file: <code>git add analysis.R</code>”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This says: ‘I want to include this change in my next permanent save.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You COMMIT with a message: <code>git commit -m 'Fixed temperature threshold bug'</code>”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This permanently saves the change to your local repository.”</p>
+</blockquote>
+<p><strong>The key insight:</strong></p>
+<blockquote class="blockquote">
+<p>“Staging lets you be selective. You might have edited 5 files, but only want to commit changes to 2.”</p>
+</blockquote>
+<p><strong>Analogy:</strong></p>
+<blockquote class="blockquote">
+<p>“Think of staging like putting items in a shopping cart. Committing is like checking out.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-10-writing-good-commit-messages" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="slide-10-writing-good-commit-messages"><span class="header-section-number">5.3</span> Slide 10: Writing Good Commit Messages</h2>
+<p><strong>[00:23-00:27]</strong></p>
+<p><strong>This is important—spend time here.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Commit messages are CRUCIAL. They’re your explanation of why you made changes.”</p>
+</blockquote>
+<p><strong>Bad commit messages:</strong></p>
+<blockquote class="blockquote">
+<p>“‘fixed stuff’” “‘update’” “‘changes’” “‘asdf’ (yes, people do this)”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s wrong with these?”</p>
+</blockquote>
+<p><strong>Students respond:</strong> “Too vague, no information, unhelpful.”</p>
+<p><strong>Good commit messages:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Removed outliers &lt; -50°C from temperature data’” “‘Added EPA water quality standards to comparison’” “‘Fixed bug in species name standardization’”</p>
+</blockquote>
+<p><strong>What makes them good:</strong></p>
+<blockquote class="blockquote">
+<p>“- Specific action (removed, added, fixed)” “- What changed” “- Sometimes: why (if not obvious)”</p>
+</blockquote>
+<p><strong>Future you:</strong></p>
+<blockquote class="blockquote">
+<p>“You’ll read these messages 6 months from now. Write for that person!”</p>
+</blockquote>
+<p><strong>Commit message best practices:</strong></p>
+<blockquote class="blockquote">
+<p>“- Use present tense: ‘Add feature’ not ‘Added feature’” “- Be specific and concise” “- Explain the WHAT and WHY, not the how (code shows how)”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slides-11-12-remote-workflow-push-and-pull" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="slides-11-12-remote-workflow-push-and-pull"><span class="header-section-number">5.4</span> Slides 11-12: Remote Workflow (Push and Pull)</h2>
+<p><strong>[00:27-00:31]</strong></p>
+<p><strong>Explain syncing with GitHub.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Once you’ve committed locally, you can sync with GitHub.”</p>
+</blockquote>
+<p><strong>Push:</strong></p>
+<blockquote class="blockquote">
+<p>“After you commit, you PUSH to send your commits to GitHub.”</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p>“This uploads your local commits to the remote repository.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Now your changes are backed up online and visible to collaborators.”</p>
+</blockquote>
+<p><strong>Pull:</strong></p>
+<blockquote class="blockquote">
+<p>“Before you START working, you PULL to get any changes from GitHub.”</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p>“This downloads commits others might have made.”</p>
+</blockquote>
+<p><strong>The golden rule:</strong></p>
+<blockquote class="blockquote">
+<p>“Always PULL before you PUSH.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Pull first → Make changes → Commit → Push.”</p>
+</blockquote>
+<p><strong>Why:</strong></p>
+<blockquote class="blockquote">
+<p>“If someone else pushed changes, you need those first. Otherwise you’ll have conflicts.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="collaboration-with-git-12-minutes" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Collaboration with Git (12 minutes)</h1>
+<section id="slides-13-14-collaboration-allison-horst-jenny-bryan-image" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="slides-13-14-collaboration-allison-horst-jenny-bryan-image"><span class="header-section-number">6.1</span> Slides 13-14: Collaboration (Allison Horst Jenny Bryan Image)</h2>
+<p><strong>[00:31-00:33]</strong></p>
+<p><strong>Show Jenny Bryan quote image (full screen).</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Git enables scientific collaboration at scale. Here’s what Jenny Bryan from RStudio says about it.”</p>
+</blockquote>
+<p><strong>Let image sit briefly.</strong></p>
+<hr>
+<p><strong>[00:33-00:36]</strong></p>
+<p><strong>Show image with explanation.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Jenny Bryan says: ‘Git/GitHub is like agreeing that we will all use Microsoft Word…’”</p>
+</blockquote>
+<p><strong>Explain the analogy:</strong></p>
+<blockquote class="blockquote">
+<p>“She doesn’t mean Word is perfect. She means: Having everyone use the SAME SYSTEM makes collaboration possible.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Without Git: Everyone has their own version control system (or none). Chaos.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“With Git: Everyone speaks the same language. Smooth collaboration.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-15-collaborative-workflow" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="slide-15-collaborative-workflow"><span class="header-section-number">6.2</span> Slide 15: Collaborative Workflow</h2>
+<p><strong>[00:36-00:39]</strong></p>
+<p><strong>Explain how collaboration works.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s how Git collaboration actually works.”</p>
+</blockquote>
+<p><strong>Repository owner:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Creates repository on GitHub” “2. Adds collaborators (gives them permission)” “3. Pushes and pulls changes”</p>
+</blockquote>
+<p><strong>Collaborator:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Clones the repository to their computer” “2. Makes changes locally” “3. Commits changes” “4. Pushes to GitHub”</p>
+</blockquote>
+<p><strong>Both people:</strong></p>
+<blockquote class="blockquote">
+<p>“- Pull frequently to get each other’s changes” “- Communicate about who’s working on what” “- Use commit messages to explain changes”</p>
+</blockquote>
+<p><strong>The beauty:</strong></p>
+<blockquote class="blockquote">
+<p>“Multiple people can work on the same project simultaneously. Git handles merging the changes.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-16-merge-conflicts" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="slide-16-merge-conflicts"><span class="header-section-number">6.3</span> Slide 16: Merge Conflicts</h2>
+<p><strong>[00:39-00:43]</strong></p>
+<p><strong>Demystify conflicts.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s talk about something that scares beginners: merge conflicts.”</p>
+</blockquote>
+<p><strong>What is a merge conflict:</strong></p>
+<blockquote class="blockquote">
+<p>“When two people edit the SAME LINE of a file differently.”</p>
+</blockquote>
+<p><strong>Example:</strong></p>
+<blockquote class="blockquote">
+<p>“You change line 45 to: <code>temperature_cutoff &lt;- -45</code>” “Partner changes line 45 to: <code>temperature_cutoff &lt;- -55</code>” “Git says: ‘I don’t know which to keep!’”</p>
+</blockquote>
+<p><strong>How Git marks conflicts:</strong></p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+temperature_cutoff &lt;- -45  # Your version
+=======
+temperature_cutoff &lt;- -55  # Their version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code></pre>
+<p><strong>How to resolve:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Look at both versions” “2. Decide which to keep (or combine them)” “3. Delete the markers (&lt;&lt;&lt;, ===, &gt;&gt;&gt;)” “4. Commit the resolved version”</p>
+</blockquote>
+<p><strong>Conflicts are okay:</strong></p>
+<blockquote class="blockquote">
+<p>“Conflicts aren’t errors—they’re Git being careful. They’re a COMMUNICATION opportunity.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Talk to your collaborator: ‘Hey, we both changed the threshold. Which should we use?’”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="git-in-practice-two-interfaces-15-minutes" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Git in Practice: Two Interfaces (15 minutes)</h1>
+<section id="slides-17-18-gui-vs.-cli" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="slides-17-18-gui-vs.-cli"><span class="header-section-number">7.1</span> Slides 17-18: GUI vs.&nbsp;CLI</h2>
+<p><strong>[00:43-00:46]</strong></p>
+<p><strong>Explain both approaches.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“You can use Git two ways: Graphical interface (GUI) or command line (CLI).”</p>
+</blockquote>
+<p><strong>Command Line:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add analysis.R</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Updated analysis"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p>“Typing commands in terminal. More powerful, works everywhere, better for troubleshooting.”</p>
+</blockquote>
+<p><strong>Graphical Interface:</strong></p>
+<blockquote class="blockquote">
+<p>“- RStudio Git pane” “- GitHub Desktop” “- GitKraken”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Click buttons instead of type commands. Easier for beginners.”</p>
+</blockquote>
+<p><strong>Today:</strong></p>
+<blockquote class="blockquote">
+<p>“I’ll show you BOTH. You can choose which you prefer.”</p>
+</blockquote>
+<p><strong>My advice:</strong></p>
+<blockquote class="blockquote">
+<p>“Start with RStudio GUI for simplicity. Learn CLI as you get comfortable. Both do the same thing.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slides-19-20-git-in-rstudio" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="slides-19-20-git-in-rstudio"><span class="header-section-number">7.2</span> Slides 19-20: Git in RStudio</h2>
+<p><strong>[00:46-00:49]</strong></p>
+<p><strong>Show RStudio interface.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“RStudio has beautiful Git integration built in.”</p>
+</blockquote>
+<p><strong>The Git pane:</strong></p>
+<blockquote class="blockquote">
+<p>“Shows:” “- Modified files (yellow M)” “- New files (green A for ‘added’)” “- Deleted files (red D)”</p>
+</blockquote>
+<p><strong>The workflow in RStudio:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Make changes to files” “2. Check the boxes next to files you want to stage” “3. Click ‘Commit’ button” “4. Write commit message in dialog” “5. Click ‘Commit’ button in dialog” “6. Click ‘Push’ button”</p>
+</blockquote>
+<p><strong>That’s it!</strong></p>
+<blockquote class="blockquote">
+<p>“Point and click. Very beginner-friendly.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-21-git-command-line-basics" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="slide-21-git-command-line-basics"><span class="header-section-number">7.3</span> Slide 21: Git Command Line Basics</h2>
+<p><strong>[00:49-00:52]</strong></p>
+<p><strong>Show essential commands.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“If you use command line, here are the essential commands.”</p>
+</blockquote>
+<p><strong>Essential Git commands:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status              <span class="co"># What changed?</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add filename.R      <span class="co"># Stage one file</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .               <span class="co"># Stage all files</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"message"</span> <span class="co"># Commit with message</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push                <span class="co"># Send to GitHub</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull                <span class="co"># Get from GitHub</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log                 <span class="co"># See commit history</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Why learn CLI:</strong></p>
+<blockquote class="blockquote">
+<p>“- More powerful for complex operations” “- Works everywhere (servers, etc.)” “- Better error messages for troubleshooting” “- Necessary for some advanced features”</p>
+</blockquote>
+<p><strong>Reassurance:</strong></p>
+<blockquote class="blockquote">
+<p>“Don’t need to memorize these. You’ll use the same 5-6 commands 90% of the time.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="best-practices-advanced-topics-10-minutes" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Best Practices &amp; Advanced Topics (10 minutes)</h1>
+<section id="slides-22-25-best-practices-.gitignore-tags-audit-trail" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="slides-22-25-best-practices-.gitignore-tags-audit-trail"><span class="header-section-number">8.1</span> Slides 22-25: Best Practices, .gitignore, Tags, Audit Trail</h2>
+<p><strong>[00:52-01:02]</strong></p>
+<p><strong>Cover key best practices.</strong></p>
+<p><strong>Best Practices (Slide 22):</strong></p>
+<blockquote class="blockquote">
+<p>“DO:” “✅ Commit often (small, logical changes)” “✅ Write clear commit messages” “✅ Pull before you start work” “✅ Push at end of work session” “✅ Use .gitignore for large data files”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“DON’T:” “❌ Commit huge changes all at once” “❌ Use vague messages” “❌ Commit passwords or API keys” “❌ Commit 100MB data files”</p>
+</blockquote>
+<hr>
+<p><strong>.gitignore (Slide 23):</strong></p>
+<blockquote class="blockquote">
+<p>“A .gitignore file tells Git what NOT to track.”</p>
+</blockquote>
+<p><strong>Example .gitignore:</strong></p>
+<pre><code># Large data files
+data/raw/big_dataset.csv
+
+# Temporary files
+*.tmp
+
+# System files
+.DS_Store
+
+# Secrets
+.env
+secrets.R</code></pre>
+<blockquote class="blockquote">
+<p>“Keeps repositories small and secure.”</p>
+</blockquote>
+<hr>
+<p><strong>Tags (Slide 24):</strong></p>
+<blockquote class="blockquote">
+<p>“Tags mark important versions.”</p>
+</blockquote>
+<p><strong>Use tags for:</strong></p>
+<blockquote class="blockquote">
+<p>“- Paper submission: <code>v1.0-submitted</code>” “- After revisions: <code>v1.1-revision1</code>” “- Final publication: <code>v2.0-published</code>”</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag v1.0-published</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">--tags</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p>“Always know exactly what code produced published results.”</p>
+</blockquote>
+<hr>
+<p><strong>Git as Audit Trail (Slide 25):</strong></p>
+<blockquote class="blockquote">
+<p>“Git provides a complete scientific audit trail:”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“📝 Every change documented” “👤 Who made each change” “📅 When changes were made” “💬 Why (via commit messages)” “🏷️ Milestones (via tags)”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This is what reviewers and funders want to see!”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="breakout-activity-10-minutes" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Breakout Activity (10 minutes)</h1>
+<section id="slide-26-understanding-conflicts" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="slide-26-understanding-conflicts"><span class="header-section-number">9.1</span> Slide 26: Understanding Conflicts</h2>
+<p><strong>[01:02-01:03]</strong></p>
+<p><strong>Present scenario.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Into breakout rooms for 10 minutes.”</p>
+</blockquote>
+<p><strong>Scenario:</strong></p>
+<blockquote class="blockquote">
+<p>“You and partner both edited line 45 of <code>analysis.R</code>”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Your version: <code>temperature_cutoff &lt;- -45  # More conservative</code>” “Partner’s: <code>temperature_cutoff &lt;- -55  # Based on sensor specs</code>”</p>
+</blockquote>
+<p><strong>Questions:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Why did Git create a conflict?” “2. How would you resolve it?” “3. What should you communicate to your partner?”</p>
+</blockquote>
+<p><strong>Send to breakout rooms.</strong></p>
+<p><strong>Instructor note:</strong> <em>Visit rooms. Guide discussion toward: conflicts happen when same line changes, need to discuss which is better, commit messages explain decisions.</em></p>
+<hr>
+</section>
+<section id="debrief" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="debrief"><span class="header-section-number">9.2</span> Debrief</h2>
+<p><strong>[01:13-01:16]</strong></p>
+<p><strong>Bring back.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“What did you conclude?”</p>
+</blockquote>
+<p><strong>Good answers:</strong></p>
+<blockquote class="blockquote">
+<p>“- Conflict because same line changed” “- Need to discuss which threshold is correct for the science” “- Maybe need to check original data or sensor specs” “- Commit message should explain final decision”</p>
+</blockquote>
+<p><strong>Key lesson:</strong></p>
+<blockquote class="blockquote">
+<p>“Conflicts force scientific discussion. That’s good! Better than silently using different thresholds.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="wrap-up-4-minutes" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Wrap-Up (4 minutes)</h1>
+<section id="slides-27-29-homework-exit-ticket-summary" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="slides-27-29-homework-exit-ticket-summary"><span class="header-section-number">10.1</span> Slides 27-29: Homework, Exit Ticket, Summary</h2>
+<p><strong>[01:16-01:20]</strong></p>
+<p><strong>Homework:</strong></p>
+<blockquote class="blockquote">
+<p>“This week’s activity: Git collaboration exercise (details on Canvas).”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You’ll:” “1. Clone shared repository” “2. Make changes to assigned file” “3. Commit with good message” “4. Push to GitHub” “5. Pull partner’s changes” “6. Resolve any conflicts”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Practice both RStudio GUI and command line.”</p>
+</blockquote>
+<hr>
+<p><strong>Exit Ticket:</strong></p>
+<blockquote class="blockquote">
+<p>“1. What’s the difference between Git and GitHub?” “2. Put these in order: Push, Edit file, Pull, Commit, Stage” “3. You’re submitting a paper. What Git tag would you create?”</p>
+</blockquote>
+<hr>
+<p><strong>Summary:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Git = version control, GitHub = hosting” “2. Push/Pull sync local and remote” “3. Commits are snapshots with messages” “4. Tags mark important versions” “5. Version control = scientific audit trail”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Next week: Bringing it all together!”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="post-lecture-checklist" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Post-Lecture Checklist</h1>
+<ul class="task-list">
+<li><label><input type="checkbox">Upload recording</label></li>
+<li><label><input type="checkbox">Post collaboration exercise details</label></li>
+<li><label><input type="checkbox">Review exit tickets</label></li>
+<li><label><input type="checkbox">Prepare Week 5 materials</label></li>
+</ul>
+<hr>
+</section>
+<section id="common-questions" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Common Questions</h1>
+<p><strong>Q: “What if I mess up and want to undo?”</strong> A: Git has many undo options. <code>git revert</code> for published commits, <code>git reset</code> for local changes.</p>
+<p><strong>Q: “Should I commit after every tiny change?”</strong> A: Commit when you reach a logical stopping point. Could be every 15 minutes or every hour.</p>
+<p><strong>Q: “What if my collaborator pushes bad code?”</strong> A: Git tracks everything. You can always go back to previous versions.</p>
+<hr>
+</section>
+<section id="timing-notes" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Timing Notes</h1>
+<p>If ahead: More detailed CLI demo, show GitHub website interface If behind: Shorter breakout (8 min), quick summary</p>
+<p><strong>Target: End with time for questions</strong></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright © 2025, NCEAS</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

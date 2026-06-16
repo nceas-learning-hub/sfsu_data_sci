@@ -1,0 +1,41 @@
+---
+title: "Water Quality Preliminary Analysis"
+author: "Gretchen LeBuhn"
+format: html
+editor: visual
+---
+
+This analysis examines water quality at 10 streams sampled monthly from January to December 2023.
+
+We measured:
+
+-   pH
+
+-   Dissolved oxygen (mg/L)
+
+-   Nitrate concentrations (mg/L0)
+
+Our goal is to identify sites exceeding EPA standards.
+
+```{r}
+
+#Load data
+water <- read.csv("../data/raw/water_samples.csv")
+
+#Quick look
+
+head(water)
+```
+
+## Summary statistics
+
+```{r}
+
+mean_ph <- mean(water$ph, na.rm = TRUE)
+mean_temp <- mean(water$temperature_c, na.rm = TRUE)
+
+```
+
+The mean pH across all sites was `r round(mean_ph, 2)`.
+
+The mean pH across all sites was 'r (round mean_ph 2)'.

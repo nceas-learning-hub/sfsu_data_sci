@@ -1,0 +1,92 @@
+---
+title: "Decision Log"
+author: "Your Name"
+date: today
+format: html
+---
+
+# Project Decision Log
+
+**Project:** [Project name here]  
+**Last updated:** `r Sys.Date()`
+
+---
+
+## Entry Template
+
+Copy and paste this template for each new decision:
+
+---
+
+### Entry [#]: [Short Title] (YYYY-MM-DD)
+
+**Decision:**  
+[What did you decide?]
+
+**Reasoning:**  
+[Why did you decide it?]
+
+**Alternatives Considered:**  
+[What else did you think about?]
+
+**Trade-offs:**  
+[What are you gaining/losing?]
+
+---
+
+## My Decisions
+
+### Entry 1: [Your First Decision] (YYYY-MM-DD)
+
+**Decision:**  
+
+
+**Reasoning:**  
+
+
+**Alternatives Considered:**  
+
+
+**Trade-offs:**  
+
+
+---
+
+### Entry 2: [Your Second Decision] (YYYY-MM-DD)
+
+**Decision:**  
+
+
+**Reasoning:**  
+
+
+**Alternatives Considered:**  
+
+
+**Trade-offs:**  
+
+
+---
+
+### Entry 3: [Add More As Needed]
+
+**Decision:**  
+
+
+**Reasoning:**  
+
+
+**Alternatives Considered:**  
+
+
+**Trade-offs:**  
+
+
+---
+
+## Notes
+
+- Add entries as you make important decisions
+- Date each entry
+- Be specific about what you decided and why
+- Remember: Could someone understand your reasoning without asking questions?

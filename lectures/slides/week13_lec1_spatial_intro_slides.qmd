@@ -1,0 +1,515 @@
+---
+title: "Week 13 Lecture 1: Vector Spatial Data and CRS"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Working with Spatial Data]{.custom-title}
+
+[Part 1: Vector Data & Coordinate Reference Systems]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 13**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#learning-objectives data-menu-title="Learning Objectives"}
+
+[By the end of today you will be able to...]{.slide-title}
+
+<hr>
+
+::: body-text
+- Explain what **vector spatial data** is and how R stores it using the
+  `sf` package
+- Identify the components of an `sf` object: geometry, attributes, and
+  spatial metadata
+- Describe what a **Coordinate Reference System (CRS)** is and why it
+  matters
+- Distinguish between **geographic** and **projected** coordinate
+  systems
+- Check and transform CRS using `st_crs()` and `st_transform()`
+- Convert a CSV with lat/lon columns into an `sf` object using
+  `st_as_sf()`
+
+📖 [Textbook
+s15](https://nceas-learning-hub.github.io/sfsu_data_sci/s15_r_geospatial_vector_analysis.html)
+· sections 1–3.1
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-spatial data-menu-title="Why Spatial Data"}
+
+[Spatial data across biology and chemistry]{.slide-title}
+
+<hr>
+
+::: body-text
+Almost every field question has a **"where"** — not just ecology:
+
+1.  **Molecular/cell biology:** where in the cell is this protein
+    localized? Which nucleus contains this fluorescence signal?
+2.  **Microbiology:** where did this pathogen outbreak originate? How
+    does transmission spread across a region?
+3.  **Marine/organismal biology:** which habitat type does this species
+    occurrence fall in?
+4.  **Environmental chemistry:** which monitoring station is nearest to
+    this contamination point? Which county does each water sample belong
+    to?
+5.  **Public health / epidemiology:** what is the disease burden by
+    census tract or zip code?
+
+Spatial tools let us answer these questions **quantitatively** and
+**reproducibly** — in the same R workflow you already know.
+:::
+
+------------------------------------------------------------------------
+
+##  {#vector-vs-raster data-menu-title="Vector vs Raster"}
+
+[Two types of spatial data]{.slide-title}
+
+<hr>
+
+::::::: columns
+:::: {.column width="50%"}
+::: body-text
+**Vector data**\
+Discrete locations or boundaries with defined geometry
+
+- Sampling sites, field stations → **points**
+- Rivers, transects, roads → **lines**
+- Watershed boundaries, counties, habitats → **polygons**
+
+Today's focus ↓
+:::
+::::
+
+:::: {.column width="50%"}
+::: body-text
+**Raster data**\
+A regular grid of cells, each holding a value
+
+- Elevation (DEM), temperature surfaces
+- Satellite imagery, land cover
+- Concentration gradient surfaces
+
+(Future topic — many `sf` workflows pair with raster data)
+:::
+::::
+:::::::
+
+------------------------------------------------------------------------
+
+##  {#simple-features data-menu-title="Simple Features"}
+
+[The `sf` package: Simple Features in R]{.slide-title}
+
+<hr>
+
+::: body-text
+**Simple Features** is an international standard (ISO 19125) for
+representing real-world objects by their location and shape.
+
+> Think of it as a shared language for spatial data — just as CSV is a
+> shared language for tabular data.
+
+The `sf` package is R's implementation. It:
+
+- introduces a spatial data class that **extends** the data frame
+- provides functions for reading and writing spatial files
+- enables spatial operations (joins, intersections, distances)
+
+Almost every `sf` function starts with `st_` — for **s**patial and
+**t**emporal. `st_join()`, `st_crs()`, `st_transform()` — you're in `sf`
+territory whenever you see that prefix.
+:::
+
+------------------------------------------------------------------------
+
+##  {#read-sf data-menu-title="Reading Shapefiles"}
+
+[Reading spatial data with `read_sf()`]{.slide-title}
+
+<hr>
+
+::: body-text
+We add a `_sf` suffix to signal this is a spatial data frame:
+:::
+
+```{r}
+library(sf)
+library(here)
+
+ak_rgns_sf <- read_sf(here("data/ak_regions_simp.shp"))
+
+# quick look at each attribute column mapped spatially
+plot(ak_rgns_sf)
+```
+
+::: body-text
+`plot()` gives a fast sanity check — one panel per attribute column,
+each displayed as a map. Notice the maps may look distorted — that's a
+CRS issue we'll fix shortly.
+
+> **What is a shapefile?** A `.shp` file is a common format for storing
+> vector spatial data. It always comes with companion files (`.dbf`,
+> `.prj`) — keep them together.
+:::
+
+------------------------------------------------------------------------
+
+##  {#sf-as-dataframe data-menu-title="sf as Data Frame"}
+
+[An `sf` object is a data frame — plus a geometry column]{.slide-title}
+
+<hr>
+
+```{r}
+class(ak_rgns_sf)
+# [1] "sf"         "data.frame"
+
+head(ak_rgns_sf)
+glimpse(ak_rgns_sf)
+```
+
+::: body-text
+`sf` objects have two classes: `sf` **and** `data.frame`. All your
+familiar tools — `head()`, `glimpse()`, `select()`, `filter()`,
+`group_by()` — work here. In addition, an `sf` object carries:
+
+- **Geometry type** — the shape kind: POINT, LINESTRING, MULTIPOLYGON…
+- **Bounding box** — the geographic extent of the data *(think: x-min,
+  x-max, y-min, y-max for the dataset)*
+- **CRS** — the coordinate reference system *(which map system are we
+  using? — more on this next)*
+- A **`geometry`** column containing the actual shapes
+
+The `geometry` column is **sticky** — it travels with the object even
+when you `select()` other columns.
+:::
+
+------------------------------------------------------------------------
+
+##  {#crs-intro data-menu-title="CRS Introduction"}
+
+[What is a Coordinate Reference System?]{.slide-title}
+
+<hr>
+
+::: body-text
+A CRS answers: **"How do we translate locations on a 3D Earth onto a
+flat screen?"**
+
+It has two components:
+
+**1. Datum** — a model of Earth's shape (it's not a perfect sphere!)
+
+> *"Is the Earth shaped like a lemon, a lime, or an orange?"*\
+> Different datums model the bulges and flattening differently. Using
+> the wrong datum can shift your points by meters or kilometers.
+
+**2. Projection** — the math that flattens the curved surface into 2D
+
+> *"How do you peel the fruit and flatten the peel?"*\
+> Every projection distorts *something* — area, shape, distance, or
+> direction. There is no perfect flat map.
+:::
+
+------------------------------------------------------------------------
+
+##  {#geographic-vs-projected data-menu-title="Geographic vs Projected"}
+
+[Geographic vs. Projected CRS]{.slide-title}
+
+<hr>
+
+::: body-text
+**Geographic (unprojected) CRS**\
+Coordinates are in *degrees* of latitude and longitude. No flattening
+has happened — you're still on a sphere.
+
+- WGS84 (EPSG **4326**) — used by GPS, the most common global standard;
+  this is what your phone records
+
+**Projected CRS**\
+Coordinates are in *meters* on a flat plane. The Earth has been
+mathematically flattened. Optimized for specific regions.
+
+- Alaska Albers (EPSG **3338**) — minimizes distortion across Alaska
+- Pseudo-Mercator (EPSG **3857**) — Google Maps, OpenStreetMap
+
+> **Key practical rule:** You cannot calculate meaningful areas or
+> distances in a geographic CRS (degrees aren't meters). Use a
+> *projected* CRS for any area or distance calculation.
+:::
+
+------------------------------------------------------------------------
+
+##  {#epsg-codes data-menu-title="EPSG Codes"}
+
+[EPSG codes: a shorthand for CRS]{.slide-title}
+
+<hr>
+
+::: body-text
+Every standard CRS has a numeric **EPSG code** — an agreed-upon
+shorthand so you don't have to type a long projection definition string.
+Three you'll use in this unit:
+
+| EPSG     | Name            | Use case                                       |
+|-----------------|-----------------|---------------------------------------|
+| **4326** | WGS84           | GPS coordinates, lat/lon CSVs, `leaflet` input |
+| **3338** | Alaska Albers   | Regional mapping in Alaska (equal-area)        |
+| **3857** | Pseudo-Mercator | Web tile basemaps (OSM, ggspatial)             |
+
+> Need a code you don't know? Search [epsg.io](https://epsg.io) by name
+> — e.g., "California Albers", "UTM Zone 10N", "NAD83". It returns the
+> EPSG number, the proj4 string, and a preview map.
+:::
+
+------------------------------------------------------------------------
+
+##  {#st-crs data-menu-title="Checking CRS"}
+
+[Checking CRS with `st_crs()`]{.slide-title}
+
+<hr>
+
+::: body-text
+Make checking the CRS a reflex — before doing anything spatial:
+:::
+
+```{r}
+st_crs(ak_rgns_sf)
+```
+
+::: body-text
+The output looks dense, but look for the EPSG code in the `ID` field.
+Here it will show **WGS84 (EPSG 4326)** — a geographic (unprojected) CRS
+with coordinates in degrees.
+
+**The most important rule in spatial data:**
+
+> Before any operation involving two spatial datasets, they **must share
+> the same CRS**. If they don't, R will throw an error — and that error
+> is protecting you from a silent, wrong answer.
+
+See [spatialreference.org](http://spatialreference.org/ref/epsg/) for a
+searchable catalog of all EPSG codes.
+:::
+
+------------------------------------------------------------------------
+
+##  {#st-transform data-menu-title="Transforming CRS"}
+
+[Transforming CRS with `st_transform()`]{.slide-title}
+
+<hr>
+
+::: body-text
+The Alaska Albers projection (EPSG 3338) is a much better choice for
+mapping Alaska — it preserves area and avoids dateline distortion:
+:::
+
+```{r}
+ak_rgns_3338_sf <- ak_rgns_sf %>%
+    st_transform(crs = 3338)
+
+st_crs(ak_rgns_3338_sf)
+
+plot(ak_rgns_3338_sf)
+```
+
+::: body-text
+💡 **Naming convention:** encode the CRS in the object name (`_3338`,
+`_4326`). When you have multiple versions of the same data in different
+coordinate systems, the suffix tells you — and anyone reading your code
+— exactly what each object is in.
+:::
+
+------------------------------------------------------------------------
+
+##  {#sf-tidyverse data-menu-title="sf + Tidyverse"}
+
+[`sf` plays nicely with the tidyverse]{.slide-title}
+
+<hr>
+
+::: body-text
+Because `sf` objects are data frames, your existing skills transfer
+directly:
+:::
+
+```{r}
+# select() — geometry stays automatically
+ak_rgns_3338_sf %>%
+    select(region)
+
+# filter() works exactly as expected
+# use %in% when testing multiple values
+unique(ak_rgns_3338_sf$region)
+
+ak_rgns_3338_sf %>%
+    filter(region == "Southeast")
+```
+
+::: body-text
+The sticky geometry column means you never have to call it explicitly —
+you can't accidentally lose your spatial information with a `select()`.
+:::
+
+------------------------------------------------------------------------
+
+##  {#csv-to-sf data-menu-title="CSV to sf"}
+
+[Turning a CSV with lat/lon into an `sf` object]{.slide-title}
+
+<hr>
+
+::: body-text
+Most scientific data doesn't arrive as a shapefile — it arrives as a
+CSV. If it has latitude and longitude columns, `st_as_sf()` promotes it
+to spatial:
+:::
+
+```{r}
+# _df suffix: just a data frame for now
+pop_df <- read_csv(here("data/alaska_population.csv"))
+
+# _sf suffix: now a spatial data frame
+pop_4326_sf <- st_as_sf(pop_df,
+                        coords = c('lng', 'lat'),
+                        crs = 4326,
+                        remove = F)
+
+head(pop_4326_sf)
+```
+
+::: body-text
+`remove = F` keeps the original `lat`/`lng` columns — you'll need them
+later for `leaflet`. `coords` must be in **longitude first, latitude
+second** order (x before y).
+:::
+
+------------------------------------------------------------------------
+
+##  {#crs-mismatch data-menu-title="CRS Mismatch Error"}
+
+[The most common spatial error — and its fix]{.slide-title}
+
+<hr>
+
+::: body-text
+Trying to join `pop_4326_sf` (WGS84, degrees) with `ak_rgns_3338_sf`
+(Alaska Albers, meters):
+
+``` r
+pop_joined_sf <- st_join(pop_4326_sf, ak_rgns_3338_sf, join = st_within)
+# Error: st_crs(x) == st_crs(y) is not TRUE
+```
+
+**R is protecting you.** Joining datasets in different coordinate
+systems is like overlaying two maps printed at different scales — the
+result would be nonsense. The fix is always `st_transform()`:
+:::
+
+```{r}
+pop_3338_sf <- st_transform(pop_4326_sf, crs = 3338)
+
+# Now both are in 3338 — safe to join
+pop_joined_sf <- st_join(pop_3338_sf, ak_rgns_3338_sf, join = st_within)
+```
+
+::: body-text
+Make `st_crs()` checks a habit before any spatial join.
+:::
+
+------------------------------------------------------------------------
+
+##  {#decision-log-spatial data-menu-title="Decision Log"}
+
+[Spatial choices belong in your decision log]{.slide-title}
+
+<hr>
+
+::: body-text
+Spatial analysis is full of decisions that affect your results —
+document them just as you would in a lab notebook:
+
+- Which CRS did you choose for analysis, and why?
+- What join type did you use — `st_within` vs. `st_intersects`?
+- Did you simplify geometries? At what tolerance?
+- Did you clip to a study area boundary?
+
+Example entry:
+
+> *"Transformed to EPSG 3338 (Alaska Albers) because the study area
+> spans Alaska and an equal-area projection is needed for valid area
+> calculations and comparisons across regions."*
+
+These are methods statements — they belong both in your decision log and
+in a methods section of any paper or report.
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Chat Exit Ticket — write in chat]{.slide-title}
+
+<hr>
+
+::: body-text
+**In pseudocode, describe these two steps:**
+
+1.  You have a CSV with `latitude` and `longitude` columns. Describe how
+    to read it in and convert it to an `sf` object in WGS84 (EPSG 4326).
+
+2.  You need to do a spatial join with a polygon boundary file that is
+    in Alaska Albers (EPSG 3338). What do you check first, and what do
+    you do before joining?
+
+No R syntax required — describe the logic clearly enough that a
+collaborator could follow your steps.
+:::
+
+------------------------------------------------------------------------
+
+##  {#looking-ahead data-menu-title="Looking Ahead"}
+
+[Coming up]{.slide-title}
+
+<hr>
+
+::: body-text
+**Wednesday Lecture:**\
+Spatial joins with `st_join()`, aggregating with `st_drop_geometry()`,
+static maps with `geom_sf()`, basemaps with `ggspatial`, and interactive
+maps with `leaflet`
+
+**Activity:**\
+Working with Alaska population and region data — the textbook s15
+exercise
+
+📖 [Textbook
+s15](https://nceas-learning-hub.github.io/sfsu_data_sci/s15_r_geospatial_vector_analysis.html)
+— sections 1 through 3.1 as your reference
+:::

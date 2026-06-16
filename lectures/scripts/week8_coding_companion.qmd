@@ -1,0 +1,835 @@
+---
+title: "Week 8: Data Visualization"
+subtitle: "Instructor Live-Coding Companion"
+author: "BIO/CHEM 806 · Gretchen LeBuhn"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Jump to"
+    theme: cosmo
+    code-tools: true
+    embed-resources: true
+    df-print: paged
+execute:
+  echo: true
+  eval: true
+  warning: false
+  message: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+::: {.callout-note appearance="minimal"}
+**How to use this document**
+
+This is your live-coding script for Week 8. Run chunks in order —
+objects created in one section are used in later sections. Open it in
+RStudio alongside your slides. The table of contents on the left mirrors
+the lecture structure.
+
+-   **Lecture 1** covers Tufte, the Grammar of Graphics, data prep, and
+    geom types
+-   **Lecture 2** covers customization, themes, color, faceting, and
+    interactive outputs
+
+Render to HTML at any time to see the full annotated output.
+:::
+
+------------------------------------------------------------------------
+
+# Lecture 1 {.unnumbered}
+
+## Setup: Load Packages
+
+```{r}
+#| label: load-packages
+
+library(readr)
+library(dplyr)
+library(tidyr)
+library(forcats)   # working with categorical variables / factors
+library(ggplot2)   # visualization
+library(leaflet)   # interactive maps
+library(DT)        # interactive tables
+library(scales)    # scale functions for visualization
+library(janitor)   # clean column names
+library(viridis)   # colorblind-friendly color palettes
+library(here)      # file paths relative to project root
+```
+
+------------------------------------------------------------------------
+
+## Section 1: Edward Tufte
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 3–6 (Tufte section)**
+
+No code to run here — this section is entirely conceptual. Use the slide
+time to discuss Tufte's three key ideas before moving on.
+
+Tufte → `ggplot2` connections to mention:
+
+-   Data-Ink Ratio → `theme_minimal()`, `theme_classic()`
+-   Chartjunk → avoid 3D charts, rainbow fills, heavy gridlines
+-   Small Multiples → `facet_wrap()`
+:::
+
+------------------------------------------------------------------------
+
+## Section 2: The Dataset
+
+### Load and Explore
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 12–13 (Dataset + Explore the Data)**
+
+Run these chunks live. Ask students to run along in their own session.
+Read the output with them — the glimpse() output is particularly useful
+for spotting the tidy data problem.
+:::
+
+```{r}
+#| label: load-data
+
+# delta_visits_raw <- read_csv(
+#   "https://portal.edirepository.org/nis/dataviewer?packageid=edi.587.1&entityid=d0dd56e44e3ab9f5ec60f787b46f5bf0",
+#   show_col_types = FALSE
+# )
+
+
+
+delta_visits_raw <- read_csv(
+   here("data/r_data_visualization", "Socioecological_monitoring_data.csv")
+ )
+```
+
+```{r}
+#| label: explore-data
+
+# What are the columns?
+colnames(delta_visits_raw)
+```
+
+```{r}
+# Shape and data types — note that visitor counts are in separate columns
+glimpse(delta_visits_raw)
+```
+
+```{r}
+# What time period does this data cover?
+range(delta_visits_raw$Date)
+```
+
+```{r}
+# What times of day were surveys conducted?
+unique(delta_visits_raw$Time_of_Day)
+```
+
+### Clean Column Names
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: "Step 1: Explore Before You Plot"**
+
+Pause after running clean_names() and show the before/after column name
+comparison. Students appreciate how much cleaner snake_case is.
+:::
+
+```{r}
+#| label: clean-names
+
+delta_visits <- delta_visits_raw %>%
+  janitor::clean_names()
+
+# Compare before and after
+colnames(delta_visits)
+```
+
+------------------------------------------------------------------------
+
+## Section 3: Tidy Data for Plotting
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 14–16 (Is This Tidy? → pivot_longer)**
+
+Before running pivot_longer(), pause and ask the chat question: "Is this
+data tidy? Which columns make you think it might not be?"
+
+Key insight to drive home: ggplot2 needs visitor_type to be a *variable*
+(column) so it can be mapped to color. While it's spread across sm_boat,
+med_boat, lrg_boat etc., that mapping is impossible.
+:::
+
+### Pivot to Long Format
+
+```{r}
+#| label: pivot-longer
+
+visits_long <- delta_visits %>%
+  pivot_longer(
+    cols      = c(sm_boat, med_boat, lrg_boat,
+                  bank_angler, scientist, cars),
+    names_to  = "visitor_type",
+    values_to = "quantity"
+  ) %>%
+  rename(restore_loc = eco_restore_approximate_location) %>%
+  select(-notes)
+
+# How did the shape change?
+cat("Original: ", nrow(delta_visits), "rows ×", ncol(delta_visits), "cols\n")
+cat("Long:     ", nrow(visits_long),  "rows ×", ncol(visits_long),  "cols\n")
+
+head(visits_long)
+```
+
+### Exercise 1: Calculate Daily Visit Totals
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slide 17 (Exercise 1)**
+
+Give students 2 minutes to attempt this before revealing the answer. The
+result — daily_visits_loc — is the data frame used in every plotting
+example for the rest of the week.
+:::
+
+```{r}
+#| label: exercise-1-daily-totals
+
+daily_visits_loc <- visits_long %>%
+  group_by(restore_loc, date, visitor_type) %>%
+  summarise(daily_visits = sum(quantity), .groups = "drop")
+
+head(daily_visits_loc)
+```
+
+------------------------------------------------------------------------
+
+## Section 4: The Four Essential Components
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 18–19 (Four Components + First Plot)**
+
+Show all three options on the slide, then run Option 1 live. The
+overlapping x-axis labels are intentional — let students see the
+"before" state.
+:::
+
+### Three Ways to Write the Same Plot
+
+```{r}
+#| label: three-options
+
+# Option 1 — data and mapping in ggplot() [PREFERRED]
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits)) +
+  geom_col()
+```
+
+```{r}
+# Option 2 — mapping called in geom
+ggplot(data = daily_visits_loc) +
+  geom_col(aes(x = restore_loc, y = daily_visits))
+```
+
+```{r}
+# Option 3 — everything in geom
+ggplot() +
+  geom_col(data = daily_visits_loc,
+           aes(x = restore_loc, y = daily_visits))
+```
+
+::: {.callout-note appearance="minimal"}
+All three produce the same plot. Option 1 is the convention — put shared
+data and aesthetics in `ggplot()`, put geometry-specific arguments in
+the `geom_*()` layer.
+:::
+
+------------------------------------------------------------------------
+
+## Section 5: Geom Types
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 21–23 (Geom Types)**
+
+Run each chunk and read the output with students. Note that the violin
+and boxplot use the same filtered data — same data, different geometry,
+different insight.
+:::
+
+### Boxplot — Distributions Across Categories
+
+```{r}
+#| label: geom-boxplot
+
+daily_visits_loc %>%
+  filter(
+    daily_visits < 30,
+    visitor_type %in% c("sm_boat", "med_boat", "lrg_boat")
+  ) %>%
+  ggplot(aes(x = visitor_type, y = daily_visits)) +
+  geom_boxplot()
+```
+
+### Violin Plot — Shape of the Distribution
+
+```{r}
+#| label: geom-violin
+
+daily_visits_loc %>%
+  filter(
+    daily_visits < 30,
+    visitor_type %in% c("sm_boat", "med_boat", "lrg_boat")
+  ) %>%
+  ggplot(aes(x = visitor_type, y = daily_visits)) +
+  geom_violin()
+```
+
+### Line + Point — Time Series (Two Geoms, One Plot)
+
+```{r}
+#| label: geom-line-point
+
+daily_visits_loc %>%
+  filter(
+    restore_loc == "Decker Island",
+    visitor_type == "med_boat"
+  ) %>%
+  ggplot(aes(x = date, y = daily_visits)) +
+  geom_line() +
+  geom_point()
+```
+
+::: {.callout-note appearance="minimal"}
+`geom_line()` shows the trend; `geom_point()` marks where the actual
+data points are. Combining them is better than either alone for time
+series.
+:::
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Lecture 2 {.unnumbered}
+
+------------------------------------------------------------------------
+
+## Section 1: The aes() Boundary
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 3–6 (aes() section)**
+
+Post the chat question BEFORE running Version A: "What's the difference
+between Version A and Version B?"
+
+Run Version A first. Let students see the salmon bars. Then explain why,
+then run the fix.
+
+This is the most important teaching moment of Lecture 2.
+:::
+
+### Version A — The "Wrong" Way (The Salmon Experiment)
+
+```{r}
+#| label: aes-wrong-fill
+
+# fill = "blue" INSIDE aes() — this does NOT make blue bars
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits,
+           fill = "blue")) +
+  geom_col()
+```
+
+::: {.callout-important appearance="minimal"}
+**Why salmon?** Putting `fill = "blue"` inside `aes()` tells ggplot2
+that `"blue"` is a variable in your data. It creates a new column filled
+with the word "blue" and maps it to fill using the default color palette
+— hence salmon, not blue.
+:::
+
+### The Fix — Constant Outside aes()
+
+```{r}
+#| label: aes-correct-constant
+
+# fill = "blue" OUTSIDE aes() — now all bars are actually blue
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits)) +
+  geom_col(fill = "blue")
+```
+
+### The Right Way — Map a Variable to Color
+
+```{r}
+#| label: aes-correct-variable
+
+# fill = visitor_type INSIDE aes() — correct because it IS a variable
+ggplot(data = daily_visits_loc,
+       aes(x = restore_loc, y = daily_visits,
+           fill = visitor_type)) +
+  geom_col()
+```
+
+::: {.callout-note appearance="minimal"}
+**The rule:**
+
+-   **Inside `aes()`** → maps a *variable* to an aesthetic (value
+    changes per data point based on the data)
+-   **Outside `aes()`** → sets a *constant* for all data points
+:::
+
+------------------------------------------------------------------------
+
+## Section 2: Labels and Built-in Themes
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 7–8 (labs + themes)**
+
+Note the axis flip — x and y are swapped from the earlier version. This
+solves the overlapping label problem in one line.
+
+After showing this plot, open the RStudio autocomplete and type theme\_
+then Tab to show the full list of built-in themes live.
+:::
+
+### labs() + Flipped Axes + theme_bw()
+
+```{r}
+#| label: labs-and-theme
+
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(
+    x        = "Number of Visits",
+    y        = "Restoration Location",
+    fill     = "Type of Visitor",
+    title    = "Total Visits to Delta Restoration Areas by Visitor Type",
+    subtitle = "Sum of all visits during July 2017 and March 2018"
+  ) +
+  theme_bw()
+```
+
+### Built-in Theme Comparison
+
+```{r}
+#| label: themes-demo
+
+# Build the base plot once so we can quickly swap themes
+base_plot <- ggplot(data = daily_visits_loc,
+                    aes(y = restore_loc, x = daily_visits,
+                        fill = visitor_type)) +
+  geom_col() +
+  labs(x = "Number of Visits", y = "Restoration Location",
+       fill = "Type of Visitor",
+       title = "Total Visits to Delta Restoration Areas")
+
+base_plot + theme_bw()       # white background, dark grid
+base_plot + theme_minimal()  # no background panel
+base_plot + theme_light()    # light gray grid
+base_plot + theme_classic()  # no grid — publication classic
+```
+
+------------------------------------------------------------------------
+
+## Section 3: Custom theme() and Reusable Theme Objects
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 9–10 (theme() + my_theme)**
+
+Emphasize the ORDER WARNING: theme() must come AFTER theme_bw() or the
+built-in theme will override your custom settings.
+
+After building my_theme, show students how it applies to multiple plots
+with a single + my_theme call.
+:::
+
+### Fine-Tuning with theme()
+
+```{r}
+#| label: custom-theme
+
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(
+    x     = "Number of Visits",
+    y     = "Restoration Location",
+    fill  = "Type of Visitor",
+    title = "Total Visits to Delta Restoration Areas by Visitor Type"
+  ) +
+  theme_bw() +                         # built-in theme FIRST
+  theme(
+    legend.position = "bottom",        # move legend
+    axis.ticks.y    = element_blank()  # remove y-axis tick marks
+  )
+```
+
+### Save Theme as a Reusable Object
+
+```{r}
+#| label: my-theme
+
+my_theme <- theme_bw(base_size = 16) +
+  theme(
+    legend.position = "bottom",
+    axis.ticks.y    = element_blank()
+  )
+```
+
+```{r}
+#| label: plot-with-my-theme
+
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(
+    x        = "Number of Visits",
+    y        = "Restoration Location",
+    fill     = "Type of Visitor",
+    title    = "Total Visits to Delta Restoration Areas by Visitor Type",
+    subtitle = "Sum of all visits during study period"
+  ) +
+  my_theme
+```
+
+------------------------------------------------------------------------
+
+## Section 4: Exercise 2 — scale_x_continuous()
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slide 11 (Exercise 2)**
+
+Ask the chat prediction question BEFORE running. "What do you think
+scale_x_continuous(breaks = seq(0, 120, 20)) will do?"
+
+Then run once without expand, then once with expand = c(0,0) so students
+can see exactly what each argument changes.
+:::
+
+```{r}
+#| label: exercise-2-scale
+
+# Step 1: Add axis breaks
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(x = "Number of Visits", y = "Restoration Location",
+       fill = "Type of Visitor",
+       title = "Total Visits to Delta Restoration Areas by Visitor Type",
+       subtitle = "Sum of all visits during study period") +
+  scale_x_continuous(breaks = seq(0, 120, 20)) +
+  my_theme
+```
+
+```{r}
+# Step 2: Also remove the gap between bars and axis (expand)
+ggplot(data = daily_visits_loc,
+       aes(y = restore_loc, x = daily_visits,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(x = "Number of Visits", y = "Restoration Location",
+       fill = "Type of Visitor",
+       title = "Total Visits to Delta Restoration Areas by Visitor Type",
+       subtitle = "Sum of all visits during study period") +
+  scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0)) +
+  my_theme
+```
+
+------------------------------------------------------------------------
+
+## Section 5: Reordering with fct_reorder()
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 12–13 (fct_reorder)**
+
+After creating daily_visits_totals, run levels() and show students that
+the factor levels are now ordered by total visits, not alphabetically.
+This is the key to understanding what fct_reorder actually does — it
+doesn't sort the data frame rows; it reorders the factor levels that
+ggplot2 uses for axis ordering.
+:::
+
+### Build Totals and Reorder
+
+```{r}
+#| label: fct-reorder-ascending
+
+daily_visits_totals <- daily_visits_loc %>%
+  group_by(restore_loc) %>%
+  mutate(n = sum(daily_visits)) %>%
+  ungroup() %>%
+  mutate(restore_loc = fct_reorder(restore_loc, n))
+
+# Confirm: no longer alphabetical
+levels(daily_visits_totals$restore_loc)
+```
+
+```{r}
+#| label: plot-sorted-ascending
+
+ggplot(data = daily_visits_totals,
+       aes(x = daily_visits, y = restore_loc,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(x = "Number of Visits", y = "Restoration Location",
+       fill = "Type of Visitor",
+       title = "Total Visits to Delta Restoration Areas by Visitor Type",
+       subtitle = "Sum of all visits during study period") +
+  scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0)) +
+  my_theme
+```
+
+### Reverse Order — Most Visited at Top
+
+```{r}
+#| label: fct-reorder-descending
+
+daily_visits_totals <- daily_visits_loc %>%
+  group_by(restore_loc) %>%
+  mutate(n = sum(daily_visits)) %>%
+  ungroup() %>%
+  mutate(restore_loc = fct_reorder(restore_loc, desc(n)))
+
+ggplot(data = daily_visits_totals,
+       aes(x = daily_visits, y = restore_loc,
+           fill = visitor_type)) +
+  geom_col() +
+  labs(x = "Number of Visits", y = "Restoration Location",
+       fill = "Type of Visitor",
+       title = "Total Visits to Delta Restoration Areas by Visitor Type",
+       subtitle = "Sum of all visits during study period") +
+  scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0)) +
+  my_theme
+```
+
+------------------------------------------------------------------------
+
+## Section 6: Accessible Color with viridis + ggsave()
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 14–15 (viridis + ggsave)**
+
+Mention the accessibility rationale before running: \~1 in 12 men and 1
+in 200 women have some form of color vision deficiency.
+
+After saving, navigate to the figures/ folder in RStudio's Files pane
+and click the file to open it — show students the output.
+:::
+
+### scale_fill_viridis_d()
+
+```{r}
+#| label: viridis-color
+
+ggplot(data = daily_visits_totals,
+       aes(x = daily_visits, y = restore_loc,
+           fill = visitor_type)) +
+  geom_col() +
+  scale_fill_viridis_d() +
+  labs(
+    x        = "Number of Visits",
+    y        = "Restoration Location",
+    fill     = "Type of Visitor",
+    title    = "Total Visits to Delta Restoration Areas by Visitor Type",
+    subtitle = "Sum of all visits during study period"
+  ) +
+  scale_x_continuous(breaks = seq(0, 120, 20), expand = c(0, 0)) +
+  my_theme
+```
+
+### ggsave()
+
+```{r}
+#| label: ggsave-demo
+#| eval: false
+
+# Create the figures directory if it doesn't exist
+dir.create("figures", showWarnings = FALSE)
+
+# Save the last rendered plot
+ggsave("figures/visit_restore_site_delta.jpg",
+       width = 12, height = 6, units = "in")
+
+# Save a named object at publication resolution
+ggsave("figures/visit_restore_site_delta.png",
+       plot   = last_plot(),
+       width  = 12,
+       height = 6,
+       units  = "in",
+       dpi    = 300)
+```
+
+------------------------------------------------------------------------
+
+## Section 7: facet_wrap() — Small Multiples
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 16–17 (facet_wrap)**
+
+Connect back to Tufte before running: "This is literally Tufte's small
+multiples concept implemented in one function call."
+
+Point out scales = "free_y" explicitly — run once with and once without
+so students can see the difference.
+:::
+
+### Build the Faceted Plot
+
+```{r}
+#| label: facet-wrap-plot
+#| fig-width: 12
+#| fig-height: 8
+
+facet_plot <- ggplot(data = daily_visits_totals,
+                     aes(x = visitor_type, y = daily_visits,
+                         fill = visitor_type)) +
+  geom_col() +
+  facet_wrap(
+    ~restore_loc,
+    scales = "free_y",   # each panel gets its own y-axis scale
+    ncol   = 5,
+    nrow   = 2
+  ) +
+  scale_fill_viridis_d() +
+  labs(
+    x        = "Type of Visitor",
+    y        = "Number of Visits",
+    title    = "Total Visits to Delta Restoration Areas",
+    subtitle = "Sum of all visits during study period"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom",
+    axis.ticks.x    = element_blank(),
+    axis.text.x     = element_blank()   # legend handles labeling
+  )
+
+facet_plot
+```
+
+```{r}
+#| label: save-facet-plot
+#| eval: false
+
+ggsave("figures/visit_restore_site_facet.jpg",
+       plot   = facet_plot,
+       width  = 12,
+       height = 8,
+       units  = "in")
+```
+
+------------------------------------------------------------------------
+
+## Section 8: Interactive Visualization
+
+::: {.callout-tip appearance="minimal"}
+**Slide cue: Slides 18–21 (Interactive viz)**
+
+Remind students that these outputs are HTML-only — they won't appear in
+a static PDF. Render this document to HTML to see them.
+
+The leaflet maps will display interactively in the rendered HTML.
+Students can pan, zoom, and click the popups.
+:::
+
+### Unique Locations Data Frame
+
+```{r}
+#| label: locations-df
+
+locations <- visits_long %>%
+  distinct(restore_loc, .keep_all = TRUE) %>%
+  select(restore_loc, latitude, longitude)
+
+locations
+```
+
+### Interactive Table with DT
+
+```{r}
+#| label: dt-table
+
+datatable(locations)
+```
+
+### Interactive Map — OpenStreetMap Markers
+
+```{r}
+#| label: leaflet-basic
+
+leaflet(locations) %>%
+  addTiles() %>%                   # OpenStreetMap base layer
+  addMarkers(
+    lng   = ~longitude,
+    lat   = ~latitude,
+    popup = ~restore_loc           # clickable label
+  )
+```
+
+### Interactive Map — Styled Circle Markers
+
+```{r}
+#| label: leaflet-circle-markers
+
+leaflet(locations) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng         = ~longitude,
+    lat         = ~latitude,
+    popup       = ~restore_loc,
+    radius      = 5,
+    fillColor   = "salmon",
+    fillOpacity = 1,
+    stroke      = TRUE,
+    weight      = 0.5,
+    color       = "white",
+    opacity     = 1
+  )
+```
+
+### Interactive Map — Layered USGS Tiles
+
+```{r}
+#| label: leaflet-usgs-tiles
+
+leaflet(locations) %>%
+  addWMSTiles(
+    "https://basemap.nationalmap.gov/arcgis/services/USGSImageryTopo/MapServer/WmsServer",
+    layers  = "0",
+    options = WMSTileOptions(format = "image/png", transparent = TRUE)
+  ) %>%
+  addWMSTiles(
+    "https://basemap.nationalmap.gov/arcgis/services/USGSHydroCached/MapServer/WmsServer",
+    layers  = "0",
+    options = WMSTileOptions(format = "image/png", transparent = TRUE)
+  ) %>%
+  addCircleMarkers(
+    lng         = ~longitude,
+    lat         = ~latitude,
+    popup       = ~restore_loc,
+    radius      = 5,
+    fillColor   = "salmon",
+    fillOpacity = 1,
+    stroke      = TRUE,
+    weight      = 0.5,
+    color       = "white",
+    opacity     = 1
+  )
+```
+
+------------------------------------------------------------------------
+
+## Session Info
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```

@@ -1,0 +1,77 @@
+---
+title: "Exit ticket: Thinking in Pseudocode"
+course: "BIO/CHEM 806"
+format:
+  html:
+    toc: false
+    number-sections: false
+execute:
+  echo: false
+---
+
+**Purpose:**\
+This discussion is about learning to plan an analysis *before* writing code. Pseudocode helps us be explicit, deliberate, and reproducible in our thinking.
+
+### Prompt
+
+Respond to **all three parts** below.
+
+1.  **What is pseudocode and how is it different from code?**\
+    In your own words, explain what pseudocode is and how it differs from actual code. Focus on *purpose*, not syntax.
+
+2.  **Critique the following pseudocode:**\
+    “Process the samples. Do statistics. Make graph.”\
+    What is missing? Why would this be a problem for reproducibility or collaboration?
+
+3.  **Write pseudocode for calculating BMI from height and weight data.**\
+    Assume:
+
+    -   Height and weight are provided for multiple individuals
+
+    -   Units must be handled correctly
+
+    -   The result should be something that could later be graphed or summarized
+
+### Guidelines
+
+-   Use plain language (no programming syntax required)
+
+-   Aim for clarity and completeness, not length
+
+-   **1–2 short paragraphs or a short numbered list** is sufficient
+
+### Reply requirement
+
+Reply to **at least one classmate**:
+
+-   Comment on whether their pseudocode is clear and reproducible
+
+-   Suggest **one specific improvement**
+
+------------------------------------------------------------------------
+
+## Sample Response (Model)
+
+1.  **What is pseudocode?**\
+    Pseudocode is a way of describing the steps of an analysis in plain language before writing actual code. Its purpose is to clarify *what* should happen and *in what order*, without worrying about programming syntax. Unlike code, pseudocode is meant to be read and understood by humans, including collaborators who may not use the same programming language.
+
+2.  **Critique of the pseudocode:**\
+    “Process the samples. Do statistics. Make graph.”
+
+This pseudocode is too vague to be useful. It does not specify what “process” means, which statistics will be calculated, or what kind of graph will be produced. Someone else (or even the same person later) would have to make many assumptions, which makes the analysis difficult to reproduce or defend. Good pseudocode should reduce ambiguity, not rely on shared but unstated understanding.
+
+3.  **Pseudocode for calculating BMI:**
+
+4.  Start with a dataset containing height and weight for each individual
+
+5.  Check that height and weight values are present and numeric
+
+6.  Convert height to meters if necessary
+
+7.  Calculate BMI for each individual using the formula: weight divided by height squared
+
+8.  Store the BMI values in a new variable
+
+9.  Check for unrealistic BMI values and flag them if needed
+
+10. Summarize BMI values (e.g., mean, range) or prepare them for visualization

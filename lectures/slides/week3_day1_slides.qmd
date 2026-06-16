@@ -1,0 +1,553 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Literate Programming with Quarto]{.custom-title}
+
+[Week 3, Day 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#welcome data-menu-title="Welcome"}
+
+[Welcome to Week 3!]{.slide-title}
+
+::: body-text
+**This week:** Combining narrative and code
+
+**Literate programming** = Code + explanation in one document
+
+**Tool:** Quarto (evolution of R Markdown)
+:::
+
+------------------------------------------------------------------------
+
+##  {#recap data-menu-title="Recap"}
+
+[Where We've Been]{.slide-title}
+
+::: body-text
+**Week 1:** Data science thinking (explicit reasoning)
+
+**Week 2:** - Projects as organizing principle - Pseudocode as planning
+tool
+
+**Today:** Actually writing analysis documents that combine code,
+results, and narrative
+:::
+
+------------------------------------------------------------------------
+
+##  {#problem data-menu-title="The Problem"}
+
+[The Traditional Problem]{.slide-title}
+
+::: body-text
+**Old workflow:**
+
+1.  Run analysis in R → save plot
+2.  Write manuscript in Word
+3.  Copy/paste plot into Word
+4.  Revise analysis → new plot
+5.  Copy/paste again (hope you got the right one!)
+6.  Reviewer asks for change
+7.  Which version of the code made THIS plot?
+
+**Problem:** Code, results, and narrative are disconnected
+:::
+
+------------------------------------------------------------------------
+
+##  {#solution data-menu-title="Solution"}
+
+[Literate Programming Solution]{.slide-title}
+
+::: body-text
+**New workflow:**
+
+Everything in ONE document:
+
+\- Narrative explanation
+
+\- Code that runs
+
+\- Results (plots, tables) automatically generated
+
+\- Change code → results update automatically
+
+**One file = complete reproducible analysis**
+
+No more "which version made this plot?"
+:::
+
+------------------------------------------------------------------------
+
+##  {#quarto-intro data-menu-title="Quarto Introduction"}
+
+[Quarto Opens New Doors]{.slide-title}
+
+![Artwork by Allison
+Horst](../../images/r_programming_introduction/allison-horst-r-doorway.png){width="70%"
+fig-align="center"}
+
+------------------------------------------------------------------------
+
+##  {#quarto-explained data-menu-title="Quarto Explained"}
+
+[What Quarto Enables]{.slide-title}
+
+![Artwork by Allison
+Horst](../../images/r_programming_introduction/allison-horst-r-doorway.png){width="50%"
+fig-align="center"}
+
+::: body-text
+**Just like R packages open new doors:**
+
+Quarto opens the door to:
+
+\- Reproducible reports
+
+\- Interactive documents\
+- Presentations (like these slides!)
+
+\- Websites
+
+\- Books
+
+**All from the same tool**
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-is-quarto data-menu-title="What Is Quarto"}
+
+[What Is Quarto?]{.slide-title}
+
+::: body-text
+**Quarto** = Publishing system for data science
+
+**Creates:** HTML, PDF, Word documents, presentations, websites
+
+**From:** Plain text files (`.qmd`) with code and narrative
+
+**Evolution of:** R Markdown (if you've heard of it)
+
+**Key insight:** Write once, output to many formats
+:::
+
+------------------------------------------------------------------------
+
+##  {#anatomy data-menu-title="Anatomy"}
+
+[Anatomy of a Quarto Document]{.slide-title}
+
+::: code-text
+```` markdown
+---
+title: "Bee Diversity Analysis"
+author: "Your Name"
+format: html
+---
+
+## Introduction
+
+We surveyed 45 urban gardens for bee species richness.
+
+```{{r}}
+#| echo: true
+#| eval: false
+
+# This code runs when you render
+bees <- read.csv("data/raw/bees.csv")
+head(bees)
+```
+
+The mean richness was 12.3 species per site.
+````
+:::
+
+------------------------------------------------------------------------
+
+##  {#three-parts data-menu-title="Three Parts"}
+
+[Three Parts of a Quarto Document]{.slide-title}
+
+::: body-text
+**1. YAML Header** (metadata)
+
+``` markdown
+---
+title: "My Analysis"
+format: html
+---
+```
+
+**2. Narrative** (Markdown text)
+
+``` markdown
+We found significant differences between sites.
+```
+
+**3. Code chunks** (executable R code)
+
+```` markdown
+```{{r}}
+plot(x, y)
+```
+````
+:::
+
+------------------------------------------------------------------------
+
+##  {#yaml data-menu-title="YAML"}
+
+[YAML: Document Settings]{.slide-title}
+
+::: body-text
+**YAML** = Yet Another Markup Language
+
+Controls document appearance and behavior
+
+**Common settings:**
+:::
+
+``` yaml
+---
+title: "Water Quality Analysis"
+author: "Gretchen LeBuhn"
+date: "2024-01-22"
+format: 
+  html:
+    toc: true          # Table of contents
+    code-fold: true    # Collapsible code
+    theme: cosmo       # Visual theme
+---
+```
+
+------------------------------------------------------------------------
+
+##  {#markdown data-menu-title="Markdown"}
+
+[Markdown: Simple Formatting]{.slide-title}
+
+::: body-text
+**Markdown** = Plain text formatting language
+:::
+
+``` markdown
+# Main heading
+## Subheading
+
+**bold text**
+*italic text*
+
+- Bullet point
+- Another point
+
+1. Numbered item
+2. Another item
+
+[Link text](https://example.com)
+```
+
+::: body-text
+**Easy to read, easy to write**
+:::
+
+------------------------------------------------------------------------
+
+##  {#code-chunks data-menu-title="Code Chunks"}
+
+[Code Chunks: Where Analysis Happens]{.slide-title}
+
+::: body-text
+**Code chunks** = Executable code blocks
+:::
+
+```` markdown
+```{{r}}
+#| label: load-data
+#| echo: true
+
+# This code runs when you render
+bees <- read.csv("data/raw/bees.csv")
+head(bees)
+```
+````
+
+::: body-text
+**Output appears in final document automatically**
+:::
+
+------------------------------------------------------------------------
+
+##  {#chunk-options data-menu-title="Chunk Options"}
+
+[Code Chunk Options]{.slide-title}
+
+::: body-text
+Control what appears in output:
+:::
+
+```` markdown
+```{{r}}
+#| echo: true       # Show code
+#| eval: true       # Run code
+#| message: false   # Hide messages
+#| warning: false   # Hide warnings
+#| fig-width: 8     # Figure width
+#| fig-cap: "Species richness by site"
+
+plot(richness ~ site, data = bees)
+```
+````
+
+::: body-text
+**Common combinations:**
+
+-   Show code + output: `echo: true`
+-   Hide code, show output: `echo: false`
+-   Don't run: `eval: false`
+:::
+
+------------------------------------------------------------------------
+
+##  {#inline-code data-menu-title="Inline Code"}
+
+[Inline Code: Values in Text]{.slide-title}
+
+::: body-text
+**Problem:** Hardcoding values
+
+> "The mean richness was 12.3 species."
+
+What if data changes? Have to find and update manually.
+
+**Solution:** Inline code
+
+``` markdown
+The mean richness was `r mean(bees$richness)` species.
+```
+
+**Result:** Value updates automatically when data changes
+
+**No more copy/paste errors!**
+:::
+
+------------------------------------------------------------------------
+
+##  {#workflow data-menu-title="Workflow"}
+
+[Quarto Workflow]{.slide-title}
+
+::: body-text
+**1. Write** `.qmd` file
+
+-   Narrative in Markdown
+-   Code in chunks
+-   Settings in YAML
+
+**2. Render** (click "Render" button)
+
+-   Code executes
+-   Output generated
+-   Final document created
+
+**3. Share** HTML/PDF/Word file
+
+**One click = complete document**
+:::
+
+------------------------------------------------------------------------
+
+##  {#demo-intro data-menu-title="Demo Introduction"}
+
+[Live Demo: Creating First Quarto Doc]{.slide-title}
+
+::: body-text
+**We'll create:** Simple analysis report
+
+**Steps:**
+
+1.  Create new Quarto document
+2.  Add YAML header
+3.  Write narrative
+4.  Add code chunk
+5.  Render to HTML
+
+**Follow along or just watch**
+:::
+
+------------------------------------------------------------------------
+
+##  {#advantages data-menu-title="Advantages"}
+
+[Why This Is Better]{.slide-title}
+
+::: body-text
+**Reproducibility:** Everything in one place
+
+**Automation:** Change data → rerun → document updates
+
+**Transparency:** See exactly what code produced each result
+
+**Collaboration:** Send one file, collaborators can re-run
+
+**Version control:** Track changes with Git (Week 4!)
+
+**Efficiency:** No more copy/paste between programs
+:::
+
+------------------------------------------------------------------------
+
+##  {#common-mistakes data-menu-title="Common Mistakes"}
+
+[Common Quarto Mistakes]{.slide-title}
+
+::: body-text
+❌ **Forgetting backticks** around code chunks
+
+❌ **Wrong YAML indentation** (use spaces, not tabs)
+
+❌ **Code depends on earlier running code** not in document
+
+❌ **Absolute paths**
+
+``` r
+read.csv("C:/Users/Me/...")  # Breaks portability!
+```
+
+❌ **Not rendering frequently** to catch errors early
+:::
+
+------------------------------------------------------------------------
+
+##  {#best-practices data-menu-title="Best Practices"}
+
+[Quarto Best Practices]{.slide-title}
+
+::: body-text
+✅ **Render early and often** (catch errors immediately)
+
+✅ **Use chunk labels** (`#| label: descriptive-name`)
+
+✅ **Keep chunks focused** (one task per chunk)
+
+✅ **Add narrative** (explain why, not just what)
+
+✅ **Use relative paths** (project portability)
+
+✅ **Set chunk options** thoughtfully
+
+✅ **Comment your code** (future-you will thank you)
+:::
+
+------------------------------------------------------------------------
+
+##  {#breakout data-menu-title="Breakout Activity"}
+
+[Breakout Activity - 15 minutes]{.slide-title}
+
+::: body-text
+**Task:** Create a simple Quarto document
+
+**Requirements:**
+
+1.  YAML header with title, author, date
+2.  Introduction section explaining data
+3.  Code chunk loading data
+4.  Code chunk with basic summary
+5.  Narrative interpreting results
+6.  At least one inline code value
+
+**Use:** Your project data or toy dataset
+
+**Goal:** Render successfully to HTML
+:::
+
+------------------------------------------------------------------------
+
+##  {#homework data-menu-title="Homework"}
+
+[Before Wednesday]{.slide-title}
+
+::: body-text
+**Ungraded Assignment:** Create analysis Quarto document
+
+**Must include:**
+
+1.  Professional YAML header
+2.  Introduction (research question, data description)
+3.  Methods (what you did)
+4.  Results with code chunks
+5.  At least 2 inline code values
+6.  At least 1 figure or table
+7.  Conclusion
+
+**Submit:** Rendered HTML file + `.qmd` source
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket (Canvas) - 2-3 minutes]{.slide-title}
+
+::: body-text
+**Complete before leaving:**
+
+1.  **Explain:** What are the three parts of a Quarto document? (2-3
+    sentences)
+
+2.  **Contrast:** How is inline code different from code chunks? Give an
+    example of when to use each.
+
+3.  **Apply:** You calculated mean temperature as 18.7°C in a code
+    chunk. Write the inline code to insert this value in text.
+
+**Submit in Canvas →**
+:::
+
+------------------------------------------------------------------------
+
+##  {#summary data-menu-title="Summary"}
+
+[Key Concepts]{.slide-title}
+
+::: body-text
+1.  **Literate programming** = code + narrative together
+
+2.  **Quarto** = tool for reproducible documents
+
+3.  **Three parts:** YAML, Markdown, code chunks
+
+4.  **Render** = execute code, create document
+
+5.  **Inline code** = dynamic values in text
+
+6.  **Multiple formats** from one source
+
+**Wednesday:** Advanced Quarto (figures, tables, cross-references)
+
+**See you then!**
+:::

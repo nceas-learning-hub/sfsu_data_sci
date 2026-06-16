@@ -1,0 +1,19 @@
+---
+title: "Untitled"
+format: html
+---
+
+```{r load-data, message:false}
+
+
+water <- read.csv("../data/raw/water_samples.csv")
+
+```
+
+##Summmary stats
+
+```{r}
+mean_ph <- mean(water$ph, na.rm = TRUE)
+mean_ph
+```
+

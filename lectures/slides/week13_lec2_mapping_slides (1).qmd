@@ -1,0 +1,615 @@
+---
+title: "Week 13 Lecture 2: Spatial Joins, Maps & Mapping Choices"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Working with Spatial Data]{.custom-title}
+
+[Part 2: Spatial Joins, Maps & Mapping Choices]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 13**]{.custom-subtitle2}
+
+---
+
+## {#recap data-menu-title="Recap"}
+
+[Quick recap from Monday]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+- `sf` objects are data frames with a sticky `geometry` column
+- Every `sf` object has a **CRS** — always check with `st_crs()` before
+  doing anything spatial
+- CRS must match before any spatial operation — transform with
+  `st_transform()`
+- CSV with lat/lon → `sf` object with `st_as_sf()`
+- Naming convention: `_sf` suffix for class, `_4326`/`_3338` for CRS
+
+**Today:** spatial joins + three mapping approaches
+
+📖 [Textbook s15](https://nceas-learning-hub.github.io/sfsu_data_sci/s15_r_geospatial_vector_analysis.html) · sections 3–8
+:::
+
+---
+
+## {#learning-obj data-menu-title="Learning Objectives"}
+
+[By the end of today you will be able to...]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+- Perform a **spatial join** with `st_join()` to relate points to
+  polygons
+- Use `st_drop_geometry()` to aggregate spatially joined data as a
+  plain data frame
+- Combine geometries with `group_by()` + `summarize()` on `sf` objects
+- Save spatial data with `write_sf()`
+- Build a **static map** with `ggplot2` + `geom_sf()`
+- Add a **basemap** with `ggspatial::annotation_map_tile()`
+- Build an **interactive map** with `leaflet`
+:::
+
+---
+
+## {#spatial-join-concept data-menu-title="Spatial Join Concept"}
+
+[What is a spatial join?]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+A **spatial join** uses *geometry* — not a shared key column — to match
+rows from two datasets.
+
+> **In other words:** instead of `left_join(df1, df2, by = "id")`, you
+> join by asking: *"Does this point fall inside that polygon?"*
+
+The question we'll answer with the Alaska data:
+
+> **"How many people live in each Alaska region?"**
+
+We have population data by *city* point, not by *region* polygon. The
+spatial join assigns each city to its region based on geography — then
+we can aggregate.
+:::
+
+---
+
+## {#spatial-join-examples data-menu-title="Spatial Join Examples"}
+
+[Spatial joins across biology and chemistry]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+The same logic applies across disciplines — using location to create a
+match that no shared key column can provide:
+
+| Question | Points | Polygons |
+|----------|--------|----------|
+| Which county does each water sampling station fall in? | monitoring stations | county boundaries |
+| Which habitat type does each bird observation belong to? | occurrence records | land cover polygons |
+| Which watershed drains to each stream chemistry site? | sample sites | watershed boundaries |
+| Which census tract does each disease case belong to? | case addresses | census tracts |
+| Which marine protected area contains each dive survey? | survey sites | MPA boundaries |
+
+Think of your own data: do you have points and boundaries you'd want to
+connect?
+:::
+
+---
+
+## {#st-join data-menu-title="st_join()"}
+
+[Step 1: `st_join()` — the spatial left join]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+First, transform population points to match the regions CRS:
+:::
+
+```{r}
+pop_3338_sf <- st_transform(pop_4326_sf, crs = 3338)
+```
+
+:::{.body-text}
+Now join — each city row gets the attributes of the region it falls
+within:
+:::
+
+```{r}
+pop_joined_sf <- st_join(pop_3338_sf,
+                         ak_rgns_3338_sf,
+                         join = st_within)
+
+head(pop_joined_sf)
+```
+
+:::{.body-text}
+The `join =` argument specifies the geometric relationship.
+`st_within` asks: *is this point completely inside that polygon?*
+:::
+
+---
+
+## {#join-types data-menu-title="Join Types"}
+
+[Choosing a join type]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+The `join =` argument accepts any **spatial predicate** — a function
+that tests a geometric relationship between two objects:
+
+| Function | Asks... | Example use |
+|----------|---------|-------------|
+| `st_within` | Is geometry A completely inside B? | Points in polygons |
+| `st_intersects` | Do geometries share any space at all? | Overlapping polygons |
+| `st_crosses` | Does A cross through B? | Lines crossing polygons |
+| `st_is_within_distance` | Is A within a buffer distance of B? | Proximity analysis |
+
+The right choice depends on your **geometry types** and your **scientific
+question**. This is a methods decision — document it.
+
+Run `?st_within` to see the full list.
+:::
+
+---
+
+## {#drop-geometry data-menu-title="Drop Geometry"}
+
+[Step 2: `st_drop_geometry()` before aggregating]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+We want to `summarize()` across cities — but if we run `group_by()` on
+an `sf` object, R tries to aggregate the geometries too (combining all
+the city points into one MULTIPOINT per region). That's not what we
+want. Drop the geometry first:
+:::
+
+```{r}
+pop_rgn_df <- pop_joined_sf %>%
+    st_drop_geometry() %>%       # back to a plain data frame
+    group_by(region) %>%
+    summarize(total_pop = sum(population))
+
+head(pop_rgn_df)
+```
+
+:::{.body-text}
+Now `pop_rgn_df` is a plain data frame — `_df` suffix, not `_sf` —
+with one row per region and a total population column. No geometry. We
+rejoin it to the regions polygons next.
+:::
+
+---
+
+## {#left-join-back data-menu-title="Rejoin Geometry"}
+
+[Step 3: `left_join()` to reattach polygon geometry]{.slide-title}
+
+<hr>
+
+```{r}
+pop_rgn_3338_sf <- left_join(ak_rgns_3338_sf,
+                             pop_rgn_df,
+                             by = "region")
+
+# quick check
+plot(pop_rgn_3338_sf["total_pop"])
+```
+
+:::{.body-text}
+The three-step pattern — you'll use it constantly:
+
+1. `st_join()` → points get polygon attributes
+2. `st_drop_geometry()` + `group_by()` + `summarize()` → plain data
+   frame with aggregated values
+3. `left_join()` back to polygons → `sf` object ready to map
+:::
+
+---
+
+## {#summarize-geometries data-menu-title="Summarize Geometries"}
+
+[Bonus: `group_by()` + `summarize()` can also dissolve geometries]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+You can also `summarize()` *directly on an `sf` object* to combine
+(dissolve) geometries within each group:
+:::
+
+```{r}
+# Dissolve regions into management areas (combines polygons)
+pop_mgmt_3338_sf <- pop_rgn_3338_sf %>%
+    group_by(mgmt_area) %>%
+    summarize(total_pop = sum(total_pop))
+
+plot(pop_mgmt_3338_sf["total_pop"])
+```
+
+:::{.body-text}
+The region polygons are merged into one larger polygon per management
+area — this is called a **union** or **dissolve**. To keep the original
+polygon boundaries (group by label only, don't merge shapes), add
+`do_union = F`:
+:::
+
+```{r}
+pop_mgmt_3338_sf <- pop_rgn_3338_sf %>%
+    group_by(mgmt_area) %>%
+    summarize(total_pop = sum(total_pop), do_union = F)
+```
+
+---
+
+## {#write-sf data-menu-title="Saving Spatial Data"}
+
+[Step 4: Save with `write_sf()`]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+Save your spatial object so you don't have to rebuild it every session:
+:::
+
+```{r}
+write_sf(pop_rgn_3338_sf, here("data/ak_regions_population.shp"))
+```
+
+:::{.body-text}
+`.shp` writes an **ESRI Shapefile** — the most widely compatible format,
+readable in QGIS, ArcGIS, and by collaborators. It creates several
+companion files; keep them together.
+
+A more modern alternative is **GeoPackage** (`.gpkg`) — a single file,
+no column-name length limit, handles larger datasets:
+
+```r
+write_sf(pop_rgn_3338_sf, here("data/ak_regions_population.gpkg"))
+```
+
+Read either back with `read_sf()`. This save step belongs in your
+numbered script sequence — the same reproducibility practice we've
+used all semester.
+:::
+
+---
+
+## {#three-mapping-approaches data-menu-title="Three Mapping Approaches"}
+
+[Three tools for mapping spatial data]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+| Tool | Output | Best for |
+|------|--------|----------|
+| `ggplot2` + `geom_sf()` | Static image | Publication figures, full control |
+| `ggspatial` + `annotation_map_tile()` | Static + basemap | Static maps needing geographic context |
+| `leaflet` | Interactive (HTML) | Exploration, reports, web communication |
+
+The right choice is a **communication decision** — not just what's
+easiest to code. Who is your audience? What do they need to *do* with
+the map? A hiring manager exploring your portfolio map needs something
+different than a journal reviewer looking at a methods figure.
+
+Document your choice in your decision log.
+:::
+
+---
+
+## {#ggplot-geom-sf data-menu-title="ggplot + geom_sf"}
+
+[Static maps: `ggplot2` + `geom_sf()`]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+`geom_sf()` reads the geometry column automatically — you don't specify
+`x` and `y` aesthetics. Everything else works like any other ggplot
+layer:
+:::
+
+```{r}
+ggplot(pop_rgn_3338_sf) +
+    geom_sf(aes(fill = total_pop)) +
+    labs(fill = "Total Population") +
+    scale_fill_continuous(low = "khaki",
+                          high = "firebrick",
+                          labels = comma) +
+    theme_bw()
+```
+
+---
+
+## {#layering-geoms data-menu-title="Layering geoms"}
+
+[Layering multiple `geom_sf()` calls]{.slide-title}
+
+<hr>
+
+```{r}
+ggplot() +
+    geom_sf(data = pop_rgn_3338_sf,       # polygons: fill = total_pop
+            aes(fill = total_pop)) +
+    geom_sf(data = pop_3338_sf,            # points: city locations
+            size = 0.5) +
+    geom_sf(data = rivers_3338_sf,         # lines: rivers
+            aes(linewidth = StrOrder)) +
+    scale_linewidth(range = c(0.05, 0.5),
+                    guide = "none") +
+    labs(title = "Total Population by Alaska Region",
+         fill = "Total Population") +
+    scale_fill_continuous(low = "khaki",
+                          high = "firebrick",
+                          labels = comma) +
+    theme_bw()
+```
+
+:::{.body-text}
+**Layer order matters** — bottom to top. Polygons render first
+(background), then lines, then points (foreground). Note that
+`rivers_3338_sf` may not have an explicit EPSG set in its metadata —
+check [epsg.io](https://epsg.io) with the proj4 string to confirm it
+matches.
+:::
+
+---
+
+## {#ggspatial data-menu-title="Basemaps with ggspatial"}
+
+[Adding basemaps with `ggspatial`]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+Web tile basemaps (OpenStreetMap, etc.) use **Pseudo-Mercator (EPSG
+3857)** — the projection behind every major web mapping service.
+Transform your data to match before adding tiles:
+:::
+
+```{r}
+pop_3857_sf <- st_transform(pop_3338_sf, crs = 3857)
+
+ggplot(data = pop_3857_sf) +
+    ggspatial::annotation_map_tile(type = "osm",
+                                   zoom = 4,
+                                   progress = "none") +
+    geom_sf(aes(color = population), fill = NA) +
+    scale_color_continuous(low = "darkkhaki",
+                           high = "firebrick",
+                           labels = comma)
+```
+
+:::{.body-text}
+`annotation_map_tile()` **must go first** so it renders behind your
+data. Higher `zoom` = more detail, slower to load (tiles download over
+the network).
+:::
+
+---
+
+## {#when-basemaps data-menu-title="When to Use Basemaps"}
+
+[When does a basemap help — and when does it clutter?]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+**Use a basemap when:**
+
+- Your audience doesn't know the geography and roads, coastlines, or
+  city locations help them orient
+- Point locations relative to physical features matter for
+  interpretation (e.g., a contamination site relative to a river)
+
+**Skip the basemap when:**
+
+- Your boundaries are well-known (states, national parks, standard
+  regions)
+- The basemap visually competes with your data
+- You're making a publication figure for print — `theme_bw()` is
+  cleaner
+
+This is a **design decision** — document it in your decision log. If
+tile loading times out on your network, note that too.
+:::
+
+---
+
+## {#leaflet-intro data-menu-title="Leaflet Introduction"}
+
+[Interactive maps with `leaflet`]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+`leaflet` creates **browser-rendered interactive maps** — zoom, click,
+hover, popup. Key differences from `ggplot`:
+
+- Uses `%>%` pipes, not `+`
+- Renders in the browser (or Viewer pane), not the Plots pane
+- Expects your data in **WGS84 (EPSG 4326)**; it handles the visual
+  projection client-side
+
+For the Alaska Albers projection, we define a custom CRS object so
+leaflet renders it with the correct regional projection:
+:::
+
+```{r}
+epsg3338 <- leaflet::leafletCRS(
+    crsClass = "L.Proj.CRS",
+    code = "EPSG:3338",
+    proj4def = "+proj=aea +lat_1=55 +lat_2=65 +lat_0=50 +lon_0=-154
+                +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0
+                +units=m +no_defs",
+    resolutions = 2 ^ (16:7)
+)
+
+pop_rgn_4326_sf <- pop_rgn_3338_sf %>%
+    st_transform(crs = 4326)
+```
+
+---
+
+## {#leaflet-polygons data-menu-title="Leaflet Polygons"}
+
+[Building up a `leaflet` map: polygons + legend]{.slide-title}
+
+<hr>
+
+```{r}
+pal <- colorNumeric(palette = "Reds",
+                    domain = pop_rgn_4326_sf$total_pop)
+
+m <- leaflet(options = leafletOptions(crs = epsg3338)) %>%
+    addPolygons(
+        data = pop_rgn_4326_sf,
+        fillColor = ~pal(total_pop),   # ~ is leaflet's version of aes()
+        weight = 1,
+        color = "black",
+        fillOpacity = 1,
+        label = ~region
+    ) %>%
+    addLegend(
+        position = "bottomleft",
+        pal = pal,
+        values = range(pop_rgn_4326_sf$total_pop),
+        title = "Total Population"
+    )
+
+m
+```
+
+:::{.body-text}
+Build leaflet maps in stages — start with gray polygons to confirm they
+render, then add color and labels.
+:::
+
+---
+
+## {#leaflet-markers data-menu-title="Leaflet Circle Markers"}
+
+[Adding point layers to `leaflet`]{.slide-title}
+
+<hr>
+
+```{r}
+m <- leaflet(options = leafletOptions(crs = epsg3338)) %>%
+    addPolygons(data = pop_rgn_4326_sf,
+                fillColor = ~pal(total_pop),
+                weight = 1, color = "black", fillOpacity = 1) %>%
+    addCircleMarkers(
+        data = pop_4326_sf,
+        lat = ~lat,
+        lng = ~lng,
+        radius = ~log(population / 500),   # log scale: prevents huge outliers
+        fillColor = "gray",
+        fillOpacity = 1,
+        weight = 0.25,
+        color = "black",
+        label = ~paste0(city, ", population ", comma(population))
+    ) %>%
+    addLegend(position = "bottomleft", pal = pal,
+              values = range(pop_rgn_4326_sf$total_pop),
+              title = "Total Population")
+m
+```
+
+---
+
+## {#mapping-choices data-menu-title="Mapping Choices"}
+
+[Mapping is communication — make intentional choices]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+Every map encodes decisions that affect what your audience sees and
+concludes:
+
+- **Color scale** — sequential vs. diverging? Perceptually uniform?
+  Color-blind accessible?
+- **Point size** — proportional to value (`log(population/500)`) or
+  uniform?
+- **Projection** — does it distort the area or shape you're trying to
+  convey?
+- **Basemap** — geographic context, or visual noise?
+- **Static vs. interactive** — who's your audience, and what do they
+  need to *do* with the map?
+
+There is no single correct map. There are only more or less defensible
+choices — and your **decision log** is where you defend them.
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket — write in chat]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+In pseudocode, describe a complete spatial analysis pipeline for your
+own field or domain:
+
+1. Read in a CSV of sampling locations (lat/lon) → convert to `sf`
+2. Transform to match a polygon boundary file's CRS
+3. Spatial join: assign each sample point to the polygon it falls within
+4. Summarize: count or sum a value per polygon
+5. Re-attach results to polygon geometry
+
+Then: which of the three mapping approaches would you use to present
+these results — and why? Write one sentence justifying your choice.
+:::
+
+---
+
+## {#looking-ahead data-menu-title="Looking Ahead"}
+
+[Activity time]{.slide-title}
+
+<hr>
+
+:::{.body-text}
+**Monday cohort:** Complete the activity as homework before Thursday
+
+**Thursday cohort:** Work through this in-person with Nicole
+
+**What you'll need:**
+
+- Alaska KNB data (download code in the activity) — shapefiles +
+  population CSV
+- Packages: `sf`, `ggplot2`, `leaflet`, `ggspatial`, `dplyr`, `scales`,
+  `here`
+
+📖 [Textbook s15](https://nceas-learning-hub.github.io/sfsu_data_sci/s15_r_geospatial_vector_analysis.html) — your reference throughout the activity
+:::

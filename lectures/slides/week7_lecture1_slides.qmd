@@ -1,0 +1,536 @@
+---
+title: "Relational Data in Practice"
+subtitle: "Week 7 · Lecture 1"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Relational Data in Practice]{.custom-title}
+
+[Joins as scientific decisions]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 7 · Lecture 1**]{.custom-subtitle2}
+
+---
+
+## {#learning-obj data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+:::{.body-text}
+By the end of this lecture, you will be able to:
+
+- Explain why data lives in multiple tables and what that structure encodes
+- Read an entity-relationship diagram for a real dataset
+- Identify primary and foreign keys in a multi-table dataset
+- Choose a join type based on your scientific question
+- Predict row counts before executing a join
+:::
+
+---
+
+## {#week5-recap data-menu-title="Week 5 Recap"}
+
+[You already know the four join types]{.slide-title}
+
+:::{.body-text}
+In Week 5 we covered:
+
+- **Inner join** — only rows with matches in both tables
+- **Left join** — all rows from the left, matched rows from the right
+- **Right join** — all rows from the right, matched rows from the left
+- **Full outer join** — all rows from both, NAs where no match
+:::
+
+. . .
+
+:::{.body-text}
+Today's question is not *what are the join types?*
+
+Today's question is: **how do you decide which one to use — and how do you know if it worked?**
+:::
+
+---
+
+## {#why-multiple-tables data-menu-title="Why Multiple Tables"}
+
+[Why does data live in multiple tables?]{.slide-title}
+
+:::{.body-text}
+This is not a limitation. It is a **design decision**.
+
+Separating data into tables means:
+
+- Each table describes one *kind of thing* (observations, sites, species)
+- Information is recorded once, not duplicated across rows
+- Tables can be updated independently
+- Relationships between entities are made explicit
+:::
+
+. . .
+
+:::{.body-text}
+A join is not "fixing" a problem. It is **making a relationship explicit** for a specific analytical purpose.
+:::
+
+---
+
+## {#our-dataset data-menu-title="Our Dataset"}
+
+[This week's dataset: urban bird surveys]{.slide-title}
+
+:::{.body-text}
+Bird surveys from parks in the **central Arizona-Phoenix metropolitan area**  
+(Arizona State University, via the EDI Data Portal)
+
+Four tables:
+:::
+
+:::{.body-text}
+| Table | What it describes | Rows |
+|---|---|---|
+| `bird_observations` | Individual bird counts per survey | 595 |
+| `surveys` | Each survey event (date, location, observer) | 269 |
+| `sites` | Park locations and characteristics | 80 |
+| `taxalist` | Species names and identifiers | 58 |
+:::
+
+---
+
+## {#er-diagram-intro data-menu-title="ER Diagrams: What and Why"}
+
+[Entity-Relationship diagrams]{.slide-title}
+
+:::{.body-text}
+An **ER diagram** is a compact map of how tables connect.
+
+Before writing any join code, read the ER diagram first.
+
+**Four steps to build one:**
+
+1. Identify entities → one box per table
+2. List variables → mark primary and foreign keys
+3. Draw relationships → label with a verb
+4. Add cardinality → how many rows on each side?
+:::
+
+---
+
+## {#er-diagram-keys data-menu-title="ER Diagram: Keys"}
+
+[Step 2: Primary keys and foreign keys]{.slide-title}
+
+:::{.body-text}
+**Primary key (PK)** — uniquely identifies each row in its own table
+
+**Foreign key (FK)** — references the primary key of another table
+
+The table that *holds* the foreign key is always on the **many** side of a relationship.
+:::
+
+. . .
+
+:::{.body-text}
+```
+taxalist                    bird_observations
+──────────────────          ──────────────────────────
+species_id  (PK) ◄───────── species_id  (FK)
+common_name                 survey_id   (FK)
+asu_itis                    site_id     (FK)
+                            bird_count
+                            notes
+```
+
+One species in `taxalist` ← many observations in `bird_observations`
+:::
+
+---
+
+## {#er-diagram-cardinality data-menu-title="Crow's Foot Notation"}
+
+[Step 4: Cardinality with crow's foot notation]{.slide-title}
+
+:::{.body-text}
+Crow's foot symbols describe **how many rows** can participate on each side:
+:::
+
+:::{.body-text}
+| Symbol | Name | Meaning |
+|---|---|---|
+| `——\|` | One and only one | Exactly one row must match |
+| `——O\|` | Zero or one | Optional: zero or one match |
+| `——<` | One or many | At least one match required |
+| `——O<` | Zero or many | Any number, including none |
+:::
+
+. . .
+
+:::{.body-text}
+Example: `bird_observations` → `taxalist`
+
+- A bird observation identifies **one and only one** species `——|` at the `taxalist` end
+- A species may have **zero or many** observations `——O<` at the `bird_observations` end
+:::
+
+---
+
+## {#er-diagram data-menu-title="ER Diagram: Bird Dataset"}
+
+[The bird dataset ER diagram]{.slide-title}
+
+:::{.body-text}
+```
+bird_observations                surveys
+─────────────────────────        ──────────────────────────
+survey_id  (FK) O<────────|──── survey_id (PK)
+site_id    (FK) O<───────────┐  site_id  (FK) O<────────|─┐
+species_id (FK) O<──────┐    │                            │ │
+bird_count               │    │  sites                    │ │
+notes                    │    │  ──────────────────────   │ │
+                         │    └─ site_id    (PK) ─────────┘ │
+                         │       park_name                   │
+                         │       park_district  ◄────────────┘
+                         │       park_acreage
+                         │
+                         │    taxalist
+                         │    ──────────────────────────
+                         └─── species_id  (PK)
+                              common_name
+                              asu_itis
+```
+:::
+
+:::{.body-text}
+`bird_observations` sits at the center — three foreign keys, zero primary key columns of its own. Its identity is a **compound key**: `survey_id` + `site_id` + `species_id`.
+:::
+
+---
+
+## {#practice1 data-menu-title="Practice 1"}
+
+[Practice: Reading the structure]{.slide-title}
+
+:::{.body-text}
+**Take 5 minutes — answer in the chat when ready**
+
+Look at this simplified version of the four tables:
+
+```
+bird_observations: survey_id, site_id, species_id, bird_count, notes
+surveys:           survey_id, site_id, survey_date, observer, notes  
+sites:             site_id, park_name, park_district, park_acreage
+taxalist:          species_id, common_name, asu_itis
+```
+
+1. What is the primary key of `taxalist`?
+2. What is the primary key of `bird_observations`? (Hint: is it a single column or compound?)
+3. `site_id` appears in three tables. In which table is it a primary key? In which is it a foreign key?
+:::
+
+---
+
+## {#practice1-debrief data-menu-title="Practice 1 Debrief"}
+
+[Practice debrief]{.slide-title}
+
+:::{.body-text}
+**Primary key of `taxalist`:** `species_id` — each species appears exactly once
+
+**Primary key of `bird_observations`:** compound key — `survey_id` + `site_id` + `species_id` together uniquely identify each row
+
+**`site_id`:**
+- Primary key in `sites` (each park appears once)
+- Foreign key in `bird_observations` (links to which park the observation occurred at)
+- Foreign key in `surveys` (links to which park the survey was conducted at)
+:::
+
+. . .
+
+:::{.body-text}
+**Why does this matter before joining?**  
+If you're unclear on keys, you don't know what the join is actually doing.
+:::
+
+---
+
+## {#choosing-join data-menu-title="Choosing a Join"}
+
+[Choosing a join: start with your question]{.slide-title}
+
+:::{.body-text}
+The join type should follow from what you need scientifically:
+:::
+
+:::{.body-text}
+| Question | Join to use |
+|---|---|
+| I only want observations I can fully describe | `inner_join` |
+| I want all my observations, even if some metadata is missing | `left_join` |
+| I want to know what's in *both* datasets, including gaps | `full_join` |
+| I want to check what *won't* match before I commit | `anti_join` |
+:::
+
+. . .
+
+:::{.body-text}
+**The most dangerous join** is the one you choose without thinking.  
+A `left_join` when you needed an `inner_join` silently introduces NAs.  
+An `inner_join` when you needed a `left_join` silently drops data.
+:::
+
+---
+
+## {#predicting-rows data-menu-title="Predicting Row Counts"}
+
+[The most important question before every join]{.slide-title}
+
+:::{.body-text}
+**"How many rows do I expect in the result — and why?"**
+:::
+
+. . .
+
+:::{.body-text}
+Rules of thumb:
+
+- **Left join:** result has ≥ rows than the left table (never fewer)
+- **Inner join:** result has ≤ rows than the smaller table
+- **Full join:** result has ≥ rows than the larger table
+- **Any join:** if a key matches *multiple* rows on the other side, you get **row multiplication**
+:::
+
+. . .
+
+:::{.body-text}
+Row multiplication is not always wrong — but it's always worth noticing.
+:::
+
+---
+
+## {#row-multiplication data-menu-title="Row Multiplication"}
+
+[Row multiplication: a concrete example]{.slide-title}
+
+:::{.body-text}
+Suppose `bird_observations` has **3 rows** for `site_id = "LI-W"`:
+:::
+
+:::{.body-text}
+```
+bird_observations (left)    sites (right)
+────────────────────────    ─────────────────────
+site_id  species  count     site_id  park_name
+LI-W     BHCO     2         LI-W     Lindo Lake
+LI-W     RWBL     5
+LI-W     MODO     1
+```
+:::
+
+. . .
+
+:::{.body-text}
+After `left_join(by = "site_id")`:
+
+```
+site_id  species  count  park_name
+LI-W     BHCO     2      Lindo Lake
+LI-W     RWBL     5      Lindo Lake
+LI-W     MODO     1      Lindo Lake
+```
+
+**3 rows in, 3 rows out** — each observation gets its site's metadata. This is correct and expected.
+:::
+
+---
+
+## {#when-mult-wrong data-menu-title="When Multiplication Goes Wrong"}
+
+[When row multiplication is a problem]{.slide-title}
+
+:::{.body-text}
+Row multiplication becomes a problem when the **right table also has multiple matches**:
+:::
+
+:::{.body-text}
+```
+table_A (left)    table_B (right)
+──────────────    ───────────────
+id   value        id   category
+X    10            X    cat1
+X    20            X    cat2   ← two rows with same key!
+```
+:::
+
+. . .
+
+:::{.body-text}
+After `left_join(by = "id")`:
+```
+id   value   category
+X    10       cat1
+X    10       cat2     ← value 10 appears twice!
+X    20       cat1
+X    20       cat2     ← value 20 appears twice!
+```
+
+**2 rows in → 4 rows out.** Your row count has doubled and your summary statistics are now wrong.
+:::
+
+---
+
+## {#practice2 data-menu-title="Practice 2"}
+
+[Practice: Predict before you join]{.slide-title}
+
+:::{.body-text}
+**Take 5 minutes — type your answers in the chat**
+
+```
+birds_subset: 3 rows
+  site_id  species_id  bird_count
+  LI-W     BHCO        2
+  LI-W     RWBL        5
+  NU-C     BHCO        1
+
+sites: 80 rows  (one row per site)
+taxalist: 58 rows  (one row per species)
+```
+
+Predict the row count for each of these joins:
+
+1. `left_join(birds_subset, sites, by = "site_id")`
+2. `inner_join(birds_subset, taxalist, by = "species_id")`
+3. `full_join(birds_subset, sites, by = "site_id")`
+:::
+
+---
+
+## {#practice2-debrief data-menu-title="Practice 2 Debrief"}
+
+[Practice 2 debrief]{.slide-title}
+
+:::{.body-text}
+**1. `left_join(birds_subset, sites, by = "site_id")`**  
+→ **3 rows** — all rows from `birds_subset` are kept; each gets its site's metadata. No multiplication because `sites` has one row per `site_id`.
+
+**2. `inner_join(birds_subset, taxalist, by = "species_id")`**  
+→ **3 rows** — both BHCO and RWBL exist in `taxalist`, so all three observations match and are kept.
+
+**3. `full_join(birds_subset, sites, by = "site_id")`**  
+→ **81 rows** — 3 bird observation rows + 78 site rows that have no matching observations (NAs introduced for bird columns).
+:::
+
+. . .
+
+:::{.body-text}
+**The habit:** before every join, write down your expectation. If the result doesn't match, stop and investigate.
+:::
+
+---
+
+## {#syntax data-menu-title="Join Syntax"}
+
+[Join syntax in R]{.slide-title}
+
+:::{.body-text}
+All four mutating joins follow the same pattern:
+:::
+
+```r
+# with pipe
+left_table %>%
+  left_join(y = right_table, by = "key_column")
+
+# without pipe  
+left_join(x = left_table, y = right_table, by = "key_column")
+```
+
+. . .
+
+:::{.body-text}
+**Always name the `by` argument explicitly** — even when R would guess correctly.  
+It documents your intent and catches mismatches early.
+:::
+
+```r
+# compound key: two columns must match
+bird_observations %>%
+  left_join(y = surveys, by = c("survey_id", "site_id"))
+```
+
+---
+
+## {#filtering-joins data-menu-title="Filtering Joins"}
+
+[A new tool: filtering joins]{.slide-title}
+
+:::{.body-text}
+Unlike mutating joins, **filtering joins** don't add columns — they filter rows based on matches.
+:::
+
+:::{.body-text}
+| Function | What it does |
+|---|---|
+| `semi_join(x, y)` | Keep rows in x that **have** a match in y |
+| `anti_join(x, y)` | Keep rows in x that **do not have** a match in y |
+:::
+
+. . .
+
+:::{.body-text}
+`anti_join` is your **diagnostic tool**: run it before committing to a join to see what won't match.
+
+```r
+# What observations have no matching site?
+anti_join(bird_observations, sites, by = "site_id")
+
+# What species have no observations?
+anti_join(taxalist, bird_observations, by = "species_id")
+```
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+:::{.body-text}
+**In the chat (or Canvas — check for the link):**
+
+Write pseudocode that:
+
+1. Joins `bird_observations` to `taxalist` by `species_id`
+2. Checks whether the result has the expected number of rows
+3. If not, runs `anti_join` to identify what didn't match
+
+You do not need to write real R code — describe the steps in plain language.
+:::
+
+---
+
+## {#coming-up data-menu-title="Coming Up"}
+
+[Coming up]{.slide-title}
+
+:::{.body-text}
+**Activity (Monday/Thursday sections):**  
+Work through the s09 bird observation exercises — four tables, real data, predict before you join.
+
+**Lecture 2 (Wednesday):**  
+What happens when joins go wrong — mismatched keys, row duplication, silent data loss — and how to diagnose them systematically.
+:::

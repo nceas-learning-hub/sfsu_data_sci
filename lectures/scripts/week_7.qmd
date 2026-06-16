@@ -1,0 +1,78 @@
+---
+title: "Phoenix Urban Parks Bird Surveys (EDI) – Data Import & Quick View"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+# Keep output tidy
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# Core packages
+library(tidyverse)
+library(here)
+```
+
+
+```{r file-paths}
+
+data_dir <- here("data/r_practice_tidy_data_joins")
+
+birds_file    <- file.path(data_dir, "52_pp52_birds_1.csv")
+surveys_file  <- file.path(data_dir, "52_pp52_surveys_1.csv")
+sites_file    <- file.path(data_dir, "52_pp52_sites_1.csv")
+taxalist_file <- file.path(data_dir, "52_pp52_taxalist_1.csv")
+
+# Quick check
+file.exists(c(birds_file, surveys_file, sites_file, taxalist_file))
+```
+
+## 2) Read in the data (Question 1)
+
+This creates the required objects with the required names.
+
+```{r read-data}
+bird_observations <- readr::read_csv(birds_file, show_col_types = FALSE)
+surveys           <- readr::read_csv(surveys_file, show_col_types = FALSE)
+sites             <- readr::read_csv(sites_file, show_col_types = FALSE)
+taxalist          <- readr::read_csv(taxalist_file, show_col_types = FALSE)
+```
+
+```{r glimpse-tables}
+glimpse(bird_observations)
+glimpse(surveys)
+glimpse(sites)
+glimpse(taxalist)
+```
+
+---
+
+## 4) (Optional) quick relational checks
+
+These are handy because these datasets are meant to join on IDs.
+
+
+```{r id-checks}
+
+# How many unique IDs?
+bird_observations %>% summarise(n_sites = n_distinct(site_id),
+                               n_surveys = n_distinct(survey_id),
+                               n_species = n_distinct(species_id))
+
+surveys %>% summarise(n_sites = n_distinct(site_id),
+                      n_surveys = n_distinct(survey_id))
+
+# Check whether survey IDs in birds exist in surveys
+anti_join(
+  bird_observations %>% distinct(survey_id),
+  surveys %>% distinct(survey_id),
+  by = "survey_id"
+) %>% nrow()
+
+# Check whether species IDs in birds exist in taxalist
+anti_join(
+  bird_observations %>% distinct(species_id),
+  taxalist %>% distinct(species_id),
+  by = "species_id"
+) %>% nrow()
+```

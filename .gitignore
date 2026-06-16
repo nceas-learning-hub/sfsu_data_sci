@@ -4,9 +4,6 @@
 
 **/*.quarto_ipynb
 
-# Ignore all lecture materials
-lectures/
-student_materials/
 .Rhistory
 .DS_Store
 _freeze/
@@ -14,3 +11,4 @@ _freeze/
 *.rmarkdown
 * 2/
 
+.positai

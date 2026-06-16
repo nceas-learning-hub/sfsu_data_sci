@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein">
+<meta name="dcterms.date" content="2026-02-11">
+
+<title>Week 3 Day 2 Lecture Script: Advanced Quarto Features</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="week3_day2_script_DETAILED_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/popper.min.js"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="week3_day2_script_DETAILED_files/libs/quarto-html/anchor.min.js"></script>
+<link href="week3_day2_script_DETAILED_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week3_day2_script_DETAILED_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="week3_day2_script_DETAILED_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="week3_day2_script_DETAILED_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="week3_day2_script_DETAILED_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lecture-overview" id="toc-lecture-overview" class="nav-link active" data-scroll-target="#lecture-overview"><span class="header-section-number">1</span> Lecture Overview</a>
+  <ul class="collapse">
+  <li><a href="#pedagogical-approach" id="toc-pedagogical-approach" class="nav-link" data-scroll-target="#pedagogical-approach"><span class="header-section-number">1.1</span> Pedagogical Approach</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">1.2</span> Learning Objectives</a></li>
+  <li><a href="#materials-needed" id="toc-materials-needed" class="nav-link" data-scroll-target="#materials-needed"><span class="header-section-number">1.3</span> Materials Needed</a></li>
+  </ul></li>
+  <li><a href="#pre-class-setup" id="toc-pre-class-setup" class="nav-link" data-scroll-target="#pre-class-setup"><span class="header-section-number">2</span> Pre-Class Setup</a>
+  <ul class="collapse">
+  <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data"><span class="header-section-number">2.1</span> Sample Data</a></li>
+  <li><a href="#rstudio-setup" id="toc-rstudio-setup" class="nav-link" data-scroll-target="#rstudio-setup"><span class="header-section-number">2.2</span> RStudio Setup</a></li>
+  </ul></li>
+  <li><a href="#introduction-5-minutes" id="toc-introduction-5-minutes" class="nav-link" data-scroll-target="#introduction-5-minutes"><span class="header-section-number">3</span> Introduction (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-1-title-slide" id="toc-slide-1-title-slide" class="nav-link" data-scroll-target="#slide-1-title-slide"><span class="header-section-number">3.1</span> Slide 1: Title Slide</a></li>
+  <li><a href="#slide-2-welcome" id="toc-slide-2-welcome" class="nav-link" data-scroll-target="#slide-2-welcome"><span class="header-section-number">3.2</span> Slide 2: Welcome</a></li>
+  <li><a href="#slide-3-creating-professional-figures-intro" id="toc-slide-3-creating-professional-figures-intro" class="nav-link" data-scroll-target="#slide-3-creating-professional-figures-intro"><span class="header-section-number">3.3</span> Slide 3: Creating Professional Figures (intro)</a></li>
+  </ul></li>
+  <li><a href="#professional-figures-15-minutes" id="toc-professional-figures-15-minutes" class="nav-link" data-scroll-target="#professional-figures-15-minutes"><span class="header-section-number">4</span> Professional Figures (15 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-4-basic-figure-creation" id="toc-slide-4-basic-figure-creation" class="nav-link" data-scroll-target="#slide-4-basic-figure-creation"><span class="header-section-number">4.1</span> Slide 4: Basic Figure Creation</a></li>
+  <li><a href="#slide-5-figure-chunk-options" id="toc-slide-5-figure-chunk-options" class="nav-link" data-scroll-target="#slide-5-figure-chunk-options"><span class="header-section-number">4.2</span> Slide 5: Figure Chunk Options</a></li>
+  <li><a href="#slide-6-multiple-figures-in-one-chunk" id="toc-slide-6-multiple-figures-in-one-chunk" class="nav-link" data-scroll-target="#slide-6-multiple-figures-in-one-chunk"><span class="header-section-number">4.3</span> Slide 6: Multiple Figures in One Chunk</a></li>
+  <li><a href="#slide-7-cross-referencing-figures" id="toc-slide-7-cross-referencing-figures" class="nav-link" data-scroll-target="#slide-7-cross-referencing-figures"><span class="header-section-number">4.4</span> Slide 7: Cross-Referencing Figures</a></li>
+  </ul></li>
+  <li><a href="#tables-12-minutes" id="toc-tables-12-minutes" class="nav-link" data-scroll-target="#tables-12-minutes"><span class="header-section-number">5</span> Tables (12 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-8-creating-tables-in-quarto-intro" id="toc-slide-8-creating-tables-in-quarto-intro" class="nav-link" data-scroll-target="#slide-8-creating-tables-in-quarto-intro"><span class="header-section-number">5.1</span> Slide 8: Creating Tables in Quarto (intro)</a></li>
+  <li><a href="#slide-9-basic-table-with-kable" id="toc-slide-9-basic-table-with-kable" class="nav-link" data-scroll-target="#slide-9-basic-table-with-kable"><span class="header-section-number">5.2</span> Slide 9: Basic Table with kable</a></li>
+  <li><a href="#slide-10-formatting-tables-with-kableextra" id="toc-slide-10-formatting-tables-with-kableextra" class="nav-link" data-scroll-target="#slide-10-formatting-tables-with-kableextra"><span class="header-section-number">5.3</span> Slide 10: Formatting Tables with kableExtra</a></li>
+  <li><a href="#slide-11-cross-referencing-tables" id="toc-slide-11-cross-referencing-tables" class="nav-link" data-scroll-target="#slide-11-cross-referencing-tables"><span class="header-section-number">5.4</span> Slide 11: Cross-Referencing Tables</a></li>
+  </ul></li>
+  <li><a href="#equations-callouts-citations-15-minutes" id="toc-equations-callouts-citations-15-minutes" class="nav-link" data-scroll-target="#equations-callouts-citations-15-minutes"><span class="header-section-number">6</span> Equations, Callouts, Citations (15 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-12-adding-equations" id="toc-slide-12-adding-equations" class="nav-link" data-scroll-target="#slide-12-adding-equations"><span class="header-section-number">6.1</span> Slide 12: Adding Equations</a></li>
+  <li><a href="#slide-13-numbered-cross-referenced-equations" id="toc-slide-13-numbered-cross-referenced-equations" class="nav-link" data-scroll-target="#slide-13-numbered-cross-referenced-equations"><span class="header-section-number">6.2</span> Slide 13: Numbered &amp; Cross-Referenced Equations</a></li>
+  <li><a href="#slide-14-callout-blocks" id="toc-slide-14-callout-blocks" class="nav-link" data-scroll-target="#slide-14-callout-blocks"><span class="header-section-number">6.3</span> Slide 14: Callout Blocks</a></li>
+  <li><a href="#slide-15-adding-citations" id="toc-slide-15-adding-citations" class="nav-link" data-scroll-target="#slide-15-adding-citations"><span class="header-section-number">6.4</span> Slide 15: Adding Citations</a></li>
+  <li><a href="#slide-16-page-layout-options" id="toc-slide-16-page-layout-options" class="nav-link" data-scroll-target="#slide-16-page-layout-options"><span class="header-section-number">6.5</span> Slide 16: Page Layout Options</a></li>
+  <li><a href="#slide-17-code-folding-for-readers" id="toc-slide-17-code-folding-for-readers" class="nav-link" data-scroll-target="#slide-17-code-folding-for-readers"><span class="header-section-number">6.6</span> Slide 17: Code Folding for Readers</a></li>
+  <li><a href="#slide-18-document-themes" id="toc-slide-18-document-themes" class="nav-link" data-scroll-target="#slide-18-document-themes"><span class="header-section-number">6.7</span> Slide 18: Document Themes</a></li>
+  <li><a href="#slide-19-table-of-contents" id="toc-slide-19-table-of-contents" class="nav-link" data-scroll-target="#slide-19-table-of-contents"><span class="header-section-number">6.8</span> Slide 19: Table of Contents</a></li>
+  <li><a href="#slide-20-tabbed-content" id="toc-slide-20-tabbed-content" class="nav-link" data-scroll-target="#slide-20-tabbed-content"><span class="header-section-number">6.9</span> Slide 20: Tabbed Content</a></li>
+  <li><a href="#slide-21-complete-analysis-workflow" id="toc-slide-21-complete-analysis-workflow" class="nav-link" data-scroll-target="#slide-21-complete-analysis-workflow"><span class="header-section-number">6.10</span> Slide 21: Complete Analysis Workflow</a></li>
+  </ul></li>
+  <li><a href="#live-demo-12-minutes" id="toc-live-demo-12-minutes" class="nav-link" data-scroll-target="#live-demo-12-minutes"><span class="header-section-number">7</span> Live Demo (12 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#start-with-mondays-document" id="toc-start-with-mondays-document" class="nav-link" data-scroll-target="#start-with-mondays-document"><span class="header-section-number">7.0.1</span> 1. Start with Monday’s document</a></li>
+  <li><a href="#add-a-figure-with-label-and-caption-using-the-gear-icon" id="toc-add-a-figure-with-label-and-caption-using-the-gear-icon" class="nav-link" data-scroll-target="#add-a-figure-with-label-and-caption-using-the-gear-icon"><span class="header-section-number">7.0.2</span> 2. Add a figure with label and caption using the gear icon</a></li>
+  <li><a href="#create-a-table-with-kable-using-the-gear-icon" id="toc-create-a-table-with-kable-using-the-gear-icon" class="nav-link" data-scroll-target="#create-a-table-with-kable-using-the-gear-icon"><span class="header-section-number">7.0.3</span> 3. Create a table with kable using the gear icon</a></li>
+  <li><a href="#add-cross-references-using-autocomplete" id="toc-add-cross-references-using-autocomplete" class="nav-link" data-scroll-target="#add-cross-references-using-autocomplete"><span class="header-section-number">7.0.4</span> 4. Add cross-references using <code>@</code> autocomplete</a></li>
+  <li><a href="#add-a-callout-block-via-insert-menu" id="toc-add-a-callout-block-via-insert-menu" class="nav-link" data-scroll-target="#add-a-callout-block-via-insert-menu"><span class="header-section-number">7.0.5</span> 5. Add a callout block via Insert menu</a></li>
+  <li><a href="#set-document-properties-via-the-gear-next-to-render" id="toc-set-document-properties-via-the-gear-next-to-render" class="nav-link" data-scroll-target="#set-document-properties-via-the-gear-next-to-render"><span class="header-section-number">7.0.6</span> 6. Set document properties via the gear next to Render</a></li>
+  <li><a href="#render-and-show-the-result" id="toc-render-and-show-the-result" class="nav-link" data-scroll-target="#render-and-show-the-result"><span class="header-section-number">7.0.7</span> 7. Render and show the result</a></li>
+  <li><a href="#toggle-to-source-mode-to-show-what-the-visual-editor-generated" id="toc-toggle-to-source-mode-to-show-what-the-visual-editor-generated" class="nav-link" data-scroll-target="#toggle-to-source-mode-to-show-what-the-visual-editor-generated"><span class="header-section-number">7.0.8</span> 8. Toggle to Source mode to show what the Visual Editor generated</a></li>
+  </ul></li>
+  <li><a href="#multiple-output-formats-5-minutes" id="toc-multiple-output-formats-5-minutes" class="nav-link" data-scroll-target="#multiple-output-formats-5-minutes"><span class="header-section-number">8</span> Multiple Output Formats (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-22-best-practices" id="toc-slide-22-best-practices" class="nav-link" data-scroll-target="#slide-22-best-practices"><span class="header-section-number">8.1</span> Slide 22: Best Practices</a></li>
+  <li><a href="#slide-23-debugging-complex-documents" id="toc-slide-23-debugging-complex-documents" class="nav-link" data-scroll-target="#slide-23-debugging-complex-documents"><span class="header-section-number">8.2</span> Slide 23: Debugging Complex Documents</a></li>
+  <li><a href="#slide-24-25-pdf-and-word-output" id="toc-slide-24-25-pdf-and-word-output" class="nav-link" data-scroll-target="#slide-24-25-pdf-and-word-output"><span class="header-section-number">8.3</span> Slide 24-25: PDF and Word Output</a></li>
+  </ul></li>
+  <li><a href="#breakout-activity-15-minutes" id="toc-breakout-activity-15-minutes" class="nav-link" data-scroll-target="#breakout-activity-15-minutes"><span class="header-section-number">9</span> Breakout Activity (15 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-26-breakout-activity" id="toc-slide-26-breakout-activity" class="nav-link" data-scroll-target="#slide-26-breakout-activity"><span class="header-section-number">9.1</span> Slide 26: Breakout Activity</a></li>
+  <li><a href="#breakout-debrief" id="toc-breakout-debrief" class="nav-link" data-scroll-target="#breakout-debrief"><span class="header-section-number">9.2</span> Breakout Debrief</a></li>
+  </ul></li>
+  <li><a href="#wrap-up-5-minutes" id="toc-wrap-up-5-minutes" class="nav-link" data-scroll-target="#wrap-up-5-minutes"><span class="header-section-number">10</span> Wrap-Up (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-27-homework" id="toc-slide-27-homework" class="nav-link" data-scroll-target="#slide-27-homework"><span class="header-section-number">10.1</span> Slide 27: Homework</a></li>
+  <li><a href="#slide-28-exit-ticket" id="toc-slide-28-exit-ticket" class="nav-link" data-scroll-target="#slide-28-exit-ticket"><span class="header-section-number">10.2</span> Slide 28: Exit Ticket</a></li>
+  <li><a href="#slide-29-summary" id="toc-slide-29-summary" class="nav-link" data-scroll-target="#slide-29-summary"><span class="header-section-number">10.3</span> Slide 29: Summary</a></li>
+  </ul></li>
+  <li><a href="#post-lecture-checklist" id="toc-post-lecture-checklist" class="nav-link" data-scroll-target="#post-lecture-checklist"><span class="header-section-number">11</span> Post-Lecture Checklist</a></li>
+  <li><a href="#common-questions" id="toc-common-questions" class="nav-link" data-scroll-target="#common-questions"><span class="header-section-number">12</span> Common Questions</a></li>
+  <li><a href="#timing-notes" id="toc-timing-notes" class="nav-link" data-scroll-target="#timing-notes"><span class="header-section-number">13</span> Timing Notes</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week 3 Day 2 Lecture Script: Advanced Quarto Features</h1>
+<p class="subtitle lead">BIO/CHEM 806 - Detailed Instructor Guide</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 11, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="lecture-overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Lecture Overview</h1>
+<p><strong>Duration:</strong> 75 minutes <strong>Format:</strong> Online synchronous <strong>Students:</strong> ~30 graduate students</p>
+<section id="pedagogical-approach" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="pedagogical-approach"><span class="header-section-number">1.1</span> Pedagogical Approach</h2>
+<p>This lecture leads with the <strong>Visual Editor</strong> for all features. Students learn what to click and where, then see the source code as “Under the Hood” context. This makes advanced Quarto features accessible to students who are not comfortable writing raw markup, while still building their literacy in what the Visual Editor generates.</p>
+<p><strong>Key Visual Editor tools students will learn today:</strong></p>
+<ul>
+<li><strong>Chunk gear icon</strong> ⚙️ — for figure/table labels, captions, sizing, code folding</li>
+<li><strong><code>@</code> autocomplete</strong> — for inserting cross-references</li>
+<li><strong>Insert menu</strong> — for callouts, citations, equations, divs, tables</li>
+<li><strong>Document properties gear</strong> ⚙️ (next to Render button) — for TOC, themes, output format, bibliography</li>
+</ul>
+</section>
+<section id="learning-objectives" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.2</span> Learning Objectives</h2>
+<p>By the end of this lecture, students will be able to:</p>
+<ol type="1">
+<li>Create professional figures with proper captions and labels using the Visual Editor</li>
+<li>Generate formatted tables from data frames and label them for cross-referencing</li>
+<li>Use the <code>@</code> autocomplete to insert cross-references to figures, tables, and equations</li>
+<li>Add callout blocks, citations, and equations via the Insert menu</li>
+<li>Customize document layout and appearance using document properties</li>
+<li>Output Quarto documents to multiple formats (HTML, PDF, Word)</li>
+</ol>
+</section>
+<section id="materials-needed" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="materials-needed"><span class="header-section-number">1.3</span> Materials Needed</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Slide deck rendered</label></li>
+<li><label><input type="checkbox">RStudio with Visual Editor open and sample data ready</label></li>
+<li><label><input type="checkbox">Example documents showing different output formats</label></li>
+<li><label><input type="checkbox">Breakout Google Doc link</label></li>
+<li><label><input type="checkbox">Exit ticket in Canvas (updated to ask about Visual Editor steps)</label></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="pre-class-setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Pre-Class Setup</h1>
+<section id="sample-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sample-data"><span class="header-section-number">2.1</span> Sample Data</h2>
+<p>Create <code>analysis_data.csv</code>:</p>
+<pre class="csv"><code>site,richness,latitude
+North,15,38.5
+Central,12,38.0
+South,18,37.5
+North,14,38.5
+Central,13,38.0
+South,17,37.5</code></pre>
+</section>
+<section id="rstudio-setup" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="rstudio-setup"><span class="header-section-number">2.2</span> RStudio Setup</h2>
+<ul>
+<li>Open RStudio with a <code>.qmd</code> file in <strong>Visual Editor mode</strong> (toggle at top-left of the editor pane)</li>
+<li>Have the sample data loaded so you can create figures/tables live</li>
+<li>Have a second <code>.qmd</code> file open in <strong>Source mode</strong> so you can toggle between the two during the demo to show what the Visual Editor generates</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="introduction-5-minutes" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Introduction (5 minutes)</h1>
+<section id="slide-1-title-slide" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="slide-1-title-slide"><span class="header-section-number">3.1</span> Slide 1: Title Slide</h2>
+<p><strong>[00:00-00:01]</strong></p>
+<p><em>No narration needed — students read the title as they join.</em></p>
+<hr>
+</section>
+<section id="slide-2-welcome" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="slide-2-welcome"><span class="header-section-number">3.2</span> Slide 2: Welcome</h2>
+<p><strong>[00:01-00:04]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Welcome back! On Monday you learned Quarto basics — YAML, Markdown, code chunks, and rendering. Today we’re leveling up to create PROFESSIONAL-QUALITY documents.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“We’re going to learn how to add proper figures with captions, formatted tables, cross-references that update automatically, and a bunch of layout features that make your documents look publication-ready.”</p>
+</blockquote>
+<p><strong>Draw attention to the new line on the slide:</strong></p>
+<blockquote class="blockquote">
+<p>“Notice the approach listed here: ‘Visual Editor first, source code for reference.’ Today I’m going to show you how to do everything through the Visual Editor’s menus and dialogs. You won’t need to memorize any raw syntax. The slides have ‘Under the Hood’ boxes that show you what the Visual Editor is writing for you — that’s there for your reference, but you don’t need to type any of it yourself.”</p>
+</blockquote>
+<p><strong>Why this matters:</strong></p>
+<blockquote class="blockquote">
+<p>“The reason I’m teaching it this way is that the Visual Editor is genuinely faster for these features. Professionals use it. It’s not training wheels — it’s just a better interface for things like setting figure options, inserting citations, and building cross-references. If you prefer source mode later, great, but there’s no reason to struggle with syntax when there’s a dialog box that does it for you.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-3-creating-professional-figures-intro" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="slide-3-creating-professional-figures-intro"><span class="header-section-number">3.3</span> Slide 3: Creating Professional Figures (intro)</h2>
+<p><strong>[00:04-00:05]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s start with figures. In research, your figures need three things: proper captions, consistent sizing, and the ability to reference them in your text — like ‘As shown in Figure 1…’ Quarto handles all of this automatically.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Think about your current workflow. You probably make a plot in R, save it as an image, paste it into Word, resize it, write a caption underneath, and then manually type ‘see Figure 3.’ If you add a figure earlier in the document, you have to renumber everything. Quarto eliminates all of that.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Your figures are created directly from your code, captioned automatically, numbered automatically, and cross-referenced automatically. If you reorder them, the numbers update. If you change the data, the figure updates.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="professional-figures-15-minutes" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Professional Figures (15 minutes)</h1>
+<section id="slide-4-basic-figure-creation" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="slide-4-basic-figure-creation"><span class="header-section-number">4.1</span> Slide 4: Basic Figure Creation</h2>
+<p><strong>[00:05-00:10]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s how you create a figure in the Visual Editor. There are five steps, and they’re all point-and-click.”</p>
+</blockquote>
+<p><strong>Walk through each step on the slide:</strong></p>
+<blockquote class="blockquote">
+<p>“Step 1: Write your plotting code inside a code chunk. You already know how to do this from Monday — just your normal ggplot or base R plotting code.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 2: Click the gear icon on the code chunk. You’ll see it in the upper-right corner of the chunk — it’s a little ⚙️. This opens the chunk options dialog.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 3: In the dialog, set the Label field. This is critical — type something that starts with <code>fig-</code>. For example, <code>fig-richness</code>. The <code>fig-</code> prefix is what tells Quarto ‘this is a figure, please number it and let me cross-reference it.’ If you forget the <code>fig-</code> prefix, Quarto will still show the plot, but it won’t be numbered or cross-referenceable.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 4: Set the Caption field. Write a complete sentence that describes what the figure shows. This is what appears below the figure in your rendered document. Think of it as the caption you’d write in a journal article.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 5: Set the Width and Height. These are in inches. A good default for a full-width figure is 8 wide by 6 tall. For side-by-side figures, you’d go narrower.”</p>
+</blockquote>
+<p><strong>Point to the callout box on the slide:</strong></p>
+<blockquote class="blockquote">
+<p>“See the ‘Under the Hood’ box at the bottom? That shows you what the gear icon is actually writing into your code chunk. Those <code>#|</code> lines — label, fig-cap, fig-width, fig-height — that’s the source code equivalent. You never need to type these yourself if you use the gear icon, but it’s useful to recognize them when you see them.”</p>
+</blockquote>
+<p><strong>Common mistake to flag:</strong></p>
+<blockquote class="blockquote">
+<p>“The number one mistake I see: forgetting the <code>fig-</code> prefix on the label. If you write <code>label: richness</code> instead of <code>label: fig-richness</code>, your cross-references won’t work and you’ll get question marks instead of figure numbers.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-5-figure-chunk-options" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="slide-5-figure-chunk-options"><span class="header-section-number">4.2</span> Slide 5: Figure Chunk Options</h2>
+<p><strong>[00:10-00:12]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s look at all the options available in that gear dialog. There are four main ones for figures.”</p>
+</blockquote>
+<p><strong>Walk through the list:</strong></p>
+<blockquote class="blockquote">
+<p>“Width and Height — size in inches. These control how big the figure is in your rendered document. If your figure looks squished or stretched, this is where you fix it.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Aspect ratio — this is an alternative to setting both width and height. If you set width to 8 and aspect ratio to 0.75, the height will be 6 automatically. Some people find this easier than specifying both dimensions.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Caption — the text below the figure. Write a complete, descriptive sentence. Good captions are specific: ‘Species richness across three urban garden sites in San Francisco, 2024’ is much better than ‘Figure showing richness.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Alignment — center, left, or right. This is a dropdown in the gear dialog. Center is the default and usually what you want for full-width figures.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The key message here: use the dialog instead of memorizing syntax. That’s what it’s for.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-6-multiple-figures-in-one-chunk" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="slide-6-multiple-figures-in-one-chunk"><span class="header-section-number">4.3</span> Slide 6: Multiple Figures in One Chunk</h2>
+<p><strong>[00:12-00:14]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Sometimes you want to show two related plots side by side — maybe pH and dissolved oxygen from the same water sampling study. You can do this in a single code chunk.”</p>
+</blockquote>
+<p><strong>Walk through the steps:</strong></p>
+<blockquote class="blockquote">
+<p>“In the gear dialog, you’ll set three things. First, the main Caption — this is the overall caption that describes the whole panel. Something like ‘Comparison of water quality metrics across sampling sites.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Second, you add Subcaptions — one for each plot in the chunk. These label the individual panels. ‘pH by site’ and ‘Dissolved oxygen by site’, for example.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Third, set Layout columns to 2. This tells Quarto to arrange the plots in two columns — side by side.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The result is a professional-looking panel figure, like what you’d see in a journal article, with (a) and (b) labels, individual subcaptions, and one shared overall caption. And the whole thing is generated from a single code chunk.”</p>
+</blockquote>
+<p><strong>When to use this:</strong></p>
+<blockquote class="blockquote">
+<p>“This is really common in ecology and chemistry papers — any time you have related measurements that you want to compare visually. The alternative is making two separate figures, which takes up more space and doesn’t show the comparison as clearly.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-7-cross-referencing-figures" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="slide-7-cross-referencing-figures"><span class="header-section-number">4.4</span> Slide 7: Cross-Referencing Figures</h2>
+<p><strong>[00:14-00:17]</strong></p>
+<p><strong>This is one of the most important slides in the deck. Spend time here.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“This is where it gets powerful. Cross-references are the feature that makes Quarto a genuine improvement over your current workflow.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 1: Make sure your figure chunk has a <code>fig-</code> label. You set this in the gear icon, and we just covered that.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 2: Put your cursor where you want to reference the figure in your text. Now type the <code>@</code> symbol. Just a single at-sign.”</p>
+</blockquote>
+<p><strong>Pause for effect:</strong></p>
+<blockquote class="blockquote">
+<p>“When you type <code>@</code>, an autocomplete menu drops down. It lists every labeled element in your document — all your <code>fig-</code> figures, all your <code>tbl-</code> tables, all your <code>eq-</code> equations. Just scroll to the one you want and click it. Done.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Quarto inserts the reference, and when you render, it becomes ‘Figure 1’ or ‘Figure 3’ or whatever the correct number is. If you later add a new figure before this one, the number updates automatically. You never manually type ‘Figure 1.’ You always use the <code>@</code> autocomplete.”</p>
+</blockquote>
+<p><strong>Drive home the key insight:</strong></p>
+<blockquote class="blockquote">
+<p>“Think about what this saves you. In a manuscript with 8 figures and 5 tables, if a reviewer asks you to add a figure near the beginning, you’d normally have to renumber every figure and table reference in the entire document. With Quarto, you add the figure, and everything updates. This is what reproducible writing actually looks like.”</p>
+</blockquote>
+<p><strong>Common mistake:</strong></p>
+<blockquote class="blockquote">
+<p>“I cannot stress this enough: never type ‘see Figure 1’ manually. Always use <code>@fig-label</code>. If someone in your breakout room types ‘see Figure 1,’ please gently redirect them.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="tables-12-minutes" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Tables (12 minutes)</h1>
+<section id="slide-8-creating-tables-in-quarto-intro" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="slide-8-creating-tables-in-quarto-intro"><span class="header-section-number">5.1</span> Slide 8: Creating Tables in Quarto (intro)</h2>
+<p><strong>[00:17-00:18]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Now let’s talk about tables. There are three approaches in Quarto.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“First, markdown tables. If you just need a simple static table — like a glossary or a methods summary — the Visual Editor makes this incredibly easy. Go to Table → Insert Table and you get a spreadsheet-like grid. You can type right into the cells and add/remove rows and columns. It works just like a table in Word or Google Docs.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Second, <code>kable()</code> from the knitr package. This is what you’ll use most of the time — it takes an R data frame and converts it to a formatted table. So your summary statistics, your ANOVA results, your model coefficients — anything you’ve computed in R can go straight into a table.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Third, the gt package, which gives you really fine-grained control over formatting. We won’t cover gt today, but it’s worth knowing about for publication-quality tables.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Today we’re focusing on kable, because it’s the most practical for the work you’re doing.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-9-basic-table-with-kable" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="slide-9-basic-table-with-kable"><span class="header-section-number">5.2</span> Slide 9: Basic Table with kable</h2>
+<p><strong>[00:18-00:21]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Creating a cross-referenceable table with kable follows the exact same pattern as figures. The Visual Editor makes it simple.”</p>
+</blockquote>
+<p><strong>Walk through the steps:</strong></p>
+<blockquote class="blockquote">
+<p>“Step 1: Write your R code that produces a data frame and pipes it to <code>kable()</code>. Your code might compute summary statistics with <code>aggregate()</code> or <code>group_by() %&gt;% summarize()</code>, then pass the result to <code>kable()</code> to format it as a table.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 2: Click the gear icon on the chunk.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 3: Set the Label to something starting with <code>tbl-</code>. For example, <code>tbl-summary</code>. Same pattern as <code>fig-</code> for figures — the prefix tells Quarto what kind of element this is.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 4: Set the Caption. Again, a complete sentence: ‘Summary statistics for species richness across three urban garden sites.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The <code>digits</code> argument inside <code>kable()</code> controls decimal places. <code>digits = 2</code> gives you two decimal places, which is usually appropriate for ecological data.”</p>
+</blockquote>
+<p><strong>Emphasize the pattern:</strong></p>
+<blockquote class="blockquote">
+<p>“Notice the pattern? Figures use <code>fig-</code> prefix, tables use <code>tbl-</code> prefix. Same gear icon, same workflow. Labels, captions, and cross-references all work identically. Once you learn the pattern for figures, you already know how to do tables.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-10-formatting-tables-with-kableextra" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="slide-10-formatting-tables-with-kableextra"><span class="header-section-number">5.3</span> Slide 10: Formatting Tables with kableExtra</h2>
+<p><strong>[00:21-00:23]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“For more polished tables, the <code>kableExtra</code> package gives you styling options. This part is done in R code, not the Visual Editor — it’s how you control the visual appearance of the table itself.”</p>
+</blockquote>
+<p><strong>Walk through the code on the slide:</strong></p>
+<blockquote class="blockquote">
+<p>“<code>kable_styling()</code> adds Bootstrap styling — ‘striped’ gives alternating row colors, ‘hover’ highlights the row when you mouse over it. Both of these make tables much easier to read.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“<code>column_spec(1, bold = TRUE)</code> makes the first column bold — useful for row labels like site names.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“<code>row_spec(0, bold = TRUE, background = '#D3D3D3')</code> styles the header row — row 0 is the header. Here we’re making it bold with a light gray background.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You don’t need to memorize these. The kableExtra package has excellent documentation, and you’ll develop a template of table styling code that you reuse. The point is: you can get publication-quality tables directly from R without any manual formatting.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-11-cross-referencing-tables" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="slide-11-cross-referencing-tables"><span class="header-section-number">5.4</span> Slide 11: Cross-Referencing Tables</h2>
+<p><strong>[00:23-00:25]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Cross-referencing tables works exactly the same as figures. I want to emphasize this because the consistency is one of Quarto’s best design decisions.”</p>
+</blockquote>
+<p><strong>Walk through the steps:</strong></p>
+<blockquote class="blockquote">
+<p>“Step 1: Make sure your table chunk has a <code>tbl-</code> label — you set this in the gear icon.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 2: In your text, type <code>@</code>. The autocomplete menu appears, and this time it lists your <code>tbl-</code> labels alongside your <code>fig-</code> labels and any <code>eq-</code> labels.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 3: Select your table reference. Quarto renders it as ‘Table 1’ or whatever the correct number is.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Same automatic numbering. Same automatic updating if you reorder. Same <code>@</code> autocomplete. One pattern to learn, and it works for figures, tables, and equations.”</p>
+</blockquote>
+<p><strong>Example in context:</strong></p>
+<blockquote class="blockquote">
+<p>“So your results section might read: ‘Statistical analysis (Table 1) revealed significant differences among sites (p &lt; 0.001). Species richness was highest at southern sites (Figure 2).’ And every one of those references was inserted with the <code>@</code> autocomplete, so they’ll always be correct.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="equations-callouts-citations-15-minutes" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Equations, Callouts, Citations (15 minutes)</h1>
+<section id="slide-12-adding-equations" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="slide-12-adding-equations"><span class="header-section-number">6.1</span> Slide 12: Adding Equations</h2>
+<p><strong>[00:25-00:28]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“For scientific writing, you often need equations. The Visual Editor has a built-in equation editor that makes this much easier than writing raw LaTeX.”</p>
+</blockquote>
+<p><strong>Walk through inline math:</strong></p>
+<blockquote class="blockquote">
+<p>“For inline equations — the kind that appear within a sentence — go to Insert → Inline Math. Or click the Sigma button (Σ) on the toolbar. A small pop-up appears where you type your LaTeX. As you type, you see a live preview of the rendered equation right there in the editor. So if you’re writing the Shannon diversity formula, you type <code>H' = -\sum p_i \ln(p_i)</code> and you can see immediately whether it looks right.”</p>
+</blockquote>
+<p><strong>Walk through display math:</strong></p>
+<blockquote class="blockquote">
+<p>“For display equations — the big centered ones — go to Insert → Display Math. This opens a larger editor. Same live preview, more room to work. These are the equations that get their own line in the document.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Both use LaTeX syntax for the actual math. If you’ve never used LaTeX, don’t worry — for common ecological and chemical formulas, you’ll find templates online. And the live preview means you can experiment without rendering the whole document.”</p>
+</blockquote>
+<p><strong>Practical tip:</strong></p>
+<blockquote class="blockquote">
+<p>“A lot of you will use this for diversity indices, population growth equations, or chemical formulas. The Insert menu handles the formatting — you just need to know the LaTeX symbols for your specific equation.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-13-numbered-cross-referenced-equations" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="slide-13-numbered-cross-referenced-equations"><span class="header-section-number">6.2</span> Slide 13: Numbered &amp; Cross-Referenced Equations</h2>
+<p><strong>[00:28-00:30]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Just like figures and tables, you can number and cross-reference equations. The workflow is slightly different because the equation label has to be added manually.”</p>
+</blockquote>
+<p><strong>Walk through the steps:</strong></p>
+<blockquote class="blockquote">
+<p>“Step 1: Insert a display equation using Insert → Display Math.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 2: After the closing dollar signs, you add a label. This part you do need to type: <code>{#eq-shannon}</code>. The <code>eq-</code> prefix is the equation equivalent of <code>fig-</code> and <code>tbl-</code>.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 3: Reference it in your text by typing <code>@</code> and selecting <code>eq-shannon</code> from the autocomplete. Same pattern!”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The result is a numbered equation — Equation 1, Equation 2 — that you can reference in your text. ‘As defined in Equation 1, Shannon diversity depends on the proportion of each species.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This is particularly valuable in methods sections where you define a formula and then reference it multiple times in your results and discussion.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-14-callout-blocks" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="slide-14-callout-blocks"><span class="header-section-number">6.3</span> Slide 14: Callout Blocks</h2>
+<p><strong>[00:30-00:32]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Callout blocks are colored boxes that highlight important information. They’re incredibly useful in scientific documents for flagging caveats, limitations, tips, and key points.”</p>
+</blockquote>
+<p><strong>Walk through the Visual Editor workflow:</strong></p>
+<blockquote class="blockquote">
+<p>“Go to Insert → Callout. A dialog opens where you choose the type from a dropdown. You have five options:”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Note — for additional context. ‘Species identifications were confirmed by expert taxonomist.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Warning — for caveats or limitations. ‘Sample sizes varied by site due to weather cancellations.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Tip — for suggested approaches. ‘Consider rarefaction when comparing sites with unequal sample sizes.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Important — for critical information that readers must not miss.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Caution — for potential pitfalls or errors to avoid.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“After you choose the type, the Visual Editor creates the callout block for you. You just type your title and content inside it. No fenced div syntax to remember.”</p>
+</blockquote>
+<p><strong>When to use them:</strong></p>
+<blockquote class="blockquote">
+<p>“I use callouts in every analysis document I write. Data limitations go in a Warning callout. Methods notes go in a Note callout. In your homework, I’m asking for at least two callout blocks — start thinking about what caveats or notes apply to your analysis.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-15-adding-citations" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="slide-15-adding-citations"><span class="header-section-number">6.4</span> Slide 15: Adding Citations</h2>
+<p><strong>[00:32-00:35]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Citations are where the Visual Editor really shines. If you’ve ever struggled with BibTeX files or citation managers, this will feel magical.”</p>
+</blockquote>
+<p><strong>Walk through the workflow:</strong></p>
+<blockquote class="blockquote">
+<p>“Go to Insert → Citation. A dialog opens with several options for finding your reference.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Option 1: Search by DOI. Paste in a DOI, and Quarto looks up the full citation metadata automatically. This is my favorite method — you don’t need a .bib file at all to start.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Option 2: Browse your .bib file. If you already have a bibliography file, the dialog lets you search through it and select references.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Option 3: Connect to Zotero. If you use Zotero as your reference manager, the Visual Editor connects directly to your Zotero library. You search your Zotero database right from the dialog.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Whichever method you use, when you select a reference, the Visual Editor inserts the citation syntax for you — something like <code>[@Smith2020]</code> — and adds the entry to your bibliography file automatically.”</p>
+</blockquote>
+<p><strong>Setting up the bibliography:</strong></p>
+<blockquote class="blockquote">
+<p>“For the bibliography file itself, click the gear icon next to the Render button — that’s the document properties dialog. There’s a Bibliography field where you point to your .bib file. You don’t need to edit the YAML by hand.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“When you render, Quarto generates a formatted reference list at the end of your document automatically. It handles the formatting, the sorting, everything.”</p>
+</blockquote>
+<p><strong>Why this matters:</strong></p>
+<blockquote class="blockquote">
+<p>“In your careers, you’re going to write papers with 30, 50, 100 references. Having a system that manages them automatically — and that can switch citation styles with one line of YAML — is transformative. You’ll set this up once and use it for every paper.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-16-page-layout-options" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="slide-16-page-layout-options"><span class="header-section-number">6.5</span> Slide 16: Page Layout Options</h2>
+<p><strong>[00:35-00:37]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“You can control page layout through the Visual Editor’s Insert → Div menu. This is how you create multi-column layouts and margin content.”</p>
+</blockquote>
+<p><strong>Walk through two-column layout:</strong></p>
+<blockquote class="blockquote">
+<p>“For a two-column layout: Insert → Div, and set the class to <code>.columns</code>. Inside that div, you nest two more divs with class <code>.column</code> and set their width attributes — usually 50% each. The Visual Editor handles the fenced div syntax — those triple colons that are easy to miscount in source mode.”</p>
+</blockquote>
+<p><strong>Walk through margin content:</strong></p>
+<blockquote class="blockquote">
+<p>“For margin notes — content that appears in the side margin — Insert → Div with class <code>.column-margin</code>. This is great for supplementary information, small figures, or notes that relate to the main text without interrupting the flow.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The Visual Editor is especially helpful here because fenced divs in source mode — with their nested colons — are one of the most common sources of syntax errors. The Insert → Div dialog eliminates that entirely.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-17-code-folding-for-readers" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="slide-17-code-folding-for-readers"><span class="header-section-number">6.6</span> Slide 17: Code Folding for Readers</h2>
+<p><strong>[00:37-00:39]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“When you’re writing for readers who aren’t coders — your advisor, a policy audience, collaborators from other fields — you probably want to show the results but not overwhelm them with code. Code folding lets you hide the code behind a clickable button.”</p>
+</blockquote>
+<p><strong>Walk through document-level setting:</strong></p>
+<blockquote class="blockquote">
+<p>“Click the gear icon next to the Render button — that’s the document properties dialog. Enable Code Fold, which hides all code by default, and Code Tools, which adds a menu at the top of the document for showing/hiding all code at once.”</p>
+</blockquote>
+<p><strong>Walk through per-chunk setting:</strong></p>
+<blockquote class="blockquote">
+<p>“You can also control this on individual chunks. Click the gear icon on a specific chunk, toggle Code Fold on, and set a Code Summary label. The label is the text on the button — something descriptive like ‘Show data cleaning code’ or ‘Show statistical model.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This is perfect for technical reports where some readers want to see the analysis code and others just want the results. Everyone gets what they need from the same document.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-18-document-themes" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="slide-18-document-themes"><span class="header-section-number">6.7</span> Slide 18: Document Themes</h2>
+<p><strong>[00:39-00:40]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Quarto has many built-in themes that change the overall look of your HTML documents. You set these in the document properties dialog.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Click the gear icon next to the Render button. Set the Theme field. Popular options are cosmo (clean and modern), flatly (flat design), journal (academic feel), litera (light and readable), and minty (subtle green accents).”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You can also add a custom CSS file if your program or lab has specific styling requirements.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“I’d encourage you to try a few different themes on your homework — it’s a one-click change and it can make your document look dramatically different.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-19-table-of-contents" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="slide-19-table-of-contents"><span class="header-section-number">6.8</span> Slide 19: Table of Contents</h2>
+<p><strong>[00:40-00:42]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“For any document longer than a page or two, you’ll want a table of contents. The Visual Editor makes this a one-click setup.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Click the gear icon next to the Render button. Enable Table of Contents. Set the Depth — how many heading levels to include. Level 3 is usually good, which means your <code>#</code>, <code>##</code>, and <code>###</code> headings all appear in the TOC.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Set the Location. ‘Left’ puts the TOC in a sidebar that stays visible as you scroll — this is my favorite for long documents because readers can always see the structure. ‘Right’ puts it on the other side. ‘Body’ puts it at the top of the document.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Sections become clickable links, so readers can jump directly to the section they need. For a long analysis document or a final report, this is essential.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-20-tabbed-content" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="slide-20-tabbed-content"><span class="header-section-number">6.9</span> Slide 20: Tabbed Content</h2>
+<p><strong>[00:42-00:43]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Tabbed content lets you organize information in clickable tabs — like browser tabs within your document. This is great when you have a plot, the underlying data, and the analysis code, and you want readers to flip between them.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“In the Visual Editor: Insert → Div with class <code>.panel-tabset</code>. Inside the div, add <code>##</code> headings for each tab. Put your content under each heading.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“For example, you might have three tabs: Plot, Data, and Code. The reader clicks whichever one they want to see. It saves vertical space and lets different audiences find what they need.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-21-complete-analysis-workflow" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="slide-21-complete-analysis-workflow"><span class="header-section-number">6.10</span> Slide 21: Complete Analysis Workflow</h2>
+<p><strong>[00:43-00:44]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me put it all together. A typical analysis document has six sections: Introduction, Methods, Results, Discussion, Conclusion, and References.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Every one of those sections benefits from what we learned today. Your Results section has figures and tables with labels and captions, cross-referenced from your text. Your Methods section might have equations and callout blocks for important caveats. Your References section is generated automatically from your citations.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“And all of it lives in a single <code>.qmd</code> file, all manageable in the Visual Editor. You render it once and get a complete, professional document.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="live-demo-12-minutes" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Live Demo (12 minutes)</h1>
+<p><strong>[00:44-00:56]</strong></p>
+<p><strong>Switch to RStudio. Make sure Visual Editor mode is active.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me show you all of this in action. I’m going to build a professional document using the Visual Editor, and I want you to watch where I click.”</p>
+</blockquote>
+<p><strong>Demo outline:</strong></p>
+<section id="start-with-mondays-document" class="level3" data-number="7.0.1">
+<h3 data-number="7.0.1" class="anchored" data-anchor-id="start-with-mondays-document"><span class="header-section-number">7.0.1</span> 1. Start with Monday’s document</h3>
+<ul>
+<li>Open existing .qmd in Visual Editor mode</li>
+<li>Point out the Visual Editor toggle at the top of the editor pane</li>
+</ul>
+<blockquote class="blockquote">
+<p>“I’m in Visual Editor mode — see this toggle up here? The document looks like a rich text editor, similar to Word or Google Docs. This is where we’ll do everything.”</p>
+</blockquote>
+</section>
+<section id="add-a-figure-with-label-and-caption-using-the-gear-icon" class="level3" data-number="7.0.2">
+<h3 data-number="7.0.2" class="anchored" data-anchor-id="add-a-figure-with-label-and-caption-using-the-gear-icon"><span class="header-section-number">7.0.2</span> 2. Add a figure with label and caption using the gear icon</h3>
+<ul>
+<li>Write a simple ggplot in a code chunk</li>
+<li>Click the gear icon ⚙️ on the chunk</li>
+<li>Fill in: Label = <code>fig-richness-site</code>, Caption = “Species richness by site”, Width = 8, Height = 6</li>
+<li>Close the dialog</li>
+</ul>
+<blockquote class="blockquote">
+<p>“I click the gear icon… here’s the dialog. I set the label — notice I start with <code>fig-</code>. I type my caption as a complete sentence. Width 8, height 6. Done. That’s all five steps from the slide.”</p>
+</blockquote>
+</section>
+<section id="create-a-table-with-kable-using-the-gear-icon" class="level3" data-number="7.0.3">
+<h3 data-number="7.0.3" class="anchored" data-anchor-id="create-a-table-with-kable-using-the-gear-icon"><span class="header-section-number">7.0.3</span> 3. Create a table with kable using the gear icon</h3>
+<ul>
+<li>Write R code with <code>kable(summary_stats, digits = 2)</code></li>
+<li>Click the gear icon</li>
+<li>Fill in: Label = <code>tbl-site-summary</code>, Caption = “Site summary statistics”</li>
+</ul>
+<blockquote class="blockquote">
+<p>“Same pattern for the table. Gear icon, label starts with <code>tbl-</code>, caption is a complete sentence.”</p>
+</blockquote>
+</section>
+<section id="add-cross-references-using-autocomplete" class="level3" data-number="7.0.4">
+<h3 data-number="7.0.4" class="anchored" data-anchor-id="add-cross-references-using-autocomplete"><span class="header-section-number">7.0.4</span> 4. Add cross-references using <code>@</code> autocomplete</h3>
+<ul>
+<li>Click in the text area below the code chunks</li>
+<li>Type a sentence: “As shown in” then type <code>@</code></li>
+<li>Show the autocomplete dropdown with both <code>fig-richness-site</code> and <code>tbl-site-summary</code></li>
+<li>Select the figure reference, finish the sentence</li>
+<li>Type another sentence using the table reference</li>
+</ul>
+<blockquote class="blockquote">
+<p>“Now watch this — I type <code>@</code> and look: there are my labels! I select <code>fig-richness-site</code> and Quarto inserts the reference. Let me do the same for the table…”</p>
+</blockquote>
+</section>
+<section id="add-a-callout-block-via-insert-menu" class="level3" data-number="7.0.5">
+<h3 data-number="7.0.5" class="anchored" data-anchor-id="add-a-callout-block-via-insert-menu"><span class="header-section-number">7.0.5</span> 5. Add a callout block via Insert menu</h3>
+<ul>
+<li>Go to Insert → Callout</li>
+<li>Choose “Warning” from the dropdown</li>
+<li>Type title: “Data Limitation”</li>
+<li>Type content: “Sample sizes varied by weather conditions.”</li>
+</ul>
+<blockquote class="blockquote">
+<p>“Insert → Callout, I pick Warning, give it a title and content. The Visual Editor creates the whole callout block for me.”</p>
+</blockquote>
+</section>
+<section id="set-document-properties-via-the-gear-next-to-render" class="level3" data-number="7.0.6">
+<h3 data-number="7.0.6" class="anchored" data-anchor-id="set-document-properties-via-the-gear-next-to-render"><span class="header-section-number">7.0.6</span> 6. Set document properties via the gear next to Render</h3>
+<ul>
+<li>Click the gear icon next to the Render button</li>
+<li>Enable Table of Contents</li>
+<li>Enable Code Fold</li>
+<li>Set theme to “cosmo”</li>
+</ul>
+<blockquote class="blockquote">
+<p>“The gear next to Render opens document properties. I turn on TOC, turn on code folding, set the theme to cosmo. All without touching the YAML.”</p>
+</blockquote>
+</section>
+<section id="render-and-show-the-result" class="level3" data-number="7.0.7">
+<h3 data-number="7.0.7" class="anchored" data-anchor-id="render-and-show-the-result"><span class="header-section-number">7.0.7</span> 7. Render and show the result</h3>
+<ul>
+<li>Click Render</li>
+<li>Point out: automatic figure/table numbering, clickable cross-references, code folding, table of contents, theme</li>
+</ul>
+<blockquote class="blockquote">
+<p>“Let’s render… and look at this. Figure 1, Table 1 — automatically numbered. Watch what happens when I click the cross-reference — it jumps to the figure! The code is folded by default but I can click to show it. And there’s our table of contents on the left.”</p>
+</blockquote>
+</section>
+<section id="toggle-to-source-mode-to-show-what-the-visual-editor-generated" class="level3" data-number="7.0.8">
+<h3 data-number="7.0.8" class="anchored" data-anchor-id="toggle-to-source-mode-to-show-what-the-visual-editor-generated"><span class="header-section-number">7.0.8</span> 8. Toggle to Source mode to show what the Visual Editor generated</h3>
+<ul>
+<li>Toggle from Visual to Source mode</li>
+<li>Point out the <code>#|</code> options in the chunks, the <code>@fig-</code> references in the text, the YAML changes</li>
+</ul>
+<blockquote class="blockquote">
+<p>“Now let me toggle to Source mode so you can see what the Visual Editor was doing behind the scenes. See these <code>#|</code> lines in the chunks? The gear icon wrote those. See <code>@fig-richness-site</code> in the text? The autocomplete wrote that. See the YAML — <code>toc: true</code>, <code>code-fold: true</code>? The document properties dialog wrote that. Everything connects.”</p>
+</blockquote>
+<p><strong>Key teaching moments during demo:</strong></p>
+<blockquote class="blockquote">
+<p>“See how Figure 1 and Table 1 appear automatically? You didn’t type those numbers.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Watch the cross-reference — click it, and it scrolls right to the figure. That’s what <code>@</code> gives you.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The code is folded. Your advisor sees the results. You can expand to see the code. Same document, different experiences.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Switching to Source mode — this is what the Visual Editor writes for you. You can always switch back and forth.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="multiple-output-formats-5-minutes" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Multiple Output Formats (5 minutes)</h1>
+<section id="slide-22-best-practices" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="slide-22-best-practices"><span class="header-section-number">8.1</span> Slide 22: Best Practices</h2>
+<p><strong>[00:56-00:58]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Before we get to output formats, let me highlight the best practices. These are all framed in terms of the Visual Editor tools you just learned.”</p>
+</blockquote>
+<p><strong>Walk through the list:</strong></p>
+<blockquote class="blockquote">
+<p>“Label everything via the gear icon. Use descriptive labels — <code>fig-temperature</code> not <code>fig-plot1</code>. A label should tell you what the figure shows without looking at it.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Write clear captions — complete sentences, in the gear dialog. A good caption should be understandable without reading the surrounding text.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Cross-reference liberally. Every time you mention a figure or table in your text, use <code>@</code> to insert the reference. Readers follow cross-references — they help people navigate your document.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Keep code chunks focused — one plot per chunk. This makes debugging easier and keeps your labels clean.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Use Insert → Callout for anything readers need to notice — limitations, caveats, tips.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Set code-folding in document properties if you’re writing for a mixed audience.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-23-debugging-complex-documents" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="slide-23-debugging-complex-documents"><span class="header-section-number">8.2</span> Slide 23: Debugging Complex Documents</h2>
+<p><strong>[00:58-00:59]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“A few tips for when things go wrong.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Render frequently. Don’t write for 30 minutes and then render — render every few minutes so you catch errors when they’re small and easy to find.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If something breaks, comment out sections to isolate the problem. The error is usually in the last thing you changed.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Check chunk labels in the gear dialog — duplicate labels are the most common cause of mysterious failures. Every label must be unique.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“And here’s my pro tip: switch to Source mode when you’re debugging tricky problems. Sometimes seeing the raw markdown makes it obvious what went wrong — a missing colon, a misplaced closing tag, an indentation error.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-24-25-pdf-and-word-output" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="slide-24-25-pdf-and-word-output"><span class="header-section-number">8.3</span> Slide 24-25: PDF and Word Output</h2>
+<p><strong>[00:59-01:01]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“One of Quarto’s most powerful features: the same <code>.qmd</code> file can produce HTML, PDF, and Word output. You write once and render to whatever format you need.”</p>
+</blockquote>
+<p><strong>PDF output:</strong></p>
+<blockquote class="blockquote">
+<p>“For PDF output, you first need to install tinytex. Run <code>quarto install tinytex</code> in your terminal — just once. Then in the Visual Editor, click the gear next to Render, change the format to PDF, and set options like document class and margins.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“PDF is what you’ll use for journal submissions. The output looks like a LaTeX document because it IS a LaTeX document under the hood — Quarto converts your markdown to LaTeX and then to PDF.”</p>
+</blockquote>
+<p><strong>Word output:</strong></p>
+<blockquote class="blockquote">
+<p>“For Word, same process: gear next to Render, change format to Word. You can optionally set a reference template — that’s a <code>.docx</code> file that defines your styles. If your journal has a Word template, you point to it here.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Word output is great for sharing with collaborators who don’t use Quarto, or when a journal specifically requires Word format. And the best part — your cross-references still work! Figure 1 is still Figure 1, Table 1 is still Table 1. The references don’t break when you change output formats.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You can even render to all three formats at once by listing them in your YAML.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="breakout-activity-15-minutes" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Breakout Activity (15 minutes)</h1>
+<section id="slide-26-breakout-activity" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="slide-26-breakout-activity"><span class="header-section-number">9.1</span> Slide 26: Breakout Activity</h2>
+<p><strong>[01:01-01:02]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Time to practice! You’re going into breakout rooms, and I want you to use the Visual Editor for everything.”</p>
+</blockquote>
+<p><strong>Read through the tasks, emphasizing which Visual Editor tool to use for each:</strong></p>
+<blockquote class="blockquote">
+<p>“Task 1: Add at least 2 figures with labels and captions. Use the gear icon on each code chunk.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Task 2: Add at least 1 table with label and caption. Same gear icon, but with a <code>tbl-</code> prefix.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Task 3: Cross-reference at least one figure and one table. Type <code>@</code> in your text and select from the autocomplete.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Task 4: Add one callout block. Insert → Callout, pick a type.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Task 5: Turn on table of contents. Document properties gear next to Render.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Your goal is a professional-looking document. Help each other — if someone’s stuck, walk them through the clicks. You have 15 minutes.”</p>
+</blockquote>
+<p><strong>Send to breakout rooms.</strong></p>
+<p><strong>Instructor note:</strong> <em>Visit rooms. Most common issues will be:</em></p>
+<ul>
+<li><em>Forgetting the <code>fig-</code> or <code>tbl-</code> prefix on labels (cross-references show ?? )</em></li>
+<li><em>Not finding the gear icon on chunks (it’s the ⚙️ in the upper-right corner of the chunk)</em></li>
+<li><em>Not finding the document properties gear (it’s next to the Render button, not on a chunk)</em></li>
+<li><em>Typing <code>@</code> in Source mode instead of Visual Editor (autocomplete only works in Visual Editor)</em></li>
+</ul>
+<hr>
+</section>
+<section id="breakout-debrief" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="breakout-debrief"><span class="header-section-number">9.2</span> Breakout Debrief</h2>
+<p><strong>[01:17-01:22]</strong></p>
+<p><strong>Bring everyone back.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Welcome back! Let’s see how it went.”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“Who successfully used the <code>@</code> autocomplete for cross-references? What did it feel like compared to typing ‘Figure 1’?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Who added a callout block? What type did you choose and why?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Did anyone try the table of contents? How does it look?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Did anyone switch to Source mode to peek at what the Visual Editor generated?”</p>
+</blockquote>
+<p><strong>Common issues to address:</strong></p>
+<blockquote class="blockquote">
+<p>“If your cross-references showed question marks: check that your label starts with <code>fig-</code> or <code>tbl-</code>. Open the gear icon and verify.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If your table of contents didn’t appear: make sure you clicked the gear next to the <em>Render</em> button, not the gear on a code chunk. They’re different dialogs.”</p>
+</blockquote>
+<p><strong>Celebrate successes:</strong></p>
+<blockquote class="blockquote">
+<p>“Raise your hand if your document looks more professional than Monday. That’s the power of labels, captions, cross-references, and a table of contents — five minutes of work in the Visual Editor.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="wrap-up-5-minutes" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Wrap-Up (5 minutes)</h1>
+<section id="slide-27-homework" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="slide-27-homework"><span class="header-section-number">10.1</span> Slide 27: Homework</h2>
+<p><strong>[01:22-01:24]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Homework before Monday of Week 4. I want a complete professional analysis document.”</p>
+</blockquote>
+<p><strong>Walk through requirements:</strong></p>
+<blockquote class="blockquote">
+<p>“All the basic Quarto elements from Monday — headings, text, code chunks, inline code.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“At least 3 labeled figures. Use the gear icon, <code>fig-</code> prefix, complete caption sentences.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“At least 2 labeled tables. Same gear icon, <code>tbl-</code> prefix.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Multiple cross-references. Every time you mention a figure or table in your text, use <code>@</code>.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“At least 2 callout blocks. Think about what caveats or notes apply to your analysis.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Table of contents. Document properties gear.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Try rendering to both HTML and PDF. If PDF doesn’t work, that’s okay — just try it and note what happened.”</p>
+</blockquote>
+<p><strong>Highlight the challenge:</strong></p>
+<blockquote class="blockquote">
+<p>“The bonus challenge: switch between Visual Editor and Source mode to see what the Visual Editor creates for you. This builds your understanding of the underlying syntax, which will help when you need to debug things later.”</p>
+</blockquote>
+<p><strong>Submit:</strong></p>
+<blockquote class="blockquote">
+<p>“Submit both rendered files plus your .qmd source.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-28-exit-ticket" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="slide-28-exit-ticket"><span class="header-section-number">10.2</span> Slide 28: Exit Ticket</h2>
+<p><strong>[01:24-01:26]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Exit ticket before you go. Three questions in Canvas.”</p>
+</blockquote>
+<p><strong>Read the questions — note these are updated from the original to focus on Visual Editor:</strong></p>
+<blockquote class="blockquote">
+<p>“Question 1: Describe the steps to create a labeled, captioned figure using the Visual Editor. What do you click? What do you fill in?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Question 2: How do you insert a cross-reference in Visual Editor? What happens when you type the at-sign?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Question 3: Why are cross-references better than writing ‘see Figure 1’ manually? Think about what happens when you add or reorder figures.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Take 2-3 minutes. Submit in Canvas before you sign off.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-29-summary" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="slide-29-summary"><span class="header-section-number">10.3</span> Slide 29: Summary</h2>
+<p><strong>[01:26-01:28]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me leave you with the key tools from today. Everything comes down to three Visual Editor tools.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The chunk gear icon for figures and tables — labels, captions, sizing, code folding.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The <code>@</code> autocomplete for cross-references — figures, tables, equations, all from one keystroke.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The Insert menu for everything else — callouts, citations, equations, layout divs.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“And the document properties gear next to Render — for TOC, themes, output format, bibliography.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Next week we tackle a critical question: why does reproducibility fail? And we’ll learn Git and GitHub as the solution. Have a great weekend!”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="post-lecture-checklist" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Post-Lecture Checklist</h1>
+<ul class="task-list">
+<li><label><input type="checkbox">Upload recording</label></li>
+<li><label><input type="checkbox">Review exit tickets (check that students describe Visual Editor steps, not raw syntax)</label></li>
+<li><label><input type="checkbox">Check for questions on discussion board</label></li>
+<li><label><input type="checkbox">Prepare Week 4 materials</label></li>
+</ul>
+<hr>
+</section>
+<section id="common-questions" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Common Questions</h1>
+<p><strong>Q: “I can’t find the gear icon on my code chunk.”</strong> A: It’s in the upper-right corner of the chunk, only visible in Visual Editor mode. If you’re in Source mode, switch to Visual Editor first.</p>
+<p><strong>Q: “My cross-references show ?? instead of numbers.”</strong> A: The label must start with <code>fig-</code>, <code>tbl-</code>, or <code>eq-</code>. Open the gear icon on the chunk and check the label field. Also make sure the label is unique — no two chunks can share a label.</p>
+<p><strong>Q: “The <code>@</code> autocomplete isn’t showing my labels.”</strong> A: The autocomplete works in Visual Editor mode, not Source mode. Also, make sure you’ve already set the label on the chunk — the autocomplete can only find labels that exist.</p>
+<p><strong>Q: “My PDF won’t render.”</strong> A: You need to install tinytex first: <code>quarto install tinytex</code> in the terminal. This only needs to be done once.</p>
+<p><strong>Q: “Where is the document properties dialog?”</strong> A: Click the gear icon ⚙️ next to the <strong>Render</strong> button (top of the editor pane). This is different from the gear icon on individual code chunks.</p>
+<p><strong>Q: “How do I cite references?”</strong> A: Insert → Citation. You can search by DOI, browse a .bib file, or connect to Zotero. The bibliography file path is set in the document properties dialog.</p>
+<p><strong>Q: “Can I have figures side-by-side?”</strong> A: Yes — in the chunk gear dialog, add subcaptions and set layout columns to 2.</p>
+<p><strong>Q: “I prefer Source mode. Do I have to use Visual Editor?”</strong> A: No! Everything we taught today can be done in Source mode by typing the <code>#|</code> options and <code>@</code> references directly. The Visual Editor is a convenience, not a requirement. The “Under the Hood” boxes on the slides show you the exact syntax.</p>
+<p><strong>Q: “Can I switch between Visual and Source mode?”</strong> A: Absolutely, and I encourage it. Toggle the button at the top of the editor pane. Switching modes doesn’t change your file — they’re two views of the same document.</p>
+<hr>
+</section>
+<section id="timing-notes" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Timing Notes</h1>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Target Time</th>
+<th>Slides</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Introduction</td>
+<td>00:00-00:05</td>
+<td>1-3</td>
+</tr>
+<tr class="even">
+<td>Professional Figures</td>
+<td>00:05-00:17</td>
+<td>4-7</td>
+</tr>
+<tr class="odd">
+<td>Tables</td>
+<td>00:17-00:25</td>
+<td>8-11</td>
+</tr>
+<tr class="even">
+<td>Equations, Callouts, Citations</td>
+<td>00:25-00:43</td>
+<td>12-20</td>
+</tr>
+<tr class="odd">
+<td>Live Demo</td>
+<td>00:44-00:56</td>
+<td>(RStudio)</td>
+</tr>
+<tr class="even">
+<td>Best Practices &amp; Output Formats</td>
+<td>00:56-01:01</td>
+<td>22-25</td>
+</tr>
+<tr class="odd">
+<td>Breakout Activity + Debrief</td>
+<td>01:01-01:22</td>
+<td>26</td>
+</tr>
+<tr class="even">
+<td>Wrap-Up</td>
+<td>01:22-01:28</td>
+<td>27-29</td>
+</tr>
+</tbody>
+</table>
+<p><strong>If ahead:</strong> Longer demo time, try rendering to multiple formats live, show Zotero citation integration <strong>If behind:</strong> Shorter demo (skip Source mode toggle), 10-min breakout, quick summary <strong>Target: 2-3 minutes for questions at end</strong></p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,416 @@
+---
+title: "Week 1, Day 1: Data Science as Scientific Practice"
+subtitle: "Biology/Chemistry 806"
+format:
+  html:
+    toc: true
+    number-sections: true
+    html-math-method: mathjax
+  pdf:
+    toc: true
+    number-sections: true
+editor:
+  markdown:
+    wrap: 72
+---
+
+# Week 1, Day 1: Data Science as Scientific Practice
+
+**Duration: 75 minutes \| Online Synchronous \| 30 students**
+
+------------------------------------------------------------------------
+
+## Pre-Class Setup (Instructor)
+
+-   Test Zoom/conferencing platform
+-   Prepare Google Doc template for breakout activity
+-   Queue up welcome slide
+-   Have chat window visible
+-   Prepare breakout rooms (groups of 3-4, total 8-10 rooms)
+
+------------------------------------------------------------------------
+
+## SLIDE 1: Welcome
+
+**\[0:00–0:05\] — Arrival and Settling**
+
+Good morning, everyone! Welcome to Biology/Chemistry 806. I'm Gretchen
+LeBuhn, and I'm co-teaching this course with Nicole Adelstein. We're
+really glad you're here.
+
+Before we jump in, let's take a moment to get settled. Grab water or tea
+if you need it, adjust your audio settings, and find a comfortable spot.
+We're going to be together for 75 minutes, and I want you to feel
+present and ready to engage.
+
+**\[Pause 3-4 seconds\]**
+
+Quick tech check: If you can hear me clearly, give me a thumbs-up
+reaction or type "yes" in the chat.
+
+Great! If your audio cuts out or something breaks during class, just pop
+a message in the chat and we'll sort it out.
+
+------------------------------------------------------------------------
+
+## SLIDE 2: What This Course Is Really About
+
+**\[0:05–0:10\] — Setting the Tone**
+
+Before we dive into activities, I want to be clear about what this
+course is and what it isn't.
+
+This is a course about **thinking clearly with data**.
+
+It's not about being a coder already. It's not about memorizing
+functions or learning statistics in isolation. It's about learning to
+explain your reasoning, spot your own assumptions, and revise when
+something doesn't make sense.
+
+If you can do that kind of thinking in biology or chemistry, you can do
+it with data in R. If you struggle to do it in R, that's not a coding
+problem — it's a thinking problem, and we'll work on it together.
+
+**\[Pause\]**
+
+Some of you might be wondering if you belong here. Maybe you've never
+written a line of code. Maybe you've used R a little and felt completely
+lost.
+
+Let me be very clear: **prior coding experience is not what matters
+here.**
+
+What matters is whether you're willing to ask "why," explain your
+choices, and revise when things are unclear. That's science. We're just
+applying it to data work.
+
+------------------------------------------------------------------------
+
+## SLIDE 3: How Today Will Work
+
+**\[0:10–0:13\] — Structure Preview**
+
+Here's what we're doing today:
+
+1.  **Get to know each other** — not in a forced icebreaker way, but in
+    a way that helps us start noticing patterns in data
+2.  **Use that process to surface big data science ideas** — without
+    touching code yet
+3.  **Talk about norms** — what you want from this class, what I want,
+    and how we'll work together
+
+I'm not testing you today. I'm watching *how* you think, not *what* you
+already know.
+
+Any questions before we start? You can unmute or use the chat.
+
+------------------------------------------------------------------------
+
+## SLIDE 4: Introductions as Data
+
+**\[0:13–0:16\] — Setting Up the Chat Activity**
+
+Okay, first activity. I want everyone to put **three things** in the
+chat:
+
+1.  Your name
+2.  Your field or program
+3.  One kind of data you work with — or hope to work with
+
+If you're not sure what counts as "data," that's totally fine. Just
+write what comes to mind. If you've never worked with data, write that.
+All answers are useful here.
+
+You've got about two minutes. Go ahead and start typing!
+
+**\[0:16–0:19\] — Silent Typing Time**
+
+*\[Monitor chat. If people seem stuck after 30 seconds, you can add:
+"I'm seeing some great responses coming in. Remember, there's no wrong
+answer here."\]*
+
+------------------------------------------------------------------------
+
+**\[0:19–0:26\] — Reading and Commentary**
+
+Okay, I'm going to read some of these out loud — not to put anyone on
+the spot, but because I want us to start noticing patterns together.
+
+*\[Read 6-8 responses, pausing to make observations\]:*
+
+-   "Excel spreadsheets" — Notice that's a *format*, not the phenomenon
+    itself. Interesting distinction.
+-   "Survey responses about student stress" — That's behavioral data
+    with a specific context.
+-   "I'm not sure" — That's an important answer too. Uncertainty is data
+    about where we are in our learning.
+-   "Gene sequences" — Molecular data with a very specific structure.
+
+**\[Pause\]**
+
+Let's pause here. We just asked one simple question, and we got very
+different kinds of answers.
+
+Here's my question for you — and you can answer in the chat or unmute:
+
+**Did everyone interpret "data" the same way?**
+
+------------------------------------------------------------------------
+
+**\[0:26–0:30\] — Processing Responses**
+
+*\[Read 3-4 chat responses aloud\]*
+
+Yes. Exactly. Some people answered with the format (Excel, CSV). Some
+answered with the content (genes, behavior). Some answered with the
+collection method (surveys, sensors).
+
+And here's the thing: **that ambiguity doesn't go away when you start
+coding.** It just gets buried under syntax.
+
+In this class, we're going to keep surfacing it. Because the hardest
+part of data science isn't learning functions — it's deciding what
+you're even measuring and how to define it clearly.
+
+------------------------------------------------------------------------
+
+## SLIDE 5: Turning This Class Into a Dataset
+
+**\[0:30–0:33\] — Setting Up Breakout Activity**
+
+Okay, next activity. I'm going to put you into small groups of 3-4
+people for about 10 minutes.
+
+Here's your task: **Imagine you need to describe this class as a
+dataset** for someone who wasn't here today.
+
+-   What variables would you include?
+-   How would you define them?
+-   What information do you wish you had?
+
+I don't want just a list of variable names. I want your **reasoning**.
+Why did you choose those variables? Where did you have to make judgment
+calls?
+
+You're going to work in a shared Google Doc — I'm dropping the template
+link in the chat right now.
+
+**\[Drop link in chat\]**
+
+Questions before I send you out?
+
+**\[0:33–0:35\] — Clarifications**
+
+*\[Answer 1-2 questions if needed\]*
+
+Great. I'm sending you to breakout rooms now. Take the full 10 minutes —
+this is not a race.
+
+I'll pop into rooms briefly to check in. See you back here at **\[state
+exact time, e.g., 12:48\]**.
+
+------------------------------------------------------------------------
+
+**\[0:35–0:45\] — BREAKOUT ROOMS**
+
+*\[Instructor visits 2-3 rooms briefly, listens, maybe asks one
+clarifying question\]*
+
+------------------------------------------------------------------------
+
+**\[0:45–0:47\] — Transition Back**
+
+Welcome back! I know 10 minutes goes fast when you're actually thinking.
+
+I'm going to ask three groups to share what they came up with — not
+everything, just **one interesting decision you made or one place where
+you got stuck**.
+
+Can I have a volunteer from **Group 3** to start us off? You can unmute
+or type in chat.
+
+------------------------------------------------------------------------
+
+## SLIDE 6: What Did We Learn?
+
+**\[0:47–0:58\] — Report-Outs and Reframing**
+
+*\[Call on three groups. After each shares for \~2 minutes, you
+reframe\]:*
+
+**Example Group 1 shares about struggling to define "experience":**
+
+I want to repeat that, because it's important.
+
+You wanted to measure "experience," but you realized it's not one thing.
+It could be time in a program, it could be prior statistics courses, it
+could be comfort with ambiguity, it could be years working with data.
+
+And here's what matters: **You didn't fail because you couldn't agree.**
+You succeeded because you **noticed the decision you'd have to make** —
+and that decision has consequences.
+
+If you measure experience as "years in grad school," you'll get a
+different analysis than if you measure it as "number of R courses
+taken." Both are defensible. Neither is invisible.
+
+**That's data science.**
+
+*\[Repeat this pattern for 2 more groups, \~3-4 minutes each\]*
+
+------------------------------------------------------------------------
+
+**\[0:58–1:02\] — Explicit Connection**
+
+Okay, let's step back. What did we just do?
+
+Without writing a single line of code, you: - Defined variables -
+Noticed ambiguity - Made decisions and justified them - Realized that
+someone else might make different decisions — and that's okay
+
+**That's the foundation of everything we'll do this semester.**
+
+On Wednesday, we'll start putting those decisions into words more
+formally using something called a "decision log." But today, I wanted
+you to *feel* what it's like to think carefully about data before you
+touch a computer.
+
+------------------------------------------------------------------------
+
+## SLIDE 7: Course Norms
+
+**\[1:02–1:05\] — Transition**
+
+We've got about 13 minutes left, and I want to spend them talking about
+**how we'll work together** this semester.
+
+I'm going to share a few norms I think are important. Then I want to
+hear from you — what do you need from this class? What do you want to
+accomplish?
+
+------------------------------------------------------------------------
+
+**\[1:05–1:10\] — Your Commitments**
+
+Here's what I'm committing to:
+
+1.  **I will not assume you know things.** If I use a term you haven't
+    seen, stop me.
+
+2.  **I will not mistake speed for understanding.** Going slow is not a
+    problem. Going fast without learning is.
+
+3.  **I will not treat "I don't know" as failure.** It's the start of
+    figuring something out.
+
+4.  **I will give you time to think before you answer.** Silence is not
+    dead air — it's thinking space.
+
+And here's what I need from you:
+
+1.  **Ask questions out loud, not just in your head.** If you're
+    confused, someone else is too.
+
+2.  **Try things even when you're not sure.** I'd rather see your messy
+    reasoning than a polished guess.
+
+3.  **Be kind to each other and to yourselves.** This course is hard
+    because thinking clearly is hard, not because I'm trying to trick
+    you.
+
+------------------------------------------------------------------------
+
+**\[1:10–1:12\] — Opening It Up**
+
+Okay, your turn. I'm going to ask two questions. You can answer in the
+chat or unmute:
+
+1.  **What do you want to accomplish this semester?**
+2.  **What do you need from me or from each other to make that happen?**
+
+Take a moment to think. Then start sharing.
+
+**\[Give 5-7 seconds of silence\]**
+
+------------------------------------------------------------------------
+
+**\[1:12–1:18\] — Student Voices**
+
+*\[Read responses, acknowledge them briefly\]:*
+
+"I want to feel competent, not just compliant." — Yes. That's exactly
+what we're here for.
+
+"I want to understand what I'm doing, not just copy code." — Absolutely.
+Understanding is the goal.
+
+"I need patience when I'm stuck." — You'll have it. From me and from
+each other.
+
+------------------------------------------------------------------------
+
+**\[1:18–1:20\] — Synthesis**
+
+I'm hearing a few themes: - You want to feel competent, not just
+compliant - You want to understand, not just copy - You want space to
+struggle without judgment
+
+I can work with that. We all can. Let's hold each other to these
+commitments.
+
+------------------------------------------------------------------------
+
+## SLIDE 8: Before Wednesday
+
+**\[1:20–1:22\] — Preview and Closing**
+
+Before Wednesday, I want you to think about this question:
+
+**What decisions did we make today that felt invisible at the time?**
+
+We're not writing code yet, but we're already making choices about what
+counts, what matters, and how to define things.
+
+On Wednesday, we'll practice writing those choices down clearly using
+something called a decision log. It's going to feel weird at first.
+That's okay.
+
+------------------------------------------------------------------------
+
+**\[1:22–1:25\] — Final Thoughts**
+
+One last thing before we go.
+
+Everything we did today — the thinking, the struggling with definitions,
+the noticing ambiguity — that's not "pre-data-science."
+
+**That IS data science.**
+
+The coding is just execution. The thinking is the work.
+
+See you Wednesday. Thanks for being here and for engaging so
+thoughtfully.
+
+*\[Stay online for 2-3 minutes for questions\]*
+
+------------------------------------------------------------------------
+
+## Materials Needed
+
+-   Zoom/conferencing platform with breakout rooms
+-   Google Doc template: "Describe this class as a dataset. What
+    variables would you include? How would you define them? What
+    information do you wish you had?"
+-   Slides (see accompanying slide deck)
+-   Chat enabled
+-   Reactions enabled (thumbs up, etc.)
+
+------------------------------------------------------------------------
+
+## Instructor Notes
+
+-   **Pacing**: Build in pauses. Online students need processing time.
+-   **Engagement**: Call on specific groups/people by name when possible
+-   **Backup plan**: If breakout rooms fail, use collaborative Google
+    Doc with sections for each "group"
+-   **Accessibility**: Keep chat open for those who prefer not to unmute

@@ -1,0 +1,646 @@
+---
+title: "Instructor Script: Wrangling as Analysis"
+subtitle: "Week 6 · Lecture 1 · 75 minutes"
+author: "Gretchen LeBuhn"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    theme: cosmo
+    self-contained: true
+---
+
+# Pre-Class Checklist
+
+- [ ] Slides open and tested in browser (not RStudio viewer)
+- [ ] Zoom breakout rooms pre-assigned (pairs or threes)
+- [ ] Chat window visible on second monitor
+- [ ] Canvas exit ticket open in a tab ready to post
+- [ ] Water or coffee in hand — you've got this
+
+---
+
+# Pacing Guide
+
+| Time | Slide | Section | Duration |
+|------|-------|---------|----------|
+| 0:00 | Title | Welcome and framing | 5 min |
+| 0:05 | Learning Objectives | What we're doing today | 3 min |
+| 0:08 | Data Is Never Ready | Why wrangling exists | 5 min |
+| 0:13 | dplyr and tidyr | The tools | 3 min |
+| 0:16 | Motivating Example 1 | Pseudocode warm-up | 8 min |
+| 0:24 | Motivating Example 1 Code | The pipeline revealed | 3 min |
+| 0:27 | Motivating Example 2 | Wide data problem | 6 min |
+| 0:33 | Motivating Example 2 Code | pivot_longer preview | 3 min |
+| 0:36 | Function Reference | Tour of the toolbox | 4 min |
+| 0:40 | Dataset Intro | Loading the salmon data | 5 min |
+| 0:45 | Package Masking | The dplyr warning | 4 min |
+| 0:49 | Data Exploration | explore before you wrangle | 5 min |
+| 0:54 | Why Explore First | The methods section analogy | 3 min |
+| 0:57 | Pipe Operator | Without vs with | 5 min |
+| 1:02 | Reading the Pipe | Gets and then | 4 min |
+| 1:06 | Benefits and Tradeoffs | Balance in chaining | 3 min |
+| 1:09 | Pipe Shortcut | Keyboard shortcut | 2 min |
+| 1:11 | Document Outline | Setting up the Quarto doc | 4 min |
+| 1:15 | Exit Ticket | Pseudocode pipeline | 8 min |
+| 1:23 | Coming Up | Preview + close | 2 min |
+| **Total** | | | **75 min** |
+
+---
+
+# Script
+
+## [0:00–0:05] Welcome — Title Slide
+
+*[Advance to title slide. Give people 60 seconds to trickle in. 
+Start talking at about 0:01.]*
+
+Good morning, everyone! Welcome to Week 6. We have made it to the 
+part of the course where things start to feel like actual data science, 
+and I'm genuinely excited about what we're doing today.
+
+Quick tech check — if you can hear me clearly, drop a thumbs up in 
+the chat or hit the reaction button.
+
+*[Pause. Watch chat.]*
+
+Perfect. If anything breaks on your end today — audio, slides, 
+anything — just pop a message in the chat and we'll sort it out 
+without breaking stride.
+
+So. Here's where we are in the story of this course. We've talked 
+about what data science is, we've built Quarto documents, we've 
+learned Git, we understand tidy data. And now — the question we've 
+been building toward — what do you actually *do* with data once you 
+have it? How do you get it from the shape it arrives in, to the shape 
+you need for your analysis?
+
+That's what this week is about. And I promise, by the end of today 
+you will look at a wrangling pipeline and see not just code, but a 
+story. A sequence of decisions. A narrative.
+
+Let's go.
+
+---
+
+## [0:05–0:08] Learning Objectives
+
+*[Advance to Learning Objectives slide.]*
+
+Here's what we're aiming for today. Notice that none of these say 
+"memorize functions." The functions you can always look up. What 
+I want you to walk away with is the *reading* — the ability to look 
+at a pipeline and understand what it's doing and why.
+
+The last bullet is the one I care about most: reading wrangling code 
+as a narrative of analytical decisions. We'll come back to that 
+phrase a few times today.
+
+---
+
+## [0:08–0:13] Data Is Never Ready
+
+*[Advance to "Data is rarely in the format we need" slide.]*
+
+Let me start with a confession. The book says data is "rarely, if 
+ever, in the format we need." I would go further. In ten years of 
+doing this work, I have never — not once — received a dataset that 
+was exactly ready to analyze. Not once.
+
+And this is not because data collectors are sloppy. It's because 
+**the format that makes sense for collecting data is almost never 
+the format that makes sense for analyzing it.**
+
+Think about how you collect data in the field or the lab. You might 
+have one row per observation, or one sheet per site, or one column 
+per species. That's intuitive when you're *recording*. But when 
+you're *modeling*, you need `species` to be a column, not a set of 
+column names spread across your spreadsheet.
+
+This mismatch is not a failure. It's just reality. And `dplyr` and 
+`tidyr` are our tools for navigating that reality.
+
+---
+
+## [0:13–0:16] Enter dplyr and tidyr
+
+*[Advance to "Enter dplyr and tidyr" slide.]*
+
+Two packages. One job each.
+
+`dplyr` handles transformations of rows and columns — keeping 
+columns, filtering rows, creating new variables, summarizing groups. 
+Think of it as the workhorse for changing what's *in* your data.
+
+`tidyr` handles reshaping — changing the *structure* of your data 
+frame. Wide to long, long to wide, splitting columns, combining them.
+
+You'll use both in almost every real analysis. And once you know 
+them, you'll wonder how you ever managed without them.
+
+---
+
+## [0:16–0:24] Motivating Example 1 — Pseudocode Warm-Up
+
+*[Advance to "Motivating Example 1: Summarizing" slide.]*
+
+Before I show you any code, I want to do something. I want you to 
+think.
+
+Here's the problem. We have a table of salmon lengths. Multiple fish 
+measured across multiple years. And we want to know: what was the 
+average length per year?
+
+*[Point to the table on the slide.]*
+
+Look at this data. Before you think about R at all — what are the 
+steps? In plain English. What would you do if you were solving this 
+by hand?
+
+I'm going to give you 90 seconds. Drop your answer in the chat — 
+just a few words, don't overthink it. What are the steps?
+
+*[Start timer. Watch chat. After 90 seconds, read a few responses 
+aloud.]*
+
+*[Common correct responses: group by year / find all the 1990 rows / 
+then calculate average / then do the same for each year.]*
+
+Yes. Exactly. You said it in different ways but you all got to the 
+same place:
+
+1. Separate the data by year
+2. Calculate the average length within each year
+3. Collect the results
+
+That's it. That's the analysis. Now watch how closely the code 
+matches what you just said.
+
+---
+
+## [0:24–0:27] Motivating Example 1 — The Code
+
+*[Advance to "Motivating Example 1: The Code" slide.]*
+
+```r
+length_data %>% 
+  group_by(year) %>% 
+  summarize(mean_length_cm = mean(length_cm))
+```
+
+Read it out loud with me — use "then" for each `%>%`:
+
+*"Take the data, **then** group by year, **then** summarize by 
+calculating mean length."*
+
+That's three lines of code. Three lines that do exactly what you 
+described in the chat. That's the power of `dplyr` — it lets you 
+write your reasoning as code.
+
+The `%>%` symbol is doing the work of connecting those steps. We'll 
+spend real time on it in a few minutes. For now, just notice how 
+readable this is.
+
+---
+
+## [0:27–0:33] Motivating Example 2 — The Wide Data Problem
+
+*[Advance to "Motivating Example 2: Reshaping" slide.]*
+
+Okay, second example. This one is a little sneakier.
+
+Here's a table that looks completely reasonable. Sites in rows, years 
+in columns. You've probably seen data like this. It's actually a very 
+natural way to record it — you add a column for each new year, each 
+row is a place. Clean, intuitive.
+
+*[Point to the wide table on the slide.]*
+
+Now here's the problem. I want to fit a model: length as a function 
+of year. In R that would be `lm(length ~ year)`.
+
+*[Pause.]*
+
+Where is `year` in this table?
+
+*[Wait a beat.]*
+
+It's not a column. It's a set of column *names*. And `lm()` can't 
+work with that — it needs `year` to be a column with actual values in 
+it, one per row.
+
+This is the moment where a lot of people get stuck. The data looks 
+fine. But the *shape* of the data is incompatible with the analysis 
+you want to do.
+
+This is what `tidyr` fixes.
+
+---
+
+## [0:33–0:36] Motivating Example 2 — The Code
+
+*[Advance to "Motivating Example 2: The Code" slide.]*
+
+```r
+site_data %>% 
+  pivot_longer(-site, 
+               names_to = "year", 
+               values_to = "length")
+```
+
+One function — `pivot_longer()` — and the years that were column 
+names become values in a column called `year`. Now `lm(length ~ year)` 
+works.
+
+We'll spend a lot of time on `pivot_longer()` in Lecture 2. For now, 
+I just want you to see that reshaping is possible and that it's 
+readable. The arguments tell you exactly what's happening: the column 
+*names* go into a column called `year`, the column *values* go into 
+a column called `length`.
+
+---
+
+## [0:36–0:40] Function Reference — Tour of the Toolbox
+
+*[Advance to "Key Functions We'll Use" slide.]*
+
+This is a reference slide. You're not memorizing this today — you're 
+getting oriented.
+
+On the left, `dplyr` functions. These are your verbs for 
+transformation: select columns, filter rows, mutate (create or 
+change) columns, rename, group, summarize, arrange.
+
+On the right, `tidyr` functions. These are your verbs for 
+reshaping: pivot longer, pivot wider, separate a column into parts, 
+unite parts into one column.
+
+Seven plus four. Eleven functions. That's genuinely most of what you 
+need for the majority of data wrangling you will ever do in your 
+scientific career.
+
+*[Pause for effect.]*
+
+You'll use all of these in the activity. You'll use most of them in 
+your final project. Let's get to know them.
+
+---
+
+## [0:40–0:45] Dataset Introduction
+
+*[Advance to "Our Dataset: Alaska Salmon Catches" slide.]*
+
+We're going to work with a real dataset for this whole chapter. 
+Commercial salmon catches from Alaska, 1878 to 1997. Five species — 
+Chinook, Sockeye, Coho, Pink, and Chum — across 18 fishing regions.
+
+This is real data from the KNB data repository, which is exactly the 
+kind of publicly archived scientific data you'll encounter in your 
+own work.
+
+```r
+library(dplyr)
+library(tidyr)
+library(readr)
+
+catch_original <- read_csv(
+  "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1"
+)
+```
+
+Notice we're loading three packages: `dplyr`, `tidyr`, and `readr`. 
+You'll need all three. And in the activity, this will be your 
+first step — get the data in, then start exploring it.
+
+---
+
+## [0:45–0:49] Package Masking
+
+*[Advance to "A Note on Package Masking" slide.]*
+
+When you load `dplyr`, you will see a warning message that looks a 
+little alarming:
+
+```
+The following objects are masked from 'package:stats':
+    filter, lag
+```
+
+I want to take a moment on this because students often panic when 
+they see it, and they shouldn't.
+
+This message is R telling you that `dplyr` has a function called 
+`filter()`, and `stats` — which R loads automatically — also has a 
+function called `filter()`. Since you loaded `dplyr` after `stats`, 
+R will use `dplyr`'s version by default.
+
+This is almost always what you want. But if you ever need to be 
+explicit — to tell R "no, I mean the *stats* version" — you write:
+
+`stats::filter()`
+
+That double-colon syntax is how you call a specific package's 
+function by name. Useful to know, rarely needed in practice.
+
+Does anyone have a question about this before we move on? 
+Drop it in chat.
+
+*[Pause briefly. Address any questions.]*
+
+---
+
+## [0:49–0:54] Data Exploration
+
+*[Advance to "Step 1: Explore Before You Transform" slide.]*
+
+Rule number one of data wrangling: **explore before you transform**.
+
+This is the equivalent of reading a paper before you cite it. You 
+need to know what you're working with before you start changing it.
+
+Here are the five exploration functions I use at the start of every 
+new dataset:
+
+```r
+colnames(catch_original)    # what are the columns?
+head(catch_original)        # what do the first rows look like?
+summary(catch_original)     # what are the ranges and types?
+unique(catch_original$Region)  # what are the distinct values?
+View(catch_original)        # look at the whole thing (in console)
+```
+
+I want to call out `View()` specifically. Use it in the console, not 
+in a code chunk. If you put it in a code chunk and render your 
+document, it will try to open a viewer window during rendering and 
+cause problems. Console only.
+
+---
+
+## [0:54–0:57] Why Explore First
+
+*[Advance to "Why Explore First?" slide.]*
+
+I want to give you an analogy that I think makes this concrete.
+
+Reading your data before wrangling it is like reading a paper's 
+methods section before jumping to the results. You need the context. 
+You need to understand how the data was collected, what the variables 
+mean, what the units are, before you can interpret anything.
+
+Specifically, exploration helps you catch four things:
+
+First — was the data read in correctly? Sometimes column types get 
+mangled on import. A number becomes a character. A date becomes a 
+number. You want to know this *now*, not after you've run twenty 
+lines of code on top of it.
+
+Second — are there unexpected data types? We're about to see a 
+beautiful real-world example of this with the Chinook column. Stay 
+tuned.
+
+Third — missing values. Where are they? How many? Does the pattern 
+matter?
+
+Fourth — structure. How many rows? How many columns? What are the 
+unique values in the key columns?
+
+Explore first. Always.
+
+---
+
+## [0:57–1:02] The Pipe Operator
+
+*[Advance to "The Pipe Operator" slide.]*
+
+Okay. The pipe. This is the thing that makes `dplyr` and `tidyr` so 
+readable, and it's worth spending real time on.
+
+The pipe `%>%` does one thing: it takes whatever is on its left and 
+passes it as the first argument to the function on its right.
+
+Let me show you the before and after.
+
+**Without the pipe:**
+
+```r
+df_filtered <- filter(df, ...)
+df_selected <- select(df_filtered, ...)
+```
+
+I have to name intermediate objects. `df_filtered` exists only so 
+that I can pass it to `select()`. That's cognitive overhead — now I 
+have to track a variable that doesn't mean anything except "the 
+result of the previous step."
+
+**With the pipe:**
+
+```r
+df_cleaned <- df %>% 
+    filter(...) %>%
+    select(...)
+```
+
+No intermediate objects. The output of `filter()` flows directly 
+into `select()`. The pipeline reads top to bottom like a recipe.
+
+---
+
+## [1:02–1:06] Reading the Pipe
+
+*[Advance to "Reading Code with the Pipe" slide.]*
+
+Here's the mental model I want you to use.
+
+The assignment operator `<-` reads as **"gets"**.  
+The pipe `%>%` reads as **"then"**.
+
+So this:
+
+```r
+df_cleaned <- df %>% 
+    filter(...) %>%
+    select(...)
+```
+
+Reads as: *"The cleaned data frame **gets** the original data, 
+**then** a filter, **then** a select."*
+
+That's a sentence. A complete thought. A description of what you 
+did and in what order.
+
+This is what I mean when I say wrangling code is a narrative of 
+analytical decisions. Each step in the pipe is a decision you made. 
+The pipe makes the sequence of those decisions visible and readable.
+
+When you read someone else's wrangling code, you should be able to 
+narrate it in plain English. When you write your own, you should be 
+able to explain why each step is there.
+
+---
+
+## [1:06–1:09] Benefits and Tradeoffs of Pipes
+
+*[Advance to "Benefits and Tradeoffs of Pipes" slide.]*
+
+Let me be honest with you — pipes are not always the right choice.
+
+The benefits are real: no intermediate objects, sequential readability, 
+easy to add or remove steps.
+
+But when you're debugging, a long pipe can be a nightmare. If 
+something's wrong, you have to figure out which step is the culprit. 
+And you can't easily inspect intermediate results without breaking 
+the pipe apart.
+
+The practical advice: chain steps that belong together. When you've 
+completed a meaningful stage — say, you've cleaned the data — save 
+it to an object before continuing. That object becomes a checkpoint. 
+You can inspect it, verify it looks right, and continue from there.
+
+We'll see this pattern in action with the salmon data.
+
+---
+
+## [1:09–1:11] Pipe Keyboard Shortcut
+
+*[Advance to "Keyboard Shortcut" slide.]*
+
+This is a small thing that will save you enormous time.
+
+**Windows:** `Ctrl` + `Shift` + `M`  
+**Mac:** `Cmd` + `Shift` + `M`
+
+Type it a few times right now in your head. Or even better — open 
+RStudio and practice it for 30 seconds. You'll use this shortcut 
+dozens of times every session.
+
+*[Brief pause.]*
+
+---
+
+## [1:11–1:15] Setting Up the Document
+
+*[Advance to "Setting Up Your Analysis Document" slide.]*
+
+Before the activity, the book asks you to do something smart: 
+outline your Quarto document before you start writing code.
+
+Here's the structure it suggests:
+
+- Data Sources
+  - Read in the data
+  - Explore data
+- Clean and Reshape Data
+  - select, quality check, mutate, pivot...
+  - rename, mutate, group_by, summarize...
+  - filter, arrange, separate, unite
+
+This is literate programming in action. You're writing the structure 
+of your analysis — the narrative — before you write the code. The 
+code fills in the blanks.
+
+In the activity, start here. Create your Quarto doc, add these 
+headings, then work through the sections one at a time with the 
+textbook as your guide.
+
+---
+
+## [1:15–1:23] Exit Ticket
+
+*[Advance to "Exit Ticket" slide. Post the exit ticket link in chat.]*
+
+Last thing before I let you go — your exit ticket.
+
+Here's the prompt:
+
+Without writing R code, write pseudocode for a pipeline that:
+
+1. Filters a dataset to rows where `species == "Chinook"`
+2. Creates a new variable that converts catch from thousands to 
+   individual fish
+3. Summarizes the result by calculating mean catch per region
+
+Write it as steps in plain language first, then express it using 
+the pipe `%>%` structure.
+
+Take six minutes on this. I'll be quiet.
+
+*[Start timer. Keep camera on. Be present but don't hover.]*
+
+*[At 5 minutes:]*
+
+One more minute — wrap up your thoughts.
+
+*[At 6 minutes:]*
+
+Okay. A couple of things to notice about this exercise.
+
+The plain language version and the pipe version should look very 
+similar. If they don't — if the pipe version surprised you — that's 
+useful information. It means there's a gap between how you're 
+thinking about the problem and how the code expresses it. The 
+activity will help close that gap.
+
+Submit your exit ticket before you leave. I read all of them.
+
+---
+
+## [1:23–1:25] Coming Up
+
+*[Advance to "Coming Up" slide.]*
+
+In the activity, you're going to work through the full pipeline 
+hands-on. Your partner and the textbook are your resources — use 
+both.
+
+On Wednesday, we'll go through the functions themselves — all of 
+them, slide by slide, with the real salmon data. By the end of 
+Wednesday, you'll have seen a complete end-to-end wrangling pipeline 
+go from raw data to a clean result in about fifteen lines of code.
+
+See you then. Thanks for being here — good questions in chat today. 
+Hang on for a minute if you have anything you want to ask.
+
+*[Stay on for 2–3 minutes for stragglers.]*
+
+---
+
+# Instructor Notes
+
+## Common Questions to Anticipate
+
+**"What's the difference between `%>%` and `|>`?"**  
+The native pipe `|>` was introduced in R 4.1. They work almost 
+identically for our purposes. The book uses `%>%` so we'll use that 
+throughout. If students have seen `|>` elsewhere, that's fine — 
+both are valid.
+
+**"Do I need to load all three packages every time?"**  
+Yes, every new R session. That's what the library chunk in your 
+Quarto document is for. Run it first, every time.
+
+**"Why does the data have to come from a URL?"**  
+It doesn't — the URL just means everyone gets the same version of 
+the data without needing to download a file. In your own projects, 
+you'll read from local files in your `data/` folder.
+
+## Timing Adjustments
+
+If you're running long, the "Why Explore First" slide (0:54) can 
+be shortened to 90 seconds — just name the four things without 
+elaborating. The pipe benefits and tradeoffs slide can also be 
+cut to 90 seconds.
+
+If you're running short, the motivating examples are expandable — 
+ask students to narrate the wide data problem in their own words 
+before revealing the solution.
+
+## Breakout Option
+
+If you want to add interaction around the pipe section, you can 
+send students to breakout rooms for 3 minutes with the question: 
+"Write the pipeline with the pipe, and the equivalent code without 
+the pipe. Which do you find more readable and why?" Quick debrief 
+on return. This adds ~5 minutes so cut from the tradeoffs section.

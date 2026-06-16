@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein">
+<meta name="dcterms.date" content="2026-02-03">
+
+<title>Week 2 Day 2 Lecture Script: Pseudocode as Scientific Planning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="week2_day2_script_DETAILED_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/popper.min.js"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="week2_day2_script_DETAILED_files/libs/quarto-html/anchor.min.js"></script>
+<link href="week2_day2_script_DETAILED_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week2_day2_script_DETAILED_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="week2_day2_script_DETAILED_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="week2_day2_script_DETAILED_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="week2_day2_script_DETAILED_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lecture-overview" id="toc-lecture-overview" class="nav-link active" data-scroll-target="#lecture-overview"><span class="header-section-number">1</span> Lecture Overview</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">1.1</span> Learning Objectives</a></li>
+  <li><a href="#materials-needed" id="toc-materials-needed" class="nav-link" data-scroll-target="#materials-needed"><span class="header-section-number">1.2</span> Materials Needed</a></li>
+  </ul></li>
+  <li><a href="#pre-class-setup-5-minutes-before" id="toc-pre-class-setup-5-minutes-before" class="nav-link" data-scroll-target="#pre-class-setup-5-minutes-before"><span class="header-section-number">2</span> Pre-Class Setup (5 minutes before)</a>
+  <ul class="collapse">
+  <li><a href="#instructor-checklist" id="toc-instructor-checklist" class="nav-link" data-scroll-target="#instructor-checklist"><span class="header-section-number">2.1</span> Instructor Checklist</a></li>
+  <li><a href="#welcome-students" id="toc-welcome-students" class="nav-link" data-scroll-target="#welcome-students"><span class="header-section-number">2.2</span> Welcome Students</a></li>
+  </ul></li>
+  <li><a href="#introduction-5-minutes" id="toc-introduction-5-minutes" class="nav-link" data-scroll-target="#introduction-5-minutes"><span class="header-section-number">3</span> Introduction (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-1-title-slide" id="toc-slide-1-title-slide" class="nav-link" data-scroll-target="#slide-1-title-slide"><span class="header-section-number">3.1</span> Slide 1: Title Slide</a></li>
+  <li><a href="#slide-2-welcome" id="toc-slide-2-welcome" class="nav-link" data-scroll-target="#slide-2-welcome"><span class="header-section-number">3.2</span> Slide 2: Welcome</a></li>
+  <li><a href="#slide-3-last-class-recap" id="toc-slide-3-last-class-recap" class="nav-link" data-scroll-target="#slide-3-last-class-recap"><span class="header-section-number">3.3</span> Slide 3: Last Class Recap</a></li>
+  </ul></li>
+  <li><a href="#the-cooking-metaphor-8-minutes" id="toc-the-cooking-metaphor-8-minutes" class="nav-link" data-scroll-target="#the-cooking-metaphor-8-minutes"><span class="header-section-number">4</span> The Cooking Metaphor (8 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-4-cooking-metaphor-allison-horst-image---full-screen" id="toc-slide-4-cooking-metaphor-allison-horst-image---full-screen" class="nav-link" data-scroll-target="#slide-4-cooking-metaphor-allison-horst-image---full-screen"><span class="header-section-number">4.1</span> Slide 4: Cooking Metaphor (Allison Horst Image - Full Screen)</a></li>
+  <li><a href="#slide-5-planning-before-cooking-allison-horst-image-explained" id="toc-slide-5-planning-before-cooking-allison-horst-image-explained" class="nav-link" data-scroll-target="#slide-5-planning-before-cooking-allison-horst-image-explained"><span class="header-section-number">4.2</span> Slide 5: Planning Before Cooking (Allison Horst Image Explained)</a></li>
+  </ul></li>
+  <li><a href="#what-is-pseudocode-10-minutes" id="toc-what-is-pseudocode-10-minutes" class="nav-link" data-scroll-target="#what-is-pseudocode-10-minutes"><span class="header-section-number">5</span> What IS Pseudocode? (10 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-6-what-is-pseudocode" id="toc-slide-6-what-is-pseudocode" class="nav-link" data-scroll-target="#slide-6-what-is-pseudocode"><span class="header-section-number">5.1</span> Slide 6: What Is Pseudocode?</a></li>
+  <li><a href="#slide-7-pseudocode-example" id="toc-slide-7-pseudocode-example" class="nav-link" data-scroll-target="#slide-7-pseudocode-example"><span class="header-section-number">5.2</span> Slide 7: Pseudocode Example</a></li>
+  <li><a href="#slide-8-why-pseudocode-matters" id="toc-slide-8-why-pseudocode-matters" class="nav-link" data-scroll-target="#slide-8-why-pseudocode-matters"><span class="header-section-number">5.3</span> Slide 8: Why Pseudocode Matters</a></li>
+  </ul></li>
+  <li><a href="#three-modes-prose-pseudocode-code-8-minutes" id="toc-three-modes-prose-pseudocode-code-8-minutes" class="nav-link" data-scroll-target="#three-modes-prose-pseudocode-code-8-minutes"><span class="header-section-number">6</span> Three Modes: Prose, Pseudocode, Code (8 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-9-pseudocode-vs.-code-vs.-prose" id="toc-slide-9-pseudocode-vs.-code-vs.-prose" class="nav-link" data-scroll-target="#slide-9-pseudocode-vs.-code-vs.-prose"><span class="header-section-number">6.1</span> Slide 9: Pseudocode vs.&nbsp;Code vs.&nbsp;Prose</a></li>
+  <li><a href="#slide-10-what-makes-good-pseudocode" id="toc-slide-10-what-makes-good-pseudocode" class="nav-link" data-scroll-target="#slide-10-what-makes-good-pseudocode"><span class="header-section-number">6.2</span> Slide 10: What Makes Good Pseudocode</a></li>
+  </ul></li>
+  <li><a href="#common-mistakes-10-minutes" id="toc-common-mistakes-10-minutes" class="nav-link" data-scroll-target="#common-mistakes-10-minutes"><span class="header-section-number">7</span> Common Mistakes (10 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-11-common-pseudocode-mistakes" id="toc-slide-11-common-pseudocode-mistakes" class="nav-link" data-scroll-target="#slide-11-common-pseudocode-mistakes"><span class="header-section-number">7.1</span> Slide 11: Common Pseudocode Mistakes</a></li>
+  </ul></li>
+  <li><a href="#practice-together-10-minutes" id="toc-practice-together-10-minutes" class="nav-link" data-scroll-target="#practice-together-10-minutes"><span class="header-section-number">8</span> Practice Together (10 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-12-practice-introduction" id="toc-slide-12-practice-introduction" class="nav-link" data-scroll-target="#slide-12-practice-introduction"><span class="header-section-number">8.1</span> Slide 12: Practice Introduction</a></li>
+  <li><a href="#slide-13-building-pseudocode-together" id="toc-slide-13-building-pseudocode-together" class="nav-link" data-scroll-target="#slide-13-building-pseudocode-together"><span class="header-section-number">8.2</span> Slide 13: Building Pseudocode Together</a></li>
+  <li><a href="#slide-14-our-complete-pseudocode" id="toc-slide-14-our-complete-pseudocode" class="nav-link" data-scroll-target="#slide-14-our-complete-pseudocode"><span class="header-section-number">8.3</span> Slide 14: Our Complete Pseudocode</a></li>
+  </ul></li>
+  <li><a href="#spotting-ambiguity-8-minutes" id="toc-spotting-ambiguity-8-minutes" class="nav-link" data-scroll-target="#spotting-ambiguity-8-minutes"><span class="header-section-number">9</span> Spotting Ambiguity (8 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slides-15-16-bad-examples" id="toc-slides-15-16-bad-examples" class="nav-link" data-scroll-target="#slides-15-16-bad-examples"><span class="header-section-number">9.1</span> Slides 15-16: Bad Examples</a></li>
+  <li><a href="#slide-17-better-version" id="toc-slide-17-better-version" class="nav-link" data-scroll-target="#slide-17-better-version"><span class="header-section-number">9.2</span> Slide 17: Better Version</a></li>
+  </ul></li>
+  <li><a href="#breakout-activity-15-minutes" id="toc-breakout-activity-15-minutes" class="nav-link" data-scroll-target="#breakout-activity-15-minutes"><span class="header-section-number">10</span> Breakout Activity (15 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-18-breakout-activity" id="toc-slide-18-breakout-activity" class="nav-link" data-scroll-target="#slide-18-breakout-activity"><span class="header-section-number">10.1</span> Slide 18: Breakout Activity</a></li>
+  <li><a href="#breakout-debrief" id="toc-breakout-debrief" class="nav-link" data-scroll-target="#breakout-debrief"><span class="header-section-number">10.2</span> Breakout Debrief</a></li>
+  </ul></li>
+  <li><a href="#pseudocode-as-debugging-tool-5-minutes" id="toc-pseudocode-as-debugging-tool-5-minutes" class="nav-link" data-scroll-target="#pseudocode-as-debugging-tool-5-minutes"><span class="header-section-number">11</span> Pseudocode as Debugging Tool (5 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-19-pseudocode-for-debugging" id="toc-slide-19-pseudocode-for-debugging" class="nav-link" data-scroll-target="#slide-19-pseudocode-for-debugging"><span class="header-section-number">11.1</span> Slide 19: Pseudocode for Debugging</a></li>
+  </ul></li>
+  <li><a href="#wrap-up-homework-7-minutes" id="toc-wrap-up-homework-7-minutes" class="nav-link" data-scroll-target="#wrap-up-homework-7-minutes"><span class="header-section-number">12</span> Wrap-Up &amp; Homework (7 minutes)</a>
+  <ul class="collapse">
+  <li><a href="#slide-20-homework" id="toc-slide-20-homework" class="nav-link" data-scroll-target="#slide-20-homework"><span class="header-section-number">12.1</span> Slide 20: Homework</a></li>
+  <li><a href="#slide-21-exit-ticket" id="toc-slide-21-exit-ticket" class="nav-link" data-scroll-target="#slide-21-exit-ticket"><span class="header-section-number">12.2</span> Slide 21: Exit Ticket</a></li>
+  <li><a href="#slide-22-summary" id="toc-slide-22-summary" class="nav-link" data-scroll-target="#slide-22-summary"><span class="header-section-number">12.3</span> Slide 22: Summary</a></li>
+  <li><a href="#questions-closing" id="toc-questions-closing" class="nav-link" data-scroll-target="#questions-closing"><span class="header-section-number">12.4</span> Questions &amp; Closing</a></li>
+  </ul></li>
+  <li><a href="#post-lecture-checklist" id="toc-post-lecture-checklist" class="nav-link" data-scroll-target="#post-lecture-checklist"><span class="header-section-number">13</span> Post-Lecture Checklist</a></li>
+  <li><a href="#common-student-questions-answers" id="toc-common-student-questions-answers" class="nav-link" data-scroll-target="#common-student-questions-answers"><span class="header-section-number">14</span> Common Student Questions &amp; Answers</a></li>
+  <li><a href="#timing-notes" id="toc-timing-notes" class="nav-link" data-scroll-target="#timing-notes"><span class="header-section-number">15</span> Timing Notes</a></li>
+  <li><a href="#extension-activities-if-time" id="toc-extension-activities-if-time" class="nav-link" data-scroll-target="#extension-activities-if-time"><span class="header-section-number">16</span> Extension Activities (If Time)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week 2 Day 2 Lecture Script: Pseudocode as Scientific Planning</h1>
+<p class="subtitle lead">BIO/CHEM 806 - Detailed Instructor Guide</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Gretchen LeBuhn &amp; Dr.&nbsp;Nicole Adelstein </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 3, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="lecture-overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Lecture Overview</h1>
+<p><strong>Duration:</strong> 75 minutes<br>
+<strong>Format:</strong> Online synchronous via Zoom<br>
+<strong>Students:</strong> ~30 graduate students (biology and chemistry)</p>
+<section id="learning-objectives" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1</span> Learning Objectives</h2>
+<p>By the end of this lecture, students will be able to:</p>
+<ol type="1">
+<li>Define pseudocode and explain its purpose in scientific programming</li>
+<li>Distinguish between prose, pseudocode, and actual code</li>
+<li>Write specific, unambiguous pseudocode for data analysis tasks</li>
+<li>Identify common pseudocode mistakes and how to fix them</li>
+<li>Use pseudocode as both a planning and debugging tool</li>
+<li>Apply domain knowledge to make pseudocode scientifically meaningful</li>
+</ol>
+</section>
+<section id="materials-needed" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="materials-needed"><span class="header-section-number">1.2</span> Materials Needed</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Zoom link ready</label></li>
+<li><label><input type="checkbox">Slide deck: <code>week2_day2_slides_FINAL.qmd</code> rendered</label></li>
+<li><label><input type="checkbox">Breakout room Google Doc link</label></li>
+<li><label><input type="checkbox">Example of your own pseudocode (prepared in advance)</label></li>
+<li><label><input type="checkbox">Exit ticket posted in Canvas</label></li>
+<li><label><input type="checkbox">Sample data description for practice exercise</label></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="pre-class-setup-5-minutes-before" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Pre-Class Setup (5 minutes before)</h1>
+<section id="instructor-checklist" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="instructor-checklist"><span class="header-section-number">2.1</span> Instructor Checklist</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Log into Zoom early</label></li>
+<li><label><input type="checkbox">Open slide deck</label></li>
+<li><label><input type="checkbox">Have Google Doc link ready to paste in chat</label></li>
+<li><label><input type="checkbox">Enable breakout rooms (5-6 rooms, 5-6 people each)</label></li>
+<li><label><input type="checkbox">Review Monday’s exit tickets for any carryover questions</label></li>
+<li><label><input type="checkbox">Start recording when class begins</label></li>
+</ul>
+</section>
+<section id="welcome-students" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="welcome-students"><span class="header-section-number">2.2</span> Welcome Students</h2>
+<p><strong>[00:00 - Class start time]</strong></p>
+<blockquote class="blockquote">
+<p>“Good afternoon everyone! Welcome back. Hope your Monday was good and you had a chance to work on your project structures.”</p>
+</blockquote>
+<p><strong>Check tech:</strong></p>
+<blockquote class="blockquote">
+<p>“Can everyone hear me okay? Can you see the slide with today’s title?”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="introduction-5-minutes" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Introduction (5 minutes)</h1>
+<section id="slide-1-title-slide" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="slide-1-title-slide"><span class="header-section-number">3.1</span> Slide 1: Title Slide</h2>
+<p><strong>[00:00-00:01]</strong></p>
+<p><strong>Show title slide:</strong> “Pseudocode as Scientific Planning”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Today we’re talking about pseudocode. And I want to start by saying: pseudocode is NOT intimidating. It’s just planning.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If you can write a to-do list, you can write pseudocode.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-2-welcome" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="slide-2-welcome"><span class="header-section-number">3.2</span> Slide 2: Welcome</h2>
+<p><strong>[00:01-00:02]</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Today’s topic: Pseudocode. What it is, why it matters, and how to write it well.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“By the end of today, you’ll have a tool that makes coding way less scary and way more systematic.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-3-last-class-recap" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="slide-3-last-class-recap"><span class="header-section-number">3.3</span> Slide 3: Last Class Recap</h2>
+<p><strong>[00:02-00:04]</strong></p>
+<p><strong>Connect to Monday.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Monday we talked about organizing projects. We learned about folder structures, relative paths, READMEs.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“That was about WHERE you work and HOW you organize files.”</p>
+</blockquote>
+<p><strong>Transition:</strong></p>
+<blockquote class="blockquote">
+<p>“Today’s question: How do you plan what goes INSIDE those scripts? Before you write a single line of code, what’s your game plan?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“The answer is pseudocode.”</p>
+</blockquote>
+<p><strong>Link concepts:</strong></p>
+<blockquote class="blockquote">
+<p>“Pseudocode bridges scientific thinking and actual code. It’s where you translate your research logic into steps a computer can eventually execute.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="the-cooking-metaphor-8-minutes" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> The Cooking Metaphor (8 minutes)</h1>
+<section id="slide-4-cooking-metaphor-allison-horst-image---full-screen" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="slide-4-cooking-metaphor-allison-horst-image---full-screen"><span class="header-section-number">4.1</span> Slide 4: Cooking Metaphor (Allison Horst Image - Full Screen)</h2>
+<p><strong>[00:04-00:05]</strong></p>
+<p><strong>Show Allison Horst code-kitchen image (full screen, no text).</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Before I explain what pseudocode is, I want to show you this illustration by Allison Horst. Just look at it for a moment.”</p>
+</blockquote>
+<p><strong>Let it sit for 3-4 seconds.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“What do you see? What stands out to you?”</p>
+</blockquote>
+<p><strong>Wait for 1-2 chat responses.</strong></p>
+<p><strong>Acknowledge responses:</strong></p>
+<blockquote class="blockquote">
+<p>“Right! A kitchen, ingredients, tools… Now let me tell you what this has to do with pseudocode.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-5-planning-before-cooking-allison-horst-image-explained" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="slide-5-planning-before-cooking-allison-horst-image-explained"><span class="header-section-number">4.2</span> Slide 5: Planning Before Cooking (Allison Horst Image Explained)</h2>
+<p><strong>[00:05-00:09]</strong></p>
+<p><strong>Show same image with explanation text.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Allison Horst uses this cooking metaphor to explain R programming. And it’s PERFECT for understanding pseudocode.”</p>
+</blockquote>
+<p><strong>Break down the metaphor:</strong></p>
+<blockquote class="blockquote">
+<p>“In this metaphor:” “- R is your chef’s knife—your main tool” “- RStudio is your kitchen—where you work”<br>
+“- Your data are your ingredients” “- Your code is the actual cooking”</p>
+</blockquote>
+<p><strong>Pause, then key point:</strong></p>
+<blockquote class="blockquote">
+<p>“But before a chef starts cooking, what do they do?”</p>
+</blockquote>
+<p><strong>Wait for responses.</strong> Common: “Read recipe,” “Prep ingredients.”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Exactly! They look at a RECIPE. The recipe is the PLAN.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Pseudocode is your recipe. It’s the plan you make before you start ‘cooking’ (writing code).”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“Would you start cooking a complicated dish without a recipe or plan? Just throw things together and hope?”</p>
+</blockquote>
+<p><strong>Students usually say no.</strong></p>
+<blockquote class="blockquote">
+<p>“Right! Same with coding. You don’t just start typing and hope it works. You plan first. That plan is pseudocode.”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>This metaphor really helps students see pseudocode as normal planning, not something technical.</em></p>
+<hr>
+</section>
+</section>
+<section id="what-is-pseudocode-10-minutes" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> What IS Pseudocode? (10 minutes)</h1>
+<section id="slide-6-what-is-pseudocode" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="slide-6-what-is-pseudocode"><span class="header-section-number">5.1</span> Slide 6: What Is Pseudocode?</h2>
+<p><strong>[00:09-00:12]</strong></p>
+<p><strong>Give formal definition.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me give you the formal definition, then we’ll break it down.”</p>
+</blockquote>
+<p><strong>Read slowly:</strong></p>
+<blockquote class="blockquote">
+<p>“Pseudocode is a step-by-step description of what you want your code to do, written in plain language.”</p>
+</blockquote>
+<p><strong>Emphasize each part:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Step-by-step’ means you break your analysis into discrete steps. Not one big blob, but a sequence.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘What you want your code to do’ means you’re describing the outcome, the logic, the process.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Plain language’ means you’re NOT writing actual code yet. No R syntax. No function names. Just clear English.”</p>
+</blockquote>
+<p><strong>Three key characteristics:</strong></p>
+<blockquote class="blockquote">
+<p>“Pseudocode is not code. It’s not prose. It’s something in between.”</p>
+</blockquote>
+<p><strong>Explain:</strong></p>
+<blockquote class="blockquote">
+<p>“It’s more specific than prose—‘Clean the data’ is too vague.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“But it’s less specific than code—you’re not worrying about syntax yet.”</p>
+</blockquote>
+<p><strong>Analogy:</strong></p>
+<blockquote class="blockquote">
+<p>“Think of it like a recipe. A recipe doesn’t say ‘Make cookies’ (too vague, that’s prose). And it doesn’t say ‘preheat_oven(temperature=350, unit=F)’ (that’s code). It says ‘Preheat oven to 350°F.’ That’s the level we want.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-7-pseudocode-example" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="slide-7-pseudocode-example"><span class="header-section-number">5.2</span> Slide 7: Pseudocode Example</h2>
+<p><strong>[00:12-00:15]</strong></p>
+<p><strong>Show the bad vs.&nbsp;good example.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me show you the difference between vague and good pseudocode.”</p>
+</blockquote>
+<p><strong>Bad example:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s BAD pseudocode: ‘Clean the data.’”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s wrong with this? Type in chat.”</p>
+</blockquote>
+<p><strong>Common responses:</strong> “Too vague,” “What does clean mean?” “How?”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Exactly! ‘Clean the data’ could mean a hundred different things. It’s not actionable.”</p>
+</blockquote>
+<p><strong>Good example:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s BETTER pseudocode:”</p>
+</blockquote>
+<p><strong>Read each line:</strong></p>
+<blockquote class="blockquote">
+<p>“- Load temperature data from CSV file” “- Remove rows where temperature is missing”<br>
+“- Remove rows where temperature is less than -50 or greater than 60” “- Calculate mean temperature for each site” “- Save cleaned data to data/processed/temp_clean.csv”</p>
+</blockquote>
+<p><strong>Point out difference:</strong></p>
+<blockquote class="blockquote">
+<p>“See the difference? Each step is SPECIFIC. I know exactly what ‘clean’ means now:” “- Handle missing values” “- Remove impossible values (based on my domain knowledge of temperature)” “- Calculate a specific statistic” “- Save to a specific location”</p>
+</blockquote>
+<p><strong>Key insight:</strong></p>
+<blockquote class="blockquote">
+<p>“Someone else could read this pseudocode and know EXACTLY what I’m planning to do. That’s the goal.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-8-why-pseudocode-matters" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="slide-8-why-pseudocode-matters"><span class="header-section-number">5.3</span> Slide 8: Why Pseudocode Matters</h2>
+<p><strong>[00:15-00:18]</strong></p>
+<p><strong>Explain the three reasons.</strong></p>
+<p><strong>Reason 1:</strong></p>
+<blockquote class="blockquote">
+<p>“First: Pseudocode forces you to think BEFORE you code.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Most mistakes in programming happen because we start typing before we know what we’re doing. We have a vague idea and we just start coding.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Pseudocode makes you think through the logic first.”</p>
+</blockquote>
+<p><strong>Reason 2:</strong></p>
+<blockquote class="blockquote">
+<p>“Second: Pseudocode reveals ambiguity.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“When you try to write pseudocode, you discover gaps in your thinking.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Clean the data’ seems clear in your head… until you try to write specific pseudocode steps. Then you realize: wait, HOW do I define an outlier? What threshold do I use?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Better to discover these questions BEFORE you spend hours coding.”</p>
+</blockquote>
+<p><strong>Reason 3:</strong></p>
+<blockquote class="blockquote">
+<p>“Third: Pseudocode makes collaboration easier.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You can share pseudocode with a collaborator or advisor and ask: ‘Is this the right approach?’ BEFORE you spend time coding.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“They can review your logic without needing to read actual code.”</p>
+</blockquote>
+<p><strong>Key insight:</strong></p>
+<blockquote class="blockquote">
+<p>“Good pseudocode translates to ANY programming language. Whether you write it in R, Python, Julia—the logic is the same.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="three-modes-prose-pseudocode-code-8-minutes" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Three Modes: Prose, Pseudocode, Code (8 minutes)</h1>
+<section id="slide-9-pseudocode-vs.-code-vs.-prose" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="slide-9-pseudocode-vs.-code-vs.-prose"><span class="header-section-number">6.1</span> Slide 9: Pseudocode vs.&nbsp;Code vs.&nbsp;Prose</h2>
+<p><strong>[00:18-00:21]</strong></p>
+<p><strong>Show the three levels.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me show you three levels of describing an analysis. And I want you to notice where pseudocode sits.”</p>
+</blockquote>
+<p><strong>Prose example:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s PROSE—too informal: ‘Remove bad data and make a graph.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This is how you might describe it to a non-scientist friend. It’s vague, it’s casual, it’s not actionable.”</p>
+</blockquote>
+<p><strong>Code example:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s actual CODE—too specific for planning:”</p>
+</blockquote>
+<p><strong>Read the code:</strong></p>
+<blockquote class="blockquote">
+<p>“<code>data &lt;- read.csv('data/raw/temps.csv')</code><br>
+<code>data_clean &lt;- data %&gt;% filter(temperature &gt;= -50, ...)</code>”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“This is the final product. It has syntax, function names, specific arguments. Too detailed for the planning stage.”</p>
+</blockquote>
+<p><strong>Pseudocode example (middle ground):</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s PSEUDOCODE—just right:”</p>
+</blockquote>
+<p><strong>Read each line:</strong></p>
+<blockquote class="blockquote">
+<p>“- Load temperature data” “- Remove rows where temperature &lt; -50 or &gt; 60”<br>
+“- Create scatterplot of temperature vs.&nbsp;elevation” “- Save plot to figures/temp_elevation.png”</p>
+</blockquote>
+<p><strong>Emphasize:</strong></p>
+<blockquote class="blockquote">
+<p>“This is specific enough that you know what to do, but general enough that you’re not bogged down in syntax.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You’re thinking about WHAT to do, not yet HOW to write the R code.”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>Students often want to jump to code. Emphasize pseudocode is a distinct, valuable step.</em></p>
+<hr>
+</section>
+<section id="slide-10-what-makes-good-pseudocode" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="slide-10-what-makes-good-pseudocode"><span class="header-section-number">6.2</span> Slide 10: What Makes Good Pseudocode</h2>
+<p><strong>[00:21-00:24]</strong></p>
+<p><strong>List the four characteristics.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“What makes pseudocode GOOD? Four things.”</p>
+</blockquote>
+<p><strong>1. Verbs:</strong></p>
+<blockquote class="blockquote">
+<p>“Good pseudocode uses action verbs. Load. Remove. Calculate. Create. Save.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“These verbs tell you what’s happening.”</p>
+</blockquote>
+<p><strong>2. Specific conditions:</strong></p>
+<blockquote class="blockquote">
+<p>“Not ‘remove bad data.’ Instead: ‘remove temperature &lt; -50 or &gt; 60.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Not ‘remove outliers.’ Instead: ‘remove values more than 3 SD from mean.’”</p>
+</blockquote>
+<p><strong>3. Clear outputs:</strong></p>
+<blockquote class="blockquote">
+<p>“Not ‘make a plot.’ Instead: ‘create scatterplot of X vs Y.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Not ‘save results.’ Instead: ‘save to figures/temp_plot.png.’”</p>
+</blockquote>
+<p><strong>4. Domain knowledge:</strong></p>
+<blockquote class="blockquote">
+<p>“This is key: Good pseudocode includes your scientific reasoning.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Remove absorbance &gt; 3 because that’s out of linear range for this instrument.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Remove GPS coordinates with accuracy &gt; 50m because that’s too imprecise for our analysis.’”</p>
+</blockquote>
+<p><strong>Summary:</strong></p>
+<blockquote class="blockquote">
+<p>“Detailed enough to be unambiguous. General enough that you’re not writing code yet.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="common-mistakes-10-minutes" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Common Mistakes (10 minutes)</h1>
+<section id="slide-11-common-pseudocode-mistakes" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="slide-11-common-pseudocode-mistakes"><span class="header-section-number">7.1</span> Slide 11: Common Pseudocode Mistakes</h2>
+<p><strong>[00:24-00:29]</strong></p>
+<p><strong>Go through each mistake with examples.</strong></p>
+<p><strong>Mistake 1: Too vague</strong></p>
+<blockquote class="blockquote">
+<p>“Mistake #1: Being too vague.”</p>
+</blockquote>
+<p><strong>Bad example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Standardize the measurements.’”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s wrong with this? Chat answers.”</p>
+</blockquote>
+<p><strong>Responses:</strong> “What does standardize mean?” “Divide by what?”</p>
+<p><strong>Good example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Divide each mass by wing length to get body condition index.’”</p>
+</blockquote>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“See? Now we know EXACTLY what standardize means in this context.”</p>
+</blockquote>
+<p><strong>Mistake 2: Too detailed (writing code)</strong></p>
+<blockquote class="blockquote">
+<p>“Mistake #2: Writing actual code instead of pseudocode.”</p>
+</blockquote>
+<p><strong>Bad example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Use filter() where count &gt;= 5.’”</p>
+</blockquote>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“This is code! You’re already thinking about specific R functions.”</p>
+</blockquote>
+<p><strong>Good example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Remove sites with fewer than 5 observations.’”</p>
+</blockquote>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“This describes WHAT without worrying about HOW (filter function).”</p>
+</blockquote>
+<p><strong>Mistake 3: Skipping steps</strong></p>
+<blockquote class="blockquote">
+<p>“Mistake #3: Skipping steps in the logic.”</p>
+</blockquote>
+<p><strong>Bad example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Load data, make plot.’”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s missing here?”</p>
+</blockquote>
+<p><strong>Wait for responses:</strong> “Cleaning?” “Calculations?”</p>
+<p><strong>Good example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Load → Remove invalid values → Calculate mean per group → Create bar plot.’”</p>
+</blockquote>
+<p><strong>Mistake 4: No decision points</strong></p>
+<blockquote class="blockquote">
+<p>“Mistake #4: Not documenting decisions.”</p>
+</blockquote>
+<p><strong>Bad example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Remove outliers.’”</p>
+</blockquote>
+<p><strong>Good example:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Remove values more than 3 SD from mean (threshold based on visual inspection of distribution).’”</p>
+</blockquote>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“The parenthetical explains WHY you chose that threshold. Future you will thank you.”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>These mistakes are VERY common. Emphasize students will make these mistakes—that’s normal.</em></p>
+<hr>
+</section>
+</section>
+<section id="practice-together-10-minutes" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Practice Together (10 minutes)</h1>
+<section id="slide-12-practice-introduction" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="slide-12-practice-introduction"><span class="header-section-number">8.1</span> Slide 12: Practice Introduction</h2>
+<p><strong>[00:29-00:30]</strong></p>
+<p><strong>Set up the scenario.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Okay, let’s practice writing pseudocode together. I’m going to give you a scenario, and we’ll build the pseudocode step by step.”</p>
+</blockquote>
+<p><strong>Read scenario:</strong></p>
+<blockquote class="blockquote">
+<p>“You have a dataset of bird observations. Each row has: species name, date, location (lat/long), and observer name.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Your goal is to:” “1. Count observations per species” “2. Make a bar chart of the top 10 species” “3. Save the chart”</p>
+</blockquote>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s build the pseudocode together. I want you to help me.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-13-building-pseudocode-together" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="slide-13-building-pseudocode-together"><span class="header-section-number">8.2</span> Slide 13: Building Pseudocode Together</h2>
+<p><strong>[00:30-00:35]</strong></p>
+<p><strong>Build it interactively.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s the FIRST step? Type in chat.”</p>
+</blockquote>
+<p><strong>Wait for responses.</strong> Common: “Load data,” “Read the file.”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Great! So Step 1: Load the bird observation data.”</p>
+</blockquote>
+<p><strong>Write it on screen or show it on slide.</strong></p>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s next?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “Count species,” “Group by species.”</p>
+<p><strong>Refine:</strong></p>
+<blockquote class="blockquote">
+<p>“Close! Let’s be specific: ‘Count the number of observations for each species.’”</p>
+</blockquote>
+<p><strong>Continue building:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s Step 3?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “Sort them.”</p>
+<p><strong>Refine:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Sort species by count, highest to lowest.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“What’s Step 4?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “Top 10.”</p>
+<p><strong>Refine:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Keep only the top 10 species.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 5?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “Make bar chart.”</p>
+<p><strong>Refine:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Create bar chart with species on x-axis, count on y-axis.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step 6?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “Save it.”</p>
+<p><strong>Refine:</strong></p>
+<blockquote class="blockquote">
+<p>“‘Save chart to figures/top_species.png.’”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-14-our-complete-pseudocode" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="slide-14-our-complete-pseudocode"><span class="header-section-number">8.3</span> Slide 14: Our Complete Pseudocode</h2>
+<p><strong>[00:35-00:37]</strong></p>
+<p><strong>Show the complete pseudocode.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Look at what we built together:”</p>
+</blockquote>
+<p><strong>Read through it:</strong></p>
+<pre><code>STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species
+STEP 5: Create bar chart (species on x-axis, count on y-axis)
+STEP 6: Save chart to figures/top_species.png</code></pre>
+<p><strong>Point out good qualities:</strong></p>
+<blockquote class="blockquote">
+<p>“Notice: Clear verbs. Specific steps. Logical order. Not actual code. Explicit about output.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“You could hand this to any programmer and they could implement it in any language.”</p>
+</blockquote>
+<p><strong>Emphasize:</strong></p>
+<blockquote class="blockquote">
+<p>“This took us 5-7 minutes to write. But it would save you HOURS of coding blind.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="spotting-ambiguity-8-minutes" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Spotting Ambiguity (8 minutes)</h1>
+<section id="slides-15-16-bad-examples" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="slides-15-16-bad-examples"><span class="header-section-number">9.1</span> Slides 15-16: Bad Examples</h2>
+<p><strong>[00:37-00:42]</strong></p>
+<p><strong>Show bad example 1.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Now let’s practice spotting BAD pseudocode. I’m going to show you some, and I want you to tell me what’s wrong.”</p>
+</blockquote>
+<p><strong>Example 1:</strong></p>
+<pre><code>Load the dataset
+Clean the data
+Analyze it
+Save the results</code></pre>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“What’s ambiguous here? Type in chat.”</p>
+</blockquote>
+<p><strong>Wait for responses.</strong> Common: “What does clean mean?” “What analysis?” “What results?”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Exactly! Every single step is too vague.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Clean the data’—remove what? Missing values? Outliers? Both? How are outliers defined?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Analyze it’—this could be ANYTHING. Mean? Regression? ANOVA?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“‘Save results’—what results? Where? What format?”</p>
+</blockquote>
+<p><strong>Show bad example 2:</strong></p>
+<pre><code>Load temperature data
+Remove outliers
+Calculate average temperature
+Make a plot</code></pre>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“This looks better, but what’s still missing?”</p>
+</blockquote>
+<p><strong>Responses:</strong> “How define outliers?” “Average by what?” “What kind of plot?”</p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Right! Let me show you the improved version.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-17-better-version" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="slide-17-better-version"><span class="header-section-number">9.2</span> Slide 17: Better Version</h2>
+<p><strong>[00:42-00:45]</strong></p>
+<p><strong>Show the improved pseudocode.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Here’s how we make this unambiguous:”</p>
+</blockquote>
+<p><strong>Read it:</strong></p>
+<pre><code>Load temperature data from field sensors
+Remove temperatures &lt; -50°C or &gt; 60°C (sensor errors)
+Remove temperatures &gt; 3 SD from site mean (outliers)
+Calculate mean temperature for each site
+Create bar plot of mean temperature by site (ordered north to south)
+Save plot to figures/temp_by_site.png</code></pre>
+<p><strong>Point out improvements:</strong></p>
+<blockquote class="blockquote">
+<p>“Now we know:” “- Data source (field sensors)” “- Two types of cleaning (sensor errors vs.&nbsp;outliers)” “- Specific definitions (&lt; -50°C, &gt; 3 SD)” “- Specific calculation (mean per site)” “- Specific plot type (bar plot, specific ordering)” “- Specific output location”</p>
+</blockquote>
+<p><strong>Key point:</strong></p>
+<blockquote class="blockquote">
+<p>“There’s no ambiguity. Someone reading this knows exactly what you’re planning.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="breakout-activity-15-minutes" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Breakout Activity (15 minutes)</h1>
+<section id="slide-18-breakout-activity" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="slide-18-breakout-activity"><span class="header-section-number">10.1</span> Slide 18: Breakout Activity</h2>
+<p><strong>[00:45-00:46]</strong></p>
+<p><strong>Explain the activity.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Time to practice! You’re going into breakout rooms.”</p>
+</blockquote>
+<p><strong>Task:</strong></p>
+<blockquote class="blockquote">
+<p>“Remember in Week 1, you described cleaning a dataset with missing or invalid values? Now I want you to rewrite that as formal pseudocode.”</p>
+</blockquote>
+<p><strong>Requirements:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Write it as numbered steps” “2. Be specific—no vague verbs”<br>
+“3. Make decisions explicit” “4. Add it to the Google Doc”</p>
+</blockquote>
+<p><strong>Goal:</strong></p>
+<blockquote class="blockquote">
+<p>“When you’re done, someone else should be able to follow your pseudocode exactly.”</p>
+</blockquote>
+<p><strong>Logistics:</strong></p>
+<blockquote class="blockquote">
+<p>“You’ll be in groups for 15 minutes. I’ll visit rooms. If you finish early, critique each other’s pseudocode—is anything ambiguous?”</p>
+</blockquote>
+<p><strong>Send to breakout rooms.</strong></p>
+<p><strong>Instructor note:</strong> <em>Visit each room. Common issues: Still too vague, forgetting to specify thresholds, no output specified. Gently redirect.</em></p>
+<hr>
+</section>
+<section id="breakout-debrief" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="breakout-debrief"><span class="header-section-number">10.2</span> Breakout Debrief</h2>
+<p><strong>[01:01-01:06]</strong></p>
+<p><strong>Bring everyone back.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Welcome back! Let’s look at what you created.”</p>
+</blockquote>
+<p><strong>Pull up Google Doc.</strong></p>
+<p><strong>Look at 2-3 examples:</strong></p>
+<blockquote class="blockquote">
+<p>“Let me look at Group 2’s pseudocode… I really like this: ‘Remove plant heights &lt; 0 cm (data entry errors) and &gt; 300 cm (biologically impossible for this species).’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Notice they didn’t just say ‘remove impossible values’—they specified the thresholds AND explained WHY.”</p>
+</blockquote>
+<p><strong>Point out common patterns:</strong></p>
+<blockquote class="blockquote">
+<p>“I’m seeing most groups did these things well:” “- Specified numeric thresholds” “- Explained the reasoning in parentheses” “- Listed steps in logical order”</p>
+</blockquote>
+<p><strong>Address common issues:</strong></p>
+<blockquote class="blockquote">
+<p>“A few things to watch:” “- Some pseudocode still says ‘clean the data’—break that into specific steps” “- Remember to specify WHERE you’re saving outputs” “- Domain knowledge is key—‘biologically impossible for this species’ is perfect!”</p>
+</blockquote>
+<p><strong>Ask:</strong></p>
+<blockquote class="blockquote">
+<p>“How many of you found that writing pseudocode revealed gaps in your thinking?”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>Most hands should go up. Validate this as the POINT of pseudocode.</em></p>
+<hr>
+</section>
+</section>
+<section id="pseudocode-as-debugging-tool-5-minutes" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Pseudocode as Debugging Tool (5 minutes)</h1>
+<section id="slide-19-pseudocode-for-debugging" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="slide-19-pseudocode-for-debugging"><span class="header-section-number">11.1</span> Slide 19: Pseudocode for Debugging</h2>
+<p><strong>[01:06-01:09]</strong></p>
+<p><strong>Introduce debugging use.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“So far we’ve talked about pseudocode as a planning tool. But it’s also a DEBUGGING tool.”</p>
+</blockquote>
+<p><strong>Scenario:</strong></p>
+<blockquote class="blockquote">
+<p>“Your code isn’t working. You’re getting errors or wrong results. What do you do?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Step back. Look at your pseudocode—or write it if you didn’t already.”</p>
+</blockquote>
+<p><strong>Two possibilities:</strong></p>
+<blockquote class="blockquote">
+<p>“When code fails, two possibilities:”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“1. Your LOGIC is flawed. You’re asking the computer to do the wrong thing.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“2. Your SYNTAX is wrong. You’re asking the right thing but using wrong words.”</p>
+</blockquote>
+<p><strong>With pseudocode:</strong></p>
+<blockquote class="blockquote">
+<p>“Check your pseudocode. Ask: ‘Is this actually what I want to do?’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If the pseudocode is RIGHT, then it’s a syntax problem. Easier to fix!”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If the pseudocode is WRONG, fix the logic first, then worry about code.”</p>
+</blockquote>
+<p><strong>Key point:</strong></p>
+<blockquote class="blockquote">
+<p>“Pseudocode helps you separate logic problems from syntax problems. That saves HOURS of frustration.”</p>
+</blockquote>
+<p><strong>Example:</strong></p>
+<blockquote class="blockquote">
+<p>“I once spent 2 hours debugging code, couldn’t figure out why my results were wrong. Then I wrote out the pseudocode and realized: I was calculating the MEAN when I needed the MEDIAN. Logic error!”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“If I’d written pseudocode first, I’d have caught that immediately.”</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="wrap-up-homework-7-minutes" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Wrap-Up &amp; Homework (7 minutes)</h1>
+<section id="slide-20-homework" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="slide-20-homework"><span class="header-section-number">12.1</span> Slide 20: Homework</h2>
+<p><strong>[01:09-01:11]</strong></p>
+<p><strong>Explain homework.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Your homework before Monday: Write pseudocode for one of two options.”</p>
+</blockquote>
+<p><strong>Option A: Plant heights</strong></p>
+<blockquote class="blockquote">
+<p>“You have plant heights at different light levels. Write pseudocode to:” “- Remove negative heights (errors)” “- Remove heights &gt; 300 cm (errors)” “- Calculate mean height per light level” “- Save summary to file”</p>
+</blockquote>
+<p><strong>Option B: UV-Vis kinetics</strong></p>
+<blockquote class="blockquote">
+<p>“You have UV-Vis absorbance data over time. Write pseudocode to:” “- Subtract baseline (first 5 timepoints)” “- Remove absorbance &lt; 0 or &gt; 3 (out of range)” “- Calculate slope (reaction rate)” “- Save rate constant”</p>
+</blockquote>
+<p><strong>Submission:</strong></p>
+<blockquote class="blockquote">
+<p>“Post your pseudocode in the discussion board. That way you can see how others approached it.”</p>
+</blockquote>
+<p><strong>Tips:</strong></p>
+<blockquote class="blockquote">
+<p>“Remember: 5-8 steps. Be specific. Include domain knowledge. Explain thresholds.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-21-exit-ticket" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="slide-21-exit-ticket"><span class="header-section-number">12.2</span> Slide 21: Exit Ticket</h2>
+<p><strong>[01:11-01:13]</strong></p>
+<p><strong>Assign exit ticket.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Before you leave, please complete the exit ticket in Canvas.”</p>
+</blockquote>
+<p><strong>Read questions:</strong></p>
+<blockquote class="blockquote">
+<p>“1. What is pseudocode and how is it different from code?”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“2. Critique this pseudocode: ‘Process the samples. Do statistics. Make graph.’”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“3. Write pseudocode for calculating BMI from height and weight data.”</p>
+</blockquote>
+<p><strong>Emphasize:</strong></p>
+<blockquote class="blockquote">
+<p>“Question 3 is a mini-version of your homework. If you can do that, you’re ready for the homework.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="slide-22-summary" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="slide-22-summary"><span class="header-section-number">12.3</span> Slide 22: Summary</h2>
+<p><strong>[01:13-01:15]</strong></p>
+<p><strong>Summarize key concepts.</strong></p>
+<p><strong>Say:</strong></p>
+<blockquote class="blockquote">
+<p>“Let’s review what we covered:”</p>
+</blockquote>
+<p><strong>Point to each:</strong></p>
+<blockquote class="blockquote">
+<p>“1. Pseudocode is your planning tool. It bridges scientific thinking and code.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“2. Good pseudocode is specific, ordered, and explicit. Like a detailed recipe.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“3. Pseudocode reveals flawed logic BEFORE you spend time coding.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“4. It’s language-agnostic. Works for R, Python, whatever.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“5. Use your domain knowledge. Make it scientifically meaningful.”</p>
+</blockquote>
+<p><strong>Connect to next week:</strong></p>
+<blockquote class="blockquote">
+<p>“Next week we start writing ACTUAL code in Quarto documents!”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“And guess what? Your pseudocode this week will make that so much easier.”</p>
+</blockquote>
+<p><strong>Final thought:</strong></p>
+<blockquote class="blockquote">
+<p>“I know writing pseudocode feels like an extra step. You want to just CODE.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“But I promise: 10 minutes of pseudocode saves hours of confused coding. Try it. See how it feels.”</p>
+</blockquote>
+<hr>
+</section>
+<section id="questions-closing" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="questions-closing"><span class="header-section-number">12.4</span> Questions &amp; Closing</h2>
+<p><strong>[01:15-01:17]</strong></p>
+<p><strong>Take questions:</strong></p>
+<blockquote class="blockquote">
+<p>“Any quick questions before we wrap?”</p>
+</blockquote>
+<p><strong>Instructor note:</strong> <em>Take 1-2 questions. Direct longer questions to office hours or discussion board.</em></p>
+<p><strong>Closing:</strong></p>
+<blockquote class="blockquote">
+<p>“Great work today, everyone! Remember: post your pseudocode for one of the homework options by Monday.”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“See you Monday when we start Week 3 and dive into Quarto!”</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“Have a great weekend!”</p>
+</blockquote>
+<p><strong>Stop recording.</strong></p>
+<hr>
+</section>
+</section>
+<section id="post-lecture-checklist" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Post-Lecture Checklist</h1>
+<ul class="task-list">
+<li><label><input type="checkbox">Stop recording</label></li>
+<li><label><input type="checkbox">Upload to Canvas</label></li>
+<li><label><input type="checkbox">Check discussion board</label></li>
+<li><label><input type="checkbox">Review exit tickets (look for misunderstandings about pseudocode vs.&nbsp;code)</label></li>
+<li><label><input type="checkbox">Prepare Week 3 Day 1 materials</label></li>
+</ul>
+<hr>
+</section>
+<section id="common-student-questions-answers" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> Common Student Questions &amp; Answers</h1>
+<p><strong>Q: “How detailed should pseudocode be?”</strong></p>
+<p>A: Detailed enough that someone could implement it, but not so detailed you’re writing actual code. If you’re naming specific functions (filter, mutate), you’ve gone too far. If someone reading it would ask “how exactly do I do that?” it’s too vague.</p>
+<p><strong>Q: “Should I write pseudocode for EVERY analysis?”</strong></p>
+<p>A: For complex, new analyses: yes. For simple, repetitive tasks you’ve done before: probably not. Use judgment. If you’re unsure about the logic, pseudocode helps.</p>
+<p><strong>Q: “Can I write pseudocode as comments in my R script?”</strong></p>
+<p>A: Yes! Many people do this. Write the pseudocode as comments first, then fill in the actual code below each comment.</p>
+<p><strong>Q: “What if my pseudocode changes as I code?”</strong></p>
+<p>A: That’s fine! Pseudocode is a living document. Update it as your understanding evolves. The point is to have the thinking process documented.</p>
+<p><strong>Q: “Is there a ‘right’ way to format pseudocode?”</strong></p>
+<p>A: No strict format. Some people number steps (Step 1, Step 2…). Some use bullets. Some use indentation for nested logic. Whatever is clear to you and others.</p>
+<hr>
+</section>
+<section id="timing-notes" class="level1" data-number="15">
+<h1 data-number="15"><span class="header-section-number">15</span> Timing Notes</h1>
+<p>If ahead of schedule: - More time on practice examples - Let students share their pseudocode in main room - More time for questions - Show more examples from different domains</p>
+<p>If behind schedule: - Combine slides 15-16 (bad examples) - Reduce breakout to 12 minutes - Skip detailed debrief, just highlight 1 example - Shorter summary</p>
+<p><strong>Target: End with time for exit ticket and 1-2 questions</strong></p>
+<hr>
+</section>
+<section id="extension-activities-if-time" class="level1" data-number="16">
+<h1 data-number="16"><span class="header-section-number">16</span> Extension Activities (If Time)</h1>
+<p>If you have extra time, consider:</p>
+<ol type="1">
+<li><p><strong>Live pseudocode challenge:</strong> Give a new scenario, write pseudocode together in real-time</p></li>
+<li><p><strong>Code-to-pseudocode:</strong> Show them actual code, ask them to reverse-engineer the pseudocode</p></li>
+<li><p><strong>Peer review:</strong> Have students swap pseudocode and critique each other’s clarity</p></li>
+<li><p><strong>Domain-specific examples:</strong> Show pseudocode for a biology analysis and a chemistry analysis, compare approaches</p></li>
+</ol>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

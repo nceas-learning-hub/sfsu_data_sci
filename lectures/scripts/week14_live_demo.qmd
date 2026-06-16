@@ -1,0 +1,944 @@
+---
+title: "Week 14: Writing Functions in R"
+subtitle: "Instructor Live-Coding Companion"
+author: "BIO/CHEM 806"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contents"
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    embed-resources: true
+editor:
+  markdown:
+    wrap: 72
+execute:
+  eval: true
+  echo: true
+  warning: true
+  message: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+```
+
+::: {.callout-note}
+## About this document
+
+This is the instructor live-coding companion for **Week 14: Writing
+Functions in R**. It covers both Monday and Wednesday lectures in
+sequence. Run each chunk interactively during class — do not knit the
+whole document at once. The TOC on the left lets you jump between
+sections during lecture.
+:::
+
+---
+
+# LECTURE 1 — Monday {#lecture-1}
+
+*DRY principle · Function anatomy · Vectorization · Lists · roxygen2*
+
+---
+
+## 1.1 The Copy-Paste Problem {#copy-paste}
+
+Before we write any functions, let's look at the problem they solve.
+
+```{r}
+#| label: copy-paste-trap
+
+airtemps <- c(212, 30.3, 78, 32)
+
+# The copy-paste approach — fragile and verbose
+celsius1 <- (airtemps[1] - 32) * 5/9
+celsius2 <- (airtemps[2] - 32) * 5/9
+celsius3 <- (airtemps[3] - 32) * 5/9
+
+celsius1
+celsius2
+celsius3
+```
+
+::: {.callout-tip}
+## Instructor note
+Ask students: "What's the problem with this code? What happens if the
+formula changes? What if airtemps has 200 values?"
+:::
+
+---
+
+## 1.2 Function Anatomy {#anatomy}
+
+Every R function has four parts: name, arguments, body, return value.
+
+```{r}
+#| label: anatomy-demo
+
+# Generic structure — walk through each part
+function_name <- function(argument1, argument2) {
+  
+  # body: computation goes here
+  result <- argument1 + argument2
+  
+  return(result)
+}
+
+# Call it
+function_name(3, 7)
+```
+
+---
+
+## 1.3 🌡️ Temperature Conversion {#temperature}
+
+*Ecological context: field sensors often record in Fahrenheit; analysis
+and publication require Celsius.*
+
+### Build `fahr_to_celsius()`
+
+```{r}
+#| label: fahr-to-celsius
+
+fahr_to_celsius <- function(fahr) {
+  celsius <- (fahr-32) * 5/9
+  return (celsius)
+}
+  
+```
+
+### Test on a single value
+
+```{r}
+#| label: test-single
+
+fahr_to_celsius(212)    # expect 100
+fahr_to_celsius(32)     # expect 0
+```
+
+### Test on a vector — vectorization for free
+
+```{r}
+#| label: test-vector
+
+airtemps <- c(212, 30.3, 78, 32)
+fahr_to_celsius(airtemps)
+```
+
+### ✏️ Chat exercise: `celsius_to_fahr()`
+
+*Post in chat, give students ~4 minutes, then live-code solution below.*
+
+```{r}
+#| label: celsius-to-fahr
+
+celsius_to_fahr <- function(celsius) {
+  fahr <- celsius * 9/5 + 32
+  return(fahr)
+}
+```
+
+### Verify round-trip correctness
+
+```{r}
+#| label: round-trip
+
+celsius  <- fahr_to_celsius(airtemps)
+result   <- celsius_to_fahr(celsius)
+
+airtemps == result    # all TRUE?
+```
+
+---
+
+## 1.4 🔋 Battery Chemistry: Coulombic Efficiency {#coulombic}
+
+*Battery chemistry context: CE is calculated for every charge-discharge
+cycle. A researcher running 200-cycle experiments repeats this formula
+hundreds of times — an ideal DRY problem.*
+
+### The biology/chemistry slide moment
+
+> **Coulombic Efficiency (CE)** = discharge capacity ÷ charge capacity × 100
+>
+> Li-ion batteries typically achieve >99% CE, but the difference between
+> 99.0% and 99.96% predicts whether a cell survives 200 or 500+ cycles.
+
+### Build `calc_coulombic_efficiency()`
+
+```{r}
+#| label: calc-ce
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh, charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) *100
+  return (ce)
+}
+
+```
+
+### Test it
+
+```{r}
+#| label: test-ce
+
+calc_coulombic_efficiency(2.98, 3.01)   # single cycle
+```
+
+### Apply across a full cycling dataset
+
+```{r}
+#| label: cycling-data
+
+cycling_data <- data.frame(
+  cycle         = 1:5,
+  charge_mAh    = c(3.01, 3.00, 2.99, 2.98, 2.97),
+  discharge_mAh = c(2.98, 2.97, 2.96, 2.95, 2.94)
+)
+
+cycling_data$CE <- calc_coulombic_efficiency(
+  cycling_data$discharge_mAh,
+  cycling_data$charge_mAh
+)
+
+cycling_data
+```
+
+---
+
+## 1.5 🧬 Molecular Biology: GC Content & Primer Tm {#molbio}
+
+*Molecular biology context: GC content determines primer melting
+temperature. Every primer must be screened before synthesis. Designing
+20 primers means 20 calculations — a function makes it instant.*
+
+### The biology/chemistry slide moment
+
+> **GC content** = % of bases that are G or C
+>
+> G–C pairs form three hydrogen bonds; A–T pairs form two. GC-rich
+> primers bind more tightly. GC content directly determines melting
+> temperature (Tm) via **Wallace's Rule**:
+>
+> `Tm = 2°C × (A + T) + 4°C × (G + C)`
+
+### Build `calc_gc_content()`
+
+```{r}
+#| label: calc-gc
+
+calc_gc_content <- function(sequence) {
+  sequence <-toupper(sequence)
+  n_total <- nchar(sequence) # total number of bases
+  n_gc <- nchar(gsub("[^GC]", "", sequence))  #counts G and C
+  return ((n_gc/ n_total) * 100)
+}
+```
+
+### Test it
+
+```{r}
+#| label: test-gc
+
+calc_gc_content("ATGCGCATTAGC")   # 50%
+calc_gc_content("GCGCGCGC")       # 100%
+calc_gc_content("aaaaattttt")       # 0%
+```
+
+### Build `calc_primer_tm()` — Wallace's Rule
+
+```{r}
+#| label: calc-tm
+
+calc_primer_tm <- function(sequence) {
+  sequence <-toupper(sequence)
+  n_a <- nchar(gsub("[^A]", "", sequence))
+  n_t <- nchar(gsub("[^T]", "", sequence))
+  n_g <- nchar(gsub("[^G]", "", sequence))
+  n_c <- nchar(gsub("[^C]", "", sequence))
+  
+  tm <- 2 * (n_a + n_t) + 4 * (n_g + n_c)
+  
+  return(tm)
+}
+
+```
+
+### Test it
+
+```{r}
+#| label: test-tm
+
+calc_primer_tm("ATGCGCATTAGC")
+calc_primer_tm("GCGCGCGC")        # all GC — high Tm
+calc_primer_tm("AAAATTTT")        # all AT — low Tm
+```
+
+---
+
+## 1.6 Returning Multiple Outputs: Lists {#lists}
+
+*What if we want both GC content and Tm from one function call?
+Return a named list.*
+
+### Build `calc_primer_stats()` — the function family payoff
+
+```{r}
+#| label: calc-primer-stats
+
+calc_primer_stats <- function(sequence) {
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+  
+  return(list(
+    sequence   = sequence,
+    gc_percent = gc,
+    tm_celsius = tm
+  ))
+}
+```
+
+### Test on one primer
+
+```{r}
+#| label: test-primer-stats
+
+calc_primer_stats("ATGCGCATTAGC")
+```
+
+### Apply across many primers with `lapply()`
+
+```{r}
+#| label: many-primers
+
+primers <- c(
+  "ATGCGCATTAGC",
+  "GCGCTTAAGCCT",
+  "AATATTTAATGG"
+)
+
+results   <- lapply(primers, calc_primer_stats)
+primer_df <- do.call(rbind, lapply(results, as.data.frame))
+primer_df
+```
+
+### The function family
+
+```{r}
+#| label: function-family
+#| eval: false
+
+# Our calc_ family — notice how autocomplete helps
+calc_gc_content()           # mol bio
+calc_primer_tm()            # mol bio
+calc_primer_stats()         # mol bio
+
+calc_coulombic_efficiency() # battery chem
+```
+
+---
+
+## 1.7 Documenting with roxygen2 {#roxygen2}
+
+*Documentation is part of the function — not an afterthought.*
+
+### Documented `calc_gc_content()`
+
+```{r}
+#| label: documented-gc
+
+#' Calculate GC content of a DNA sequence
+#'
+#' @param sequence Character string of nucleotide bases (A, T, G, C).
+#'   Case-insensitive.
+#'
+#' @return Numeric: percentage of bases that are G or C (0–100)
+#' @export
+#'
+#' @examples
+#' calc_gc_content("ATGCGCATTAGC")
+#' calc_gc_content("AAAAAA")
+
+calc_gc_content <- function(sequence) 
+```
+
+### ✏️ Chat exercise: document `calc_coulombic_efficiency()`
+
+*Students write the roxygen2 block; model answer below.*
+
+```{r}
+#| label: documented-ce
+
+#' Calculate coulombic efficiency for a battery charge-discharge cycle
+#'
+#' @param discharge_cap_mAh Numeric. Discharge capacity in
+#'   milliamp-hours (mAh). Must be positive.
+#' @param charge_cap_mAh Numeric. Charge capacity in milliamp-hours
+#'   (mAh). Must be positive.
+#'
+#' @return Numeric. Coulombic efficiency as a percentage. Values near
+#'   100 indicate efficient charge storage; values substantially below
+#'   100 indicate capacity loss.
+#' @export
+#'
+#' @examples
+#' calc_coulombic_efficiency(2.98, 3.01)
+#' calc_coulombic_efficiency(
+#'   discharge_cap_mAh = 2.94,
+#'   charge_cap_mAh    = 2.97
+#' )
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh,
+                                      charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) * 100
+  return(ce)
+}
+```
+
+
+in a function it would look like:
+
+lebuhn/
+├── DESCRIPTION
+├── NAMESPACE
+├── R/
+│   └── calc_gc_content.R
+└── man/
+
+
+
+
+
+
+---
+
+# LECTURE 2 — Wednesday {#lecture-2}
+
+*Conditionals · stop() · warning() · Default arguments · ggplot wrapping*
+
+::: {.callout-important}
+## Before Wednesday's class
+Paste the functions from Lecture 1 into your R session or source this
+document. All of these are needed: `calc_gc_content()`,
+`calc_primer_tm()`, `calc_primer_stats()`, `calc_coulombic_efficiency()`,
+and `cycling_data`.
+:::
+
+---
+
+## 2.1 Warm-Up: Functions with Conditionals {#conditionals}
+
+*A function that branches based on input — the warm-up chat exercise.*
+
+```{r}
+#| label: classify-temp
+
+classify_temp <- function(celsius) {
+  if (celsius > 30) {
+    return("hot")
+  } else if (celsius < 10) {
+    return("cold")
+  } else {
+    return("moderate")
+  }
+}
+```
+
+### ✏️ Chat warm-up: predict before running
+
+```{r}
+#| label: test-classify
+
+classify_temp(35)    # predict before running
+classify_temp(5)     # predict before running
+classify_temp(20)    # predict before running
+classify_temp(15)    # the chat exercise question
+```
+
+::: {.callout-tip}
+## Instructor note
+Run each one separately. Ask "what do you predict?" and wait for chat
+before hitting Run. The key insight: `return()` exits immediately — the
+function never evaluates the remaining branches.
+:::
+
+---
+
+## 2.2 🔋 Battery Chemistry: Specific Capacity {#specific-capacity}
+
+*Specific capacity (mAh/g) = how much charge stored per gram of active
+electrode material. The primary metric for comparing materials — and
+a function where bad inputs produce silently wrong results.*
+
+### Stage 1 — naïve version: what goes wrong?
+
+```{r}
+#| label: naive-specific-cap
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: bad-inputs-naive
+
+# What happens?
+calc_specific_capacity(3.0, 0)           # Inf — wrong, no error
+calc_specific_capacity(3.0, 0.015)       # correct: 200 mAh/g
+```
+
+```{r}
+#| label: bad-type-naive
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")  # error — but cryptic
+```
+
+::: {.callout-tip}
+## Instructor note
+The `Inf` case is the most dangerous: it passes silently and produces a
+meaningless result that could make it into a paper. This motivates
+`stop()`.
+:::
+
+---
+
+### Stage 2 — add `stop()` for impossible inputs
+
+```{r}
+#| label: with-stop
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+  
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value — check your units.")
+  }
+  
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: test-stop
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")  # stop: not numeric
+calc_specific_capacity(3.0, 0)           # stop: mass <= 0
+calc_specific_capacity(3.0, 0.015)       # works: 200 mAh/g
+```
+
+---
+
+### Stage 3 — add `warning()` for suspicious-but-computable inputs
+
+```{r}
+#| label: with-warning
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+  
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value — check your units.")
+  }
+  
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected — verify instrument output.")
+  }
+  
+  return(capacity_mAh / mass_g)
+}
+```
+
+```{r}
+#| label: test-warning
+
+calc_specific_capacity(-0.5, 0.015)   # warning, but returns -33.3
+calc_specific_capacity(3.0, 0.015)    # clean: 200 mAh/g
+```
+
+::: {.callout-tip}
+## Instructor note — the stop() vs warning() decision
+Ask in chat: "Why `warning()` for negative capacity but `stop()` for
+zero mass?"
+
+- Zero mass: division by zero → `Inf` → meaningless result → `stop()`
+- Negative capacity: odd but computable — might be real instrument noise
+  worth investigating → `warning()`, let the user decide
+:::
+
+---
+
+## 2.3 Default Arguments {#defaults}
+
+*Arguments with defaults make functions flexible without burdening the
+common case.*
+
+```{r}
+#| label: with-defaults
+
+calc_specific_capacity <- function(capacity_mAh,
+                                   mass_g,
+                                   units = "mAh/g") {
+  
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value — check your units.")
+  }
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected — verify instrument output.")
+  }
+  
+  result <- capacity_mAh / mass_g
+  message("Returning specific capacity in ", units)
+  return(result)
+}
+```
+
+```{r}
+#| label: test-defaults
+
+# Uses default units
+calc_specific_capacity(3.0, 0.015)
+
+# Override default
+calc_specific_capacity(3.0, 0.015, units = "Ah/g")
+```
+
+---
+
+## 2.4 🧬 Molecular Biology: Primer Quality Check {#primer-quality}
+
+*Putting it all together: conditionals + stop() + warning() + defaults,
+applied to a real primer screening workflow.*
+
+### The biology/chemistry slide moment
+
+> Primers for standard PCR should have GC content of **40–60%**. Outside
+> this range: GC < 40% → may not bind reliably; GC > 60% → may form
+> secondary structures. These thresholds are checked for every primer
+> before ordering synthesis.
+
+### Build `calc_primer_quality()`
+
+```{r}
+#| label: calc-primer-quality
+
+calc_primer_quality <- function(sequence,
+                                gc_min = 40,
+                                gc_max = 60) {
+  
+  # Input validation
+  if (!is.character(sequence)) {
+    stop("sequence must be a character string.")
+  }
+  
+  # Compute stats using our Lecture 1 functions
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+  
+  # Warn if GC is outside the specified range
+  if (gc < gc_min | gc > gc_max) {
+    warning("GC content (", round(gc, 1), "%) is outside the ",
+            gc_min, "-", gc_max, "% optimal range.")
+  }
+  
+  return(list(
+    gc_percent  = gc,
+    tm_celsius  = tm,
+    gc_in_range = (gc >= gc_min & gc <= gc_max)
+  ))
+}
+```
+
+### Test it
+
+```{r}
+#| label: test-primer-quality
+
+# Standard PCR — uses defaults
+calc_primer_quality("ATGCGCATTAGC")      # GC = 50%, in range
+
+# Low GC primer — should warn
+calc_primer_quality("AATATTTAATGG")      # GC = 8%, warning
+
+# High GC primer — should warn
+calc_primer_quality("GCGCGGCATGCC")      # GC = 83%, warning
+```
+
+### Default arguments enable scientific flexibility
+
+```{r}
+#| label: flexible-thresholds
+
+# GC-rich organism (e.g. Mycobacterium tuberculosis genome ~65% GC)
+calc_primer_quality("GCGCGGCATGCC",
+                    gc_min = 50,
+                    gc_max = 75)
+
+# High-stringency assay — tighter window
+calc_primer_quality("ATGCGCATTAGC",
+                    gc_min = 45,
+                    gc_max = 55)
+```
+
+::: {.callout-tip}
+## Instructor note
+Point out that `calc_primer_quality()` calls `calc_gc_content()` and
+`calc_primer_tm()` — functions we already wrote. Functions calling
+functions is normal and encouraged. This is why we gave them sensible
+names with a common prefix.
+:::
+
+---
+
+## 2.5 Wrapping ggplot in a Function {#ggplot-function}
+
+*The DRY principle applies equally to visualization. If you make the
+same style of plot repeatedly, wrap it.*
+
+### Step 1 — build a custom theme function
+
+```{r}
+#| label: custom-theme
+
+custom_theme <- function(base_size = 9) {
+  ggplot2::theme(
+    text             = ggplot2::element_text(family = "Helvetica",
+                                             color  = "gray30",
+                                             size   = base_size),
+    plot.title       = ggplot2::element_text(size  = ggplot2::rel(1.25),
+                                             hjust = 0.5,
+                                             face  = "bold"),
+    panel.background = ggplot2::element_blank(),
+    panel.border     = ggplot2::element_blank(),
+    panel.grid.minor = ggplot2::element_blank(),
+    panel.grid.major = ggplot2::element_line(colour    = "grey90",
+                                             linewidth = 0.25),
+    legend.position  = "right",
+    legend.key       = ggplot2::element_rect(colour = NA, fill = NA),
+    axis.ticks       = ggplot2::element_blank(),
+    axis.line        = ggplot2::element_blank()
+  )
+}
+```
+
+### Step 2 — wrap the full cycling plot
+
+```{r}
+#| label: plot-cycling
+
+plot_cycling <- function(df,
+                         point_size    = 2,
+                         font_size     = 10,
+                         ce_threshold  = 99) {
+  
+  ggplot(df, aes(x = cycle, y = CE)) +
+    geom_point(size = point_size, color = "#167B62") +
+    geom_line(color = "#167B62", alpha = 0.6) +
+    geom_hline(yintercept = ce_threshold,
+               linetype   = "dashed",
+               color      = "#A23923") +
+    labs(
+      title = "Coulombic Efficiency by Cycle",
+      x     = "Cycle Number",
+      y     = "Coulombic Efficiency (%)"
+    ) +
+    custom_theme(font_size)
+}
+```
+
+### Call it
+
+```{r}
+#| label: call-plot-cycling
+
+# Default arguments
+plot_cycling(cycling_data)
+```
+
+```{r}
+#| label: call-plot-cycling-custom
+
+# Override point size and threshold line
+plot_cycling(cycling_data, point_size = 3, ce_threshold = 98)
+```
+
+::: {.callout-tip}
+## Instructor note — the thesis argument
+"Your advisor asks you to change the CE threshold line from 99% to 98%
+across all 15 cycling plots in your thesis.
+
+- **Without the function:** find and edit 15 ggplot blocks.
+- **With the function:** change one default argument. Done."
+:::
+
+---
+
+## 2.6 Putting It All Together {#synthesis}
+
+*A complete pipeline function: validate input → compute → plot.*
+
+```{r}
+#| label: full-pipeline
+
+analyze_cycling_data <- function(df,
+                                 ce_threshold = 99,
+                                 font_size    = 10) {
+  
+  # Validate required columns
+  required_cols <- c("cycle", "charge_mAh", "discharge_mAh")
+  if (!all(required_cols %in% names(df))) {
+    stop("df must contain columns: cycle, charge_mAh, discharge_mAh")
+  }
+  
+  # Compute CE
+  df$CE <- calc_coulombic_efficiency(
+    df$discharge_mAh,
+    df$charge_mAh
+  )
+  
+  # Warn if any CE exceeds 100%
+  if (any(df$CE > 100)) {
+    warning("Some CE values exceed 100% — check charge/discharge convention.")
+  }
+  
+  # Plot
+  plot_cycling(df,
+               ce_threshold = ce_threshold,
+               font_size    = font_size)
+}
+```
+
+```{r}
+#| label: test-pipeline
+
+analyze_cycling_data(cycling_data)
+```
+
+```{r}
+#| label: test-pipeline-bad
+#| error: true
+
+# What happens with a bad data frame?
+bad_df <- data.frame(x = 1:3, y = 4:6)
+analyze_cycling_data(bad_df)
+```
+
+---
+
+## 2.7 Bridge to Activity {#bridge}
+
+The Thursday in-person activity (s18) uses `find_max()` — here's how
+today's tools map onto those exercises:
+
+```{r}
+#| label: bridge-map
+#| eval: false
+
+# Activity exercise 1-2: function anatomy (Monday)
+double_it   <- function(x)   { return(2 * x) }
+exclaim_age <- function(age) { return(paste("I am", age, "years old!")) }
+
+# Activity exercise 3: conditionals (Wednesday)
+find_max <- function(value_1, value_2) {
+  if (value_1 > value_2) {
+    return(value_1)
+  } else if (value_2 > value_1) {
+    return(value_2)
+  }
+}
+
+# Activity exercise 5-6: stop() — same pattern as calc_specific_capacity()
+find_max <- function(value_1, value_2) {
+  if (!is.numeric(value_1) | !is.numeric(value_2)) {
+    stop("Values must be numeric.")
+  }
+  if (value_1 == value_2) {
+    stop("Values must be different from each other.")
+  }
+  if (value_1 > value_2) return(value_1)
+  if (value_2 > value_1) return(value_2)
+}
+
+# Activity exercise 7: default arguments — same pattern as gc_min/gc_max
+find_max <- function(value_1, value_2, equal_ok = FALSE) {
+  if (!is.numeric(value_1) | !is.numeric(value_2)) {
+    stop("Values must be numeric.")
+  }
+  if (value_1 == value_2) {
+    if (equal_ok) return(value_1)
+    stop("Values must be different from each other.")
+  }
+  if (value_1 > value_2) return(value_1)
+  if (value_2 > value_1) return(value_2)
+}
+```
+
+::: {.callout-note}
+## For students
+Everything in Thursday's activity follows the exact same patterns from
+this week's lectures. Keep this companion document open as a reference.
+The textbook page s18 has the full exercise set.
+:::
+
+---
+
+## Summary: All Functions Written This Week {#summary}
+
+```{r}
+#| label: full-function-library
+#| eval: false
+
+# ── Lecture 1 ──────────────────────────────────────────────────────────
+
+# Temperature (ecology)
+fahr_to_celsius <- function(fahr) { ... }
+celsius_to_fahr <- function(celsius) { ... }
+
+# Battery chemistry
+calc_coulombic_efficiency <- function(discharge_cap_mAh,
+                                      charge_cap_mAh) { ... }
+
+# Molecular biology — a function family
+calc_gc_content   <- function(sequence) { ... }
+calc_primer_tm    <- function(sequence) { ... }
+calc_primer_stats <- function(sequence) { ... }   # returns list
+
+# ── Lecture 2 ──────────────────────────────────────────────────────────
+
+# Battery chemistry — with validation
+calc_specific_capacity <- function(capacity_mAh,
+                                   mass_g,
+                                   units = "mAh/g") { ... }
+
+# Molecular biology — with validation + defaults
+calc_primer_quality <- function(sequence,
+                                gc_min = 40,
+                                gc_max = 60) { ... }
+
+# Visualization
+custom_theme  <- function(base_size = 9) { ... }
+plot_cycling  <- function(df,
+                          point_size   = 2,
+                          font_size    = 10,
+                          ce_threshold = 99) { ... }
+
+# Pipeline
+analyze_cycling_data <- function(df,
+                                 ce_threshold = 99,
+                                 font_size    = 10) { ... }
+```

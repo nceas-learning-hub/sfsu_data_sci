@@ -1,0 +1,583 @@
+---
+title: "Week 2, Day 2: Pseudocode as Scientific Planning"
+subtitle: "Lecture Script"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+**Duration:** 75 minutes | **Format:** Online Synchronous | **Students:** 30
+
+---
+
+## Pre-Class Setup (Instructor)
+
+- Test Zoom/conferencing platform
+- Prepare examples of bad and good pseudocode (biology and chemistry)
+- Have Week 1 analysis descriptions ready to reference
+- Prepare Google Doc for guided exercise
+- Prepare breakout rooms (groups of 3-4)
+- Queue up examples of ambiguous instructions
+
+---
+
+## SLIDE 1: Welcome
+**[0:00–0:03] — Arrival and Settling**
+
+Good morning! Welcome to Day 2 of Week 2.
+
+Quick tech check: If you can hear me and see the slides, give me a thumbs-up.
+
+Today we're talking about pseudocode. If that word sounds intimidating, don't worry — pseudocode is just a fancy name for "writing down what you plan to do before you do it."
+
+---
+
+## SLIDE 2: Last Class Recap
+**[0:03–0:06] — Connecting to Monday**
+
+On Monday, we talked about organizing projects — folders, file structures, relative paths, README files.
+
+Today, we're zooming in one level: **How do you plan what goes inside those scripts?**
+
+You can have the best folder structure in the world, but if your scripts are a mess of unplanned commands, your analysis won't be reproducible.
+
+Pseudocode is the bridge between scientific thinking and code.
+
+---
+
+## SLIDE 3: What Is Pseudocode?
+**[0:06–0:10] — Definition**
+
+**Pseudocode is a step-by-step description of what you want your code to do, written in plain language.**
+
+It's not code. It's not prose. It's something in between.
+
+Think of it as a recipe for analysis:
+
+- Clear enough that someone could follow it
+- Specific enough that there's no ambiguity
+- General enough that you're not writing actual code yet
+
+Here are examples from both fields:
+
+**Biology - Bad (too vague):**
+- "Clean the species data"
+
+**Biology - Better (pseudocode):**
+- "Remove rows where species name is missing"
+- "Remove rows where species name contains obvious typos (checked against species list)"
+- "Standardize species names to match taxonomy database"
+- "Save cleaned data to `data/processed/species_clean.csv`"
+
+**Chemistry - Bad (too vague):**
+- "Process the spectroscopy data"
+
+**Chemistry - Better (pseudocode):**
+- "Load absorbance data from CSV file"
+- "Subtract baseline absorbance (measured at 800 nm)"
+- "Apply Beer-Lambert law to calculate concentrations"
+- "Remove concentrations outside calibration range (0-10 μM)"
+- "Save processed data to `data/processed/concentrations.csv`"
+
+See the difference?
+
+---
+
+## SLIDE 4: Why Pseudocode Matters
+**[0:10–0:14] — The Case for Planning**
+
+Why do we need pseudocode? Three reasons:
+
+**1. It forces you to think before you code**
+
+Most coding mistakes happen because people start typing before they know what they're trying to do. Pseudocode makes you slow down and plan.
+
+**2. It reveals ambiguity**
+
+When you write "clean the data," you think you know what you mean. But when you try to write pseudocode, you realize: *What does "clean" mean? What counts as invalid? What do I do with missing values?*
+
+**Biology example:** "Remove outliers" — which outliers? Based on what criteria? Standard deviations? IQR? Domain knowledge?
+
+**Chemistry example:** "Correct for drift" — linear drift? Exponential? What's your baseline reference?
+
+Pseudocode surfaces those questions before you waste time coding.
+
+**3. It makes collaboration easier**
+
+If you write pseudocode, someone else can review your logic before you invest hours in coding. You can catch flawed reasoning early.
+
+**[Pause]**
+
+Here's the key insight: **Good pseudocode can be translated into any programming language.**
+
+If your pseudocode is clear, converting it to R is almost mechanical. If your pseudocode is vague, your code will be vague too.
+
+---
+
+## SLIDE 5: Pseudocode vs. Code vs. Prose
+**[0:14–0:18] — Three Modes of Thinking**
+
+Let's look at the same task written three ways:
+
+**Chemistry example:**
+
+**Prose** (too informal):
+> "I'm going to remove the bad absorbance readings and then calculate the concentrations using the calibration curve."
+
+**Pseudocode** (just right):
+- Load absorbance data from instrument output
+- Remove rows where absorbance is negative (instrument error)
+- Remove rows where absorbance > 3.0 (out of linear range)
+- Apply calibration equation: concentration = (absorbance - 0.05) / 0.123
+- Create scatterplot of concentration vs. time
+- Save plot to `figures/concentration_timeseries.png`
+
+**Code** (too specific):
+```r
+data <- read.csv("data/raw/absorbance.csv")
+data_clean <- data %>% 
+  filter(absorbance >= 0,
+         absorbance <= 3.0) %>%
+  mutate(concentration = (absorbance - 0.05) / 0.123)
+ggplot(data_clean, aes(x = time, y = concentration)) +
+  geom_point()
+ggsave("figures/concentration_timeseries.png")
+```
+
+**[Pause]**
+
+Notice that pseudocode has:
+- **Verbs** — "Load," "Remove," "Apply," "Create," "Save"
+- **Specific conditions** — "where absorbance is negative," "absorbance > 3.0"
+- **Clear outputs** — "scatterplot," "save to figures/"
+- **Domain knowledge** — "out of linear range," "calibration equation"
+
+It's detailed enough to be unambiguous, but general enough that you're not worrying about syntax.
+
+---
+
+## SLIDE 6: Common Pseudocode Mistakes
+**[0:18–0:22] — What to Avoid**
+
+Let me show you some common mistakes people make when writing pseudocode.
+
+### **Mistake 1: Too vague**
+
+**Biology example:**
+❌ "Standardize the measurements"
+
+That could mean anything. Be specific about *what* you're standardizing and *how*.
+
+✅ "Divide each bird mass by wing length to get body condition index"
+
+**Chemistry example:**
+❌ "Normalize the data"
+
+What kind of normalization?
+
+✅ "Divide each absorbance value by the maximum absorbance to scale from 0 to 1"
+
+---
+
+### **Mistake 2: Too detailed (actually writing code)**
+
+**Biology example:**
+❌ "Use filter() to subset where count >= 5"
+
+That's code, not pseudocode. You're worrying about syntax before you've clarified the logic.
+
+✅ "Remove sites with fewer than 5 observations"
+
+**Chemistry example:**
+❌ "Use mutate() to create new column with pH = -log10(H_concentration)"
+
+✅ "Calculate pH from hydrogen ion concentration"
+
+---
+
+### **Mistake 3: Skipping steps**
+
+**Biology example:**
+❌ "Load field data, make species accumulation curve"
+
+What happened in between? Did you clean it? Aggregate by site? Calculate richness?
+
+✅ "Load field data → Remove incomplete surveys → Count species per site → Calculate cumulative species richness → Plot accumulation curve"
+
+**Chemistry example:**
+❌ "Load titration data, determine pKa"
+
+Too many hidden steps!
+
+✅ "Load pH and volume data → Identify equivalence point → Calculate half-equivalence pH → Report pKa value"
+
+---
+
+### **Mistake 4: No decision points**
+
+**Biology example:**
+❌ "Remove rare species"
+
+How do you define rare? What's your cutoff?
+
+✅ "Remove species that occur in fewer than 3 sites (less than 10% of total sites)"
+
+**Chemistry example:**
+❌ "Remove bad datapoints"
+
+What makes a datapoint "bad"?
+
+✅ "Remove datapoints where pH meter error flag is TRUE or pH change > 2 units between consecutive readings"
+
+**[Pause]**
+
+The pattern here: **Good pseudocode makes all decisions explicit.**
+
+---
+
+## SLIDE 7: Let's Practice Together
+**[0:22–0:28] — Guided Exercise**
+
+Alright, let's practice. I'm going to give you a scenario, and we'll write pseudocode together.
+
+**Scenario (Biology/Ecology):**
+
+You have a dataset of bird observations. Each row has:
+- Species name
+- Date of observation
+- Location (latitude/longitude)
+- Observer name
+
+You want to:
+1. Count how many observations there are for each species
+2. Create a bar chart showing the 10 most commonly observed species
+3. Save the chart
+
+**[Pause]**
+
+Let's build this step by step. I'll start, and you can type suggestions in the chat.
+
+Here's how I'd start:
+
+```
+STEP 1: Load the bird observation data
+```
+
+What comes next? **Type in the chat** — what's the next step?
+
+*[Wait for responses]*
+
+---
+
+**[0:28–0:32] — Collaborative Building**
+
+Great! I'm seeing:
+- "Count observations per species"
+- "Group by species and count"
+- "Summarize by species"
+
+Those are all getting at the same idea. Let me write it in pseudocode:
+
+```
+STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+```
+
+Good. Now what? We want the top 10. How do we get those?
+
+*[Wait for responses]*
+
+Right! We need to sort and take the top 10:
+
+```
+STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species
+```
+
+Now we need to make the plot. What kind of plot?
+
+*[Wait for responses]*
+
+Bar chart, yes:
+
+```
+STEP 5: Create a bar chart with species on x-axis, count on y-axis
+```
+
+And finally?
+
+```
+STEP 6: Save the chart to figures/top_species.png
+```
+
+---
+
+**[0:32–0:36] — Analysis of Our Pseudocode**
+
+Let's look at what we just wrote:
+
+```
+STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species
+STEP 5: Create a bar chart with species on x-axis, count on y-axis
+STEP 6: Save the chart to figures/top_species.png
+```
+
+Is this good pseudocode? Let's check:
+
+✅ **Clear verbs** — Load, Count, Sort, Keep, Create, Save  
+✅ **Specific steps** — We know exactly what's happening  
+✅ **Ordered logically** — Each step depends on the previous one  
+✅ **Not code** — We didn't worry about R syntax  
+✅ **Explicit output** — We know where the file is saved
+
+This pseudocode could be translated into R, Python, or even Excel. The logic is clear.
+
+---
+
+## SLIDE 8: Identifying Ambiguity in Pseudocode
+**[0:36–0:42] — Debugging Bad Pseudocode**
+
+Now let's look at some pseudocode that has problems. I want you to spot the ambiguity.
+
+**Example 1 (Chemistry):**
+
+```
+Load the titration dataset
+Clean the pH data
+Calculate the equivalence point
+Plot the titration curve
+```
+
+What's wrong with this? **Type in the chat.**
+
+*[Wait for responses]*
+
+Exactly! It's way too vague. What does "clean" mean? How do you calculate equivalence point? What kind of plot?
+
+---
+
+**Example 2 (Biology):**
+
+```
+Load temperature data from field sensors
+Remove outliers
+Calculate average temperature by site
+Make a plot
+```
+
+Better, but still problems. What's ambiguous here?
+
+*[Wait for responses]*
+
+Right! **How do we define outliers?** Are we using standard deviations? Domain knowledge? And what kind of plot?
+
+Here's a better version:
+
+```
+Load temperature data from field sensors
+Remove temperatures below -50°C or above 60°C (sensor error range)
+Remove temperatures more than 3 standard deviations from site mean
+Calculate mean temperature for each site
+Create a bar plot of mean temperature by site (ordered north to south)
+Save plot to figures/temp_by_site.png
+```
+
+Much clearer!
+
+---
+
+**Example 3 (Chemistry):**
+
+```
+Load absorbance spectra
+Correct for baseline
+Find peak wavelength
+Save results
+```
+
+What's missing here?
+
+*[Wait for responses]*
+
+Better version:
+
+```
+Load absorbance spectra from UV-Vis instrument
+Subtract minimum absorbance (wavelength 800-900 nm) from all values
+Identify wavelength with maximum absorbance in range 400-700 nm
+Extract absorbance value at peak wavelength
+Save wavelength and absorbance to data/processed/peak_data.csv
+```
+
+---
+
+## SLIDE 9: Breakout Activity — Rewrite Your Week 1 Analysis
+**[0:42–0:45] — Setting Up**
+
+Okay, now it's your turn.
+
+In Week 1, you wrote a plain-language description of an analysis: clean a dataset with missing and invalid values, summarize it, and produce a figure.
+
+Now you're going to **rewrite that description as formal pseudocode.**
+
+I'm sending you to breakout rooms for 15 minutes. Here's what I want:
+
+1. **Rewrite your Week 1 analysis as numbered pseudocode steps**
+2. **Be specific** — no vague verbs like "clean" or "summarize"
+3. **Make decisions explicit** — if you're removing something, say what and why
+4. **Include domain-specific details** (e.g., "temperatures below -50°C," "pH > 14," "absorbance < 0")
+5. **Write it in the Google Doc** I'll drop in the chat
+
+When you're done, you'll have pseudocode that could be handed to someone else and they'd know exactly what to do.
+
+**[Drop Google Doc link in chat]**
+
+---
+
+**[0:45–1:00] — Breakout Rooms**
+
+*[Instructor: Circulate through rooms, check in, offer feedback]*
+
+*[2 minutes before end: "You have 2 minutes — wrap up your pseudocode!"]*
+
+---
+
+## SLIDE 10: Report Out
+**[1:00–1:08] — Whole-Class Sharing**
+
+Welcome back! Let's see what you came up with.
+
+*[Call on 2-3 groups to share their pseudocode]*
+
+Group 2 (Chemistry), can you walk us through your pseudocode?
+
+*[Listen, validate good choices, gently point out remaining ambiguities]*
+
+Group 5 (Biology), what did you come up with?
+
+*[Listen, validate good choices, gently point out remaining ambiguities]*
+
+---
+
+**[1:08–1:12] — Common Patterns**
+
+Here's what I'm noticing across groups:
+
+**Good:**
+- Most of you specified *what* counts as invalid (e.g., "temperature below 0°C," "negative absorbance values")
+- Most of you ordered your steps logically
+- Most of you specified output file names and locations
+- Good use of domain knowledge (measurement ranges, physical constraints)
+
+**Needs work:**
+- A few groups still have vague verbs like "process" or "analyze" — be more specific!
+- Some groups skipped intermediate steps — don't assume the reader knows what you mean
+- A few groups mixed pseudocode with actual code syntax — stay in plain language
+
+**Chemistry-specific observation:**
+- Great job being specific about units and calibration steps!
+- Remember to document your equations (e.g., "Apply Beer-Lambert law: A = εbc")
+
+**Biology-specific observation:**
+- Good job considering data quality checks (GPS errors, taxonomic issues)
+- Remember to document your grouping decisions (e.g., "aggregate by site," "summarize by month")
+
+---
+
+## SLIDE 11: Pseudocode as a Tool for Debugging
+**[1:12–1:15] — Beyond Planning**
+
+Here's something I want you to remember:
+
+**Pseudocode isn't just for planning. It's also for debugging.**
+
+When your code isn't working, the problem is usually one of two things:
+
+1. **Your logic is flawed** — you're asking the computer to do the wrong thing
+2. **Your syntax is wrong** — you're asking correctly but using the wrong words
+
+If you have pseudocode, you can separate these problems:
+
+- Go back to your pseudocode and ask: "Is this what I actually want to do?"
+- If the pseudocode is right but the code is wrong, it's a syntax problem (easier to fix with Google/ChatGPT)
+- If the pseudocode is wrong, fix the logic first, *then* rewrite the code
+
+**Chemistry example:**
+- Pseudocode says: "Calculate molarity from mass and volume"
+- But you forgot: "First convert mass to moles using molecular weight"
+- That's a logic error, not a syntax error!
+
+**Biology example:**
+- Pseudocode says: "Calculate species richness per site"
+- But you forgot: "First remove duplicate observations of same species at same site"
+- Fix the logic, then fix the code!
+
+**This saves hours of frustration.**
+
+---
+
+## SLIDE 12: Before Next Class
+**[1:13–1:15] — Homework**
+
+Here's what I want you to do before Monday:
+
+**Exit Ticket:**
+
+Write pseudocode for ONE of these tasks (choose based on your field):
+
+**Option A (Biology/Ecology):**
+> You have a dataset of plant heights measured at different light levels. Read the dataset, remove plants with negative height values (data entry errors), remove plants with height > 300 cm (measurement errors), calculate the mean height for each light level, and save the summary to a new file.
+
+**Option B (Chemistry):**
+> You have UV-Vis absorbance data from a kinetics experiment. Read the dataset, subtract the baseline absorbance (first 5 timepoints), remove any absorbance values < 0 or > 3 (outside linear range), calculate the slope of absorbance vs. time (reaction rate), and save the rate constant to a new file.
+
+Post your pseudocode (5-8 steps) in the discussion board. Keep it specific!
+
+**Also:**
+
+Finish setting up Git and GitHub (this week's activity). We'll use it starting next week.
+
+---
+
+## SLIDE 13: Key Takeaways
+**[1:15] — Summary**
+
+Let's review what we covered:
+
+1. **Pseudocode is a planning tool** — it bridges scientific thinking and code
+2. **Good pseudocode is specific, ordered, and explicit** — no ambiguity
+3. **Pseudocode reveals flawed logic** before you waste time coding
+4. **Pseudocode is language-agnostic** — it can be translated into any programming language
+5. **Use domain knowledge in pseudocode** — measurement ranges, physical constraints, scientific decisions
+
+**Next week:** We'll start writing actual code inside Quarto documents. But the pseudocode you write this week will make that much easier.
+
+See you Monday!
+
+*[Stay online for 2-3 minutes for questions]*
+
+---
+
+## Materials Needed
+- Examples of bad and good pseudocode (both biology and chemistry)
+- Guided exercise scenario (bird observations - accessible to both groups)
+- Google Doc for breakout activity
+- Breakout rooms (groups of 3-4)
+- Week 1 analysis descriptions (students should have these)
+- Exit ticket options (discipline-specific)
+
+---
+
+## Instructor Notes
+- **Timing**: The breakout activity can extend to 18 minutes if needed
+- **Common struggle**: Students often slip back into vague language — gently redirect them
+- **Guided exercise**: Type the pseudocode in a shared document as you build it with the class
+- **Exit ticket**: Remind students to post before Monday's class
+- **Chemistry students**: May initially over-specify equations — remind them pseudocode doesn't need full mathematical notation
+- **Biology students**: May initially under-specify taxonomic/ecological decisions — remind them to be explicit about grouping and filtering choices

@@ -1,0 +1,280 @@
+---
+title: "Week 6 Lecture 2 — Reshaping and Its Consequences (Code Companion)"
+format: html
+execute:
+  echo: true
+  warning: true
+  message: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(comment = "#>")
+```
+
+## Libraries
+
+Note: the tidyverse is a set of packages built around a shared design philosophy — consistent function names, consistent argument order, consistent use of data frames as inputs and outputs, and readable pipelines. Once you know one tidyverse package, the others feel familiar. That consistency is the point. Connect it to what they already know from Week 5: tidy data is a principle for organizing data, not a tool. The tidyverse is a collection of tools designed to work naturally with data that's already tidy. The two things reinforce each other — if your data is tidy, tidyverse functions are easy to apply; if you use tidyverse functions, you naturally produce tidy output.
+
+library(tidyverse) loads eight or so packages at once. It's convenient but worth explaining what it actually does — it loads ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, and forcats together.
+
+-   reading, cleaning, and reshaping data, `readr`, `dplyr`, and `tidyr`
+
+-   plotting, `ggplot2`.
+
+-   working with strings, `stringr`
+
+-   working with dates, `lubridate`.
+
+-   working with categorical variables, `forcats`
+
+In a course context that's fine. In production code or a package, loading the specific packages you need is better practice because it **makes dependencies explicit and avoids masking problems.**
+
+```{r}
+#| label: libraries
+library(tidyverse)  # dplyr + tidyr + ggplot2 + friends
+library(readr)
+```
+
+# Data sources
+
+## Read the data
+
+Read the data in from KNB Package Alaska commercial salmon catches by management region (1886-1997)
+
+```{r}
+catch_original <- read_csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1")
+```
+
+------------------------------------------------------------------------
+
+## `select()` — keeping what you need
+
+```{r}
+#| label: select-keep
+## keep what you want
+catch_data <- catch_original %>%
+  select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+
+## OR drop what you don't want
+catch_data <- catch_original %>%
+  select(-All, -notesRegCode)
+```
+
+## Quality check with `glimpse()`
+
+```{r}
+#| label: quality-check
+dplyr::glimpse(catch_data)
+```
+
+------------------------------------------------------------------------
+
+## `mutate()` — first attempt at type conversion
+
+```{r}
+#| label: mutate-as-numeric-first
+catch_clean <- catch_data %>%
+  mutate(Chinook = as.numeric(Chinook))
+```
+
+Find the row(s) that became `NA` after coercion:
+
+```{r}
+#| label: find-na
+i <- which(is.na(catch_clean$Chinook))
+i
+
+catch_data[i, ]
+```
+
+------------------------------------------------------------------------
+
+## `mutate()` with `if_else()` — fixing the `"I"` problem
+
+```{r}
+#| label: mutate-if-else-fix
+catch_clean <- catch_data %>%
+  mutate(
+    Chinook = if_else(
+      condition = Chinook == "I",
+      true = "1",
+      false = Chinook
+    ),
+    Chinook = as.numeric(Chinook)
+  )
+```
+
+Verify:
+
+```{r}
+#| label: verify-fix
+catch_clean[i, ]
+```
+
+------------------------------------------------------------------------
+
+## `pivot_longer()` — wide → long
+
+```{r}
+#| label: pivot-longer
+catch_long <- catch_clean %>%
+  pivot_longer(
+    cols = -c(Region, Year),
+    names_to = "species",
+    values_to = "catch"
+  )
+
+catch_long
+```
+
+## `pivot_wider()` — long → wide (reverse)
+
+```{r}
+#| label: pivot-wider
+catch_wide <- catch_long %>%
+  pivot_wider(
+    names_from = species,
+    values_from = catch
+  )
+
+catch_wide
+```
+
+------------------------------------------------------------------------
+
+## `rename()` — defensive coding
+
+```{r}
+#| label: rename-catch
+catch_long <- catch_long %>%
+  rename(catch_thousands = catch)
+
+catch_long
+```
+
+------------------------------------------------------------------------
+
+## Unit conversion with `mutate()` + `select()`
+
+```{r}
+#| label: unit-conversion
+catch_long <- catch_long %>%
+  mutate(catch = catch_thousands * 1000) %>%
+  select(-catch_thousands)
+
+catch_long
+```
+
+------------------------------------------------------------------------
+
+## Split–Apply–Combine with `group_by()` + `summarize()`
+
+```{r}
+#| label: group-summarize
+mean_region <- catch_long %>%
+  group_by(Region) %>%
+  summarize(mean_catch = mean(catch))
+
+mean_region
+```
+
+### Counting with `n()` and `count()`
+
+```{r}
+#| label: counting
+n_region <- catch_long %>%
+  group_by(Region) %>%
+  summarize(n = n())
+
+n_region
+
+## Shortcut:
+catch_long %>% count(Region)
+```
+
+------------------------------------------------------------------------
+
+## `filter()` — keeping rows by condition
+
+```{r}
+#| label: filter-examples
+sse_catch <- catch_long %>%
+  filter(Region == "SSE")
+
+chinook_sse <- catch_long %>%
+  filter(
+    Region == "SSE",
+    species == "Chinook"
+  )
+
+sse_catch
+chinook_sse
+```
+
+------------------------------------------------------------------------
+
+## `arrange()` — sorting rows
+
+```{r}
+#| label: arrange-examples
+## ascending (default)
+mean_region %>% arrange(mean_catch)
+
+## descending
+mean_region %>% arrange(desc(mean_catch))
+```
+
+------------------------------------------------------------------------
+
+## `separate()` + `unite()` — splitting and combining columns
+
+These are standalone examples from lecture (they use example data frames).
+
+```{r}
+#| label: separate-example
+# Example: sites_df has a column called site, like "HAW-101"
+# sites_df %>%
+#   separate(site, c("island", "site_number"), "-")
+
+# Tiny reproducible example:
+sites_df <- tibble(site = c("HAW-101", "MOL-023"))
+sites_df %>%
+  separate(site, c("island", "site_number"), "-")
+```
+
+```{r}
+#| label: unite-example
+# Example: dates_df has year/month/day columns
+# dates_df %>%
+#   unite(date, year, month, day, sep = "-")
+
+# Tiny reproducible example:
+dates_df <- tibble(year = 1930, month = 12, day = 14)
+dates_df %>%
+  unite(date, year, month, day, sep = "-")
+```
+
+------------------------------------------------------------------------
+
+## All together — the complete pipeline
+
+```{r}
+#| label: complete-pipeline
+mean_region_pipeline <- catch_original %>%
+  select(-All, -notesRegCode) %>%
+  mutate(Chinook = if_else(Chinook == "I", "1", Chinook)) %>% # data entry erro
+  mutate(Chinook = as.numeric(Chinook)) %>%
+  pivot_longer(
+    -c(Region, Year),
+    names_to = "species",
+    values_to = "catch"
+  ) %>%
+  mutate(catch = catch * 1000) %>%
+  group_by(Region) %>%
+  summarize(mean_catch = mean(catch)) %>%
+  arrange(desc(mean_catch))
+
+mean_region_pipeline
+```

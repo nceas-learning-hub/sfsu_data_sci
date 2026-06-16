@@ -1,0 +1,978 @@
+---
+title: "Week 2, Day 1: Projects as the Unit of Scientific Work"
+subtitle: "Lecture Script - EXPANDED VERSION"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+**Duration:** 75 minutes \| **Format:** Online Synchronous \|
+**Students:** 30
+
+------------------------------------------------------------------------
+
+## Pre-Class Setup 
+
+-   Test Zoom/conferencing platform\
+-   Prepare example messy project folder screenshot
+-   Prepare example organized project structure
+-   Have file system demo ready
+-   Prepare breakout rooms (groups of 3-4, total 8-10 rooms)
+-   Queue up "bad project" example and "good project" example
+-   Have exit ticket ready in Canvas/Google Forms
+
+------------------------------------------------------------------------
+
+## SLIDE 1: Welcome Back
+
+**\[0:00–0:03\] — Arrival and Settling**
+
+Good morning everyone! Welcome to Week 2. How's everyone doing?
+
+Before we start, quick tech check: If you can hear me, give me a
+thumbs-up or type "yes" in the chat.
+
+Great! Today we're talking about projects — not R code, not statistics,
+but *how you organize your work*. This might sound boring, but trust me,
+it's one of the most important things we'll cover this semester.
+
+Let me tell you a story. Last year, a graduate student came to me with a
+failed analysis. She'd spent three weeks coding, and when she tried to
+run her analysis again after revising one data file, nothing worked. Her
+paths were all broken, she couldn't remember which dataset was the
+"real" one, and she had no documentation of what she'd changed. We had
+to start over from scratch.
+
+That's what we're preventing today.
+
+------------------------------------------------------------------------
+
+## SLIDE 2: Last Week Recap
+
+**\[0:03–0:07\] — Connecting to Week 1**
+
+Last week, we talked about data science as a way of thinking — about
+being explicit with your reasoning and documenting your decisions.
+
+We did exercises where you wrote out your analytical thinking in plain
+language. You described the steps you'd take to clean a dataset, what
+decisions you'd make, and why.
+
+Here's the question we didn't answer: **Where do you actually DO that
+work?**
+
+Not in your head. Not in random files scattered across your desktop. You
+do it in a **project**.
+
+A project is the basic unit of reproducible scientific work. Everything
+we do this semester happens inside projects. And I mean *everything* —
+every analysis, every figure, every table, every report.
+
+**\[Pause\]**
+
+By the end of today's class, you'll understand: 1. What a project is and
+why it matters 2. How to structure project folders 3. Why relative paths
+are crucial 4. How to document your project so others can use it
+
+------------------------------------------------------------------------
+
+## SLIDE 3: The Messy Desktop Problem
+
+**\[0:07–0:12\] — The Problem**
+
+Let me show you something. *\[Share screen with messy project folder\]*
+
+This is what a lot of people's "data analysis" looks like:
+
+```         
+Desktop/
+├── bee_data_final.csv
+├── bee_data_final_FINAL.csv
+├── bee_data_final_v2.csv
+├── bee_data_v3_USE_THIS_ONE.csv
+├── analysis_draft.R
+├── analysis_new.R
+├── analysis_March15.R
+├── richness_plot.png
+├── richness_plot_good.png
+├── richness_plot_for_paper.png
+├── notes.txt
+└── meeting_notes_with_advisor.docx
+```
+
+Anyone recognize this pattern? You can admit it — we've all been there.
+I certainly have.
+
+**\[Pause for chat responses\]**
+
+Here's the problem: **This structure makes reproducibility impossible.**
+
+Let me ask you some questions about this folder:
+
+1.  Which data file is the "real" one? Is it `_FINAL`? Or
+    `_v3_USE_THIS_ONE`?
+2.  Which script actually generated `richness_plot_for_paper.png`? Was
+    it `analysis_new.R`? Or `analysis_March15.R`?
+3.  If I asked you to reproduce this analysis six months from now, where
+    would you even start?
+4.  Did you clean the data? Where's the cleaning script?
+5.  Where did `bee_data_final.csv` come from in the first place? Field
+    data? A collaborator? Downloaded from somewhere?
+
+**You can't answer these questions just by looking at the folder.**
+
+And here's the scary part: If *you* can't answer these questions about
+*your own analysis*, what hope does a reviewer have? What hope does your
+future self have?
+
+------------------------------------------------------------------------
+
+## SLIDE 4: The Cost of Disorganization
+
+**\[0:12–0:15\] — Real Consequences**
+
+Let me tell you what happens with disorganized projects:
+
+**Scenario 1: The Reviewer Requests Changes**
+
+A reviewer asks you to re-run your analysis excluding one site that
+might be contaminated. You open your project six months later. Which
+script do you run? Which data file do you use? You end up redoing the
+entire analysis because you can't figure out what you did the first
+time.
+
+**Scenario 2: Your Lab Partner Needs Your Data**
+
+Your lab partner wants to build on your work. You send them your folder.
+They try to run your script and get an error:
+`Error: cannot open file 'C:/Users/YourName/Desktop/data.csv'`. The path
+is hardcoded to your computer. They have to manually fix every file
+path.
+
+**Scenario 3: You Want to Publish Your Data and Code**
+
+A journal requires you to deposit your data and code in a repository.
+You try to package it up. You realize you have no README, no
+documentation, no explanation of what anything means. You spend a week
+writing documentation for code you barely remember writing.
+
+**\[Pause\]**
+
+All of these problems are solved by one thing: **A well-organized
+project.**
+
+------------------------------------------------------------------------
+
+## SLIDE 5: What Is a Project?
+
+**\[0:15–0:18\] — Core Definition**
+
+Here's the central idea:
+
+**A project is a self-contained folder that contains everything needed
+to reproduce an analysis — data, code, documentation, and outputs —
+organized in a way that makes sense to someone else.**
+
+Let me unpack that:
+
+**Self-contained** = All files are inside one folder. Nothing lives on
+your Desktop. Nothing lives in random Downloads folders.
+
+**Everything needed** = Data, scripts, outputs, documentation. If it's
+part of the analysis, it's in the project.
+
+**Organized in a way that makes sense** = Clear folder structure.
+Logical file names. Obvious ordering.
+
+**To someone else** = Not just to you. To a collaborator. To a reviewer.
+To your future self.
+
+Projects answer three questions:
+
+1.  **What data am I using?** → stored in `data/` folder
+2.  **What did I do with it?** → documented in scripts
+3.  **What did I produce?** → saved in `figures/` or `outputs/`
+
+If someone opens your project folder, they should be able to understand
+and reproduce your work **without asking you questions**.
+
+That's the standard we're aiming for.
+
+------------------------------------------------------------------------
+
+## SLIDE 6: A Well-Organized Project Structure
+
+**\[0:18–0:23\] — The Solution**
+
+Here's what a good project structure looks like:
+
+```         
+bee_diversity_analysis/
+├── data/
+│   ├── raw/                    # Original, untouched data
+│   │   ├── bee_surveys_2023.csv
+│   │   └── site_characteristics.csv
+│   └── processed/              # Cleaned data (never edit raw!)
+│       ├── bee_clean.csv
+│       └── sites_clean.csv
+├── scripts/
+│   ├── 01_clean_data.R         # Numbered = order to run
+│   ├── 02_calculate_richness.R
+│   └── 03_make_figures.R
+├── figures/
+│   ├── richness_by_site.png
+│   └── accumulation_curve.png
+├── outputs/
+│   └── richness_summary.csv
+├── README.md                    # START HERE
+├── .gitignore                   # Files to ignore (we'll cover this later)
+└── bee_diversity.Rproj          # RStudio project file
+```
+
+**\[Pause to let students look at this\]**
+
+Let's walk through what makes this good:
+
+**1. Clear hierarchy** - Data is separate from scripts - Scripts are
+separate from outputs - Each folder has one job
+
+**2. Raw data is protected** - Original data never changes - It's in its
+own `raw/` subfolder - All modifications happen via scripts
+
+**3. Scripts are numbered** - You know the order to run them - `01_`
+runs before `02_` runs before `03_` - No guessing
+
+**4. Self-documenting** - Folder names tell you what's inside - File
+names are descriptive - README explains the project
+
+**5. Outputs are separate** - Figures go in `figures/` - Tables or
+summaries go in `outputs/` - Nothing gets lost in the `scripts/` folder
+
+------------------------------------------------------------------------
+
+## SLIDE 7: Deep Dive — The Data Folder
+
+**\[0:23–0:28\] — Critical Distinction**
+
+Let's zoom in on the most important part of project structure: the data
+folder.
+
+```         
+data/
+├── raw/         # What you started with
+└── processed/   # What you created
+```
+
+This distinction is **fundamental** to reproducibility.
+
+**Raw data** = what you got from the field, the lab, an instrument, a
+collaborator, or a database. **It never changes. Ever.**
+
+**Processed data** = what you created by cleaning, filtering,
+transforming, or combining the raw data. **It's the result of running a
+script.**
+
+Here's the golden rule:
+
+> **You can delete all processed data at any time and regenerate it by
+> running your scripts.**
+
+If you can't do that — if deleting `processed/bee_clean.csv` would break
+everything — then your workflow is not reproducible.
+
+Let me give you examples:
+
+**Biology example:** - **Raw:** Field notebook data with GPS errors,
+misspelled species names, missing dates - **Processed:** Corrected
+coordinates, standardized species names, filled dates based on field
+notes - **How to regenerate:** Run `01_clean_data.R` which loads
+`raw/field_data.csv` and creates `processed/field_clean.csv`
+
+**Chemistry example:** - **Raw:** pH meter output with baseline drift,
+uncalibrated readings, instrument artifacts - **Processed:**
+Baseline-corrected values, calibrated to buffer standards, artifacts
+removed - **How to regenerate:** Run `01_calibration.R` which loads
+`raw/ph_raw.csv` and creates `processed/ph_calibrated.csv`
+
+**\[Pause\]**
+
+In the chat, tell me: **Have you ever manually edited a dataset in Excel
+and then saved over the original?**
+
+*\[Wait 10 seconds for responses\]*
+
+*\[Read some responses aloud\]*
+
+Yeah, we've all done it. But that's a reproducibility disaster. If you
+manually change cell C45 from 3.2 to 3.5 because "it looked wrong," and
+then save the file, **you can never recreate what you did**.
+
+Was it a typo? A measurement error? A calculation error? Did you change
+other cells too? Nobody will ever know.
+
+From now on: **Raw data is read-only. All changes happen in code.**
+
+This is hard at first. You'll want to "quickly fix" something in Excel.
+Don't do it. Write the code instead.
+
+------------------------------------------------------------------------
+
+## SLIDE 8: Relative Paths (The Secret Sauce)
+
+**\[0:28–0:34\] — Why Your Code Must Be Portable**
+
+Okay, here's where things get technical for a second, but this is
+crucial.
+
+When you write code that reads a file, you need to tell R *where* the
+file is. There are two ways to do this:
+
+**Absolute path** (BAD):
+
+``` r
+# This only works on MY computer
+data <- read.csv("/Users/gretchen/Desktop/bee_analysis/data/raw/bees.csv")
+```
+
+**Relative path** (GOOD):
+
+``` r
+# This works on ANYONE's computer
+data <- read.csv("data/raw/bees.csv")
+```
+
+What's the difference?
+
+The **absolute path** includes the full location from the root of your
+computer: `/Users/gretchen/Desktop/...`
+
+This only works on my computer. If you try to run my code, it will fail
+with an error like:
+
+```         
+Error: cannot open file '/Users/gretchen/Desktop/bee_analysis/data/raw/bees.csv': 
+No such file or directory
+```
+
+Why? Because you don't have a user named "gretchen" on your computer.
+Even if you download my project folder, the path won't exist for you.
+
+The **relative path** is relative to the project folder:
+`data/raw/bees.csv`
+
+This means: "Starting from wherever the project is located, go into the
+`data` folder, then the `raw` subfolder, and read `bees.csv`."
+
+As long as you have the project folder with that structure, the code
+will work. It doesn't matter if the project is on your Desktop, in your
+Documents, on an external drive, or on someone else's computer.
+
+**This is what makes projects portable and reproducible.**
+
+------------------------------------------------------------------------
+
+**\[0:34–0:38\] — Why This Matters**
+
+Let me give you a concrete scenario:
+
+You finish your analysis on your computer at school. You organize it
+beautifully, but you use absolute paths in all your code:
+
+``` r
+data <- read.csv("C:/Users/Student/Documents/Research/data.csv")
+```
+
+You go home. You want to keep working on your laptop. You copy the
+project folder to your laptop.
+
+You try to run your script. **ERROR.** Because your laptop doesn't have
+`C:/Users/Student/Documents/...`
+
+You manually change all the paths. Now it works on your laptop.
+
+You go back to school. **ERROR.** Because you changed the paths and now
+they don't work on your school computer.
+
+You email your advisor your analysis. She tries to run it. **ERROR.**
+Because she doesn't have your folder structure.
+
+See the problem? Absolute paths make your code fragile. It breaks as
+soon as you move it.
+
+**Relative paths make your code robust.** Move the project anywhere.
+Share it with anyone. It still works.
+
+------------------------------------------------------------------------
+
+## SLIDE 9: Live Demo — Creating an RStudio Project
+
+**\[0:38–0:44\] — Hands-On Demonstration**
+
+Alright, let me show you how to actually create a project in RStudio.
+
+*\[Share screen with RStudio\]*
+
+I'm going to create a simple project structure from scratch. Follow
+along visually — you'll do this yourself for your homework.
+
+**Step 1: Create the project folder**
+
+I'll use Finder (Mac) or File Explorer (Windows) to create a new folder.
+I'm calling it `water_quality_analysis`.
+
+```         
+water_quality_analysis/    [Created manually]
+```
+
+**Step 2: Create subfolders**
+
+Inside that folder, I create these folders: - `data` - Inside `data`, I
+create `raw` and `processed` - `scripts` - `figures`
+
+```         
+water_quality_analysis/
+├── data/
+│   ├── raw/
+│   └── processed/
+├── scripts/
+└── figures/
+```
+
+**Step 3: Add a data file**
+
+I'll copy a sample dataset into `data/raw/`. Let's say I have
+`water_samples.csv`.
+
+```         
+water_quality_analysis/
+├── data/
+│   ├── raw/
+│   │   └── water_samples.csv    [Added]
+│   └── processed/
+├── scripts/
+└── figures/
+```
+
+**Step 4: Create an RStudio Project**
+
+Now I open RStudio and go to `File > New Project`.
+
+I select `Existing Directory` (because I already created the folder).
+
+I navigate to `water_quality_analysis` and click `Create Project`.
+
+RStudio creates a file called `water_quality_analysis.Rproj`.
+
+```         
+water_quality_analysis/
+├── data/
+│   ├── raw/
+│   │   └── water_samples.csv
+│   └── processed/
+├── scripts/
+├── figures/
+└── water_quality_analysis.Rproj    [Created by RStudio]
+```
+
+**Step 5: Create a script with relative paths**
+
+I create a new R script: `File > New File > R Script`.
+
+I'll save it as `scripts/01_load_data.R`.
+
+Inside, I write:
+
+``` r
+# Load water quality data
+water <- read.csv("data/raw/water_samples.csv")
+
+# Check that it loaded
+head(water)
+```
+
+Notice: The path is `"data/raw/water_samples.csv"` — it's relative to
+the project folder.
+
+**Step 6: Test it**
+
+I run the code. It works!
+
+Now watch this: I'll close RStudio completely. I'll move the entire
+`water_quality_analysis` folder to my Desktop.
+
+I double-click the `.Rproj` file. RStudio opens the project.
+
+I run the script again. **It still works.**
+
+Why? Because the path is relative. As long as the folder structure
+inside the project is intact, the code runs anywhere.
+
+------------------------------------------------------------------------
+
+## SLIDE 10: The README File
+
+**\[0:44–0:49\] — Documentation is Part of the Project**
+
+Every project needs a `README.md` file. This is the first thing someone
+reads when they open your project.
+
+A good README answers four questions:
+
+1.  **What is this project about?**
+2.  **What data does it use?**
+3.  **How do I run the analysis?** (What order do I run scripts?)
+4.  **Who do I contact if I have questions?**
+
+Let me show you a good README and a bad README.
+
+**Bad README:**
+
+``` markdown
+# My Project
+
+This is my analysis.
+```
+
+That's useless. It tells me nothing.
+
+**Good README:**
+
+``` markdown
+# Bee Diversity in Urban Gardens
+
+## Overview
+This project analyzes bee species richness across 45 urban garden sites 
+in San Francisco, sampled May–August 2023.
+
+Research question: Does species richness differ between community gardens 
+and private yards?
+
+## Data
+- Raw data: `data/raw/bee_surveys.csv` (field surveys from summer 2023)
+- Processed data: `data/processed/bee_clean.csv` (created by `01_clean_data.R`)
+
+## Scripts
+Run scripts in this order:
+
+1. `scripts/01_clean_data.R` 
+   - Removes incomplete surveys (missing site ID or date)
+   - Standardizes species names to match BugGuide taxonomy
+   - Creates `data/processed/bee_clean.csv`
+
+2. `scripts/02_calculate_richness.R`
+   - Calculates rarefied richness standardized to 3 surveys per site
+   - Uses the vegan package
+   - Creates `outputs/richness_by_site.csv`
+
+3. `scripts/03_make_figures.R`
+   - Generates Figure 1 (richness by garden type)
+   - Saves to `figures/richness_comparison.png`
+
+## Contact
+Gretchen LeBuhn (lebuhn@sfsu.edu)
+Last updated: October 2023
+```
+
+See the difference? The good README tells me: - What the research
+question is - Where the data came from - What each script does - What
+order to run things - Who to ask if I have questions
+
+I could hand this to a reviewer, and they'd know exactly how to
+reproduce my analysis.
+
+------------------------------------------------------------------------
+
+## SLIDE 11: Breakout Activity — Design a Project Structure
+
+**\[0:49–0:51\] — Setting Up Breakout Activity**
+
+Alright, now you're going to practice designing a project structure.
+
+I'm putting you into breakout rooms for 15 minutes. Here's your
+scenario:
+
+**Scenario:** You're analyzing water quality data from 10 sites sampled
+monthly for one year. You measured pH, dissolved oxygen, and nitrate
+concentration. You need to: - Clean the data (remove sensor errors
+outside valid ranges) - Calculate monthly averages for each site -
+Compare sites to EPA water quality standards - Make a time series plot
+showing trends over the year - Write a short summary report
+
+**Your job:** 1. Design a complete project folder structure 2. Name all
+the folders and subfolders 3. List what files would go in each folder 4.
+Decide on script names and their order 5. Write a brief README outline
+
+Write your design in the Google Doc I'm dropping in the chat. Don't
+write any code — just plan the structure.
+
+**Questions to guide your thinking:** - What goes in `data/raw/`? - What
+goes in `data/processed/`? - How many scripts do you need? - What should
+they be named? - What outputs will you create?
+
+**\[Drop Google Doc link in chat\]**
+
+Work together in your groups. I'll visit rooms to see how you're doing.
+
+------------------------------------------------------------------------
+
+**\[0:51–1:06\] — Breakout Rooms**
+
+*\[Instructor: Circulate through breakout rooms every 3-4 minutes\]*
+
+*\[Listen to discussions, offer hints if groups are stuck\]*
+
+*\[Common places groups get stuck: deciding how many scripts they need,
+or what to name processed data files\]*
+
+*\[2 minutes before end: "You have 2 minutes left — wrap up your design
+and make sure someone can present it!"\]*
+
+------------------------------------------------------------------------
+
+## SLIDE 12: Report Out from Breakout Groups
+
+**\[1:06–1:15\] — Whole-Class Discussion**
+
+Welcome back! That was great work. Let's hear from a few groups.
+
+Group 3, can you share your structure? Someone unmute and walk us
+through what you decided.
+
+*\[Listen to Group 3's structure\]*
+
+*\[Validate good choices, gently correct issues\]*
+
+For example: - "I love that you separated raw and processed data —
+that's crucial." - "I see you created `data/EPA_standards.csv` — where
+does that go? Is it raw data or reference data? Maybe create a
+`data/reference/` folder?" - "You have three scripts — great! But can
+someone else tell what order to run them just from the names? Consider
+adding numbers: `01_clean.R`, `02_analyze.R`, `03_plot.R`."
+
+------------------------------------------------------------------------
+
+Group 7, what did you come up with? Different from Group 3?
+
+*\[Listen to Group 7's structure\]*
+
+*\[Compare the two approaches\]*
+
+Interesting! So Group 3 put all cleaning in one script, and Group 7
+split it into two scripts: one for removing errors, one for calculating
+averages. Both approaches can work! The key is that your README explains
+what each script does.
+
+------------------------------------------------------------------------
+
+**\[1:15–1:18\] — Synthesizing Common Patterns**
+
+Let me summarize what I saw across most groups:
+
+**Things most groups got right:** 1. ✅ Separated `data/raw/` and
+`data/processed/` 2. ✅ Numbered scripts to show order 3. ✅ Created a
+`figures/` folder for plots 4. ✅ Named scripts descriptively
+(`clean_data.R`, not `script1.R`)
+
+**Common issues I saw:** 1. ❌ Some groups created a `final_outputs/`
+folder — don't do this! Everything should be reproducible. There's no
+"final" until the paper is published. 2. ❌ Some groups weren't sure
+whether to put EPA standards in `raw/` or `processed/` — if you
+downloaded it from EPA and didn't modify it, it's raw! 3. ❌ Some groups
+forgot to plan for a README — always document your project!
+
+**Key insight from this exercise:**
+
+You can't design a good project structure until you understand your
+analytical workflow. That's why we spent last week and today thinking
+about planning before coding.
+
+------------------------------------------------------------------------
+
+## SLIDE 13: Common Mistakes to Avoid
+
+**\[1:18–1:22\] — Learning from Others' Errors**
+
+Let me tell you about common mistakes I see students make with projects:
+
+### **Mistake 1: Working outside the project folder**
+
+You're working on your analysis. You make a quick plot just to check
+something. You save it to your Desktop.
+
+Later, you want to include that plot in your paper. Where did you save
+it? Was it `plot1.png` or `figure_temp.png`? Did you already delete it?
+
+**Rule:** If it's part of the analysis, it goes in the project folder.
+No exceptions.
+
+------------------------------------------------------------------------
+
+### **Mistake 2: Using absolute paths**
+
+You write a script with absolute paths:
+
+``` r
+data <- read.csv("C:/Users/YourName/School/Research/Fall2024/data.csv")
+```
+
+You share it with your lab partner. They run it. Error.
+
+Why? Because they don't have `C:/Users/YourName/School/...` on their
+computer.
+
+**Rule:** Always use relative paths. Always.
+
+------------------------------------------------------------------------
+
+### **Mistake 3: Editing raw data**
+
+You open `data/raw/field_data.csv` in Excel. You notice row 47 has a
+typo. You fix it. You save the file.
+
+Congratulations, you just destroyed reproducibility. Now nobody knows
+what you changed, not even you when you look at this six months from
+now.
+
+**Rule:** Raw data is read-only. If you need to fix something, write
+code to fix it. Add a comment explaining why.
+
+Example:
+
+``` r
+# Remove row 47 - field notes indicate this was a data entry error
+# Observer confirmed species was actually "Bombus vosnesenskii", not "Bомbus" (Cyrillic character)
+data_clean <- data %>% filter(row_number() != 47)
+```
+
+------------------------------------------------------------------------
+
+### **Mistake 4: No README**
+
+You finish your analysis. You put everything in folders. It looks great!
+
+Six months later, you open the project. You have no idea what
+`02_analysis_v3.R` does differently from `02_analysis_v2.R`.
+
+Your advisor asks to see your analysis. She opens the project. She has
+no idea where to start.
+
+**Rule:** Write your README as you go. Update it when you change things.
+Future-you will thank present-you.
+
+------------------------------------------------------------------------
+
+### **Mistake 5: Too many versions**
+
+You're worried about breaking your code. So you save multiple
+versions: - `analysis.R` - `analysis_v2.R` - `analysis_final.R` -
+`analysis_final_fixed.R` - `analysis_final_fixed_really.R`
+
+This is what version control (Git) solves. We'll cover that in Week 4.
+For now, just know: you shouldn't have multiple versions of the same
+script in your project.
+
+------------------------------------------------------------------------
+
+## SLIDE 14: The Project Checklist
+
+**\[1:22–1:25\] — Quick Reference**
+
+Here's a checklist for a good project structure. Every project you
+create this semester should have:
+
+**Folder Structure:** - \[ \] `data/raw/` — original data, never
+modified - \[ \] `data/processed/` — cleaned/transformed data - \[ \]
+`scripts/` — numbered R scripts showing order - \[ \] `figures/` — all
+plots and visualizations - \[ \] `outputs/` — tables, summaries, or
+other results (optional)
+
+**Files:** - \[ \] `.Rproj` file — makes it an RStudio project - \[ \]
+`README.md` — explains what the project does - \[ \] Descriptive file
+names (not `analysis.R` or `data.csv`)
+
+**Code Practices:** - \[ \] Relative paths only (never absolute paths) -
+\[ \] Scripts are numbered if order matters - \[ \] Comments explain
+decisions - \[ \] Raw data is never modified
+
+**Documentation:** - \[ \] README explains research question - \[ \]
+README lists data sources - \[ \] README explains how to run the
+analysis - \[ \] README includes contact information
+
+------------------------------------------------------------------------
+
+## SLIDE 15: Git Setup Preview
+
+**\[1:25–1:28\] — Looking Ahead**
+
+One last thing before we finish: this week's activity is setting up Git
+and GitHub.
+
+**What is Git?** A version control system that tracks every change you
+make to your files. Think of it as "Track Changes" for your entire
+project.
+
+**What is GitHub?** A website where you can host your Git repositories
+online and collaborate with others.
+
+**Why do we care?** Because good project structure + version control =
+fully reproducible, auditable science.
+
+Instead of having files named `analysis_final_REALLY_final_v3.R`, you'll
+have a single file called `analysis.R` and Git will track all the
+versions for you.
+
+We'll cover Git concepts properly in Week 4. For now, just get it
+installed and set up. The activity instructions are on Canvas.
+
+------------------------------------------------------------------------
+
+## SLIDE 16: Before Next Class
+
+**\[1:28–1:30\] — Homework Assignment**
+
+Here's your homework for Wednesday:
+
+1.  **Create a project folder** for any analysis (real or made-up)
+
+    -   Use real data if you have it from your research
+    -   Or create a toy example with fake data
+
+2.  **Organize it** with the proper folder structure:
+
+    -   `data/raw/`
+    -   `data/processed/`
+    -   `scripts/`
+    -   `figures/`
+
+3.  **Create an RStudio Project** (`.Rproj` file)
+
+4.  **Write a README.md** file that explains:
+
+    -   What the project is about
+    -   What data you're using
+    -   How to run the analysis (even if you don't have scripts yet)
+
+5.  **Create at least one script** that loads data using a relative path
+
+6.  **Test that your relative paths work** by:
+
+    -   Moving the project folder to a different location
+    -   Opening the `.Rproj` file
+    -   Running your script
+    -   Confirming it still works
+
+Post a screenshot of your project structure to the discussion board by
+Monday night.
+
+------------------------------------------------------------------------
+
+## SLIDE 17: Exit Ticket
+
+**\[1:30\] — CHECK FOR UNDERSTANDING**
+
+**Before you log off, please complete today's exit ticket in Canvas. It
+should take 2-3 minutes.**
+
+### Exit Ticket Questions:
+
+1.  **In your own words, what is a "project" in the context of data
+    science?** (2-3 sentences)
+
+2.  **Scenario:** Your lab partner sends you their analysis folder. When
+    you try to run their script, you get this error:
+
+    ```         
+    Error: cannot open file 'C:/Users/Maria/Documents/Lab/data.csv'
+    ```
+
+    **What's the problem, and how would you fix it?**
+
+3.  **Outline a project folder structure** for this scenario: \> You're
+    analyzing gene expression data from 5 tissue samples. You have raw
+    sequencing files, and you need to normalize the data, identify
+    differentially expressed genes, and create a heatmap.
+
+    List the folders you'd create and give examples of what files would
+    go in each folder.
+
+**Submit your exit ticket before you leave today!**
+
+------------------------------------------------------------------------
+
+## SLIDE 18: Key Concepts to Remember
+
+**\[After exit ticket\] — Summary**
+
+Let's review the main concepts from today:
+
+1.  **Projects are the unit of scientific work** — not scripts, not
+    sessions, not random files
+
+2.  **Good structure makes reproducibility possible** — data, scripts,
+    and outputs are clearly separated
+
+3.  **Raw data never changes** — all modifications happen via code in
+    scripts
+
+4.  **Relative paths make code portable** — so anyone can run your
+    analysis anywhere
+
+5.  **Documentation is not optional** — README files explain your
+    project to others (and to future-you)
+
+6.  **Organization is part of doing science** — it's not extra work, it
+    IS the work
+
+If you get stuck this week setting up your project, post in the
+discussion board or come to office hours. Don't struggle in silence!
+
+See you Wednesday!
+
+*\[Stay online for 2-3 minutes for questions\]*
+
+------------------------------------------------------------------------
+
+## Materials Needed
+
+-   Messy desktop folder screenshot
+-   Organized project structure diagram
+-   Live demo prepared (RStudio, sample data file)
+-   README examples (good and bad)
+-   Google Doc for breakout activity
+-   Breakout rooms (groups of 3-4)
+-   Exit ticket set up in Canvas/Google Forms
+
+------------------------------------------------------------------------
+
+## Instructor Notes
+
+### Timing
+
+-   The breakout activity is 15 minutes (can extend to 17 if groups need
+    more time)
+-   Exit ticket adds \~2 minutes at end
+-   If running over, can shorten the "common mistakes" section
+
+### Common Student Confusion
+
+-   **Raw vs. processed distinction**: Students often want to put
+    cleaned data back in `raw/`. Emphasize that raw means "never
+    modified."
+-   **Absolute vs. relative paths**: This is conceptually hard. The live
+    demo helps a lot.
+-   **When to use subfolders**: Some students create too many subfolders
+    (`data/raw/2023/summer/june/`). Keep it simple.
+
+### Exit Ticket Purpose
+
+-   Question 1: Checks conceptual understanding
+-   Question 2: Checks understanding of relative vs. absolute paths
+    (common error)
+-   Question 3: Checks ability to apply folder structure to a new
+    scenario
+
+### 

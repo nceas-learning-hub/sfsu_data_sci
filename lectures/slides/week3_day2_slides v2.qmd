@@ -1,0 +1,725 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+## {#title-slide data-menu-title="Title Slide"} 
+
+[Advanced Quarto: Figures, Tables, Cross-References]{.custom-title}
+
+[Week 3, Day 2]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+---
+
+## {#welcome data-menu-title="Welcome"}
+
+[Welcome Back!]{.slide-title}
+
+:::{.body-text}
+**Monday:** Basic Quarto (YAML, Markdown, code chunks)
+
+**Today:** Professional features
+
+- High-quality figures
+- Formatted tables
+- Cross-references
+- Professional layout
+
+**Goal:** Create publication-ready documents
+
+**Approach:** Visual Editor first, source code for reference
+:::
+
+---
+
+## {#figures-intro data-menu-title="Figures Introduction"}
+
+[Creating Professional Figures]{.slide-title}
+
+:::{.body-text}
+**Figures in Quarto** = automatic, reproducible
+
+**Advantages:**
+
+- Consistent sizing
+- Proper captions
+- Cross-referenceable
+- Updates automatically with data
+
+**No more:** Saving plots, resizing, copy/pasting
+:::
+
+---
+
+## {#basic-figure data-menu-title="Basic Figure"}
+
+[Basic Figure Creation]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Write your plotting code inside a code chunk
+2. Click the **gear icon** ⚙️ on the chunk
+3. Set **Label** to `fig-richness` (must start with `fig-`)
+4. Set **Caption** to your figure caption
+5. Set **Width** and **Height** (in inches)
+
+**Key:** The `fig-` prefix is what makes it cross-referenceable!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+The gear icon writes these chunk options for you:
+`#| label: fig-richness`, `#| fig-cap: "..."`, `#| fig-width: 8`, `#| fig-height: 6`
+:::
+
+---
+
+## {#figure-options data-menu-title="Figure Options"}
+
+[Figure Chunk Options]{.slide-title}
+
+:::{.body-text}
+**Some available in the chunk gear icon** ⚙️ **dialog:**
+
+- **Width / Height** — size in inches (e.g., 8 × 6)
+- **Aspect ratio** — alternative to setting both dimensions
+- **Caption** — text that appears below the figure
+- **Alignment** — center, left, or right (dropdown)
+
+Use the dialog instead of memorizing syntax!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+#| fig-width: 8      # Width in inches
+#| fig-height: 6     # Height in inches
+#| fig-cap: "Your caption here"
+#| fig-align: center  # or left, right
+```
+:::
+
+---
+
+## {#multi-figures data-menu-title="Multiple Figures"}
+
+[Multiple Figures in One Chunk]{.slide-title}
+
+:::{.body-text}
+**After setting name in the chunk gear icon** ⚙️ **dialog:**
+
+1. Set the main **Caption** (overall figure caption)
+2. Add **Subcaptions** — one per plot in the chunk
+3. Set **Layout columns** to `2` for side-by-side
+
+**Result:** Two plots side-by-side with individual subcaptions and one shared caption
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+#| label: fig-comparison
+#| fig-cap: "Comparison of pH and dissolved oxygen"
+#| fig-subcap:
+#|   - "pH by site"
+#|   - "Dissolved oxygen by site"
+#| layout-ncol: 2
+```
+:::
+
+---
+
+## {#cross-ref-figures data-menu-title="Cross-Reference Figures"}
+
+[Cross-Referencing Figures]{.slide-title}
+
+:::{.body-text}
+**Step 1:** Make sure your figure chunk has a `fig-` label (via the gear icon)
+
+**Step 2:** In your text, type **`@`** — an autocomplete menu appears!
+
+- Lists all your labeled figures, tables, and equations
+- Select the one you want (e.g., `fig-temperature`)
+- Quarto inserts the reference for you
+
+**Result:** "As shown in Figure 1, temperature..." with **automatic numbering** — if you reorder figures, numbers update!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+In source mode, you type `@fig-temperature` directly in your markdown text.
+:::
+
+---
+
+## {#tables-intro data-menu-title="Tables Introduction"}
+
+[Creating Tables in Quarto]{.slide-title}
+
+:::{.body-text}
+**Three approaches:**
+
+1. **Markdown tables** — Visual Editor: **Table → Insert Table** (spreadsheet-like grid!)
+2. **knitr::kable()** — from R data frames (most common)
+3. **gt package** — publication-quality formatting
+
+**Today:** Focus on kable + the Visual Editor tools
+:::
+
+---
+
+## {#kable-basic data-menu-title="Kable Basic"}
+
+[Basic Table with kable]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Write your R code that produces a table using `kable()`
+2. Click the **gear icon** ⚙️ on the chunk
+3. Set **Label** to `tbl-summary` (must start with `tbl-`)
+4. Set **Caption** to your table caption
+
+**Key:** The `tbl-` prefix is what makes tables cross-referenceable — same pattern as `fig-` for figures!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+#| label: tbl-summary
+#| tbl-cap: "Summary statistics by site"
+```
+:::
+
+---
+
+## {#kable-formatting data-menu-title="Kable Formatting"}
+
+[Formatting Tables with kableExtra]{.slide-title}
+
+:::{.body-text}
+Table styling is done in R code (not the Visual Editor):
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+
+library(kableExtra)
+
+kable(summary_stats, 
+      digits = 2,
+      col.names = c("Site", "Mean", "SD"),
+      caption = "Species richness statistics") %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold = TRUE) %>%
+  row_spec(0, bold = TRUE, background = "#D3D3D3")
+```
+
+:::{.body-text}
+**Result:** Professional table with striping, hover, and bold formatting
+:::
+
+---
+
+## {#cross-ref-tables data-menu-title="Cross-Reference Tables"}
+
+[Cross-Referencing Tables]{.slide-title}
+
+:::{.body-text}
+**Same workflow as figures!**
+
+1. Make sure your table chunk has a `tbl-` label (via gear icon)
+2. In your text, type **`@`**
+3. The autocomplete menu shows all `tbl-`, `fig-`, and `eq-` labels
+4. Select your table reference
+
+**Result:** "Statistical analysis (Table 1) revealed..."
+
+Numbers update automatically if you reorder!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+In source mode: `Statistical analysis (@tbl-anova) revealed significant differences among sites (p < 0.001).`
+:::
+
+---
+
+## {#equations data-menu-title="Equations"}
+
+[Adding Equations]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+**Inline math:** Use **Insert → Inline Math** (or the **Σ** toolbar button) — type your LaTeX in the pop-up with live preview
+
+**Display math (centered):** Use **Insert → Display Math** — opens a larger editor for block equations
+
+Both give you a **live preview** as you type the LaTeX!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+Inline: `$H' = -\sum p_i \ln(p_i)$`
+
+Display:
+```
+$$
+H' = -\sum_{i=1}^{S} p_i \ln(p_i)
+$$
+```
+:::
+
+---
+
+## {#numbered-equations data-menu-title="Numbered Equations"}
+
+[Numbered & Cross-Referenced Equations]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Insert a display equation using **Insert → Display Math**
+2. After the closing `$$`, add a label: `{#eq-shannon}`
+3. Reference it in text by typing **`@`** and selecting `eq-shannon`
+
+**Result:** Numbered equation that you can reference just like figures and tables!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```
+$$
+H' = -\sum_{i=1}^{S} p_i \ln(p_i)
+$$ {#eq-shannon}
+
+As shown in @eq-shannon, diversity depends on...
+```
+:::
+
+---
+
+## {#callouts data-menu-title="Callouts"}
+
+[Callout Blocks]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Go to **Insert → Callout**
+2. Choose the type from the dropdown: note, warning, tip, important, caution
+3. Add a title and your content
+
+The fenced div syntax is created automatically!
+
+**Great for:** Data limitations, methods notes, analysis suggestions
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```markdown
+:::{.callout-warning}
+## Data Limitation
+Sample sizes varied by site due to weather.
+:::
+```
+:::
+
+---
+
+## {#citations data-menu-title="Citations"}
+
+[Adding Citations]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Go to **Insert → Citation**
+2. Search by **DOI**, browse your **`.bib` file**, or connect to **Zotero**
+3. Select your reference — the `[@key]` syntax is inserted automatically
+
+**Setting up the bibliography:**
+
+- Click the **gear icon** ⚙️ next to the **Render** button
+- Set the **Bibliography** field to your `.bib` file
+
+No need to edit YAML by hand!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+YAML: `bibliography: references.bib`
+
+In text: `Urban bees are declining [@Smith2020].`
+:::
+
+---
+
+## {#layout data-menu-title="Layout"}
+
+[Page Layout Options]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+**Two-column layout:** **Insert → Div**, set class to `.columns`, then nest two divs with class `.column` and set width attributes
+
+**Margin content:** **Insert → Div** with class `.column-margin`
+
+The Visual Editor creates the fenced div syntax for you — no counting colons!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```markdown
+:::: {.columns}
+::: {.column width="50%"}
+Left column content
+:::
+::: {.column width="50%"}
+Right column content
+:::
+::::
+```
+:::
+
+---
+
+## {#code-folding data-menu-title="Code Folding"}
+
+[Code Folding for Readers]{.slide-title}
+
+:::{.body-text}
+**Document-level setting:**
+
+- Click the **gear icon** ⚙️ next to the **Render** button
+- Enable **Code Fold** and **Code Tools**
+
+**Per-chunk setting:**
+
+- Click the **gear icon** ⚙️ on any code chunk
+- Toggle **Code Fold** on
+- Set a custom **Code Summary** label (e.g., "Show data cleaning code")
+
+**Result:** Readers see a button to reveal code if interested
+:::
+
+:::{.callout-tip}
+## Under the Hood
+YAML: `code-fold: true` and `code-tools: true`
+
+Per chunk: `#| code-fold: true` and `#| code-summary: "Show data cleaning code"`
+:::
+
+---
+
+## {#themes data-menu-title="Themes"}
+
+[Document Themes]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Click the **gear icon** ⚙️ next to the **Render** button
+2. Open the document properties dialog
+3. Set **Theme** (cosmo, flatly, journal, litera, minty, etc.)
+4. Optionally add a **Custom CSS** file
+
+**Popular themes:** cosmo, flatly, litera, minty
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+---
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+---
+```
+:::
+
+---
+
+## {#toc data-menu-title="Table of Contents"}
+
+[Table of Contents]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Click the **gear icon** ⚙️ next to the **Render** button
+2. Enable **Table of Contents**
+3. Set **Depth** (how many heading levels to include)
+4. Set **Location** (left, right, or body)
+
+**Sections become clickable navigation — great for long documents!**
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+---
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contents"
+---
+```
+:::
+
+---
+
+## {#tabs data-menu-title="Tabsets"}
+
+[Tabbed Content]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. **Insert → Div** with class `.panel-tabset`
+2. Inside the div, add `##` headings for each tab
+3. Put content (plots, tables, code) under each heading
+
+**Result:** Content organized in clickable tabs — saves space!
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```markdown
+::: {.panel-tabset}
+## Plot
+(plot code here)
+
+## Data
+(data code here)
+:::
+```
+:::
+
+---
+
+## {#workflow-example data-menu-title="Workflow Example"}
+
+[Complete Analysis Workflow]{.slide-title}
+
+:::{.body-text}
+**Typical structure:**
+
+1. Introduction (context, questions)
+2. Methods (data collection, analysis approach)
+3. Results (with @fig-xxx and @tbl-xxx references)
+4. Discussion (interpretation)
+5. Conclusion
+6. References (auto-generated)
+
+**All from one `.qmd` file — all manageable in Visual Editor!**
+:::
+
+---
+
+## {#best-practices-advanced data-menu-title="Best Practices Advanced"}
+
+[Advanced Best Practices]{.slide-title}
+
+:::{.body-text}
+✅ **Label everything** via the gear icon (fig-, tbl-, eq-)
+
+✅ **Use descriptive labels** (fig-temperature not fig-plot1)
+
+✅ **Write clear captions** (complete sentences, in the gear dialog)
+
+✅ **Cross-reference liberally** (type `@` to find labels)
+
+✅ **Keep code chunks focused** (one plot per chunk)
+
+✅ **Use Insert → Callout** for important notes
+
+✅ **Set code-folding** in document properties for technical reports
+:::
+
+---
+
+## {#debugging-advanced data-menu-title="Debugging Advanced"}
+
+[Debugging Complex Documents]{.slide-title}
+
+:::{.body-text}
+**Strategy:**
+
+1. **Render frequently** (catch errors early)
+2. **Comment out sections** to isolate problems
+3. **Check chunk labels** in the gear dialog (no duplicates!)
+4. **Verify file paths** (data, images, bib)
+5. **Look at error line numbers** in render log
+
+**Common issue:** Duplicate chunk labels cause silent failures
+
+**Tip:** Switch to Source mode to check the raw markdown when debugging tricky problems
+:::
+
+---
+
+## {#breakout data-menu-title="Breakout Activity"}
+
+[Breakout Activity - 15 minutes]{.slide-title}
+
+:::{.body-text}
+**Task:** Enhance your Monday document **using Visual Editor**
+
+**Add (use the menus and gear icons!):**
+
+1. At least 2 figures with labels and captions (gear icon ⚙️)
+2. At least 1 table with label and caption (gear icon ⚙️)
+3. Cross-references to a figure and table (type `@`)
+4. One callout block (Insert → Callout)
+5. Table of contents (document properties gear ⚙️)
+
+**Goal:** Professional-looking document
+
+**Help each other!**
+:::
+
+---
+
+## {#pdf-output data-menu-title="PDF Output"}
+
+[Outputting to PDF]{.slide-title}
+
+:::{.body-text}
+**Requirements:** Install tinytex: `quarto install tinytex`
+
+**In Visual Editor:**
+
+1. Click the **gear icon** ⚙️ next to the **Render** button
+2. Change format to **PDF**
+3. Set options like document class and margins
+
+**Great for submission to journals!**
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+---
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=1in
+    keep-tex: true
+---
+```
+:::
+
+---
+
+## {#word-output data-menu-title="Word Output"}
+
+[Outputting to Word]{.slide-title}
+
+:::{.body-text}
+**In Visual Editor:**
+
+1. Click the **gear icon** ⚙️ next to the **Render** button
+2. Change format to **Word (docx)**
+3. Optionally set a reference template and enable TOC
+
+**Useful for:** Sharing with non-technical collaborators, manuscript submissions requiring Word, making final formatting tweaks
+
+**Cross-references still work in Word!**
+:::
+
+:::{.callout-tip}
+## Under the Hood
+```yaml
+---
+format:
+  docx:
+    reference-doc: template.docx
+    toc: true
+---
+```
+:::
+
+---
+
+## {#homework data-menu-title="Homework"}
+
+[Before Monday]{.slide-title}
+
+:::{.body-text}
+**Assignment to test yourself:** Complete professional analysis document
+
+**Requirements:**
+1. All basic Quarto elements (from Monday)
+2. At least 3 labeled figures
+3. At least 2 labeled tables
+4. Multiple cross-references
+5. At least 2 callout blocks
+6. Table of contents
+7. Try rendering to both HTML and PDF
+
+**Challenge:** Try switching between Visual Editor and Source mode to see what the Visual Editor creates for you!
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket (Canvas) - 2-3 minutes]{.slide-title}
+
+:::{.body-text}
+**Complete before leaving:**
+
+1. **Visual Editor:** Describe the steps to create a labeled, captioned figure using the Visual Editor (what do you click, what do you fill in?)
+
+2. **Cross-reference:** How do you insert a cross-reference in Visual Editor?
+
+3. **Explain:** Why are cross-references better than writing "see Figure 1" manually?
+
+**Submit in Canvas →**
+:::
+
+---
+
+## {#summary data-menu-title="Summary"}
+
+[Key Concepts]{.slide-title}
+
+:::{.body-text}
+1. **Figures** = gear icon ⚙️ for labels & captions
+
+2. **Tables** = gear icon ⚙️ for `tbl-` labels, kable() for formatting
+
+3. **Cross-references** = type `@` for autocomplete menu
+
+4. **Callouts** = Insert → Callout
+
+5. **Citations** = Insert → Citation (DOI, Zotero, .bib)
+
+6. **Document settings** = gear icon ⚙️ next to Render (TOC, theme, format)
+
+**Next week:** Why reproducibility fails + Git/GitHub!
+
+**Have a great weekend!**
+:::

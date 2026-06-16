@@ -1,0 +1,599 @@
+---
+title: "Week 14, Lecture 2: Conditionals, Errors, and ggplot Functions"
+subtitle: "Student-facing live demo"
+author: "BIO/CHEM 806"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contents"
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    embed-resources: true
+editor: visual
+execute:
+  eval: true
+  echo: true
+  warning: true
+  message: true
+---
+
+This demo is designed to be read and run in Quarto Visual mode. The text before each major code chunk previews what the code is doing. Read the code first, then run the chunk.
+
+Some chunks intentionally produce errors or warnings. Those messages are part of the lesson.
+
+The first chunk loads the plotting package we will use later. It does not print anything when it succeeds.
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+library(ggplot2)
+```
+
+# Today
+
+From Monday, we already know the core function toolkit:
+
+- write a function with `function(arg) { ... return(...) }`;
+- apply functions to vectors and data frames;
+- return multiple values as a named list;
+- document functions so future readers know what they do.
+
+Today we extend that toolkit. We will write functions that make decisions, catch bad inputs, use defaults, and wrap repeated `ggplot2` code.
+
+# Setup: functions and data from Monday
+
+This chunk recreates the small function family and example data used in today's examples. Read it in four parts:
+
+1.  `calc_coulombic_efficiency()` computes one battery metric.
+2.  `cycling_data` creates a small example data frame.
+3.  `calc_gc_content()` and `calc_primer_tm()` compute primer sequence summaries.
+4.  `calc_primer_stats()` combines those primer summaries in a named list.
+
+```{r}
+#| label: monday-functions-and-data
+
+calc_coulombic_efficiency <- function(discharge_cap_mAh, charge_cap_mAh) {
+  ce <- (discharge_cap_mAh / charge_cap_mAh) * 100
+  return(ce)
+}
+
+cycling_data <- data.frame(
+  cycle         = 1:5,
+  charge_mAh    = c(3.01, 3.00, 2.99, 2.98, 2.97),
+  discharge_mAh = c(2.98, 2.97, 2.96, 2.95, 2.94)
+)
+
+cycling_data$CE <- calc_coulombic_efficiency(
+  cycling_data$discharge_mAh,
+  cycling_data$charge_mAh
+)
+
+calc_gc_content <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_total <- nchar(sequence)
+  n_gc <- nchar(gsub("[^GC]", "", sequence))
+  return((n_gc / n_total) * 100)
+}
+
+calc_primer_tm <- function(sequence) {
+  sequence <- toupper(sequence)
+  n_a <- nchar(gsub("[^A]", "", sequence))
+  n_t <- nchar(gsub("[^T]", "", sequence))
+  n_g <- nchar(gsub("[^G]", "", sequence))
+  n_c <- nchar(gsub("[^C]", "", sequence))
+  tm <- 2 * (n_a + n_t) + 4 * (n_g + n_c)
+  return(tm)
+}
+
+calc_primer_stats <- function(sequence) {
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+  return(list(
+    sequence   = sequence,
+    gc_percent = gc,
+    tm_celsius = tm
+  ))
+}
+```
+
+This check chunk prints the setup objects so we can confirm that the functions and data are available before moving on.
+
+```{r}
+#| label: check-setup
+
+cycling_data
+calc_primer_stats("ATGCGCATTAGC")
+```
+
+# Warm-up: mental model check
+
+What does this function do? What would `classify_temp(15)` return?
+
+Before running the chunk, read the branches in order:
+
+```{r}
+#| label: classify-temp
+
+classify_temp <- function(celsius) {
+  if (celsius > 30) {
+    return("hot")
+  } else if (celsius < 10) {
+    return("cold")
+  } else {
+    return("moderate")
+  }
+}
+```
+
+define a function {\
+if this condition is true {\
+do this\
+} else if another condition is true {\
+do this instead\
+} else {\
+do this as the default\
+}\
+}
+
+This chunk calls the function with four different inputs. The value 15 should land in the final `else` branch because it is not greater than 30 and not less than 10.
+
+```{r}
+#| label: test-classify-temp
+
+classify_temp(35)
+classify_temp(5)
+classify_temp(20)
+classify_temp(15)
+```
+
+# Functions with conditionals
+
+Functions can branch based on input values using `if`, `else if`, and `else`. The function returns as soon as it hits a `return()`.
+
+The first true branch wins.
+
+This chunk repeats the same function calls with comments beside each predicted result.
+
+```{r}
+#| label: classify-temp-more-tests
+
+classify_temp(35)    # hot
+classify_temp(5)     # cold
+classify_temp(20)    # moderate
+```
+
+# Battery chemistry context: specific capacity
+
+Specific capacity, measured in mAh/g, describes how much charge a battery electrode material stores per gram of active material. It is a primary metric for comparing electrode materials.
+
+This is the formula. The chunk is marked `eval: false`, so it displays the expression without trying to run it.
+
+```{r}
+#| label: specific-capacity-formula
+#| eval: false
+
+specific_capacity <- capacity_mAh / mass_g
+```
+
+The formula is simple, but the inputs are easy to get wrong.
+
+Common problems in real datasets include:
+
+- dividing by the wrong mass because inactive material was included;
+- entering mass in milligrams instead of grams, which is off by 1000x;
+- zero-mass entries;
+- negative capacity values from instrument noise or data entry errors.
+
+A function with input validation catches these problems before they become quietly wrong results.
+
+# Building `calc_specific_capacity()`
+
+Start simple, then add protection layer by layer.
+
+## Stage 1: a naive version
+
+This first version has only one line of real work: divide capacity by mass and return the result. It has no checks for impossible or mistyped inputs.
+
+```{r}
+#| label: naive-specific-capacity
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  return(capacity_mAh / mass_g)
+}
+```
+
+Now run the naive function on one bad input and one good input. Dividing by zero returns `Inf`, which is dangerous because it looks like a valid result.
+
+```{r}
+#| label: naive-specific-capacity-zero
+
+calc_specific_capacity(3.0, 0)
+calc_specific_capacity(3.0, 0.015)
+```
+
+This chunk intentionally passes text where the function expects a number. The chunk is marked `error: true` so the document can continue after showing the error.
+
+```{r}
+#| label: naive-specific-capacity-bad-type
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")
+```
+
+The first bad input returns `Inf`. That is dangerous because it looks like a result. The second bad input errors, but the message is not written for the user of our function.
+
+## Stage 2: add `stop()` for hard errors
+
+Use `stop()` when the input is so wrong that the function cannot proceed. It halts execution and prints your message.
+
+A good error message tells the user what was wrong and, when possible, how to fix it.
+
+Read this protected version in three parts:
+
+1.  The first `if` checks whether both inputs are numeric.
+2.  The second `if` checks whether mass is positive.
+3.  Only after those checks does the function compute and return the result.
+
+```{r}
+#| label: specific-capacity-with-stop
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value - check your units.")
+  }
+
+  return(capacity_mAh / mass_g)
+}
+```
+
+The next two chunks intentionally trigger our custom error messages. These are better failures than a silent `Inf` or a cryptic arithmetic error.
+
+```{r}
+#| label: test-specific-capacity-stop-text
+#| error: true
+
+calc_specific_capacity(3.0, "graphite")
+```
+
+```{r}
+#| label: test-specific-capacity-stop-zero
+#| error: true
+
+calc_specific_capacity(3.0, 0)
+```
+
+After the input checks pass, the function behaves like the simple version.
+
+```{r}
+#| label: test-specific-capacity-stop-good
+
+calc_specific_capacity(3.0, 0.015)
+```
+
+## Stage 3: add `warning()` for suspicious values
+
+Use `warning()` when something is suspicious but the function can still proceed. The user should see a flag, but the function does not need to halt.
+
+Here, zero mass is impossible for the calculation, so it gets `stop()`. Negative capacity is unusual, but it may reflect instrument behavior or a case the researcher needs to inspect, so it gets `warning()`.
+
+Read this version as the same protected function plus one extra check before the final return.
+
+```{r}
+#| label: specific-capacity-with-warning
+
+calc_specific_capacity <- function(capacity_mAh, mass_g) {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be a positive value - check your units.")
+  }
+
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected - verify instrument output.")
+  }
+
+  return(capacity_mAh / mass_g)
+}
+```
+
+This test chunk shows the difference between a warning and an error. The first call warns but still returns a number. The second call runs normally.
+
+```{r}
+#| label: test-specific-capacity-warning
+
+calc_specific_capacity(-0.5, 0.015)
+calc_specific_capacity(3.0, 0.015)
+```
+
+# `stop()` versus `warning()`
+
+| Situation | Use | Why |
+|----|----|----|
+| Input type is wrong | `stop()` | The function cannot compute the intended result. |
+| Value is physically impossible | `stop()` | The result would be meaningless. |
+| Value is unexpected but computable | `warning()` | Flag it and let the user decide. |
+| Value is near the edge of a reasonable range | `warning()` | Worth noting, not fatal. |
+
+Rule of thumb: would the result mislead someone? If yes, stop. If it is suspicious but still interpretable, warn.
+
+# Default arguments
+
+Arguments can have default values, set in the function definition. The user only needs to supply them when they want something different from the default.
+
+Read the function header carefully. `units = "mAh/g"` means the function will use that value unless the user supplies a different `units` argument.
+
+```{r}
+#| label: specific-capacity-with-defaults
+
+calc_specific_capacity <- function(capacity_mAh,
+                                   mass_g,
+                                   units = "mAh/g") {
+  if (!is.numeric(capacity_mAh) | !is.numeric(mass_g)) {
+    stop("Both capacity_mAh and mass_g must be numeric.")
+  }
+
+  if (mass_g <= 0) {
+    stop("mass_g must be positive.")
+  }
+
+  if (capacity_mAh < 0) {
+    warning("Negative capacity detected - verify instrument output.")
+  }
+
+  result <- capacity_mAh / mass_g
+  message("Returning specific capacity in ", units)
+  return(result)
+}
+```
+
+The first call uses the default. The second call overrides the default by naming `units = "Ah/g"`.
+
+```{r}
+#| label: test-specific-capacity-defaults
+
+calc_specific_capacity(3.0, 0.015)
+calc_specific_capacity(3.0, 0.015, units = "Ah/g")
+```
+
+In this teaching example, `units` is only a label in the message. The function does not convert mAh/g to Ah/g. The point is the syntax and logic of a default argument.
+
+# Molecular biology context: primer quality checks
+
+When primers are designed, researchers screen them against quality thresholds before ordering synthesis.
+
+- GC content should often be about 40-60 percent for standard PCR.
+- If GC is below 40 percent, a primer may not bind reliably at standard temperatures.
+- If GC is above 60 percent, a primer may form secondary structures or non-specific products.
+- Melting temperature is often checked alongside GC content.
+
+These thresholds are checked for every primer, every time. A function that returns a quality flag makes the screening instant and consistent.
+
+# `calc_primer_quality()`
+
+This function combines input validation, default arguments, functions calling other functions, and a warning when a primer falls outside the selected GC range.
+
+Read the function in five parts:
+
+1.  The function header sets default GC thresholds.
+2.  The first `if` stops if `sequence` is not text.
+3.  The middle lines call the Monday functions to compute GC content and melting temperature.
+4.  The next `if` warns if GC content is outside the chosen range.
+5.  The `return()` gives back a named list of results.
+
+```{r}
+#| label: calc-primer-quality
+
+calc_primer_quality <- function(sequence,
+                                gc_min = 40,
+                                gc_max = 60) {
+  if (!is.character(sequence)) {
+    stop("sequence must be a character string.")
+  }
+
+  gc <- calc_gc_content(sequence)
+  tm <- calc_primer_tm(sequence)
+
+  if (gc < gc_min | gc > gc_max) {
+    warning("GC content (", round(gc, 1), "%) is outside ",
+            gc_min, "-", gc_max, "% optimal range.")
+  }
+
+  return(list(
+    gc_percent  = gc,
+    tm_celsius  = tm,
+    gc_in_range = (gc >= gc_min & gc <= gc_max)
+  ))
+}
+```
+
+These examples show three uses of the same function: a standard primer, a high-GC primer that warns under the default range, and a case where the acceptable GC range is changed.
+
+```{r}
+#| label: test-primer-quality
+
+# Standard PCR: use defaults.
+calc_primer_quality("ATGCGCATTAGC")
+
+# High-GC primer under standard PCR defaults: this warns.
+calc_primer_quality("GCGCGGCATGCC")
+
+# GC-rich organism or assay: override the acceptable range.
+calc_primer_quality("GCGCGATATGCC", gc_min = 50, gc_max = 70)
+```
+
+Default arguments make a function reusable across research contexts: sensible defaults for the common case, flexible overrides for a specific assay.
+
+# Wrapping `ggplot2` code in a function
+
+Everything we know about functions applies to `ggplot2` code too. If you make the same style of plot repeatedly - same theme, same geometry, same axis structure - wrap it.
+
+This first plotting function does not make a plot by itself. It returns a reusable `ggplot2` theme. The default argument `base_size = 9` controls the text size unless a different size is supplied.
+
+```{r}
+#| label: custom-theme
+
+custom_theme <- function(base_size = 9) {
+  theme(
+    text = element_text(family = "Helvetica",
+                        color = "gray30",
+                        size = base_size),
+    plot.title = element_text(size = rel(1.25),
+                              hjust = 0.5,
+                              face = "bold"),
+    panel.background = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(colour = "grey90",
+                                    linewidth = 0.25),
+    axis.ticks = element_blank()
+  )
+}
+```
+
+# A battery cycling plot function
+
+Battery researchers plot Coulombic efficiency versus cycle number repeatedly. This function wraps the full plotting workflow.
+
+Read this chunk in layers:
+
+1.  The function accepts a data frame plus three optional plotting settings.
+2.  `ggplot(df, aes(x = cycle, y = CE))` names the data frame and mapped variables.
+3.  The geoms add points, a line, and a horizontal threshold.
+4.  `labs()` adds readable labels.
+5.  `custom_theme(font_size)` applies the theme function we just wrote.
+
+```{r}
+#| label: plot-cycling
+
+plot_cycling <- function(df,
+                         point_size = 2,
+                         font_size = 10,
+                         ce_threshold = 99) {
+  ggplot(df, aes(x = cycle, y = CE)) +
+    geom_point(size = point_size, color = "#167B62") +
+    geom_line(color = "#167B62", alpha = 0.6) +
+    geom_hline(yintercept = ce_threshold,
+               linetype = "dashed",
+               color = "#A23923") +
+    labs(title = "Coulombic Efficiency by Cycle",
+         x = "Cycle Number",
+         y = "Coulombic Efficiency (%)") +
+    custom_theme(font_size)
+}
+```
+
+The first plot call uses all the defaults from the function definition.
+
+```{r}
+#| label: call-plot-cycling-default
+
+plot_cycling(cycling_data)
+```
+
+The second plot call changes two arguments while leaving the rest of the plotting code untouched.
+
+```{r}
+#| label: call-plot-cycling-custom
+
+plot_cycling(cycling_data, point_size = 3, ce_threshold = 98)
+```
+
+# Why wrapped plots matter for reproducibility
+
+Imagine you have 15 figures in your thesis using the same style.
+
+Without a function, changing the plot style means finding and editing 15 plot blocks. With a function, changing the plot style means editing one function definition or changing one argument.
+
+This is the DRY principle - do not repeat yourself - applied to visualization.
+
+# Optional synthesis: validate, compute, visualize
+
+A complete analysis function can validate the input data frame, compute a new column, check for suspicious results, and return a plot.
+
+Read this synthesis function as a full workflow:
+
+1.  Define the columns the data frame must contain.
+2.  Stop if any required column is missing.
+3.  Compute Coulombic efficiency from charge and discharge capacity.
+4.  Warn if any CE value is greater than 100 percent.
+5.  Return the plot from `plot_cycling()`.
+
+```{r}
+#| label: analyze-cycling-data
+
+analyze_cycling_data <- function(df,
+                                 ce_threshold = 99,
+                                 font_size = 10) {
+  needed_cols <- c("cycle", "charge_mAh", "discharge_mAh")
+
+  if (!all(needed_cols %in% names(df))) {
+    stop("df must contain columns: cycle, charge_mAh, discharge_mAh")
+  }
+
+  df$CE <- calc_coulombic_efficiency(
+    df$discharge_mAh,
+    df$charge_mAh
+  )
+
+  if (any(df$CE > 100)) {
+    warning("Some CE values exceed 100% - check charge/discharge convention.")
+  }
+
+  plot_cycling(df, ce_threshold = ce_threshold, font_size = font_size)
+}
+```
+
+This call uses the whole workflow on the example data frame.
+
+```{r}
+#| label: test-analyze-cycling-data
+
+analyze_cycling_data(cycling_data)
+```
+
+# Summary
+
+Today we added:
+
+- conditionals: `if`, `else if`, and `else` inside functions;
+- `stop()`: halt when an input makes computation impossible;
+- `warning()`: flag suspicious inputs while continuing to compute;
+- default arguments: sensible defaults that users can override;
+- functions that call other functions;
+- wrapped `ggplot2` workflows for reproducible figures.
+
+Remember the rule: would a bad input mislead someone? If yes, use `stop()`. If it is suspicious but still worth inspecting, use `warning()`.
+
+This final reference chunk is not meant to run. It lists the main functions from today.
+
+```{r}
+#| label: final-function-list
+#| eval: false
+
+classify_temp()
+calc_specific_capacity()
+calc_primer_quality()
+custom_theme()
+plot_cycling()
+analyze_cycling_data()
+```
+
+# Exit ticket
+
+Copy and complete these three lines:
+
+**One tool I can use from today:** `stop()` / `warning()` / default arguments / ggplot function
+
+**How I would use it:\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
+
+**One thing I want to remember:** \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_

@@ -1,0 +1,556 @@
+---
+title: "Week 1, Day 2: Reproducibility & Decision Logs"
+subtitle: "Lecture Script"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+---
+
+::: callout-note
+## Course Information
+
+**Course:** BIO/CHEM 806 - Graduate Introduction to Data Science with R\
+**Duration:** 75 minutes \| Online Synchronous \| 30 students\
+**Date:** Week 1, Day 2
+:::
+
+------------------------------------------------------------------------
+
+# Pre-Class Setup (Instructor)
+
+::: callout-tip
+## Preparation Checklist
+
+-   [ ] Test conferencing platform
+-   [ ] Prepare decision log template (Google Doc)
+-   [ ] Load scenario slide
+-   [ ] Prepare breakout rooms (groups of 3)
+-   [ ] Queue quiet background music for silent writing time (optional)
+-   [ ] Have chat links ready to copy-paste (see below)
+:::
+
+------------------------------------------------------------------------
+
+# Lecture Script
+
+## SLIDE 1: Welcome Back + Bridge from Monday
+
+**\[0:00–0:04\] — Settling In**
+
+Good morning, and welcome back to day two!
+
+On Monday, we did something that might have felt simple — we introduced ourselves, we talked about this class as if it were a dataset, and we noticed how quickly ambiguity shows up even in simple questions.
+
+Today, we're going to connect that experience to something bigger: **how we actually work with data in ways that we can defend, reproduce, and share.**
+
+Take a breath. We're going to move slowly and deliberately.
+
+------------------------------------------------------------------------
+
+**\[0:04–0:08\] — Naming What Monday Was About**
+
+Before we go forward, I want to name what we did on Monday.
+
+When you defined variables like "experience" or "field," you were making **data decisions**. You were deciding:
+
+-   What counts
+-   What doesn't count\
+-   How to measure something that's actually quite fuzzy
+
+Those decisions don't disappear when you start coding. They get **embedded** in your work — sometimes invisibly.
+
+Today's question is: **How do we make those decisions visible, defensible, and reproducible?**
+
+------------------------------------------------------------------------
+
+## SLIDE 2: Today's Plan
+
+**\[0:08–0:10\]**
+
+Here's what we're doing today:
+
+1.  I'll introduce the idea of **reproducibility** — what it means, why it matters
+2.  We'll talk about **decision logs** — a tool for writing down your reasoning as you work
+3.  You'll practice writing one entry
+4.  We'll critique each other's writing to see where clarity breaks down
+5.  I'll show you how this connects to how we organize our work
+
+By the end of today, you'll have a template you can use all semester.
+
+Questions? Chat or unmute.
+
+------------------------------------------------------------------------
+
+## SLIDE 3: Let's Talk About Reproducibility
+
+**\[0:10–0:15\] — The Problem**
+
+Let me show you something.
+
+*\[Show slide: messy Excel workflow — copy/paste chaos, files named "Final_v2_REAL_final.xlsx"\]*
+
+Does this look familiar?
+
+You work in Excel, you calculate something, you copy it into Word, you make a figure, you paste that too. Maybe you email a version to yourself. Maybe you save three copies with slightly different names.
+
+Then your advisor says: "Can you redo this with the updated data?"
+
+And you think: "...I have no idea what I did."
+
+**\[Pause for effect\]**
+
+Sound familiar? You can admit it. We've all been there.
+
+------------------------------------------------------------------------
+
+**\[0:15–0:19\] — Defining Reproducibility**
+
+Reproducibility means: **Someone else — or future you — can take your data and your process and arrive at the same results.**
+
+Not just the same numbers. The same **reasoning.**
+
+There are different kinds of reproducibility:
+
+-   **Computational:** Your code runs the same way on different computers
+-   **Empirical:** Your data collection is documented well enough that someone could repeat it
+-   **Conceptual:** Your *decisions* are clear enough that someone understands *why* you did what you did
+
+We're focusing on that last one today — conceptual reproducibility.
+
+------------------------------------------------------------------------
+
+**\[0:19–0:22\] — Why This Matters**
+
+Here's the thing: **You're always collaborating with future-you.**
+
+And past-you doesn't respond to emails.
+
+If you don't write down why you made a decision, you won't remember it in two weeks. You definitely won't remember it in two months. And if you can't remember it, you can't defend it.
+
+------------------------------------------------------------------------
+
+## SLIDE 4: A Tool — The Data Decision Log
+
+**\[0:22–0:30\] — Introducing the Log**
+
+So here's a tool I want you to use: a **data decision log.**
+
+It's just a running document where you write down:
+
+-   What you decided
+-   Why you decided it
+-   What else you considered
+-   What trade-offs you made
+
+Let me show you an example.
+
+*\[Show slide with example entry\]:*
+
+```         
+Decision: Converted all "dawn" entries to 6:00 AM.
+
+Reasoning: Dawn in our study area ranges from 5:45–6:15 AM during 
+our sampling period. Using 6:00 introduces less than 30 minutes of 
+error, which is acceptable given our 2-hour observation windows.
+
+Alternative considered: Exclude "dawn" entries entirely. Rejected 
+because it removes 18% of early-season observations, which would 
+bias our temporal analysis toward mid-day.
+
+Trade-off: Slight temporal imprecision in exchange for retaining 
+sample size and avoiding seasonal bias.
+```
+
+------------------------------------------------------------------------
+
+**\[0:30–0:37\] — What This Does**
+
+Notice what this entry does:
+
+-   It's **transparent** — you're not hiding your reasoning
+-   It shows you **thought about alternatives** — not just the first thing that came to mind\
+-   It acknowledges **trade-offs** instead of pretending the decision was obvious
+
+This is scientific thinking applied to data work.
+
+**\[Pause\]**
+
+Now, you might be thinking: "Is this just busywork for this class?"
+
+**No.** This is professional practice — both in science and in industry.
+
+Think about it: In biology and chemistry, you keep a **lab notebook**. You document what you did, why you did it, what you observed, and what you learned. Decision logs are the computational equivalent of that lab notebook.
+
+And it's not just scientific practice. At Google, software engineers write something called **Design Docs** before major projects. These documents have almost the same structure as your decision logs:
+
+-   What are we doing?
+-   Why this approach?
+-   What alternatives did we consider?
+-   What trade-offs are we making?
+
+Your decision logs are the data science equivalent. You're learning a professional practice that bridges traditional science and modern engineering.
+
+I'm dropping a couple of links in the chat so you can see the connection.
+
+::: callout-important
+## Chat Drop #1 (Minute 37)
+
+```         
+Google Design Docs - How engineers document decisions:
+https://www.industrialempathy.com/posts/design-docs-at-google/
+
+Google Documentation Best Practices:
+https://google.github.io/styleguide/docguide/best_practices.html
+```
+:::
+
+Now, practically speaking: **Eventually, you'll keep your decision log as a file in your R Project.** We'll learn how to do that when we learn Quarto in a few weeks. For now, you can use whatever format is comfortable — Google Doc, text file, even a physical notebook — as long as you're documenting your thinking.
+
+Any questions about what a decision log is or why we'd use one? Chat or unmute.
+
+------------------------------------------------------------------------
+
+## SLIDE 5: Your Turn — Writing Practice
+
+**\[0:37–0:39\] — Setting Up**
+
+Okay, now you're going to practice writing one entry.
+
+I'm going to give you a scenario. You'll write a decision log entry using the same structure I just showed you.
+
+You'll have **10 minutes of silent, independent writing time.** I'm dropping a Google Doc template in the chat — make your own copy and write in it.
+
+*\[Drop link in chat\]*
+
+Don't worry about perfection. Just practice the structure.
+
+------------------------------------------------------------------------
+
+## SLIDE 6: The Scenario
+
+**\[0:39–0:41\]**
+
+*\[Read slowly, give people time to process\]:*
+
+You're analyzing bee diversity data from urban gardens. Your dataset includes a column called "Garden Type" with these entries:
+
+-   Community garden
+-   Community Garden (capital G)
+-   community garden (lowercase)
+-   Comm. garden
+-   School garden
+-   school garden (community-maintained)
+-   Private yard
+-   private yard (open to public)
+
+**Your task:** Write a decision log entry explaining how you would standardize these categories for analysis — and why.
+
+Questions before we go silent?
+
+------------------------------------------------------------------------
+
+**\[0:41–0:43\] — Quick Clarifications**
+
+*\[Answer 1-2 questions if needed\]*
+
+Great. Silent writing starts now. I'll mute my mic and play some quiet music. We'll reconvene at **\[state exact time\]**.
+
+You can keep your camera on or off — whatever helps you focus.
+
+------------------------------------------------------------------------
+
+**\[0:43–0:53\] — SILENT WRITING TIME**
+
+*\[Mute. Optional: play quiet instrumental music. Monitor chat for questions\]*
+
+*\[At 5 minutes, briefly unmute\]: "You're halfway. Keep going."*
+
+------------------------------------------------------------------------
+
+## SLIDE 7: Peer Review
+
+**\[0:53–0:56\] — Transition**
+
+Okay, time's up. Finish your sentence if you need to, but we're transitioning.
+
+I'm putting you into breakout rooms of 3 people. Here's what you'll do:
+
+1.  **Each person reads their entry out loud** — just read it, about 1-2 minutes each
+2.  **After each person reads, the other two give feedback:**
+    -   One thing that was **clear**
+    -   One place where you wanted **more explanation**
+
+You're not grading each other. You're helping each other see where clarity breaks down.
+
+12 minutes total. About 4 minutes per person. Try to move through all three people.
+
+Questions?
+
+------------------------------------------------------------------------
+
+**\[0:56–0:57\] — Send to Breakouts**
+
+Great. Sending you out now. See you at **\[state exact time\]**.
+
+------------------------------------------------------------------------
+
+**\[0:57–1:09\] — BREAKOUT ROOMS**
+
+*\[Visit 2-3 rooms briefly\]*
+
+------------------------------------------------------------------------
+
+## SLIDE 8: What Made Writing Hard?
+
+**\[1:09–1:12\] — Transition Back**
+
+Welcome back! That was good work.
+
+I don't want to hear the specifics of your scenarios right now. Instead, I want to hear:
+
+**What made writing hard? What made clarity hard?**
+
+Chat or unmute — I want to hear from several of you.
+
+------------------------------------------------------------------------
+
+**\[1:12–1:21\] — Harvesting Insights**
+
+*\[Read and respond to 4-5 student observations\]:*
+
+**"I didn't know how much detail to include."**
+
+Yes. Here's my guideline: **Write enough that a colleague could understand your reasoning without asking follow-up questions.** If they'd need you there to explain it, you didn't write enough.
+
+**"I wasn't sure if my reasoning was good enough."**
+
+Let me reframe that. There's no such thing as reasoning that's "good enough" in the abstract. There's reasoning that's **defensible given your constraints** — and reasoning that's **not defensible.**
+
+"I combined them because they seemed similar" → not defensible
+
+"I combined community and school gardens into 'public gardens' because both involve shared maintenance structures and open access, even though governance differs" → defensible
+
+See the difference?
+
+**"I realized I hadn't thought through alternatives."**
+
+**That's the value of writing it down.** Writing reveals what you haven't thought about yet. That's not a bug — that's a feature.
+
+**"It was hard to admit trade-offs."**
+
+Yes. Because we're trained to present conclusions, not uncertainty. But science *is* trade-offs. Every decision has costs. Pretending they don't exist doesn't make your work stronger — it makes it fragile.
+
+------------------------------------------------------------------------
+
+**\[1:21–1:23\] — Naming the Core Pattern**
+
+Here's what I'm hearing:
+
+**Writing forces you to be explicit about things you thought you'd already decided.**
+
+That's uncomfortable. It's also essential.
+
+Because when you start coding — which we will soon — you'll make these same decisions inside filter commands and mutate operations. And if you haven't written them down, you won't remember them two weeks later.
+
+Or worse: you won't be able to defend your own work.
+
+------------------------------------------------------------------------
+
+## SLIDE 9: When Do You Actually Use This?
+
+**\[1:23–1:28\] — Making It Practical**
+
+Practical question: When do you write in a decision log?
+
+You don't write **every single decision**. That would be paralyzing.
+
+You write when:
+
+1.  You're **choosing between two reasonable options** (not when the answer is obvious)
+2.  You're **combining or recoding categories**
+3.  You're **excluding data** (ALWAYS document exclusions)
+4.  You're **making an assumption** that could be challenged
+5.  You **tried something and it didn't work** — so future-you doesn't repeat the mistake
+
+Here's the test: If someone asked you in a meeting, "Why did you do it that way?" and your honest answer is "Um... I'm not sure," **that's when you should have written it down.**
+
+------------------------------------------------------------------------
+
+## SLIDE 10: How This Connects to Structure
+
+**\[1:28–1:36\] — Bridging to Workflows**
+
+Okay. Decision logs are about **recording your reasoning**. But they only work if your **files and workflow** are also reproducible.
+
+Let me show you what I mean.
+
+*\[Show slide: organized project structure with folders\]*
+
+This is what a reproducible project looks like:
+
+-   **One folder per project** (we'll use RProjects)
+-   **Organized subfolders:** raw data, processed data, scripts, figures
+-   **Relative file paths** so your code works on anyone's computer
+
+Why does this matter?
+
+Because if I can't **find** your data, and I can't **run** your code, your decision log is just a story. It's not reproducible.
+
+------------------------------------------------------------------------
+
+**\[1:36–1:41\] — The Workflow Promise**
+
+Here's what we're building toward this semester:
+
+A way of working where:
+
+-   Your **data stays raw** (you never overwrite the original)
+-   Your **process is scripted** (no manual copy-paste)
+-   Your **decisions are documented**
+-   Your **file paths are robust** (they work on my computer, your computer, future-you's computer)
+
+Today you practiced the decision log. Next week, we'll build the structure. By Week 3, we'll start writing actual code inside that structure.
+
+Everything connects.
+
+------------------------------------------------------------------------
+
+## SLIDE 11: Before Next Class
+
+**\[1:41–1:43\]**
+
+Here's what I want you to do before our next class:
+
+1.  **Open R or RStudio** on your computer — we sent installation instructions
+2.  **Just look at the interface**. Notice what's confusing. Notice what's not.
+3.  **Open a blank script file.** Type your name. Save it. Close it.
+
+That's it.
+
+And if you want to start thinking about decision logs — maybe even start keeping one for work you're already doing — that's great. But no pressure. We'll build this practice together over the semester.
+
+I'm dropping the decision log template link in the chat now.
+
+::: callout-important
+## Chat Drop #2 (Minute 72)
+
+```         
+Decision Log Template (Quarto format - we'll learn this in Week 3):
+[Paste Canvas link to decision_log_template.qmd]
+
+R/RStudio Installation Troubleshooting:
+[Paste link to your s01 materials or installation instructions]
+```
+:::
+
+------------------------------------------------------------------------
+
+**\[1:43–1:45\] — Why I'm Asking This**
+
+Why such a simple task?
+
+Because a huge amount of coding anxiety comes from trying to learn **the tool** and **the concepts** at the same time.
+
+I want you to get comfortable with what RStudio *looks like* before we ask it to do anything.
+
+Separate the fears. Tackle them one at a time.
+
+------------------------------------------------------------------------
+
+## SLIDE 12: Resources
+
+**\[1:45–1:46\]**
+
+I've dropped those two links in the chat. You also have links to the Google Design Docs article and documentation best practices from earlier.
+
+All of these will be on Canvas under Week 1 resources.
+
+------------------------------------------------------------------------
+
+## SLIDE 13: Final Thought
+
+**\[1:46–1:49\]**
+
+Before we go, one last thing.
+
+Everything we did today — the writing, the peer review, the struggling with clarity — that's not "pre-data-science."
+
+**That IS data science.**
+
+The coding is just execution. The thinking is the work.
+
+See you next time. Come ready to look at R with curiosity, not fear.
+
+*\[Stay online for 2-3 minutes for questions\]*
+
+------------------------------------------------------------------------
+
+# Materials Needed
+
+::: callout-note
+## Required Materials
+
+-   Slides with messy Excel workflow example
+-   Slides with decision log example
+-   Slides with organized project structure
+-   Google Doc template for decision log writing
+-   Breakout rooms (groups of 3)
+-   Quiet music (optional, for silent writing)
+-   Decision log template for student download (Quarto format)
+-   **Links ready to paste in chat (copy from script above):**
+    -   Google Design Docs article
+    -   Google Documentation Best Practices
+    -   Decision log template (Canvas link)
+    -   R/RStudio installation guide
+:::
+
+------------------------------------------------------------------------
+
+# Instructor Notes
+
+::: callout-tip
+## Teaching Tips
+
+**Chat links:** Copy-paste the formatted chat messages from the callout boxes above at the indicated times
+
+**Lab notebook connection:** Emphasizes that this is familiar scientific practice, not just tech industry stuff
+
+**Silent writing:** Some students will finish early. That's okay. Encourage them to review and refine.
+
+**Peer review:** Visit rooms and model constructive feedback if needed
+
+**Timing:** The script is approximately 75 minutes with the Google/lab notebook connection
+
+**Google connection:** This validates that what you're teaching is both scientific and industry practice
+
+**R Project preview:** Seeds the idea that decision logs will live in their project folders (Week 3 payoff)
+
+**Flexibility on format:** For now, students can use any format. You'll transition them to Quarto `.qmd` files in Week 3.
+:::
+
+------------------------------------------------------------------------
+
+# Pacing Guide
+
+| Time      | Section                       | Duration     |
+|-----------|-------------------------------|--------------|
+| 0:00-0:08 | Welcome + Monday recap        | 8 min        |
+| 0:08-0:22 | Reproducibility concepts      | 14 min       |
+| 0:22-0:41 | Decision log intro + scenario | 19 min       |
+| 0:41-0:53 | Silent writing                | 12 min       |
+| 0:53-1:09 | Peer review in breakouts      | 16 min       |
+| 1:09-1:28 | Debrief + practical guidance  | 19 min       |
+| 1:28-1:41 | Connection to workflows       | 13 min       |
+| 1:41-1:49 | Closing + preview             | 8 min        |
+| **Total** |                               | **\~75 min** |
+
+------------------------------------------------------------------------
+
+*This lecture script is version controlled. Last updated: `r Sys.Date()`*

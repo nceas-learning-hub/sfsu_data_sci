@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="week1_day2_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week1_day2_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="week1_day2_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="week1_day2_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="week1_day2_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week1_day2_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="week1_day2_slides_files/libs/quarto-html/quarto-syntax-highlighting-bb1cd4028f63a369ab283e072cb7d572.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
+
+  <title>week1_day2_slides</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="week1_day2_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="week1_day2_slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="week1_day2_slides_files/libs/revealjs/dist/theme/quarto-783b56fd89fa04a839529f0be340ea05.css">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="week1_day2_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="title-slide" class="slide level2 center" data-menu-title="Title Slide">
+<h2></h2>
+<p><span class="custom-title">Reproducibility &amp; Decision Logs</span></p>
+<p><span class="custom-subtitle">Week 1, Day 2</span></p>
+<hr class="hr-red">
+<p><span class="custom-subtitle2"><strong>BIO/CHEM 806</strong></span></p>
+</section>
+<section id="welcome-back" class="slide level2" data-menu-title="Welcome Back">
+<h2></h2>
+<p><span class="slide-title">Welcome Back</span></p>
+<div class="body-text">
+<p><strong>Monday:</strong> We noticed how ambiguity shows up in simple questions</p>
+<p><strong>Today:</strong> How do we work with data in ways we can defend, reproduce, and share?</p>
+</div>
+</section>
+<section id="monday-recap" class="slide level2" data-menu-title="Monday Recap">
+<h2></h2>
+<p><span class="slide-title">What Monday Was About</span></p>
+<div class="body-text">
+<p>When you defined variables like “experience” or “field,” you were making <strong>data decisions</strong>:</p>
+<ul>
+<li>What counts</li>
+<li>What doesn’t count</li>
+<li>How to measure fuzzy concepts</li>
+</ul>
+<p><strong>Those decisions get embedded in your work.</strong></p>
+<p><strong>Today’s question:</strong> How do we make those decisions visible, defensible, and reproducible?</p>
+</div>
+</section>
+<section id="today-plan" class="slide level2" data-menu-title="Today's Plan">
+<h2></h2>
+<p><span class="slide-title">Today’s Plan</span></p>
+<div class="body-text">
+<ol type="1">
+<li><p>What is <strong>reproducibility</strong>?</p></li>
+<li><p>What is a <strong>decision log</strong>?</p></li>
+<li><p><strong>Practice</strong> writing one entry</p></li>
+<li><p><strong>Critique</strong> each other’s writing</p></li>
+<li><p>Connect to <strong>project organization</strong></p></li>
+</ol>
+</div>
+</section>
+<section id="messy-workflow" class="slide level2" data-menu-title="Messy Workflow">
+<h2></h2>
+<p><span class="slide-title">Sound Familiar?</span></p>
+<div class="body-text">
+<p>You work in Excel…</p>
+<p>Calculate something…</p>
+<p>Copy to Word…</p>
+<p>Make a figure…</p>
+<p>Paste it…</p>
+<p>Email yourself a version…</p>
+<p>Save: <code>Analysis_Final_v2_REAL_final.xlsx</code></p>
+</div>
+</section>
+<section id="oh-no" class="slide level2" data-menu-title="The Problem">
+<h2></h2>
+<p><span class="slide-title">Then Your Advisor Emails</span></p>
+<div class="body-text center-text">
+<p>“Can you redo this with the updated data?”</p>
+<p><strong>And you think:</strong></p>
+<p>“…I have no idea what I did.”</p>
+</div>
+</section>
+<section id="reproducibility-def" class="slide level2" data-menu-title="Reproducibility Definition">
+<h2></h2>
+<p><span class="slide-title">What Is Reproducibility?</span></p>
+<div class="body-text">
+<p><strong>Someone else — or future you — can take your data and your process and arrive at the same results.</strong></p>
+<p>Not just the same numbers.</p>
+<p><strong>The same reasoning.</strong></p>
+</div>
+</section>
+<section id="types-repro" class="slide level2" data-menu-title="Types of Reproducibility">
+<h2></h2>
+<p><span class="slide-title">Three Types of Reproducibility</span></p>
+<div class="body-text">
+<p><strong>Computational:</strong> Your code runs the same way on different computers</p>
+<p><strong>Empirical:</strong> Your data collection is documented well enough to repeat</p>
+<p><strong>Conceptual:</strong> Your <em>decisions</em> are clear enough to understand <em>why</em></p>
+<p><strong>Today’s focus:</strong> Conceptual reproducibility</p>
+</div>
+</section>
+<section id="future-you" class="slide level2" data-menu-title="Future You">
+<h2></h2>
+<p><span class="slide-title">Why This Matters</span></p>
+<div class="body-text center-text">
+<p><strong>You’re always collaborating with future-you.</strong></p>
+<p>And past-you doesn’t respond to emails.</p>
+</div>
+<div class="body-text">
+<p>If you don’t write down why you made a decision:</p>
+<p>- You won’t remember it in two weeks</p>
+<p>- You can’t defend it</p>
+<p>- You can’t reproduce it</p>
+</div>
+</section>
+<section id="decision-log" class="slide level2" data-menu-title="Decision Log">
+<h2></h2>
+<p><span class="slide-title">Tool: The Data Decision Log</span></p>
+<div class="body-text">
+<p>A running document where you write:</p>
+<ul>
+<li>What you decided</li>
+<li>Why you decided it</li>
+<li>What else you considered</li>
+<li>What trade-offs you made</li>
+</ul>
+<p>Google Design Docs - How engineers document decisions: https://www.industrialempathy.com/posts/design-docs-at-google/</p>
+<p>Google Documentation Best Practices: https://google.github.io/styleguide/docguide/best_practices.html</p>
+</div>
+</section>
+<section id="raw-data-example" class="slide level2" data-menu-title="Raw Data Example">
+<h2></h2>
+<p><span class="slide-title-smaller">Sample Field Data (Before Decisions)</span></p>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>time</th>
+<th>water_potential</th>
+<th>site</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>06:15</td>
+<td>-0.45</td>
+<td>Riparian</td>
+</tr>
+<tr class="even">
+<td>08:30</td>
+<td>-0.62</td>
+<td>Riparian</td>
+</tr>
+<tr class="odd">
+<td>dawn</td>
+<td>-0.38</td>
+<td>Riparian</td>
+</tr>
+<tr class="even">
+<td>12:00</td>
+<td>-1.10</td>
+<td>Upland</td>
+</tr>
+<tr class="odd">
+<td>15:45</td>
+<td>-1.35</td>
+<td>Upland</td>
+</tr>
+<tr class="even">
+<td>dawn</td>
+<td>-0.92</td>
+<td>Upland</td>
+</tr>
+<tr class="odd">
+<td>18:20</td>
+<td>-0.88</td>
+<td>Coastal</td>
+</tr>
+<tr class="even">
+<td>dawn</td>
+<td>-0.70</td>
+<td>Coastal</td>
+</tr>
+</tbody>
+</table>
+<p><em>Field notes as recorded. No cleaning or interpretation yet.</em></p>
+</div>
+</section>
+<section id="example-log" class="slide level2" data-menu-title="Example Log">
+<h2></h2>
+<p><span class="slide-title-smaller">Example Decision Log Entry</span></p>
+<div class="body-text">
+<p><strong>Decision:</strong> Converted all “dawn” entries to 6:00 AM.</p>
+<p><strong>Reasoning:</strong> Dawn in our study area ranges from 5:45–6:15 AM. Using 6:00 introduces &lt;30 minutes of error, acceptable given our 2-hour observation windows.</p>
+<p><strong>Alternative considered:</strong> Exclude “dawn” entries entirely. Rejected because it removes 18% of early-season observations.</p>
+<p><strong>Trade-off:</strong> Slight temporal imprecision in exchange for retaining sample size.</p>
+</div>
+</section>
+<section id="what-it-does" class="slide level2" data-menu-title="What It Does">
+<h2></h2>
+<p><span class="slide-title">What This Entry Does</span></p>
+<div class="body-text">
+<ul>
+<li><p><strong>Transparent</strong> — not hiding reasoning</p></li>
+<li><p><strong>Shows alternatives</strong> — not just first idea</p></li>
+<li><p><strong>Acknowledges trade-offs</strong> — doesn’t pretend the decision was obvious</p></li>
+</ul>
+<p><strong>This is scientific thinking applied to data work.</strong></p>
+</div>
+</section>
+<section id="your-turn" class="slide level2" data-menu-title="Your Turn">
+<h2></h2>
+<p><span class="slide-title">Your Turn: Writing Practice</span></p>
+<div class="body-text">
+<p><strong>10 minutes of silent, independent writing</strong></p>
+<p>Use the same structure:</p>
+<p>- Decision</p>
+<p>- Reasoning</p>
+<p>- Alternative considered</p>
+<p>- Trade-off</p>
+<p>Google Doc template in chat → <a href="https://docs.google.com/document/d/1eOaHbS_YalUxA_vojhBwR24AaEviGyA5oGFcWPlVhIM/edit?tab=t.0" class="uri">https://docs.google.com/document/d/1eOaHbS_YalUxA_vojhBwR24AaEviGyA5oGFcWPlVhIM/edit?tab=t.0</a></p>
+</div>
+</section>
+<section id="scenario" class="slide level2" data-menu-title="Scenario">
+<h2></h2>
+<p><span class="slide-title-smaller">The Scenario</span></p>
+<div class="body-text">
+<p>You’re analyzing bee diversity data from urban gardens. Your dataset has a “Garden Type” column with:</p>
+<ul>
+<li>Community garden</li>
+<li>Community Garden</li>
+<li>community garden</li>
+<li>Comm. garden</li>
+<li>School garden</li>
+<li>school garden (community-maintained)</li>
+<li>Private yard</li>
+<li>private yard (open to public)</li>
+</ul>
+<p><strong>Task:</strong> Write a decision log entry explaining how you would standardize these categories — and why.</p>
+</div>
+</section>
+<section id="silent-writing" class="slide level2" data-menu-title="Silent Writing">
+<h2></h2>
+<p><span class="slide-title">Silent Writing Time</span></p>
+<div class="body-text center-text">
+<p><strong>10 minutes</strong></p>
+<p>Start now.</p>
+</div>
+</section>
+<section id="peer-review" class="slide level2" data-menu-title="Peer Review">
+<h2></h2>
+<p><span class="slide-title">Peer Review</span></p>
+<div class="body-text">
+<p><strong>Breakout rooms of 3 (12 minutes):</strong></p>
+<ol type="1">
+<li><p>Each person <strong>reads</strong> their entry aloud (1-2 min)</p></li>
+<li><p>Others give feedback:</p>
+<ul>
+<li>One thing that was <strong>clear</strong></li>
+<li>One place you wanted <strong>more explanation</strong></li>
+</ul></li>
+</ol>
+<p><strong>Goal:</strong> Help each other see where clarity breaks down</p>
+</div>
+</section>
+<section id="debrief" class="slide level2" data-menu-title="Debrief">
+<h2></h2>
+<p><span class="slide-title">What Made Writing Hard?</span></p>
+<div class="body-text center-text">
+<p>Not the specifics of your scenarios—</p>
+<p><strong>What made clarity hard?</strong></p>
+<p>What made writing difficult?</p>
+<p>(Chat or unmute)</p>
+</div>
+</section>
+<section id="detail-question" class="slide level2" data-menu-title="Detail Question">
+<h2></h2>
+<p><span class="slide-title-smaller">“How much detail should I include?”</span></p>
+<div class="body-text">
+<p><strong>Guideline:</strong></p>
+<p>Write enough that a colleague could understand your reasoning <strong>without asking follow-up questions</strong>.</p>
+<p>If they’d need you there to explain it, you didn’t write enough.</p>
+</div>
+</section>
+<section id="reasoning-quality" class="slide level2" data-menu-title="Reasoning Quality">
+<h2></h2>
+<p><span class="slide-title-smaller">“Is my reasoning good enough?”</span></p>
+<div class="body-text">
+<p>There’s no “good enough” in the abstract.</p>
+<p>There’s reasoning that’s <strong>defensible given your constraints</strong> and reasoning that’s <strong>not defensible</strong>.</p>
+<p><strong>Not defensible:</strong> “I combined them because they seemed similar”</p>
+<p><strong>Defensible:</strong> “I combined community and school gardens into ‘public gardens’ because both involve shared maintenance and open access, even though governance structures differ”</p>
+</div>
+</section>
+<section id="writing-reveals" class="slide level2" data-menu-title="Writing Reveals">
+<h2></h2>
+<p><span class="slide-title-smaller">“I hadn’t thought through alternatives”</span></p>
+<div class="body-text center-text">
+<p><strong>That’s the value of writing it down.</strong></p>
+<p>Writing reveals what you haven’t thought about yet.</p>
+<p>That’s not a bug — that’s a feature.</p>
+</div>
+</section>
+<section id="tradeoffs" class="slide level2" data-menu-title="Trade-offs">
+<h2></h2>
+<p><span class="slide-title-smaller">“It was hard to admit trade-offs”</span></p>
+<div class="body-text">
+<p>We’re trained to present <strong>conclusions</strong>, not <strong>uncertainty</strong>.</p>
+<p>But science IS trade-offs.</p>
+<p>Pretending they don’t exist doesn’t make your work stronger—</p>
+<p><strong>It makes it fragile.</strong></p>
+</div>
+</section>
+<section id="core-pattern" class="slide level2" data-menu-title="Core Pattern">
+<h2></h2>
+<p><span class="slide-title">The Core Pattern</span></p>
+<div class="body-text center-text">
+<p><strong>Writing forces you to be explicit about things you thought you’d already decided.</strong></p>
+<p>That’s uncomfortable.</p>
+<p>That’s essential.</p>
+</div>
+</section>
+<section id="when-to-use" class="slide level2" data-menu-title="When to Use">
+<h2></h2>
+<p><span class="slide-title">When Do You Use This?</span></p>
+<div class="body-text">
+<p>Write in your decision log when:</p>
+<ol type="1">
+<li>Choosing between <strong>two reasonable options</strong></li>
+<li><strong>Combining or recoding categories</strong></li>
+<li><strong>Excluding data</strong> (ALWAYS)</li>
+<li>Making an <strong>assumption</strong> that could be challenged</li>
+<li>Something <strong>didn’t work</strong> (so future-you doesn’t repeat it)</li>
+</ol>
+</div>
+</section>
+<section id="the-test" class="slide level2" data-menu-title="The Test">
+<h2></h2>
+<p><span class="slide-title">The Test</span></p>
+<div class="body-text center-text">
+<p>If someone asked in a meeting:</p>
+<p><strong>“Why did you do it that way?”</strong></p>
+<p>And your honest answer is:</p>
+<p><strong>“Um… I’m not sure”</strong></p>
+<p><strong>→ You should have written it down.</strong></p>
+</div>
+</section>
+<section id="project-structure" class="slide level2" data-menu-title="Project Structure">
+<h2></h2>
+<p><span class="slide-title">How This Connects to Structure</span></p>
+<div class="body-text">
+<p>Decision logs record your <strong>reasoning</strong>.</p>
+<p>But they only work if your <strong>files and workflow</strong> are also reproducible.</p>
+<p><strong>Organized project:</strong></p>
+<p>- One folder per project (RProject)</p>
+<p>- Organized subfolders (raw data, processed data, scripts, figures)</p>
+<p>- Relative file paths (works on anyone’s computer)</p>
+</div>
+</section>
+<section id="why-structure" class="slide level2" data-menu-title="Why Structure">
+<h2></h2>
+<p><span class="slide-title">Why Structure Matters</span></p>
+<div class="body-text center-text">
+<p>If I can’t <strong>find</strong> your data</p>
+<p>and I can’t <strong>run</strong> your code,</p>
+<p>your decision log is just a story.</p>
+<p><strong>It’s not reproducible.</strong></p>
+</div>
+</section>
+<section id="workflow-promise" class="slide level2" data-menu-title="Workflow Promise">
+<h2></h2>
+<p><span class="slide-title">What We’re Building Toward</span></p>
+<div class="body-text">
+<p>A way of working where:</p>
+<ul>
+<li>Your <strong>data stays raw</strong> (never overwrite originals)</li>
+<li>Your <strong>process is scripted</strong> (no manual copy-paste)</li>
+<li>Your <strong>decisions are documented</strong></li>
+<li>Your <strong>file paths are robust</strong> (work on any computer)</li>
+</ul>
+<p><strong>Everything connects.</strong></p>
+</div>
+</section>
+<section id="before-next" class="slide level2" data-menu-title="Before Next Class">
+<h2></h2>
+<p><span class="slide-title">Before Next Class</span></p>
+<div class="body-text">
+<p><strong>Low-stakes assignment:</strong></p>
+<ol type="1">
+<li>Open R or RStudio</li>
+<li>Just <strong>look</strong> at the interface</li>
+<li>Open a blank script file</li>
+<li>Type your name</li>
+<li>Save it</li>
+<li>Close it</li>
+</ol>
+<p><strong>That’s it.</strong></p>
+</div>
+</section>
+<section id="why-simple" class="slide level2" data-menu-title="Why So Simple">
+<h2></h2>
+<p><span class="slide-title">Why Such a Simple Task?</span></p>
+<div class="body-text">
+<p>Coding anxiety comes from learning <strong>the tool</strong> and <strong>the concepts</strong> at the same time.</p>
+<p>Get comfortable with what RStudio <em>looks like</em> before we ask it to do anything.</p>
+<p><strong>Separate the fears. Tackle them one at a time.</strong></p>
+</div>
+</section>
+<section id="resources" class="slide level2" data-menu-title="Resources">
+<h2></h2>
+<p><span class="slide-title">Resources</span></p>
+<div class="body-text">
+<p><strong>In the chat:</strong></p>
+<ol type="1">
+<li>Decision log template (use all semester)</li>
+<li>R/RStudio installation troubleshooting guide</li>
+</ol>
+</div>
+</section>
+<section id="final-thought" class="slide level2" data-menu-title="Final Thought">
+<h2></h2>
+<p><span class="slide-title">Final Thought</span></p>
+<div class="body-text center-text">
+<p>Everything we did today — writing, peer review, struggling with clarity —</p>
+<p><strong>That’s not “pre-data-science.”</strong></p>
+<p><strong>That IS data science.</strong></p>
+<p>The coding is just execution.</p>
+<p><strong>The thinking is the work.</strong></p>
+<p>Each week we will have an exit ticket on canvas. Here is this week’s</p>
+<p><a href="https://sfsu.instructure.com/courses/64795/discussion_topics/520397" class="uri">https://sfsu.instructure.com/courses/64795/discussion_topics/520397</a></p>
+<p>Please take a moment to answer on your way out- these are due by 2 pm.</p>
+</div>
+</section>
+<section id="see-you" class="slide level2" data-menu-title="See You">
+<h2></h2>
+<div class="body-text center-text">
+<p><strong>See you next time!</strong></p>
+<p>Come ready to look at R with curiosity, not fear.</p>
+</div>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="week1_day2_slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="week1_day2_slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

@@ -1,0 +1,524 @@
+---
+title: "Week 11, Lecture 1"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+editor:
+  markdown:
+    wrap: 72
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Publishing to the Web]{.custom-title}
+
+[BIO/CHEM 806 · Week 11, Lecture 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**NCEAS Learning Hub**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#learning-objectives data-menu-title="Learning Objectives"}
+
+[Learning objectives]{.slide-title}
+
+::: body-text
+By the end of today you will be able to:
+
+-   Explain what **GitHub Pages** is and how it works
+-   Create an `index.qmd` and render it as `index.html`
+-   Activate GitHub Pages for your `training_{USERNAME}` repository
+-   Link multiple rendered `.html` files from a single landing page
+-   Describe why spiny lobsters are a useful system for studying MPA
+    effectiveness
+:::
+
+------------------------------------------------------------------------
+
+##  {#where-we-are data-menu-title="Where We Are"}
+
+[Where we are]{.slide-title}
+
+::: body-text
+So far in this course you have:
+
+-   Written reproducible analyses in Quarto
+-   Cleaned and wrangled data with `dplyr` and `tidyr`
+-   Built visualizations with `ggplot2`
+-   Collaborated with Git and GitHub
+
+**The missing piece:** making your work *accessible* — to advisors,
+collaborators, and the scientific community.
+:::
+
+------------------------------------------------------------------------
+
+##  {#the-problem data-menu-title="The Problem"}
+
+[The sharing problem]{.slide-title}
+
+::::::: columns
+:::: {.column width="50%"}
+::: body-text
+**What you have**
+
+-   A beautiful analysis
+-   A rendered HTML file
+-   A GitHub repository
+
+**The problem**
+
+-   Your collaborator doesn't use R
+-   Your advisor wants a link, not a zip file
+-   Your thesis committee wants to *see* the work
+:::
+::::
+
+:::: {.column width="50%"}
+::: body-text
+**What you need**
+
+-   A URL that anyone can visit
+-   No login, no setup, no file download
+-   Updated automatically when you push
+
+**The solution:** GitHub Pages
+:::
+::::
+:::::::
+
+------------------------------------------------------------------------
+
+##  {#github-pages-what data-menu-title="What is GitHub Pages"}
+
+[What is GitHub Pages?]{.slide-title}
+
+::: body-text
+GitHub Pages is a free hosting service that turns a GitHub repository
+into a website.
+
+-   Every repository can have its own site
+-   The URL follows a predictable pattern
+-   It updates every time you push to `main`
+-   Works with any `.html` file — including Quarto output
+
+**The key insight:** `index.html` is the default page. Whatever is in
+`index.html` is what visitors see first.
+:::
+
+------------------------------------------------------------------------
+
+##  {#url-pattern data-menu-title="URL Pattern"}
+
+[The URL pattern]{.slide-title}
+
+::: body-text
+GitHub follows a consistent naming convention:
+:::
+
+```         
+https://{username}.github.io/{repo_name}/
+```
+
+::: body-text
+**Examples:**
+
+-   `github.com` → `github.io`
+-   `github.com/gretchen/training_gretchen` becomes
+    `gretchen.github.io/training_gretchen/`
+
+**Chat prompt coming:** What would *your* GitHub Pages URL be?
+:::
+
+------------------------------------------------------------------------
+
+##  {#chat-prompt-url data-menu-title="Chat Prompt URL"}
+
+[Chat prompt]{.slide-title}
+
+::: {.body-text .center-text}
+**Based on your GitHub username and your `training_{USERNAME}`
+repository name, what will your GitHub Pages URL be?**
+
+Type it in the chat.
+
+`https://{username}.github.io/{repo_name}/`
+:::
+
+------------------------------------------------------------------------
+
+##  {#workflow-overview data-menu-title="Workflow Overview"}
+
+[The publishing workflow]{.slide-title}
+
+::: body-text
+There are four steps, and you already know all of them:
+
+1.  Create `index.qmd` at the root of your repo
+2.  Render it → produces `index.html`
+3.  Commit and push both files to GitHub
+4.  Activate GitHub Pages in Settings → Pages
+
+After step 4, every future push automatically updates your site. **No
+extra steps.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#index-qmd data-menu-title="index.qmd"}
+
+[Why `index.qmd`?]{.slide-title}
+
+::: body-text
+`index.html` is a web convention — it's the "front door."
+
+When a browser visits a folder (like your repo), it automatically looks
+for `index.html` and serves it.
+
+-   Name must be exactly `index` (lowercase)
+-   Operating systems handle case differently — get this right
+-   The corresponding `index.qmd` is what you edit
+-   Render it to get `index.html`
+
+If you also have an `index_files/` folder — commit that too.
+:::
+
+------------------------------------------------------------------------
+
+##  {#setup-steps data-menu-title="Setup Steps"}
+
+[Setting up: step by step]{.slide-title}
+
+::: body-text
+**In RStudio:**
+
+1.  Open your `training_{USERNAME}` project
+2.  `File → New File → Quarto Document`
+3.  Title: "GitHub Pages Example", format: HTML
+4.  Save as `index.qmd` at the **top level** of the project
+5.  Click Render → observe `index.html` appears
+6.  Commit both `index.qmd` and `index.html`, push
+
+**On GitHub:**
+
+7.  Settings → Pages
+8.  Branch: change from "None" → `main`, folder: root
+9.  Click Save
+:::
+
+------------------------------------------------------------------------
+
+##  {#activating-pages data-menu-title="Activating Pages"}
+
+[Activating GitHub Pages]{.slide-title}
+
+::: body-text
+After clicking Save you'll see:
+
+> *"Your GitHub Pages site is currently being built from the main
+> branch"*
+
+**Wait 1–2 minutes**, then visit your URL.
+
+If you don't see your page:
+
+-   Check that `index.html` is committed and pushed
+-   Check the URL exactly — trailing `/` matters
+-   Hard refresh your browser (`Cmd+Shift+R` or `Ctrl+Shift+R`)
+:::
+
+------------------------------------------------------------------------
+
+##  {#linking-files data-menu-title="Linking Files"}
+
+[Linking multiple files]{.slide-title}
+
+::: body-text
+Your `index.qmd` can link to *any* other rendered `.html` file in your
+repo using standard Markdown syntax:
+
+``` markdown
+[Data wrangling and cleaning](scripts/data-wrangling-cleaning.html)
+```
+
+The path is **relative** — it starts from where `index.qmd` lives.
+
+**For this to work:**
+
+-   The `.html` file must exist (render first)
+-   The `.html` file must be committed and pushed
+:::
+
+------------------------------------------------------------------------
+
+##  {#exercise-1 data-menu-title="Exercise 1"}
+
+[Exercise 1: Build your landing page]{.slide-title}
+
+::: body-text
+In your `index.qmd`, create a table of contents linking your existing
+analyses:
+
+``` markdown
+## Course Lessons
+
+- [Introduction to Literate Analysis](scripts/intro-to-qmd.html)
+- [Cleaning and Wrangling Data](scripts/data-cleaning.html)
+- [Data Visualization](scripts/data-visualization.html)
+
+## Course Practice Sessions
+
+- Practice I
+- Practice II
+- Practice III
+```
+
+Render → Commit → Push → Check your site.
+:::
+
+------------------------------------------------------------------------
+
+##  {#what-makes-good-page data-menu-title="What Makes a Good Page"}
+
+[What makes a good landing page?]{.slide-title}
+
+::: body-text
+Think about your audience.
+
+**For an advisor or committee:**
+
+-   Brief description of the project
+-   Clear links to each analysis component
+-   A note about the data source
+
+**For a collaborator:**
+
+-   What the repo contains
+-   How to navigate the analyses
+-   Status of work in progress
+
+**For future you:**
+
+-   Decision log entries integrated
+-   Notes on what each file does
+:::
+
+------------------------------------------------------------------------
+
+##  {#real-use-case data-menu-title="Real Use Case"}
+
+[This is a real research skill]{.slide-title}
+
+::: body-text
+GitHub Pages isn't a course exercise — researchers use this pattern to:
+
+-   Share supplementary materials for publications
+-   Host open data documentation
+-   Create project websites for grants
+-   Make interactive results accessible to non-R users
+
+You're building a skill you'll use beyond this class.
+:::
+
+------------------------------------------------------------------------
+
+##  {#biology-transition data-menu-title="Biology Transition"}
+
+[Now: the biology of this week's activity]{.slide-title}
+
+::: body-text
+The activity you'll do with Nicole uses a real ecological dataset:
+
+**California spiny lobster** (*Panulirus interruptus*)
+
+-   Collected along the Santa Barbara Channel mainland coast
+-   Santa Barbara Coastal Long-Term Ecological Research site
+-   Tracks abundance, body size, and fishing pressure
+
+**Why does this species matter?**
+:::
+
+------------------------------------------------------------------------
+
+##  {#lobster-biology data-menu-title="Lobster Biology"}
+
+[*Panulirus interruptus*: the basics]{.slide-title}
+
+-   Spiny lobsters lack the large claws of their Atlantic cousins — they
+    defend themselves with spines
+-   Nocturnal foragers: urchins, mussels, snails, worms
+-   **Keystone predators** in kelp forest ecosystems
+-   Long-lived: can exceed 30 years
+-   Commercially important: the largest US West Coast crustacean fishery
+    by value
+
+------------------------------------------------------------------------
+
+##  {#lobster-data data-menu-title="Lobster Data"}
+
+**The measurement you'll work with:**
+
+**Carapace length (mm)** The shell from the rostrum to the tail
+
+Carapace length is a proxy for:
+
+-   Age
+-   Reproductive maturity
+-   Ecological role
+
+------------------------------------------------------------------------
+
+##  {#mpa-methods data-menu-title="MPA Methods"}
+
+Methods:
+
+The number and sizes of spiny lobster are recorded by divers in four 60
+x 5 m (300 m2 total) lobster transects that are associated with each
+permanent SBC LTER kelp forest community survey transect.
+
+Data on the abundance and size of the California spiny lobster,
+Panulirus interruptus,
+
+-   collected annually in late summer
+
+-   five sites (Arroyo Quemado, Carpinteria, Isla Vista, Mohawk and
+    Naples)
+
+Santa Barbara Coastal LTER, D. Reed, and R. Miller. 2022. SBC LTER:
+Reef: Abundance, size and fishing effort for California Spiny Lobster
+(Panulirus interruptus), ongoing since 2012 ver 8. Environmental Data
+Initiative.
+https://doi.org/10.6073/pasta/25aa371650a671bafad64dd25a39ee18 (Accessed
+2026-04-13). ::: ---
+
+##  {#mpa-context data-menu-title="MPA Context"}
+
+[Why marine protected areas?]{.slide-title}
+
+::: body-text
+**Two of the five study sites are MPAs since 2012:**
+
+-   **IVEE** — Isla Vista Reef
+-   **NAPL** — Naples Reef
+
+**Three sites are not protected:**
+
+-   AQUE — Arroyo Quemado
+-   CARP — Carpinteria
+-   MOHK — Mohawk Reef
+
+**The central question:** Does MPA protection change lobster abundance,
+size, and the relationship between fishing pressure and population
+structure?
+:::
+
+------------------------------------------------------------------------
+
+##  {#fishing-pressure data-menu-title="Fishing Pressure"}
+
+[Trap counts as a proxy for fishing pressure]{.slide-title}
+
+::: body-text
+The dataset has two components you'll analyze separately:
+
+**Lobster abundance and size** (Owner's dataset)
+
+-   Individual carapace measurements
+-   Site, year, month
+
+**Commercial trap buoy counts** (Collaborator's dataset)
+
+-   Number of trap floats observed
+-   Proxy for fishing effort / pressure
+
+**Together:** you can ask how fishing pressure relates to lobster
+population structure.
+:::
+
+------------------------------------------------------------------------
+
+##  {#why-this-matters data-menu-title="Why This Matters"}
+
+[Connecting biology to your analysis]{.slide-title}
+
+::: body-text
+When you make analytical decisions in the activity, the biology matters:
+
+-   Setting a size threshold at 70 mm — [California spiny
+    lobsters](https://www.google.com/search?q=California+spiny+lobsters&rlz=1C5GCCM_enUS1118US1125&oq=reproductive+maturity+spiny+lobster&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRigATIHCAIQIRigATIHCAMQIRigATIHCAQQIRirAtIBCDY5NzhqMGo3qAIIsAIB8QUHXffP1sm9cQ&sourceid=chrome&ie=UTF-8&ved=2ahUKEwj6mL-p-emTAxUqIEQIHa_fA1IQgK4QegQIAxAC)
+    may take 5–9 years to reach reproductive maturity, maturing around
+    63.5–78.2 mm CL before they reach the legal harvesting size,
+    ensuring they can breed at least once.
+-   Filtering out NAPL — what are you losing ecologically?
+-   The "high" fishing pressure threshold of ≥ 8 traps — what does that
+    mean for the population?
+
+**Data science without domain knowledge produces answers that don't mean
+anything.**
+:::
+
+------------------------------------------------------------------------
+
+##  {#activity-preview data-menu-title="Activity Preview"}
+
+[What you'll do with Nicole]{.slide-title}
+
+::: body-text
+**Section 1 — Clean and wrangle** (working in parallel)
+
+Owner: lobster abundance and size data Collaborator: trap buoy counts
+data
+
+**Section 2 — Visualize**
+
+Build plots, add styling, save to `figs/`
+
+**Section 3 — Collaborative report**
+
+Pair programming in `lobster-report.qmd` → publish to GitHub Pages using
+what you learned today
+
+**Bonus:** MPA designation with `case_when()`
+:::
+
+------------------------------------------------------------------------
+
+##  {#before-you-go data-menu-title="Before You Go"}
+
+[Before activity section]{.slide-title}
+
+::: body-text
+**Make sure you have:**
+
+-   [ ] GitHub Pages activated for `training_{USERNAME}`
+-   [ ] `index.html` live at your URL
+-   [ ] At least one link working from your landing page
+:::
+
+------------------------------------------------------------------------
+
+##  {#wrap-up data-menu-title="Wrap Up"}
+
+[See you Wednesday]{.slide-title}
+
+::: {.body-text .center-text}
+Wednesday we'll go deeper on Quarto site options, connecting your
+published work to your thesis, and bridge into the next unit: spatial
+data with `sf`.
+
+**After activity this week:** you'll have a live URL you can share with
+your advisor.
+
+That's not a course exercise — that's real.
+:::

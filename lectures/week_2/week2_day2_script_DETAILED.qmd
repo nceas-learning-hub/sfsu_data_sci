@@ -1,0 +1,1017 @@
+---
+title: "Week 2 Day 2 Lecture Script: Pseudocode as Scientific Planning"
+subtitle: "BIO/CHEM 806 - Detailed Instructor Guide"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+---
+
+# Lecture Overview
+
+**Duration:** 75 minutes  
+**Format:** Online synchronous via Zoom  
+**Students:** ~30 graduate students (biology and chemistry)
+
+## Learning Objectives
+
+By the end of this lecture, students will be able to:
+
+1. Define pseudocode and explain its purpose in scientific programming
+2. Distinguish between prose, pseudocode, and actual code
+3. Write specific, unambiguous pseudocode for data analysis tasks
+4. Identify common pseudocode mistakes and how to fix them
+5. Use pseudocode as both a planning and debugging tool
+6. Apply domain knowledge to make pseudocode scientifically meaningful
+
+## Materials Needed
+
+- [ ] Zoom link ready
+- [ ] Slide deck: `week2_day2_slides_FINAL.qmd` rendered
+- [ ] Breakout room Google Doc link
+- [ ] Example of your own pseudocode (prepared in advance)
+- [ ] Exit ticket posted in Canvas
+- [ ] Sample data description for practice exercise
+
+---
+
+# Pre-Class Setup (5 minutes before)
+
+## Instructor Checklist
+
+- [ ] Log into Zoom early
+- [ ] Open slide deck
+- [ ] Have Google Doc link ready to paste in chat
+- [ ] Enable breakout rooms (5-6 rooms, 5-6 people each)
+- [ ] Review Monday's exit tickets for any carryover questions
+- [ ] Start recording when class begins
+
+## Welcome Students
+
+**[00:00 - Class start time]**
+
+> "Good afternoon everyone! Welcome back. Hope your Monday was good and you had a chance to work on your project structures."
+
+**Check tech:**
+
+> "Can everyone hear me okay? Can you see the slide with today's title?"
+
+---
+
+# Introduction (5 minutes)
+
+## Slide 1: Title Slide
+
+**[00:00-00:01]**
+
+**Show title slide:** "Pseudocode as Scientific Planning"
+
+**Say:**
+
+> "Today we're talking about pseudocode. And I want to start by saying: pseudocode is NOT intimidating. It's just planning."
+
+> "If you can write a to-do list, you can write pseudocode."
+
+---
+
+## Slide 2: Welcome
+
+**[00:01-00:02]**
+
+**Say:**
+
+> "Today's topic: Pseudocode. What it is, why it matters, and how to write it well."
+
+> "By the end of today, you'll have a tool that makes coding way less scary and way more systematic."
+
+---
+
+## Slide 3: Last Class Recap
+
+**[00:02-00:04]**
+
+**Connect to Monday.**
+
+**Say:**
+
+> "Monday we talked about organizing projects. We learned about folder structures, relative paths, READMEs."
+
+> "That was about WHERE you work and HOW you organize files."
+
+**Transition:**
+
+> "Today's question: How do you plan what goes INSIDE those scripts? Before you write a single line of code, what's your game plan?"
+
+> "The answer is pseudocode."
+
+**Link concepts:**
+
+> "Pseudocode bridges scientific thinking and actual code. It's where you translate your research logic into steps a computer can eventually execute."
+
+---
+
+# The Cooking Metaphor (8 minutes)
+
+## Slide 4: Cooking Metaphor (Allison Horst Image - Full Screen)
+
+**[00:04-00:05]**
+
+**Show Allison Horst code-kitchen image (full screen, no text).**
+
+**Say:**
+
+> "Before I explain what pseudocode is, I want to show you this illustration by Allison Horst. Just look at it for a moment."
+
+**Let it sit for 3-4 seconds.**
+
+**Say:**
+
+> "What do you see? What stands out to you?"
+
+**Wait for 1-2 chat responses.**
+
+**Acknowledge responses:**
+
+> "Right! A kitchen, ingredients, tools... Now let me tell you what this has to do with pseudocode."
+
+---
+
+## Slide 5: Planning Before Cooking (Allison Horst Image Explained)
+
+**[00:05-00:09]**
+
+**Show same image with explanation text.**
+
+**Say:**
+
+> "Allison Horst uses this cooking metaphor to explain R programming. And it's PERFECT for understanding pseudocode."
+
+**Break down the metaphor:**
+
+> "In this metaphor:"
+> "- R is your chef's knife—your main tool"
+> "- RStudio is your kitchen—where you work"  
+> "- Your data are your ingredients"
+> "- Your code is the actual cooking"
+
+**Pause, then key point:**
+
+> "But before a chef starts cooking, what do they do?"
+
+**Wait for responses.** Common: "Read recipe," "Prep ingredients."
+
+**Say:**
+
+> "Exactly! They look at a RECIPE. The recipe is the PLAN."
+
+> "Pseudocode is your recipe. It's the plan you make before you start 'cooking' (writing code)."
+
+**Ask:**
+
+> "Would you start cooking a complicated dish without a recipe or plan? Just throw things together and hope?"
+
+**Students usually say no.**
+
+> "Right! Same with coding. You don't just start typing and hope it works. You plan first. That plan is pseudocode."
+
+**Instructor note:** *This metaphor really helps students see pseudocode as normal planning, not something technical.*
+
+---
+
+# What IS Pseudocode? (10 minutes)
+
+## Slide 6: What Is Pseudocode?
+
+**[00:09-00:12]**
+
+**Give formal definition.**
+
+**Say:**
+
+> "Let me give you the formal definition, then we'll break it down."
+
+**Read slowly:**
+
+> "Pseudocode is a step-by-step description of what you want your code to do, written in plain language."
+
+**Emphasize each part:**
+
+> "'Step-by-step' means you break your analysis into discrete steps. Not one big blob, but a sequence."
+
+> "'What you want your code to do' means you're describing the outcome, the logic, the process."
+
+> "'Plain language' means you're NOT writing actual code yet. No R syntax. No function names. Just clear English."
+
+**Three key characteristics:**
+
+> "Pseudocode is not code. It's not prose. It's something in between."
+
+**Explain:**
+
+> "It's more specific than prose—'Clean the data' is too vague."
+
+> "But it's less specific than code—you're not worrying about syntax yet."
+
+**Analogy:**
+
+> "Think of it like a recipe. A recipe doesn't say 'Make cookies' (too vague, that's prose). And it doesn't say 'preheat_oven(temperature=350, unit=F)' (that's code). It says 'Preheat oven to 350°F.' That's the level we want."
+
+---
+
+## Slide 7: Pseudocode Example
+
+**[00:12-00:15]**
+
+**Show the bad vs. good example.**
+
+**Say:**
+
+> "Let me show you the difference between vague and good pseudocode."
+
+**Bad example:**
+
+> "Here's BAD pseudocode: 'Clean the data.'"
+
+**Ask:**
+
+> "What's wrong with this? Type in chat."
+
+**Common responses:** "Too vague," "What does clean mean?" "How?"
+
+**Say:**
+
+> "Exactly! 'Clean the data' could mean a hundred different things. It's not actionable."
+
+**Good example:**
+
+> "Here's BETTER pseudocode:"
+
+**Read each line:**
+
+> "- Load temperature data from CSV file"
+> "- Remove rows where temperature is missing"  
+> "- Remove rows where temperature is less than -50 or greater than 60"
+> "- Calculate mean temperature for each site"
+> "- Save cleaned data to data/processed/temp_clean.csv"
+
+**Point out difference:**
+
+> "See the difference? Each step is SPECIFIC. I know exactly what 'clean' means now:"
+> "- Handle missing values"
+> "- Remove impossible values (based on my domain knowledge of temperature)"
+> "- Calculate a specific statistic"
+> "- Save to a specific location"
+
+**Key insight:**
+
+> "Someone else could read this pseudocode and know EXACTLY what I'm planning to do. That's the goal."
+
+---
+
+## Slide 8: Why Pseudocode Matters
+
+**[00:15-00:18]**
+
+**Explain the three reasons.**
+
+**Reason 1:**
+
+> "First: Pseudocode forces you to think BEFORE you code."
+
+> "Most mistakes in programming happen because we start typing before we know what we're doing. We have a vague idea and we just start coding."
+
+> "Pseudocode makes you think through the logic first."
+
+**Reason 2:**
+
+> "Second: Pseudocode reveals ambiguity."
+
+> "When you try to write pseudocode, you discover gaps in your thinking."
+
+> "'Clean the data' seems clear in your head... until you try to write specific pseudocode steps. Then you realize: wait, HOW do I define an outlier? What threshold do I use?"
+
+> "Better to discover these questions BEFORE you spend hours coding."
+
+**Reason 3:**
+
+> "Third: Pseudocode makes collaboration easier."
+
+> "You can share pseudocode with a collaborator or advisor and ask: 'Is this the right approach?' BEFORE you spend time coding."
+
+> "They can review your logic without needing to read actual code."
+
+**Key insight:**
+
+> "Good pseudocode translates to ANY programming language. Whether you write it in R, Python, Julia—the logic is the same."
+
+---
+
+# Three Modes: Prose, Pseudocode, Code (8 minutes)
+
+## Slide 9: Pseudocode vs. Code vs. Prose
+
+**[00:18-00:21]**
+
+**Show the three levels.**
+
+**Say:**
+
+> "Let me show you three levels of describing an analysis. And I want you to notice where pseudocode sits."
+
+**Prose example:**
+
+> "Here's PROSE—too informal: 'Remove bad data and make a graph.'"
+
+> "This is how you might describe it to a non-scientist friend. It's vague, it's casual, it's not actionable."
+
+**Code example:**
+
+> "Here's actual CODE—too specific for planning:"
+
+**Read the code:**
+
+> "`data <- read.csv('data/raw/temps.csv')`  
+> `data_clean <- data %>% filter(temperature >= -50, ...)`"
+
+> "This is the final product. It has syntax, function names, specific arguments. Too detailed for the planning stage."
+
+**Pseudocode example (middle ground):**
+
+> "Here's PSEUDOCODE—just right:"
+
+**Read each line:**
+
+> "- Load temperature data"
+> "- Remove rows where temperature < -50 or > 60"  
+> "- Create scatterplot of temperature vs. elevation"
+> "- Save plot to figures/temp_elevation.png"
+
+**Emphasize:**
+
+> "This is specific enough that you know what to do, but general enough that you're not bogged down in syntax."
+
+> "You're thinking about WHAT to do, not yet HOW to write the R code."
+
+**Instructor note:** *Students often want to jump to code. Emphasize pseudocode is a distinct, valuable step.*
+
+---
+
+## Slide 10: What Makes Good Pseudocode
+
+**[00:21-00:24]**
+
+**List the four characteristics.**
+
+**Say:**
+
+> "What makes pseudocode GOOD? Four things."
+
+**1. Verbs:**
+
+> "Good pseudocode uses action verbs. Load. Remove. Calculate. Create. Save."
+
+> "These verbs tell you what's happening."
+
+**2. Specific conditions:**
+
+> "Not 'remove bad data.' Instead: 'remove temperature < -50 or > 60.'"
+
+> "Not 'remove outliers.' Instead: 'remove values more than 3 SD from mean.'"
+
+**3. Clear outputs:**
+
+> "Not 'make a plot.' Instead: 'create scatterplot of X vs Y.'"
+
+> "Not 'save results.' Instead: 'save to figures/temp_plot.png.'"
+
+**4. Domain knowledge:**
+
+> "This is key: Good pseudocode includes your scientific reasoning."
+
+> "'Remove absorbance > 3 because that's out of linear range for this instrument.'"
+
+> "'Remove GPS coordinates with accuracy > 50m because that's too imprecise for our analysis.'"
+
+**Summary:**
+
+> "Detailed enough to be unambiguous. General enough that you're not writing code yet."
+
+---
+
+# Common Mistakes (10 minutes)
+
+## Slide 11: Common Pseudocode Mistakes
+
+**[00:24-00:29]**
+
+**Go through each mistake with examples.**
+
+**Mistake 1: Too vague**
+
+> "Mistake #1: Being too vague."
+
+**Bad example:**
+
+> "'Standardize the measurements.'"
+
+**Ask:**
+
+> "What's wrong with this? Chat answers."
+
+**Responses:** "What does standardize mean?" "Divide by what?"
+
+**Good example:**
+
+> "'Divide each mass by wing length to get body condition index.'"
+
+**Say:**
+
+> "See? Now we know EXACTLY what standardize means in this context."
+
+**Mistake 2: Too detailed (writing code)**
+
+> "Mistake #2: Writing actual code instead of pseudocode."
+
+**Bad example:**
+
+> "'Use filter() where count >= 5.'"
+
+**Say:**
+
+> "This is code! You're already thinking about specific R functions."
+
+**Good example:**
+
+> "'Remove sites with fewer than 5 observations.'"
+
+**Say:**
+
+> "This describes WHAT without worrying about HOW (filter function)."
+
+**Mistake 3: Skipping steps**
+
+> "Mistake #3: Skipping steps in the logic."
+
+**Bad example:**
+
+> "'Load data, make plot.'"
+
+**Ask:**
+
+> "What's missing here?"
+
+**Wait for responses:** "Cleaning?" "Calculations?"
+
+**Good example:**
+
+> "'Load → Remove invalid values → Calculate mean per group → Create bar plot.'"
+
+**Mistake 4: No decision points**
+
+> "Mistake #4: Not documenting decisions."
+
+**Bad example:**
+
+> "'Remove outliers.'"
+
+**Good example:**
+
+> "'Remove values more than 3 SD from mean (threshold based on visual inspection of distribution).'"
+
+**Say:**
+
+> "The parenthetical explains WHY you chose that threshold. Future you will thank you."
+
+**Instructor note:** *These mistakes are VERY common. Emphasize students will make these mistakes—that's normal.*
+
+---
+
+# Practice Together (10 minutes)
+
+## Slide 12: Practice Introduction
+
+**[00:29-00:30]**
+
+**Set up the scenario.**
+
+**Say:**
+
+> "Okay, let's practice writing pseudocode together. I'm going to give you a scenario, and we'll build the pseudocode step by step."
+
+**Read scenario:**
+
+> "You have a dataset of bird observations. Each row has: species name, date, location (lat/long), and observer name."
+
+> "Your goal is to:"
+> "1. Count observations per species"
+> "2. Make a bar chart of the top 10 species"
+> "3. Save the chart"
+
+**Say:**
+
+> "Let's build the pseudocode together. I want you to help me."
+
+---
+
+## Slide 13: Building Pseudocode Together
+
+**[00:30-00:35]**
+
+**Build it interactively.**
+
+**Say:**
+
+> "What's the FIRST step? Type in chat."
+
+**Wait for responses.** Common: "Load data," "Read the file."
+
+**Say:**
+
+> "Great! So Step 1: Load the bird observation data."
+
+**Write it on screen or show it on slide.**
+
+**Ask:**
+
+> "What's next?"
+
+**Responses:** "Count species," "Group by species."
+
+**Refine:**
+
+> "Close! Let's be specific: 'Count the number of observations for each species.'"
+
+**Continue building:**
+
+> "What's Step 3?"
+
+**Responses:** "Sort them."
+
+**Refine:**
+
+> "'Sort species by count, highest to lowest.'"
+
+> "What's Step 4?"
+
+**Responses:** "Top 10."
+
+**Refine:**
+
+> "'Keep only the top 10 species.'"
+
+> "Step 5?"
+
+**Responses:** "Make bar chart."
+
+**Refine:**
+
+> "'Create bar chart with species on x-axis, count on y-axis.'"
+
+> "Step 6?"
+
+**Responses:** "Save it."
+
+**Refine:**
+
+> "'Save chart to figures/top_species.png.'"
+
+---
+
+## Slide 14: Our Complete Pseudocode
+
+**[00:35-00:37]**
+
+**Show the complete pseudocode.**
+
+**Say:**
+
+> "Look at what we built together:"
+
+**Read through it:**
+
+```
+STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species
+STEP 5: Create bar chart (species on x-axis, count on y-axis)
+STEP 6: Save chart to figures/top_species.png
+```
+
+**Point out good qualities:**
+
+> "Notice: Clear verbs. Specific steps. Logical order. Not actual code. Explicit about output."
+
+> "You could hand this to any programmer and they could implement it in any language."
+
+**Emphasize:**
+
+> "This took us 5-7 minutes to write. But it would save you HOURS of coding blind."
+
+---
+
+# Spotting Ambiguity (8 minutes)
+
+## Slides 15-16: Bad Examples
+
+**[00:37-00:42]**
+
+**Show bad example 1.**
+
+**Say:**
+
+> "Now let's practice spotting BAD pseudocode. I'm going to show you some, and I want you to tell me what's wrong."
+
+**Example 1:**
+
+```
+Load the dataset
+Clean the data
+Analyze it
+Save the results
+```
+
+**Ask:**
+
+> "What's ambiguous here? Type in chat."
+
+**Wait for responses.** Common: "What does clean mean?" "What analysis?" "What results?"
+
+**Say:**
+
+> "Exactly! Every single step is too vague."
+
+> "'Clean the data'—remove what? Missing values? Outliers? Both? How are outliers defined?"
+
+> "'Analyze it'—this could be ANYTHING. Mean? Regression? ANOVA?"
+
+> "'Save results'—what results? Where? What format?"
+
+**Show bad example 2:**
+
+```
+Load temperature data
+Remove outliers
+Calculate average temperature
+Make a plot
+```
+
+**Ask:**
+
+> "This looks better, but what's still missing?"
+
+**Responses:** "How define outliers?" "Average by what?" "What kind of plot?"
+
+**Say:**
+
+> "Right! Let me show you the improved version."
+
+---
+
+## Slide 17: Better Version
+
+**[00:42-00:45]**
+
+**Show the improved pseudocode.**
+
+**Say:**
+
+> "Here's how we make this unambiguous:"
+
+**Read it:**
+
+```
+Load temperature data from field sensors
+Remove temperatures < -50°C or > 60°C (sensor errors)
+Remove temperatures > 3 SD from site mean (outliers)
+Calculate mean temperature for each site
+Create bar plot of mean temperature by site (ordered north to south)
+Save plot to figures/temp_by_site.png
+```
+
+**Point out improvements:**
+
+> "Now we know:"
+> "- Data source (field sensors)"
+> "- Two types of cleaning (sensor errors vs. outliers)"
+> "- Specific definitions (< -50°C, > 3 SD)"
+> "- Specific calculation (mean per site)"
+> "- Specific plot type (bar plot, specific ordering)"
+> "- Specific output location"
+
+**Key point:**
+
+> "There's no ambiguity. Someone reading this knows exactly what you're planning."
+
+---
+
+# Breakout Activity (15 minutes)
+
+## Slide 18: Breakout Activity
+
+**[00:45-00:46]**
+
+**Explain the activity.**
+
+**Say:**
+
+> "Time to practice! You're going into breakout rooms."
+
+**Task:**
+
+> "Remember in Week 1, you described cleaning a dataset with missing or invalid values? Now I want you to rewrite that as formal pseudocode."
+
+**Requirements:**
+
+> "1. Write it as numbered steps"
+> "2. Be specific—no vague verbs"  
+> "3. Make decisions explicit"
+> "4. Add it to the Google Doc"
+
+**Goal:**
+
+> "When you're done, someone else should be able to follow your pseudocode exactly."
+
+**Logistics:**
+
+> "You'll be in groups for 15 minutes. I'll visit rooms. If you finish early, critique each other's pseudocode—is anything ambiguous?"
+
+**Send to breakout rooms.**
+
+**Instructor note:** *Visit each room. Common issues: Still too vague, forgetting to specify thresholds, no output specified. Gently redirect.*
+
+---
+
+## Breakout Debrief
+
+**[01:01-01:06]**
+
+**Bring everyone back.**
+
+**Say:**
+
+> "Welcome back! Let's look at what you created."
+
+**Pull up Google Doc.**
+
+**Look at 2-3 examples:**
+
+> "Let me look at Group 2's pseudocode... I really like this: 'Remove plant heights < 0 cm (data entry errors) and > 300 cm (biologically impossible for this species).'"
+
+> "Notice they didn't just say 'remove impossible values'—they specified the thresholds AND explained WHY."
+
+**Point out common patterns:**
+
+> "I'm seeing most groups did these things well:"
+> "- Specified numeric thresholds"
+> "- Explained the reasoning in parentheses"
+> "- Listed steps in logical order"
+
+**Address common issues:**
+
+> "A few things to watch:"
+> "- Some pseudocode still says 'clean the data'—break that into specific steps"
+> "- Remember to specify WHERE you're saving outputs"
+> "- Domain knowledge is key—'biologically impossible for this species' is perfect!"
+
+**Ask:**
+
+> "How many of you found that writing pseudocode revealed gaps in your thinking?"
+
+**Instructor note:** *Most hands should go up. Validate this as the POINT of pseudocode.*
+
+---
+
+# Pseudocode as Debugging Tool (5 minutes)
+
+## Slide 19: Pseudocode for Debugging
+
+**[01:06-01:09]**
+
+**Introduce debugging use.**
+
+**Say:**
+
+> "So far we've talked about pseudocode as a planning tool. But it's also a DEBUGGING tool."
+
+**Scenario:**
+
+> "Your code isn't working. You're getting errors or wrong results. What do you do?"
+
+> "Step back. Look at your pseudocode—or write it if you didn't already."
+
+**Two possibilities:**
+
+> "When code fails, two possibilities:"
+
+> "1. Your LOGIC is flawed. You're asking the computer to do the wrong thing."
+
+> "2. Your SYNTAX is wrong. You're asking the right thing but using wrong words."
+
+**With pseudocode:**
+
+> "Check your pseudocode. Ask: 'Is this actually what I want to do?'"
+
+> "If the pseudocode is RIGHT, then it's a syntax problem. Easier to fix!"
+
+> "If the pseudocode is WRONG, fix the logic first, then worry about code."
+
+**Key point:**
+
+> "Pseudocode helps you separate logic problems from syntax problems. That saves HOURS of frustration."
+
+**Example:**
+
+> "I once spent 2 hours debugging code, couldn't figure out why my results were wrong. Then I wrote out the pseudocode and realized: I was calculating the MEAN when I needed the MEDIAN. Logic error!"
+
+> "If I'd written pseudocode first, I'd have caught that immediately."
+
+---
+
+# Wrap-Up & Homework (7 minutes)
+
+## Slide 20: Homework
+
+**[01:09-01:11]**
+
+**Explain homework.**
+
+**Say:**
+
+> "Your homework before Monday: Write pseudocode for one of two options."
+
+**Option A: Plant heights**
+
+> "You have plant heights at different light levels. Write pseudocode to:"
+> "- Remove negative heights (errors)"
+> "- Remove heights > 300 cm (errors)"
+> "- Calculate mean height per light level"
+> "- Save summary to file"
+
+**Option B: UV-Vis kinetics**
+
+> "You have UV-Vis absorbance data over time. Write pseudocode to:"
+> "- Subtract baseline (first 5 timepoints)"
+> "- Remove absorbance < 0 or > 3 (out of range)"
+> "- Calculate slope (reaction rate)"
+> "- Save rate constant"
+
+**Submission:**
+
+> "Post your pseudocode in the discussion board. That way you can see how others approached it."
+
+**Tips:**
+
+> "Remember: 5-8 steps. Be specific. Include domain knowledge. Explain thresholds."
+
+---
+
+## Slide 21: Exit Ticket
+
+**[01:11-01:13]**
+
+**Assign exit ticket.**
+
+**Say:**
+
+> "Before you leave, please complete the exit ticket in Canvas."
+
+**Read questions:**
+
+> "1. What is pseudocode and how is it different from code?"
+
+> "2. Critique this pseudocode: 'Process the samples. Do statistics. Make graph.'"
+
+> "3. Write pseudocode for calculating BMI from height and weight data."
+
+**Emphasize:**
+
+> "Question 3 is a mini-version of your homework. If you can do that, you're ready for the homework."
+
+---
+
+## Slide 22: Summary
+
+**[01:13-01:15]**
+
+**Summarize key concepts.**
+
+**Say:**
+
+> "Let's review what we covered:"
+
+**Point to each:**
+
+> "1. Pseudocode is your planning tool. It bridges scientific thinking and code."
+
+> "2. Good pseudocode is specific, ordered, and explicit. Like a detailed recipe."
+
+> "3. Pseudocode reveals flawed logic BEFORE you spend time coding."
+
+> "4. It's language-agnostic. Works for R, Python, whatever."
+
+> "5. Use your domain knowledge. Make it scientifically meaningful."
+
+**Connect to next week:**
+
+> "Next week we start writing ACTUAL code in Quarto documents!"
+
+> "And guess what? Your pseudocode this week will make that so much easier."
+
+**Final thought:**
+
+> "I know writing pseudocode feels like an extra step. You want to just CODE."
+
+> "But I promise: 10 minutes of pseudocode saves hours of confused coding. Try it. See how it feels."
+
+---
+
+## Questions & Closing
+
+**[01:15-01:17]**
+
+**Take questions:**
+
+> "Any quick questions before we wrap?"
+
+**Instructor note:** *Take 1-2 questions. Direct longer questions to office hours or discussion board.*
+
+**Closing:**
+
+> "Great work today, everyone! Remember: post your pseudocode for one of the homework options by Monday."
+
+> "See you Monday when we start Week 3 and dive into Quarto!"
+
+> "Have a great weekend!"
+
+**Stop recording.**
+
+---
+
+# Post-Lecture Checklist
+
+- [ ] Stop recording
+- [ ] Upload to Canvas
+- [ ] Check discussion board
+- [ ] Review exit tickets (look for misunderstandings about pseudocode vs. code)
+- [ ] Prepare Week 3 Day 1 materials
+
+---
+
+# Common Student Questions & Answers
+
+**Q: "How detailed should pseudocode be?"**
+
+A: Detailed enough that someone could implement it, but not so detailed you're writing actual code. If you're naming specific functions (filter, mutate), you've gone too far. If someone reading it would ask "how exactly do I do that?" it's too vague.
+
+**Q: "Should I write pseudocode for EVERY analysis?"**
+
+A: For complex, new analyses: yes. For simple, repetitive tasks you've done before: probably not. Use judgment. If you're unsure about the logic, pseudocode helps.
+
+**Q: "Can I write pseudocode as comments in my R script?"**
+
+A: Yes! Many people do this. Write the pseudocode as comments first, then fill in the actual code below each comment.
+
+**Q: "What if my pseudocode changes as I code?"**
+
+A: That's fine! Pseudocode is a living document. Update it as your understanding evolves. The point is to have the thinking process documented.
+
+**Q: "Is there a 'right' way to format pseudocode?"**
+
+A: No strict format. Some people number steps (Step 1, Step 2...). Some use bullets. Some use indentation for nested logic. Whatever is clear to you and others.
+
+---
+
+# Timing Notes
+
+If ahead of schedule:
+- More time on practice examples
+- Let students share their pseudocode in main room
+- More time for questions
+- Show more examples from different domains
+
+If behind schedule:
+- Combine slides 15-16 (bad examples)
+- Reduce breakout to 12 minutes
+- Skip detailed debrief, just highlight 1 example
+- Shorter summary
+
+**Target: End with time for exit ticket and 1-2 questions**
+
+---
+
+# Extension Activities (If Time)
+
+If you have extra time, consider:
+
+1. **Live pseudocode challenge:** Give a new scenario, write pseudocode together in real-time
+
+2. **Code-to-pseudocode:** Show them actual code, ask them to reverse-engineer the pseudocode
+
+3. **Peer review:** Have students swap pseudocode and critique each other's clarity
+
+4. **Domain-specific examples:** Show pseudocode for a biology analysis and a chemistry analysis, compare approaches

@@ -1,0 +1,594 @@
+---
+title: "Reshaping and Its Consequences"
+subtitle: "Week 6 · Lecture 2"
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## {#title-slide data-menu-title="Title Slide"}
+
+[Reshaping and Its Consequences]{.custom-title}
+
+[How the shape of your data changes what analysis is possible]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 6 · Lecture 2**]{.custom-subtitle2}
+
+---
+
+## {#learning-obj data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+:::{.body-text}
+By the end of this lecture, you will be able to:
+
+- Use `select()` to keep or remove columns
+- Use `mutate()` to change column content and fix data type errors
+- Use `pivot_longer()` and `pivot_wider()` to reshape data
+- Use `rename()` for defensive, name-based column renaming
+- Apply Split-Apply-Combine logic with `group_by()` and `summarize()`
+- Filter, sort, and split/unite columns in a wrangling pipeline
+- Read and write a complete end-to-end wrangling pipeline
+:::
+
+---
+
+## {#select-intro data-menu-title="select()"}
+
+[Section 5: `select()` — Keeping What You Need]{.slide-title}
+
+:::{.body-text}
+The salmon dataset has two columns we don't need: `All` and 
+`notesRegCode`. Use `select()` to keep only what's relevant.
+:::
+
+```r
+catch_data <- catch_original %>%
+    select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+
+head(catch_data)
+```
+
+. . .
+
+:::{.body-text}
+You can also use `select()` to **drop** columns with a minus sign:
+:::
+
+```r
+catch_data <- catch_original %>%
+    select(-All, -notesRegCode)
+```
+
+---
+
+## {#quality-check data-menu-title="Quality Check"}
+
+[Section 6: Quality Check with `glimpse()`]{.slide-title}
+
+:::{.body-text}
+After selecting, check that everything looks as expected:
+:::
+
+```r
+dplyr::glimpse(catch_data)
+```
+
+```
+Rows: 1,708
+Columns: 7
+$ Region  <chr> "SSE", "SSE", ...
+$ Year    <dbl> 1886, 1887, ...
+$ Chinook <chr> "0", "0", ...   ← ⚠️ should be numeric!
+$ Sockeye <dbl> 5, 155, ...
+```
+
+. . .
+
+:::{.body-text}
+**Chinook is stored as character, not numeric.** This is a common 
+problem when data comes from PDFs or Excel files. Let's fix it.
+:::
+
+---
+
+## {#mutate-fix data-menu-title="mutate() to fix types"}
+
+[Section 7: Fixing Column Types with `mutate()`]{.slide-title}
+
+:::{.body-text}
+`mutate()` creates new columns or overwrites existing ones.
+
+First attempt — convert Chinook to numeric:
+:::
+
+```r
+catch_clean <- catch_data %>%
+    mutate(Chinook = as.numeric(Chinook))
+```
+
+```
+Warning: NAs introduced by coercion
+```
+
+. . .
+
+:::{.body-text}
+R is telling us it couldn't convert something — let's find out what:
+:::
+
+```r
+i <- which(is.na(catch_clean$Chinook))
+catch_data[i, ]
+```
+
+```
+  Region  Year Chinook ...
+1    GSE  1955 I       ...
+```
+
+---
+
+## {#mutate-if-else data-menu-title="mutate() with if_else"}
+
+[Fixing the Data Entry Error]{.slide-title}
+
+:::{.body-text}
+The letter `"I"` was misread from a PDF — it should be `"1"`. Use 
+`if_else()` inside `mutate()` to fix it before converting:
+:::
+
+```r
+catch_clean <- catch_data %>%
+    mutate(Chinook = if_else(condition = Chinook == "I", 
+                             true = "1", 
+                             false = Chinook),
+           Chinook = as.numeric(Chinook))
+
+## verify the fix
+catch_clean[i, ]
+```
+
+```
+  Region  Year Chinook ...
+1    GSE  1955       1 ...
+```
+
+:::{.body-text}
+This is a realistic data cleaning scenario — real data has real errors.
+:::
+
+---
+
+## {#pivot-longer-intro data-menu-title="pivot_longer() intro"}
+
+[Section 8: Reshaping with `pivot_longer()`]{.slide-title}
+
+:::{.body-text}
+Our data is currently **wide** — one column per salmon species. For 
+most analyses, we want it **long** — one row per observation.
+:::
+
+```r
+catch_long <- catch_clean %>% 
+    pivot_longer(
+        cols = -c(Region, Year),
+        names_to = "species",
+        values_to = "catch"
+    )
+
+head(catch_long)
+```
+
+```
+  Region  Year species catch
+1    SSE  1886 Chinook     0
+2    SSE  1886 Sockeye  5000
+3    SSE  1886    Coho     0
+```
+
+---
+
+## {#pivot-longer-explained data-menu-title="pivot_longer() explained"}
+
+[Understanding `pivot_longer()` Arguments]{.slide-title}
+
+```r
+pivot_longer(
+    cols = -c(Region, Year),   # which columns to pivot
+    names_to = "species",      # new column for old column NAMES
+    values_to = "catch"        # new column for old column VALUES
+)
+```
+
+:::{.body-text}
+- **`cols`**: the columns being collapsed. Here, everything *except* 
+  Region and Year.
+- **`names_to`**: the new column that will hold the old column **names** 
+  (Chinook, Sockeye, Coho, Pink, Chum → species)
+- **`values_to`**: the new column that will hold the old column **values**
+:::
+
+---
+
+## {#pivot-wider data-menu-title="pivot_wider()"}
+
+[The Reverse: `pivot_wider()`]{.slide-title}
+
+:::{.body-text}
+`pivot_wider()` does the reverse — it spreads rows back out into 
+columns. Arguments mirror `pivot_longer()`:
+:::
+
+```r
+catch_wide <- catch_long %>%
+    pivot_wider(names_from = species,
+                values_from = catch)
+
+head(catch_wide)
+```
+
+```
+  Region  Year Chinook Sockeye  Coho  Pink  Chum
+1    SSE  1886       0       5     0     0     0
+2    SSE  1887       0     155     0     0     0
+```
+
+. . .
+
+:::{.body-text}
+Use `?pivot_longer` and `?pivot_wider` in the console whenever 
+you need to remind yourself of the arguments.
+:::
+
+---
+
+## {#why-shape-matters data-menu-title="Why Shape Matters"}
+
+[Why Does Shape Matter?]{.slide-title}
+
+:::{.body-text}
+The shape of your data determines what operations are possible:
+
+- **Plotting**: `ggplot2` needs data in long format to map species 
+  to color aesthetics
+- **Modeling**: `lm(catch ~ year)` needs `year` as a column, not 
+  column names
+- **Summarizing**: `group_by(species)` only works if `species` is a column
+
+**Wide** format → good for data entry, human readability
+
+**Long** format → good for analysis, plotting, modeling
+:::
+
+---
+
+## {#rename-intro data-menu-title="rename()"}
+
+[Section 9: `rename()` — Defensive Column Renaming]{.slide-title}
+
+:::{.body-text}
+The metadata tells us `catch` values are in **thousands of fish**. 
+Let's rename the column before converting:
+:::
+
+```r
+catch_long <- catch_long %>%
+    rename(catch_thousands = catch)
+```
+
+. . .
+
+:::{.body-text}
+**Why use `rename()` instead of `names()[4] <- "catch_thousands"`?**
+
+Using position-based renaming is fragile. If a colleague updates the 
+dataset and adds a column, position 4 is now a different column.
+
+`rename()` targets the column **by name** — it breaks loudly if the 
+column name changes, and silently adapts if columns are reordered.
+
+This is **defensive coding**.
+:::
+
+---
+
+## {#mutate-convert data-menu-title="mutate() to convert units"}
+
+[Section 10: Adding Columns with `mutate()`]{.slide-title}
+
+:::{.body-text}
+Now convert from thousands to individual fish, and drop the old column:
+:::
+
+```r
+catch_long <- catch_long %>%
+    mutate(catch = catch_thousands * 1000) %>%
+    select(-catch_thousands)
+
+head(catch_long)
+```
+
+```
+  Region  Year species    catch
+1    SSE  1886 Chinook        0
+2    SSE  1886 Sockeye     5000
+3    SSE  1886    Coho        0
+```
+
+:::{.body-text}
+Notice: we chained `mutate()` and `select()` together because they're 
+part of the same cleaning step.
+:::
+
+---
+
+## {#split-apply-combine data-menu-title="Split-Apply-Combine"}
+
+[Section 11: The Split-Apply-Combine Strategy]{.slide-title}
+
+:::{.body-text}
+To get average catch per region, we'd "by hand":
+
+1. **Split** — group all rows from the same region together
+2. **Apply** — calculate mean catch for each group
+3. **Combine** — bring the results into a single table
+:::
+
+![](https://nceas-learning-hub.github.io/sfsu_data_sci/images/r_tidyverse_clean_wrangle/regions-split-apply-combine.png){fig-align="center" width="75%"}
+
+---
+
+## {#group-summarize data-menu-title="group_by + summarize"}
+
+[`group_by()` and `summarize()`]{.slide-title}
+
+:::{.body-text}
+`dplyr` implements Split-Apply-Combine with two functions:
+:::
+
+```r
+mean_region <- catch_long %>%
+    group_by(Region) %>%
+    summarize(mean_catch = mean(catch))
+
+head(mean_region)
+```
+
+```
+  Region mean_catch
+1    ALU    40384.
+2    BER    16373.
+3    BRB  2709796.
+```
+
+:::{.body-text}
+- `group_by(Region)` → **splits** by region (invisible grouping)
+- `mean(catch)` → **applies** the function to each group
+- `summarize()` → **combines** into one row per group
+:::
+
+---
+
+## {#count-n data-menu-title="counting rows"}
+
+[Counting Rows per Group]{.slide-title}
+
+:::{.body-text}
+Another common use: count the number of rows in each group using 
+`n()`:
+:::
+
+```r
+n_region <- catch_long %>%
+    group_by(Region) %>%
+    summarize(n = n())
+```
+
+. . .
+
+:::{.body-text}
+**Tip:** The shortcut `count()` does the same thing in one step:
+:::
+
+```r
+catch_long %>%
+    count(Region)
+```
+
+---
+
+## {#filter-intro data-menu-title="filter()"}
+
+[Section 12: `filter()` — Keeping Rows by Condition]{.slide-title}
+
+:::{.body-text}
+`filter()` keeps rows that match a condition:
+:::
+
+```r
+sse_catch <- catch_long %>%
+    filter(Region == "SSE")
+```
+
+. . .
+
+:::{.body-text}
+You can filter on multiple conditions:
+:::
+
+```r
+## Chinook from the SSE region only
+chinook_sse <- catch_long %>%
+    filter(Region == "SSE",
+           species == "Chinook")
+
+## catches over one million fish
+big_catch <- catch_long %>%
+    filter(catch > 1000000)
+```
+
+---
+
+## {#arrange-intro data-menu-title="arrange()"}
+
+[Section 13: `arrange()` — Sorting Rows]{.slide-title}
+
+:::{.body-text}
+`arrange()` sorts a data frame by one or more columns:
+:::
+
+```r
+## ascending (default)
+mean_region <- catch_long %>%
+    group_by(Region) %>%
+    summarize(mean_catch = mean(catch)) %>%
+    arrange(mean_catch)
+
+## descending
+mean_region <- catch_long %>%
+    group_by(Region) %>%
+    summarize(mean_catch = mean(catch)) %>%
+    arrange(desc(mean_catch))
+```
+
+:::{.body-text}
+Common use cases: displaying sorted tables in reports, calculating 
+cumulative sums where row order matters.
+:::
+
+---
+
+## {#separate-unite data-menu-title="separate() and unite()"}
+
+[Section 14: `separate()` and `unite()`]{.slide-title}
+
+:::{.body-text}
+Split one column into many:
+:::
+
+```r
+sites_df %>%
+    separate(site, c("island", "site_number"), "-")
+```
+
+```
+  island site_number
+1    HAW         101
+2    OAH         320
+3    MAU         039
+```
+
+. . .
+
+:::{.body-text}
+Combine many columns into one:
+:::
+
+```r
+dates_df %>%
+    unite(date, year, month, day, sep = "-")
+```
+
+```
+        date
+1 1930-12-14
+```
+
+---
+
+## {#all-together data-menu-title="All Together"}
+
+[Section 15: Putting It All Together]{.slide-title}
+
+:::{.body-text}
+A complete pipeline — from raw data to result — in a single readable 
+expression:
+:::
+
+```r
+mean_region <- catch_original %>%
+  select(-All, -notesRegCode) %>% 
+  mutate(Chinook = if_else(Chinook == "I", "1", Chinook)) %>% 
+  mutate(Chinook = as.numeric(Chinook)) %>% 
+  pivot_longer(-c(Region, Year), 
+               names_to = "species", 
+               values_to = "catch") %>%
+  mutate(catch = catch * 1000) %>% 
+  group_by(Region) %>% 
+  summarize(mean_catch = mean(catch)) %>% 
+  arrange(desc(mean_catch))
+```
+
+---
+
+## {#pipeline-as-narrative data-menu-title="Pipeline as Narrative"}
+
+[Reading the Pipeline as a Narrative]{.slide-title}
+
+:::{.body-text}
+Each line is an **analytical decision**:
+
+1. Remove irrelevant columns
+2. Fix a known data entry error
+3. Convert the fixed column to numeric
+4. Reshape to long format for analysis
+5. Convert units to actual fish counts
+6. Group by region
+7. Calculate mean catch per region
+8. Sort to see the highest-catch regions first
+
+The code **documents your reasoning** — not just what you did, 
+but in what order and why each step follows from the last.
+:::
+
+---
+
+## {#save-commit data-menu-title="Save and Commit"}
+
+[Don't Forget: Save and Commit]{.slide-title}
+
+:::{.body-text}
+Before we finish:
+
+1. **Save** your `.qmd` file
+2. **Render** it — this checks that all code runs cleanly
+3. Follow your Git workflow:
+
+**Stage → Commit → Pull → Push**
+
+Your rendered HTML is proof that the analysis is reproducible from 
+scratch.
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+:::{.body-text}
+Without writing R code, write **pseudocode** that:
+
+1. Takes a dataset in wide format (one column per time point)
+2. Pivots it to long format
+
+Then answer: **Why is the long format preferable** for the analysis 
+you have in mind? What does having `year` as a column (rather than 
+as column names) make possible?
+:::

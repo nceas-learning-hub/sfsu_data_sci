@@ -1,0 +1,473 @@
+---
+title: "Publishing to the Web, Part 2"
+subtitle: "Week 11 Lecture 2 · BIO/CHEM 806 · 75 min"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Today's lecture"
+    theme: cosmo
+  
+    code-tools: true
+execute:
+  echo: true
+  eval: true
+  warning: false
+  message: false
+---
+
+---
+
+## Section 1 — Opening reflection · `0:00–0:12` {#opening}
+
+::: {.callout-tip}
+## Instructor cue · Slides 1–3 · 12 min
+
+**Stay on the slides.** Do not open this document yet.
+
+Post the chat prompt from Slide 2 immediately after your opening line.
+Read responses aloud for 5–6 minutes — this time is worth it. Look for
+the analytically interesting decisions: the 70 mm threshold, filtering
+NAPL, dropping NAs, stacked vs. dodged bars, adding the MPA
+designation with `case_when()`. Name those specifically on Slide 3.
+
+**Monday cohort:** genuine debrief — they did the activity.  
+**Thursday cohort:** they're hearing what's coming. Ask them to start
+forming their own thoughts for their section.
+
+After Slide 3, switch to this document and tell students: *"Open your
+own `training_{USERNAME}` project in RStudio and follow along."*
+:::
+
+::: {.callout-note}
+## 💬 Chat prompt · Slide 2
+
+*What was one analytical decision you made during the lobster activity
+that you weren't sure about — a threshold, a filter, a plot choice?
+Take 60 seconds and type it in chat.*
+:::
+
+**What those decisions reveal — Slide 3**
+
+The decisions students described — threshold at 70 mm, whether to drop
+NAs, stacked vs. dodged bars — are not wrong or right. **They are
+scientific choices that need to be documented.** Adding the MPA
+`DESIGNATION` with `case_when()` is a good example: it changes what
+questions you can ask. That is a modeling decision that belongs in your
+methods section.
+
+When you publish a report to GitHub Pages, those decisions become
+visible. That is a feature, not a bug. Reproducible work means your
+choices are traceable.
+
+---
+
+## Section 2 — YAML options · `0:12–0:22` {#yaml-options}
+
+::: {.callout-tip}
+## Instructor cue · Slides 4–5 · 10 min
+
+Walk through the YAML block on Slide 4 and the table below it slowly.
+Then move to Slide 5 (themes) — work through the themes table, then do
+the live demo: change `theme: cosmo` to `theme: sandstone` in this
+document's YAML header, render, then change it back. One word, whole
+page changes.
+
+After the demo, show your own published GitHub Pages site and point out
+which YAML options you used. The connection "this YAML produced that
+page" is the payoff.
+:::
+
+The YAML header of your `index.qmd` controls how your published page
+looks and behaves. A few high-value options:
+
+```yaml
+---
+title: "My Research"
+author: "Your Name"
+date: today
+toc: true
+toc-depth: 2
+number-sections: true
+theme: cosmo
+---
+```
+
+| YAML key | What it does |
+|---|---|
+| `date: today` | Auto-inserts the render date — updates every time you render |
+| `toc: true` | Adds a clickable table of contents |
+| `toc-depth: 2` | Controls how many heading levels appear in the TOC |
+| `number-sections: true` | Numbers every section heading automatically |
+| `theme: cosmo` | Applies a Bootstrap theme — one word changes the entire page |
+
+```{r}
+#| label: show-date
+
+# date: today in YAML evaluates to this:
+Sys.Date()
+```
+
+Every time you render and push, the published date updates
+automatically. This tells a reader when the analysis was last touched —
+important for a living document like a thesis site.
+
+### Themes · Slide 5
+
+Quarto ships with the full Bootswatch theme library. Preview all of
+them at [bootswatch.com](https://bootswatch.com). Popular options for
+scientific documents:
+
+| Theme | Character |
+|---|---|
+| `cosmo` | Clean, modern, readable |
+| `flatly` | Minimal, professional |
+| `journal` | Slightly more editorial |
+| `lumen` | Light and airy |
+| `sandstone` | Earthy, warm |
+
+::: {.callout-tip}
+## Instructor cue — live theme demo
+
+Change `theme: cosmo` to `theme: sandstone` in **this document's YAML
+header** and render. Then change it back. Point out: one word, entire
+page changes. Students can browse [bootswatch.com](https://bootswatch.com)
+on their own time to choose a theme for their thesis site.
+:::
+
+---
+
+## Section 3 — `_quarto.yml` · `0:22–0:35` {#quarto-yml}
+
+::: {.callout-tip}
+## Instructor cue · Slides 6–7 · 13 min
+
+Return to the slides briefly for Slide 6, then come back here and
+**open the `_quarto.yml` file you prepared before class** alongside
+this document in RStudio. Show its contents without going deep into
+syntax. The concept: one file at the root, shared settings, navbar
+appears on every page.
+
+End this section by pointing to the course website:
+*"This site — `nceas-learning-hub.github.io/sfsu_data_sci` — is built
+exactly this way. Everything you see there was made with the tools you
+now know."*
+
+**Remind students:** they do **not** need `_quarto.yml` for this
+week's activity. A single `index.qmd` with Markdown links is
+completely sufficient. This is the step up for thesis projects with
+multiple chapters.
+:::
+
+When you have multiple `.qmd` files that should all look the same —
+same theme, same TOC settings, same navigation bar — don't repeat the
+YAML in each file. Create `_quarto.yml` at the **root of your project**
+and Quarto applies it to every document automatically.
+
+```yaml
+# _quarto.yml — place this file at the root of your project
+
+project:
+  type: website
+
+website:
+  title: "My Research Project"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: analysis/data-cleaning.qmd
+        text: Data Cleaning
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+```
+
+### What `_quarto.yml` unlocks · Slide 7
+
+With `_quarto.yml` and `type: website`, your repository becomes a
+proper multi-page site:
+
+- A **navbar** that appears on every page automatically
+- **Shared theme, font, and layout** across all documents
+- `quarto render` in the Terminal builds every page at once
+- `quarto preview` lets you see the full site locally before pushing
+
+::: {.callout-note}
+## You don't need this for today's activity
+
+A single `index.qmd` with Markdown links is enough for the current
+assignment. `_quarto.yml` is for thesis projects with multiple
+chapters and a consistent navigation structure across all pages.
+:::
+
+---
+
+## Section 4 — Thesis structure and open science · `0:35–0:47` {#thesis}
+
+::: {.callout-tip}
+## Instructor cue · Slides 8–10 · 12 min
+
+This is the most important conceptual section — do not rush it.
+
+**Slide 8:** Use the file tree to make the thesis structure concrete.
+Narrate each file's purpose as you walk down the list.
+
+**Slide 9:** Work through the three audience types (advisor,
+collaborator, future you) — ask students which one they find hardest
+to write for.
+
+**Slide 10 (open science):** Post the chat prompt and take 3–4
+responses. Listen for: an abstract at the top, figure labels explaining
+biological significance, a methods section describing thresholds and
+rationale, a link to EDI. Surface 2–3 of these explicitly.
+
+**For Thursday students** who haven't done the activity yet: say
+explicitly — *"Keep this question in mind during your section. You'll
+have something concrete to think about."*
+:::
+
+### Connecting this to your thesis · Slide 8
+
+Here is one way to structure a thesis GitHub repository so it publishes
+cleanly to GitHub Pages:
+
+```
+thesis-project/
+├── _quarto.yml                 ← shared settings and navbar
+├── index.qmd                   ← project overview and data description
+├── analysis/
+│   ├── 01-clean.qmd            ← data cleaning decisions, documented
+│   ├── 02-explore.qmd          ← exploratory analysis
+│   ├── 03-model.qmd            ← statistical modeling
+│   └── 04-figures.qmd          ← publication-ready figures
+├── data/                       ← raw data (or link to repository)
+└── figs/                       ← saved figure outputs
+```
+
+Your committee sees a URL. Your advisor can open it without installing
+R. Your collaborator at another institution can check your work. Six
+months from now, you can pick this up and understand what you did —
+because you documented it.
+
+### Who is your audience? · Slide 9
+
+Different audiences need different things from your site:
+
+**Advisor:** Can they trace your logic from raw data to conclusion? Is
+the decision log visible?
+
+**Collaborator who doesn't use R:** Can they see the visualizations and
+read your interpretations without running anything?
+
+**Future you:** Can you pick this up in six months and understand what
+you did and why?
+
+**The site forces you to write for all three.**
+
+### Open science in practice · Slide 10
+
+Many journals now request or require: data availability statements,
+analysis code shared openly, and reproducible workflows. A GitHub Pages
+site with your Quarto analyses satisfies all three. Some journals link
+directly to your GitHub repo or your published site in supplementary
+materials.
+
+You are not learning a tool. **You are building a practice.**
+
+::: {.callout-note}
+## 💬 Chat prompt · Slide 10
+
+*For those who have done the activity: if your lobster report were
+supplementary material for a journal paper, what's the one thing you'd
+add to make it more useful for a reader who can't run your code?*
+:::
+
+---
+
+## Section 5 — Troubleshooting · `0:47–0:55` {#troubleshooting}
+
+::: {.callout-tip}
+## Instructor cue · Slide 11 · 8 min
+
+Work through the three issues below. After presenting them, ask in
+Zoom: *"Is everyone's site live? Thumbs up if yes."* Flag any
+non-responders — they may need help before Thursday.
+
+Keep this section brisk. The goal is to send students into Thursday
+with working sites, not to cover every possible failure mode.
+:::
+
+Three issues come up almost every time:
+
+**1 — Site shows "404" or won't load**
+
+- Is `index.html` committed **and** pushed? Not `index.qmd` — the
+  **HTML file** is what GitHub Pages serves.
+- Did you activate Pages in **Settings → Pages → Branch: main →
+  Folder: root → Save**?
+- After pushing, wait 2 minutes and hard-refresh
+  (`Cmd+Shift+R` on Mac, `Ctrl+Shift+R` on Windows).
+- Try the URL in a private/incognito window first — browsers cache
+  aggressively.
+
+**2 — Link goes to `.qmd` instead of `.html`**
+
+```markdown
+<!-- Wrong — links to the source file -->
+[See the data page](data.qmd)
+
+<!-- Right — links to the rendered file -->
+[See the data page](data.html)
+```
+
+Render the file first, then commit the `.html`. The `.qmd` is your
+source. The `.html` is what the browser serves.
+
+**3 — Old content is still showing**
+
+GitHub Pages caches aggressively. Try the URL in an incognito window.
+If that shows updated content, clear your browser cache or wait a few
+minutes.
+
+::: {.callout-note}
+## The order matters every time
+
+```
+Render  →  Stage (add)  →  Commit  →  Pull  →  Push
+```
+
+Both the `.qmd` **and** the `.html` must be committed and pushed. The
+`.qmd` is version control for your source. The `.html` is what GitHub
+Pages publishes.
+:::
+
+---
+
+## Section 6 — Thursday setup and bridge to spatial data · `0:55–1:15` {#thursday-bridge}
+
+::: {.callout-tip}
+## Instructor cue · Slides 12–14 · 20 min
+
+Give the Thursday checklist directly and explicitly — Slide 12. Then
+move into the sf bridge on Slides 13–14. Keep the spatial section
+conceptual: no live coding, just orientation. Students are not expected
+to understand `sf` yet; they are being shown what it unlocks.
+
+**If running behind:** Compress to 10 minutes — give the Thursday
+checklist verbally and shorten the sf teaser to one paragraph. Section
+4 (thesis and open science) is the high-value content; protect it
+before cutting here.
+
+**If running ahead:** Expand Section 4 — have students sketch their own
+thesis project file structure: file names, section titles, intended
+audience. Valuable even if rough.
+:::
+
+### For Thursday's activity cohort · Slide 12
+
+Everything from Monday's lecture applies to you — the activity is
+identical for both cohorts.
+
+Before you arrive at Thursday's section, make sure:
+
+- [ ] GitHub Pages is activated for `training_{USERNAME}`
+- [ ] `index.html` is live at your URL
+      (`{username}.github.io/{repo-name}/`)
+- [ ] You have at least one Markdown link working in `index.qmd`
+
+If you ran into setup problems, **come a few minutes early to the
+activity or post in the course discussion board today**. Nicole has
+seen all the common errors.
+
+### What's next: spatial data with `sf` · Slides 13–14
+
+Next week we move into geospatial analysis. The publishing workflow is
+**identical** to what you learned today — you will render analyses that
+produce maps and publish them to GitHub Pages. The `sf` unit builds
+directly on the foundation you have now.
+
+**The conceptual shift:**
+
+Right now, when you have location data, you have latitude and longitude
+columns — numbers. `sf` treats those numbers as **geometry**: points in
+a coordinate reference system. Once you have `sf` objects, you can do
+things that are impossible with plain columns: spatial joins, distance
+calculations, buffering, overlaying with polygon data.
+
+The coordinate reference system (CRS) is what makes "spatial" different
+from "just numbers with labels." The `leaflet` maps from the
+visualization unit are a preview of the spatial thinking we'll build
+on next.
+
+```{r}
+#| label: sf-teaser
+#| eval: false
+#| echo: true
+
+# sf teaser — Slide 14
+# Read this, don't run it yet.
+
+library(sf)
+
+# A data frame becomes spatial
+lobster_sf <- st_as_sf(lobster_data,
+                       coords = c("longitude", "latitude"),
+                       crs = 4326)  # WGS84 — the standard GPS CRS
+
+# Now you can do spatial joins, buffering, distance calculations...
+# ...and publish the result to GitHub Pages.
+```
+
+---
+
+## Wrap-up · Slide 15
+
+::: {.callout-tip}
+## Instructor cue — closing
+
+For the **Monday cohort:** their published lobster report is due.
+Confirm the URL works before they leave.
+
+For the **Thursday cohort:** remind them of the pre-activity checklist
+above. Post a Canvas reminder after class.
+
+**Post-class checklist:**
+
+- [ ] Confirm Thursday activity logistics with Nicole — pairing, data
+      setup
+- [ ] Post Canvas reminder: Thursday cohort must have Pages live before
+      section
+- [ ] Flag students without working sites for office hours
+- [ ] Review today's chat responses from the open science discussion —
+      strong answers worth surfacing at Thursday's debrief
+- [ ] Prep spatial data materials for next week (textbook s15)
+:::
+
+This week in one sentence: **you learned to close the loop** between
+your analysis and the world.
+
+Write in R → Render with Quarto → Publish with GitHub Pages →
+Share a URL.
+
+That loop is reproducible, open, and professional. Next week: the same
+loop, with maps.
+
+---
+
+## Going further {#going-further}
+
+- **Textbook s12** — Step-by-step GitHub Pages setup; use as a
+  reference if students get stuck on the publish workflow
+- **Textbook s13** — What a complete collaborative report includes;
+  the lobster report maps directly to their thesis site structure
+- **Bootswatch themes** — [bootswatch.com](https://bootswatch.com) —
+  all available in Quarto with one YAML word
+- **Quarto documentation:**
+  [HTML theming](https://quarto.org/docs/output-formats/html-themes.html) ·
+  [Websites with `_quarto.yml`](https://quarto.org/docs/websites/) ·
+  [YAML reference](https://quarto.org/docs/reference/formats/html.html)

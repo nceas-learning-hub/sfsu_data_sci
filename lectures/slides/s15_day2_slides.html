@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="s15_day2_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="s15_day2_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="s15_day2_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="s15_day2_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="s15_day2_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="s15_day2_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="s15_day2_slides_files/libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
+
+  <meta name="author" content="Gretchen LeBuhn">
+  <meta name="dcterms.date" content="2026-05-13">
+  <title>Data Inspection &amp; Analysis Using LLMs</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="s15_day2_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="s15_day2_slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="s15_day2_slides_files/libs/revealjs/dist/theme/quarto-ad6adf48c6dcb95869ce8df1cf92cc0c.css">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="s15_day2_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Data Inspection &amp; Analysis Using LLMs</h1>
+  <p class="subtitle">BIO/CHEM 806 · Session 2</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Gretchen LeBuhn 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-05-13</p>
+</section>
+<section id="section" class="slide level2 custom-title">
+<h2></h2>
+<div class="title-block">
+<p><strong>Data Inspection &amp; Analysis</strong><br>
+<strong>Using LLMs</strong></p>
+<p>BIO/CHEM 806 · Session 2</p>
+</div>
+</section>
+<section id="yesterday-vs.-today" class="slide level2 slide-title">
+<h2>Yesterday vs.&nbsp;Today</h2>
+<div class="body-text">
+<p><strong>Session 1 — Copilot &amp; ChatGPT as coding partners</strong></p>
+<ul>
+<li>You wrote code; the LLM helped fill it in</li>
+<li>Inline suggestions, pseudocode → code, refactoring</li>
+</ul>
+<p><strong>Session 2 — Flipping the question</strong></p>
+<ul>
+<li>What can an LLM do <em>with your data</em> directly?</li>
+<li>Where does it genuinely help?</li>
+<li>Where does it silently fail?</li>
+<li>How do we engineer prompts to catch those failures?</li>
+</ul>
+</div>
+</section>
+<section id="learning-objectives" class="slide level2 slide-title">
+<h2>Learning Objectives</h2>
+<div class="body-text">
+<p>By the end of this session you will be able to:</p>
+<ol type="1">
+<li><p>Upload data to ChatGPT and run exploratory inspection using natural language prompts</p></li>
+<li><p>Apply <strong>Data Guardian Prompts</strong> to catch silent errors before they reach your results</p></li>
+<li><p>Ask an LLM to suggest and run statistical analyses — and critically evaluate the output</p></li>
+<li><p>Export LLM-generated code to R and verify it reproduces the same results</p></li>
+</ol>
+</div>
+</section>
+<section id="session-roadmap" class="slide level2 slide-title">
+<h2>Session Roadmap</h2>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Part</th>
+<th>Topic</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>How LLMs handle tabular data</td>
+<td>~10 min</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Dataset inspection in ChatGPT</td>
+<td>~15 min</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Data Guardian Prompts</strong></td>
+<td>~20 min</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Statistical analysis in ChatGPT</td>
+<td>~15 min</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Reproducibility: export &amp; verify in R</td>
+<td>~10 min</td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>Wrap-up &amp; discussion</td>
+<td>~5 min</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section>
+<section id="part-1" class="title-slide slide level1 section-title center">
+<h1>Part 1</h1>
+
+</section>
+<section id="how-llms-handle-tabular-data" class="slide level2">
+<h2>How LLMs Handle Tabular Data</h2>
+</section>
+<section id="what-an-llm-sees" class="slide level2 slide-title">
+<h2>What an LLM “sees”</h2>
+<div class="body-text">
+<p>When you upload a CSV to ChatGPT:</p>
+<ul>
+<li>The file is <strong>converted to text tokens</strong></li>
+<li>Everything the model can “know” about your data is what fits in its <strong>context window</strong></li>
+<li>If your file is too large, the model <strong>silently truncates</strong> it</li>
+</ul>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>ChatGPT will <strong>not</strong> tell you it only read part of your dataset. It will produce summaries that look complete.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="token-limits-by-model" class="slide level2 slide-title">
+<h2>Token Limits by Model</h2>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Token Limit</th>
+<th>Approx. CSV capacity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GPT-3.5</td>
+<td>~4,000</td>
+<td>~200 rows × 10 cols</td>
+</tr>
+<tr class="even">
+<td>GPT-4 (8k)</td>
+<td>~8,000</td>
+<td>~400 rows × 10 cols</td>
+</tr>
+<tr class="odd">
+<td>GPT-4-turbo</td>
+<td>~128,000</td>
+<td>~6,000–10,000 rows × 10–20 cols</td>
+</tr>
+</tbody>
+</table>
+<p>Rule of thumb: <strong>each cell ≈ 5–10 tokens</strong></p>
+<p><em>Today’s dataset: NAPL-only fish survey subset (&lt;8 KB) → works fine with free ChatGPT</em></p>
+</div>
+</section>
+<section id="three-modes-of-llm-data-work" class="slide level2 slide-title">
+<h2>Three Modes of LLM Data Work</h2>
+<div class="columns">
+<div class="column" style="width:28%;">
+<p><strong>Interpretation</strong></p>
+<p>Reads data as text, reasons in natural language</p>
+<p><em>Good for:</em> inspection, description</p>
+<p><em>Reliability:</em> moderate — verify against domain knowledge</p>
+</div><div class="column" style="width:28%;">
+<p><strong>Code Execution</strong></p>
+<p>Writes &amp; runs Python; returns real results</p>
+<p><em>Good for:</em> computation, visualization</p>
+<p><em>Reliability:</em> high <em>if</em> the code is correct</p>
+</div><div class="column" style="width:28%;">
+<p><strong>Narrative Generation</strong></p>
+<p>Converts results to plain language</p>
+<p><em>Good for:</em> methods &amp; results writing</p>
+<p><em>Reliability:</em> high for prose, lower for numerical accuracy</p>
+</div></div>
+</section>
+<section id="the-key-skill" class="slide level2 slide-title">
+<h2>The Key Skill</h2>
+<div class="body-text">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Know which mode you’re in</strong></p>
+</div>
+<div class="callout-content">
+<p>Each mode has different risks and needs different verification:</p>
+<ul>
+<li><strong>Interpretation</strong> → compare to what you know about the data</li>
+<li><strong>Code execution</strong> → inspect the code; re-run in R</li>
+<li><strong>Narrative</strong> → check numbers against actual model output</li>
+</ul>
+</div>
+</div>
+</div>
+<p><em>Chat: Which mode do you think is most useful for your thesis research? Post one sentence.</em></p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-2" class="title-slide slide level1 section-title center">
+<h1>Part 2</h1>
+
+</section>
+<section id="dataset-inspection-in-chatgpt" class="slide level2">
+<h2>Dataset Inspection in ChatGPT</h2>
+</section>
+<section id="our-practice-dataset" class="slide level2 slide-title">
+<h2>Our Practice Dataset</h2>
+<div class="body-text">
+<p><strong>SBC LTER Annual Fish Survey — NAPL subset</strong></p>
+<pre><code>https://sbclter.msi.ucsb.edu/external/Reef/Data/trial_data/
+Annual_survey_NAPL_only.csv</code></pre>
+<ul>
+<li>Download and upload via <strong>paperclip</strong> — not a URL link</li>
+<li>Start a <strong>new chat</strong> before uploading</li>
+<li>Free ChatGPT (GPT-3.5/4) works fine for this file size</li>
+</ul>
+<p><em>Students: you’re welcome to follow along with a dataset from your own thesis work</em></p>
+</div>
+</section>
+<section id="first-look" class="slide level2 slide-title">
+<h2>2.1 — First Look</h2>
+<div class="body-text">
+<p><strong>Prompt to use:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Tell me about this dataset. What does it appear to contain, what types of variables are present, and what might this data be used to study?</em></p>
+</div>
+</div>
+</div>
+<p><strong>As you read the response, notice:</strong></p>
+<ul>
+<li>What ecological context did it identify without metadata?</li>
+<li>What did it get right? What did it oversimplify or miss?</li>
+<li>This is pattern recognition from training, not domain expertise</li>
+</ul>
+</div>
+</section>
+<section id="missing-values" class="slide level2 slide-title">
+<h2>2.2 — Missing Values</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Which columns contain missing values, and how many are in each column? Present this as a table. Then tell me whether the missingness pattern suggests data not collected versus species not observed.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Biological interpretation matters:</strong></p>
+<ul>
+<li>Missing <strong>COUNT</strong> → species likely not observed → structural zero</li>
+<li>Missing <strong>SIZE</strong> → animal counted but not measured → different issue</li>
+</ul>
+<p>These have <strong>very different</strong> implications for analysis</p>
+</div>
+</section>
+<section id="summary-statistics" class="slide level2 slide-title">
+<h2>2.3 — Summary Statistics</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Provide summary statistics — mean, median, standard deviation, min, max — for the COUNT and SIZE columns. Also list unique values for SITE and YEAR.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Watch for:</strong></p>
+<p>COUNT distribution is almost certainly <strong>right-skewed</strong> — mean &gt;&gt; median because a few species dominate</p>
+<p>This informs model family selection later <em>(Poisson? Negative binomial?)</em></p>
+</div>
+</section>
+<section id="data-transformation" class="slide level2 slide-title">
+<h2>2.4 — Data Transformation</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Convert this dataset to wide format using SP_CODE as column headers and COUNT as values. If a species appears more than once for the same site and year combination, sum the counts. Show me the first 10 rows and tell me the dimensions of the resulting table.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Verify:</strong> Row count in wide format should equal the number of unique <strong>site × year</strong> combinations</p>
+<p><em>We specified what to do with duplicates — intentional. “Tell me the dimensions” is a mini data guardian check built right into the prompt.</em></p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-3" class="title-slide slide level1 section-title center">
+<h1>Part 3</h1>
+
+</section>
+<section id="data-guardian-prompts" class="slide level2">
+<h2>Data Guardian Prompts</h2>
+</section>
+<section id="the-core-problem" class="slide level2 slide-title">
+<h2>The Core Problem</h2>
+<div class="body-text">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>LLMs produce confident output regardless of silent failures</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>A join removes 20% of your rows → well-formatted result</li>
+<li>A filter excludes a whole year → beautiful plot</li>
+<li>A model is misspecified → significant p-value</li>
+<li>Data was silently truncated → authoritative summary</li>
+</ul>
+<p><strong>The model will not volunteer that anything went wrong.</strong> You have to ask.</p>
+</div>
+</div>
+</div>
+<p><strong>Data Guardian Prompts</strong> force the model to show its work at every step — like controls in a lab experiment.</p>
+</div>
+</section>
+<section id="the-10-data-guardian-prompts" class="slide level2 slide-title">
+<h2>The 10 Data Guardian Prompts</h2>
+<div class="body-text">
+<table class="caption-top">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 41%">
+<col style="width: 51%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Name</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Data Ingestion Verification</td>
+<td>After every upload</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Row Accountability</td>
+<td>After every transformation</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Duplicate Detection</td>
+<td>Before aggregation or joins</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Join Audit</td>
+<td>After every merge</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Zero vs.&nbsp;NA Distinction</td>
+<td>Before count/abundance analysis</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Outlier Flagging</td>
+<td>Before fitting any model</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Scope Confirmation</td>
+<td>Before running analysis</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Model Assumption Check</td>
+<td>After fitting, before interpreting</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Aggregation Transparency</td>
+<td>After any summary or plot</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Reproducibility Handoff</td>
+<td>Last thing in every session</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="guardian-prompt-1" class="slide level2 slide-title">
+<h2>Guardian Prompt 1</h2>
+<h3 id="data-ingestion-verification">Data Ingestion Verification</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>After loading the data, confirm: (1) the number of rows and columns, (2) the column names and data types, (3) the first 5 rows. Do not proceed with any analysis until you have shown me this information.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> The very first thing that can go wrong is that the model didn’t read what you think it read.</p>
+<p><strong>Watch for:</strong> Row count doesn’t match your file → stop and investigate before continuing.</p>
+<p><strong>When:</strong> Run this immediately after <strong>every upload</strong>.</p>
+</div>
+</section>
+<section id="guardian-prompt-2" class="slide level2 slide-title">
+<h2>Guardian Prompt 2</h2>
+<h3 id="row-accountability-after-every-transformation">Row Accountability After Every Transformation</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>After each data transformation step, print the row count and the count of any NA or zero values in the key response variable. If any transformation removes rows, stop and report which rows were removed and why before continuing.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Filtering, joining, dropping NAs, pivoting — any of these can remove rows without warning.</p>
+<p><strong>Watch for:</strong> LLMs tend to pipeline steps together. Push back — ask for counts after <strong>each individual step</strong>.</p>
+</div>
+</section>
+<section id="guardian-prompt-3" class="slide level2 slide-title">
+<h2>Guardian Prompt 3</h2>
+<h3 id="duplicate-detection-before-aggregation">Duplicate Detection Before Aggregation</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Before performing any aggregation or join, check whether there are duplicate rows based on the key columns [list them]. Report the number of duplicate groups and show me 3 example duplicate records. Do not aggregate until I confirm the duplicates are expected.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Undetected duplicates inflate counts and means. One species appearing twice in the same site-year inflates trend estimates — invisibly.</p>
+<p><strong>Note:</strong> Confirming <strong>absence</strong> of duplicates is as valuable as detecting presence.</p>
+</div>
+</section>
+<section id="guardian-prompt-4" class="slide level2 slide-title">
+<h2>Guardian Prompt 4</h2>
+<h3 id="join-audit">Join Audit</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>After performing the join, report: (1) the row count of each input table, (2) the row count of the result, (3) any keys present in one table but not the other. If the result has more rows than the larger input, explain why.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Inner joins silently drop unmatched rows. Left joins can inflate rows if the right table has duplicates.</p>
+<p><strong>Rule:</strong> Result rows &gt; larger input rows → many-to-many duplication. Investigate immediately.</p>
+</div>
+</section>
+<section id="guardian-prompt-5" class="slide level2 slide-title">
+<h2>Guardian Prompt 5</h2>
+<h3 id="zero-vs.-na-force-explicit-distinction">Zero vs.&nbsp;NA — Force Explicit Distinction</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Before any analysis involving COUNT or abundance: distinguish between cells where the value is 0 (species observed but none counted) and cells where the value is NA (data not collected). Report the count of each. Do not treat zeros and NAs as equivalent in any analysis.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> In ecological count data, 0 and NA have fundamentally different biological meanings. Models that conflate them — or drop both — produce wrong answers.</p>
+<p><strong>Especially critical for:</strong> zero-inflated models, occupancy analyses, species distribution models.</p>
+</div>
+</section>
+<section id="guardian-prompt-6" class="slide level2 slide-title">
+<h2>Guardian Prompt 6</h2>
+<h3 id="outlier-flagging-before-modeling">Outlier Flagging Before Modeling</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Before fitting any model, identify values in [response variable] that are more than 3 standard deviations from the mean. List them with their row identifiers and ask me whether to include, exclude, or investigate them before proceeding.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Outliers can dominate regression results. The model will fit whatever you ask for regardless of whether one record is driving the entire trend estimate.</p>
+<p><strong>Important:</strong> Do NOT automatically exclude outliers — in ecology, extreme values are often real and ecologically meaningful. Surface them for <strong>your judgment</strong>.</p>
+</div>
+</section>
+<section id="guardian-prompt-7" class="slide level2 slide-title">
+<h2>Guardian Prompt 7</h2>
+<h3 id="scope-confirmation">Scope Confirmation</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Before running any analysis, restate in plain language: (1) which rows are included (what filters have been applied), (2) which columns are used, and (3) what the analysis unit is. Confirm this matches my research question.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> After multiple transformation steps, it’s easy to lose track of what subset the analysis is actually running on.</p>
+<p><strong>Key move:</strong> If the model’s restatement doesn’t match your intent, correct it <strong>before</strong> it runs anything. Far easier than diagnosing a wrong answer afterward.</p>
+</div>
+</section>
+<section id="guardian-prompt-8" class="slide level2 slide-title">
+<h2>Guardian Prompt 8</h2>
+<h3 id="model-assumption-check-before-interpretation">Model Assumption Check Before Interpretation</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>After fitting the model, check and report: (1) residual deviance and degrees of freedom, (2) whether the dispersion parameter suggests overdispersion, (3) a residual plot, and (4) influential observations. Do not present conclusions until these checks are done.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> A Poisson GLM with overdispersion produces standard errors that are too small and p-values that are too significant — and the model will show them with full confidence regardless.</p>
+<p><strong>Rule of thumb:</strong> deviance/df &gt; 2 → switch to negative binomial.</p>
+</div>
+</section>
+<section id="guardian-prompt-9" class="slide level2 slide-title">
+<h2>Guardian Prompt 9</h2>
+<h3 id="aggregation-transparency">Aggregation Transparency</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>When you aggregate or summarize this data, tell me: (1) how many original rows contributed to each summary value, (2) what function was used (sum, mean, median), and (3) whether any rows were excluded and why.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Every time series plot involves aggregation. Making the model describe the operation lets you verify the plot shows what you think it shows.</p>
+<p><strong>Watch for:</strong> Whether NAs were excluded or treated as zero before aggregation — default behavior varies by language and function.</p>
+</div>
+</section>
+<section id="guardian-prompt-10" class="slide level2 slide-title">
+<h2>Guardian Prompt 10</h2>
+<h3 id="reproducibility-handoff">Reproducibility Handoff</h3>
+<div class="body-text">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Please compile all the code used in this session into a single, self-contained R script that I can run locally. The script should load the data from file, reproduce every transformation and visualization we discussed, and include comments explaining each step. List any steps performed in Python that will need translation to R.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Why:</strong> Analysis done inside ChatGPT is ephemeral. This prompt converts a session into a permanent, auditable record.</p>
+<p><strong>Run it as the last thing you do in every session.</strong> Then verify the script in RStudio.</p>
+</div>
+</section>
+<section id="deploying-the-prompts" class="slide level2 slide-title">
+<h2>Deploying the Prompts</h2>
+<div class="body-text">
+<p>You don’t have to use all 10 every time</p>
+<p>Think of them as <strong>targeted controls</strong> — deploy at the moments when silent errors are most likely:</p>
+<ul>
+<li><strong>Uploads</strong> → Prompt 1</li>
+<li><strong>Each wrangling step</strong> → Prompt 2</li>
+<li><strong>Before any join or aggregation</strong> → Prompts 3, 4, 9</li>
+<li><strong>Count/abundance data</strong> → Prompt 5</li>
+<li><strong>Before modeling</strong> → Prompts 6, 7</li>
+<li><strong>After fitting</strong> → Prompt 8</li>
+<li><strong>End of session</strong> → Prompt 10</li>
+</ul>
+<p><em>Chat: Which one do you think you’d be most likely to forget to use on your own data? Why?</em></p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-4" class="title-slide slide level1 section-title center">
+<h1>Part 4</h1>
+
+</section>
+<section id="statistical-analysis-in-chatgpt" class="slide level2">
+<h2>Statistical Analysis in ChatGPT</h2>
+</section>
+<section id="setting-up-scope-first" class="slide level2 slide-title">
+<h2>Setting Up: Scope First</h2>
+<div class="body-text">
+<p>Before any plots or models, deploy <strong>Guardian Prompt 7</strong>:</p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Before creating any plots: restate which rows are included in the analysis, what the analysis unit is, and whether NA values in COUNT have been handled.</em></p>
+</div>
+</div>
+</div>
+<p>This confirms we all agree on what data we’re working with before the analysis begins.</p>
+<p><em>Continue in the same chat from Part 2.</em></p>
+</div>
+</section>
+<section id="time-series-total-count" class="slide level2 slide-title">
+<h2>4.1 — Time Series: Total Count</h2>
+<div class="body-text">
+<p><strong>Prompt with Guardian Prompt 9 built in:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Create a time series plot of total fish count across all species, with YEAR on the x-axis and total COUNT on the y-axis. Use different colors for each SITE. After creating the plot, tell me how many rows contributed to each year’s total and whether any years had missing data.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Watch:</strong> Are all sites represented in every year? Year-to-year variability vs.&nbsp;directional trend?</p>
+</div>
+</section>
+<section id="top-species-composition" class="slide level2 slide-title">
+<h2>4.2 — Top Species Composition</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Create a time series plot of the top 5 most abundant species across all years. Before plotting, report which 5 species were selected and their total counts so I can verify the ranking.</em></p>
+</div>
+</div>
+</div>
+<p><strong>“Before plotting, report…”</strong> is the key move — it surfaces the intermediate aggregation step before the visualization obscures it.</p>
+<p>If the top 5 don’t match your ecological expectation, you catch it <strong>here</strong> — not after the plot is in your paper.</p>
+</div>
+</section>
+<section id="model-selection-consultation" class="slide level2 slide-title">
+<h2>4.3 — Model Selection Consultation</h2>
+<div class="body-text">
+<p><strong>Prompt with Guardian Prompt 8 pre-flight:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>I want to understand whether total fish count has increased or decreased over time. Before recommending a model, tell me: (1) whether count data with many zeros is appropriate for a Poisson GLM or whether another family is more suitable, and (2) what assumptions that model makes that I should verify.</em></p>
+</div>
+</div>
+</div>
+<p><strong>Listen for the reasoning chain:</strong></p>
+<p>Count data → Poisson → check equidispersion → many zeros → zero-inflation risk → variance &gt; mean → overdispersion → consider negative binomial</p>
+</div>
+</section>
+<section id="fitting-and-checking-the-model" class="slide level2 slide-title">
+<h2>4.4 — Fitting and Checking the Model</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Fit a Poisson GLM with total annual count as the response and YEAR as the predictor. After fitting, report: (1) residual deviance and degrees of freedom, (2) the dispersion ratio (deviance/df), (3) whether this suggests we should switch to a negative binomial model. Do not interpret results until after this check.</em></p>
+</div>
+</div>
+</div>
+<p>“Do not interpret until after this check” is doing a lot of work — the LLM’s natural tendency is to move directly to interpretation. We’re <strong>interrupting that flow deliberately</strong>.</p>
+</div>
+</section>
+<section id="reading-the-dispersion-check" class="slide level2 slide-title">
+<h2>Reading the Dispersion Check</h2>
+<div class="body-text">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>If deviance/df ≈ 1</strong></p>
+<p>Poisson is appropriate — proceed with interpretation</p>
+</div><div class="column" style="width:50%;">
+<p><strong>If deviance/df &gt; 2</strong></p>
+<p>Overdispersion detected → refit with negative binomial</p>
+<p>Standard errors from Poisson will be too small → p-values will be too significant</p>
+</div></div>
+<p><strong>Follow-up if needed:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>The dispersion ratio suggests overdispersion. Please refit using a negative binomial GLM, then show me the coefficient for YEAR and its 95% confidence interval. Interpret in plain language — what does it mean for how fish counts change per year?</em></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="report-ready-narrative" class="slide level2 slide-title">
+<h2>4.5 — Report-Ready Narrative</h2>
+<div class="body-text">
+<p><strong>Prompt:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Write a methods and results paragraph suitable for a scientific report describing the GLM analysis. Include the model family and link function, the reason for choosing it, the key statistical results (coefficient, confidence interval, p-value), and a plain-language interpretation of the trend. Use past tense and avoid jargon where possible.</em></p>
+</div>
+</div>
+</div>
+<p>This is one of ChatGPT’s <strong>strongest capabilities</strong> — the paragraph will be close to publication-ready.</p>
+<p><strong>Critical read:</strong> Does the narrative accurately reflect the model you <em>actually</em> fitted? Narrative quality is not evidence that the numbers are right.</p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="part-5" class="title-slide slide level1 section-title center">
+<h1>Part 5</h1>
+
+</section>
+<section id="reproducibility-export-verify-in-r" class="slide level2">
+<h2>Reproducibility: Export &amp; Verify in R</h2>
+</section>
+<section id="the-problem" class="slide level2 slide-title">
+<h2>The Problem</h2>
+<div class="body-text">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Everything we just did exists only in this chat window</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Close the tab → it’s gone</li>
+<li>Screenshot → not reproducible</li>
+<li>The analysis cannot be peer-reviewed, shared, or built upon</li>
+</ul>
+</div>
+</div>
+</div>
+<p>This is not a hypothetical concern — it’s the default state of any ChatGPT data analysis session.</p>
+<p><strong>The fix:</strong> Guardian Prompt 10 — every time.</p>
+</div>
+</section>
+<section id="send-the-reproducibility-handoff" class="slide level2 slide-title">
+<h2>Send the Reproducibility Handoff</h2>
+<div class="body-text">
+<p><strong>Guardian Prompt 10 in the chat:</strong></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><em>Please compile all the code used in this session into a single, self-contained R script that I can run locally. The script should: load the data from file, reproduce every transformation and visualization we discussed, and include comments explaining each step. After generating the script, list any steps performed in Python that will need translation to R.</em></p>
+</div>
+</div>
+</div>
+<p>Copy the R script → paste into RStudio → <strong>run it</strong>.</p>
+</div>
+</section>
+<section id="what-to-verify" class="slide level2 slide-title">
+<h2>What to Verify</h2>
+<div class="body-text">
+<p>When running the exported script, check:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Numbers</strong></p>
+<ul>
+<li>Row counts match what ChatGPT reported?</li>
+<li>GLM coefficients match?</li>
+<li>p-values match?</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Structure</strong></p>
+<ul>
+<li>All packages available?</li>
+<li>Data loads from file correctly?</li>
+<li>Transformations produce same dimensions?</li>
+</ul>
+</div></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Any numerical discrepancy in coefficients or row counts is a <strong>bug to resolve</strong> — not a rounding difference to ignore.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-reusable-verification-pattern" class="slide level2 slide-title">
+<h2>A Reusable Verification Pattern</h2>
+<div class="body-text">
+<p>Paste this helper into any R script after ChatGPT exports:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a>verify_step <span class="ot">&lt;-</span> <span class="cf">function</span>(df, label, response_col) {</span>
+<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">---"</span>, label, <span class="st">"---</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  Rows:"</span>, <span class="fu">nrow</span>(df), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  NAs in"</span>, response_col, <span class="st">":"</span>,</span>
+<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">is.na</span>(df[[response_col]])), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"  Zeros in"</span>, response_col, <span class="st">":"</span>,</span>
+<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(df[[response_col]] <span class="sc">==</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-8"><a href="" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Use after every transformation:</span></span>
+<span id="cb2-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># verify_step(fish, "after loading", "COUNT")</span></span>
+<span id="cb2-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># verify_step(fish_clean, "after dropping NAs", "COUNT")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is Guardian Prompt 2 implemented as reusable R code.</p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="wrap-up" class="title-slide slide level1 section-title center">
+<h1>Wrap-Up</h1>
+
+</section>
+<section id="the-reliability-landscape" class="slide level2 slide-title">
+<h2>The Reliability Landscape</h2>
+<div class="body-text">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Where LLMs are genuinely strong</strong></p>
+<ul>
+<li>First-look data description</li>
+<li>Generating plausible analysis options</li>
+<li>Writing methods &amp; results prose</li>
+<li>Translating between R and Python</li>
+<li>Explaining statistical reasoning</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Where silent failure is common</strong></p>
+<ul>
+<li>Large datasets (truncation)</li>
+<li>Multi-step transformations</li>
+<li>Joins across tables</li>
+<li>Zero vs.&nbsp;NA handling</li>
+<li>Model assumption checking</li>
+<li>Any result you don’t independently verify</li>
+</ul>
+</div></div>
+</div>
+</section>
+<section id="the-core-principle" class="slide level2 slide-title">
+<h2>The Core Principle</h2>
+<div class="body-text">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Data Guardian Prompts don’t make the LLM smarter</strong></p>
+</div>
+<div class="callout-content">
+<p>They force it to <strong>show its work</strong> so that <em>you</em> can catch the errors.</p>
+<p>The LLM will produce confident, well-formatted output regardless of whether it is computing on the right data, the right subset, or using the right model.</p>
+<p><strong>You are always the last line of defense.</strong></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="quick-reference-card" class="slide level2 slide-title">
+<h2>Quick Reference Card</h2>
+<div class="body-text">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Prompt</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Ingestion Verification</td>
+<td>After every upload</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Row Accountability</td>
+<td>After every transformation</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Duplicate Detection</td>
+<td>Before aggregation / joins</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Join Audit</td>
+<td>After every merge</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Zero vs.&nbsp;NA</td>
+<td>Before count analysis</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Outlier Flagging</td>
+<td>Before any model</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Scope Confirmation</td>
+<td>Before analysis</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Assumption Check</td>
+<td>After fitting</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Aggregation Transparency</td>
+<td>After any summary or plot</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Reproducibility Handoff</td>
+<td>End of every session</td>
+</tr>
+</tbody>
+</table>
+<p><em>This table is in your live-coding companion — keep it open.</em></p>
+</div>
+</section>
+<section id="discussion" class="slide level2 slide-title">
+<h2>Discussion</h2>
+<div class="body-text">
+<p>Coming back to the question from the start of class:</p>
+<p><em>Which mode — interpretation, code execution, narrative — turned out to be most useful for your work?</em></p>
+<p>Open questions:</p>
+<ul>
+<li>Where in your research would you trust ChatGPT output without verifying in R?</li>
+<li>Where would you never trust it?</li>
+<li>What type of silent error would be most dangerous in <strong>your</strong> dataset specifically?</li>
+</ul>
+</div>
+</section>
+<section id="looking-ahead" class="slide level2 slide-title">
+<h2>Looking Ahead</h2>
+<div class="body-text">
+<p><strong>Session 3 — Accessing ChatGPT via API</strong></p>
+<ul>
+<li>Move beyond the chat interface</li>
+<li>Call LLMs programmatically from R</li>
+<li>Batch processing for large-scale text and data tasks</li>
+<li>When the API approach is better than the browser approach</li>
+</ul>
+<p><strong>For now:</strong> Practice Guardian Prompts on a dataset of your own — bring observations to the next session.</p>
+</div>
+</section>
+<section id="section-1" class="slide level2 custom-title">
+<h2></h2>
+<div class="title-block">
+<p>Questions?</p>
+<p><em>Live-coding companion:</em><br>
+<code>s02_ai_analysis_livecode.qmd</code></p>
+<p><em>The 10 Data Guardian Prompts are in Section 3 of the companion — keep it open during any future LLM data session.</em></p>
+</div>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>BIO/CHEM 806 · Data Inspection &amp; Analysis Using LLMs</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="s15_day2_slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="s15_day2_slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

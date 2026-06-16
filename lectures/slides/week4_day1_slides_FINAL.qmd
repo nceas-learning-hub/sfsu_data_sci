@@ -1,0 +1,330 @@
+---
+format: 
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  code-line-numbers: false
+---
+
+## {#title-slide data-menu-title="Title Slide"} 
+
+[Why Reproducibility Fails (And How to Fix It)]{.custom-title}
+
+[Week 4, Day 1]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806**]{.custom-subtitle2}
+
+---
+
+## {#welcome data-menu-title="Welcome"}
+
+[Welcome to Week 4!]{.slide-title}
+
+:::{.body-text}
+**This week:** Reproducibility in practice
+
+**Monday:** Why reproducibility fails
+
+**Wednesday:** Git and GitHub (tools that help)
+
+**The uncomfortable truth:** Most scientific analyses aren't reproducible
+:::
+
+---
+
+## {#recap data-menu-title="Recap"}
+
+[Where We've Been]{.slide-title}
+
+:::{.body-text}
+**Week 1:** Data science thinking
+
+**Week 2:** Projects and pseudocode (organization + planning)
+
+**Week 3:** Quarto (combining code and narrative)
+
+**Today:** The gap between theory and practice
+
+**Why reproducibility fails even when you try**
+:::
+
+---
+
+## {#reproducibility-matters data-menu-title="Why It Matters"}
+
+[Why Reproducibility Matters]{.slide-title}
+
+![Artwork by Allison Horst](../../images/r_provenance_reproducibility/reproducibility_alibi_horst.png){width=75% fig-align="center"}
+
+---
+
+## {#reproducibility-explained data-menu-title="Reproducibility Explained"}
+
+[Reproducibility as Scientific Integrity]{.slide-title}
+
+![Artwork by Allison Horst](../../images/r_provenance_reproducibility/reproducibility_alibi_horst.png){width=55% fig-align="center"}
+
+:::{.body-text}
+**Without reproducibility:**
+- Can't verify results
+- Can't build on prior work
+- Can't trust conclusions
+
+**Reproducibility isn't optional—it's essential**
+
+**It's your scientific alibi**
+:::
+
+---
+
+## {#definition data-menu-title="Definition"}
+
+[What Is Reproducibility?]{.slide-title}
+
+:::{.body-text}
+**Reproducibility** = Someone else can take your data and code and get the same results
+
+**Not:**
+- Replicability (collecting new data)
+- Just having data available
+- Describing methods in prose
+
+**Is:**
+- Exact same results from same inputs
+- Including all intermediate steps
+- With clear documentation
+:::
+
+---
+
+## {#crisis data-menu-title="Reproducibility Crisis"}
+
+[The Reproducibility Crisis]{.slide-title}
+
+:::{.body-text}
+**Studies show:**
+- 70% of researchers have tried and failed to reproduce another's work
+- 50% have failed to reproduce their OWN work
+- Less than 30% of published studies share data AND code
+
+**In biology/ecology:**
+- Many analyses impossible to reproduce
+- Methods sections insufficient
+- Code rarely shared
+:::
+
+---
+
+## {#why-fails-intro data-menu-title="Why Fails Introduction"}
+
+[Why Does Reproducibility Fail?]{.slide-title}
+
+:::{.body-text}
+**Not because scientists are careless!**
+
+Reproducibility fails due to:
+1. Undocumented decisions
+2. Fragile computational environments
+3. Manual steps
+4. Ambiguous workflows
+5. Time pressure
+
+**Let's examine each...**
+:::
+
+---
+
+## {#undocumented-decisions data-menu-title="Undocumented Decisions"}
+
+[Reason 1: Undocumented Decisions]{.slide-title}
+
+:::{.body-text}
+**The problem:**
+
+You try outlier removal thresholds: 2 SD, 2.5 SD, 3 SD
+
+You pick 2.5 SD (seems reasonable)
+
+**You don't write this down**
+
+Six months later: Which threshold did you use?
+
+**Methods say:** "Outliers were removed"
+
+**Reviewer asks:** "How were outliers defined?"
+
+**You:** ¯\_(ツ)_/¯
+:::
+
+---
+
+## {#fragile-environments data-menu-title="Fragile Environments"}
+
+[Reason 2: Fragile Computational Environments]{.slide-title}
+
+:::{.body-text}
+**The problem:**
+
+Your analysis runs on:
+- R version 4.2.1
+- ggplot2 version 3.4.0
+- Your computer
+
+**Collaborator has:**
+- R version 4.3.0
+- ggplot2 version 3.4.2
+- Different computer
+
+**Result:** Different results or errors
+
+**Why?** Package versions matter, OS matters
+:::
+
+---
+
+## {#manual-steps data-menu-title="Manual Steps"}
+
+[Reason 3: Manual Steps]{.slide-title}
+
+:::{.body-text}
+**The problem:**
+
+Your workflow:
+1. Export data from instrument
+2. Open in Excel, delete bad rows
+3. Save as CSV
+4. Run R script
+5. Open plot, adjust colors in Photoshop
+6. Insert in manuscript
+
+**Which rows deleted? What colors? Can't reconstruct!**
+
+**Solution:** Everything in code
+:::
+
+---
+
+## {#solution-intro data-menu-title="Solution Introduction"}
+
+[The Solution: Reproducible Workflows]{.slide-title}
+
+:::{.body-text}
+**Core principle:**
+
+**Everything in code + version control**
+
+This solves:
+- ✅ Undocumented decisions → Comments in code
+- ✅ Fragile environments → Document packages
+- ✅ Manual steps → Automate in code
+- ✅ Ambiguous workflows → Clear structure
+- ✅ Time pressure → Build habits now
+:::
+
+---
+
+## {#checklist data-menu-title="Reproducibility Checklist"}
+
+[Reproducibility Checklist]{.slide-title}
+
+:::{.body-text}
+**Before sharing/publishing:**
+
+- [ ] All steps in code (no manual steps)
+- [ ] Decisions documented in comments
+- [ ] File paths are relative
+- [ ] README explains how to run
+- [ ] Package versions documented
+- [ ] Code runs start-to-finish without errors
+- [ ] Someone else has successfully run it
+
+**If you can't check all boxes, it's not reproducible**
+:::
+
+---
+
+## {#breakout data-menu-title="Breakout Activity"}
+
+[Breakout Activity - 12 minutes]{.slide-title}
+
+:::{.body-text}
+**Scenario:** Master's student's analysis can't be reproduced
+
+**Files:**
+- `data_final.csv`
+- `analysis_old.R`
+- `analysis_NEW.R`
+- Several plots
+- Methods: "Data were cleaned and outliers removed"
+
+**In groups:**
+1. List everything that's missing for reproducibility
+2. Redesign the workflow to be reproducible
+3. What specific documentation is needed?
+:::
+
+---
+
+## {#homework data-menu-title="Homework"}
+
+[Before Wednesday]{.slide-title}
+
+:::{.body-text}
+**Reading:** Git/GitHub introduction (on Canvas)
+
+**Task:** Review YOUR current project
+
+**Ask yourself:**
+1. Could someone else reproduce my analysis?
+2. What manual steps do I have?
+3. What decisions are undocumented?
+4. Is my workflow clear?
+
+**Be honest:** Identifying problems is the first step
+:::
+
+---
+
+## {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket (Canvas) - 2-3 minutes]{.slide-title}
+
+:::{.body-text}
+**Complete before leaving:**
+
+1. **Identify:** Name three reasons reproducibility fails in scientific research.
+
+2. **Evaluate:** A researcher's methods say "outliers were removed." What information is missing?
+
+3. **Reflect:** Think of your own research. What's one manual step you currently do that should be in code?
+
+**Submit in Canvas →**
+:::
+
+---
+
+## {#summary data-menu-title="Summary"}
+
+[Key Concepts]{.slide-title}
+
+:::{.body-text}
+1. **Reproducibility** = same data + code → same results
+
+2. **Most research isn't reproducible** (and that's a problem)
+
+3. **Five reasons:** Undocumented decisions, fragile environments, manual steps, ambiguous workflows, time pressure
+
+4. **Solution:** Everything in code + version control
+
+5. **Wednesday:** Git/GitHub as reproducibility infrastructure
+
+**See you Wednesday!**
+:::

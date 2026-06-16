@@ -1,0 +1,14 @@
+---
+title: "test.week3"
+format: html
+---
+ Our goal is to...
+ 
+```{r}
+library(readr)
+
+#load data
+
+water <- read_csv("data\raw\water_samples.csv")
+```
+ 

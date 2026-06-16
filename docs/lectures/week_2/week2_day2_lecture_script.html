@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Week 2, Day 2: Pseudocode as Scientific Planning – sfsu_data_sci</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo_lh_hex.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-727819a61b461fb3761f83f0bc6d3628.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-a84ed7022e8a4693fc129125ca96c2d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-727819a61b461fb3761f83f0bc6d3628.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #44444444;
+      }
+</style>
+
+
+<link rel="stylesheet" href="../../site_libs/quarto-contrib/quarto-project/nceas-learning-hub/theme/banner/banner.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">sfsu_data_sci</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-instructors" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Instructors</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-instructors">    
+        <li>
+    <a class="dropdown-item" href="https://www.oharascience.com/">
+ <span class="dropdown-text">Gretchen LeBuhn and Nicole Adelstein</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/nceas-learning-hub/sfsu_data_sci"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Week 2, Day 2: Pseudocode as Scientific Planning</h1>
+            <p class="subtitle lead">Lecture Script</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pre-class-setup-instructor" id="toc-pre-class-setup-instructor" class="nav-link active" data-scroll-target="#pre-class-setup-instructor"><span class="header-section-number">1</span> Pre-Class Setup (Instructor)</a></li>
+  <li><a href="#slide-1-welcome" id="toc-slide-1-welcome" class="nav-link" data-scroll-target="#slide-1-welcome"><span class="header-section-number">2</span> SLIDE 1: Welcome</a></li>
+  <li><a href="#slide-2-last-class-recap" id="toc-slide-2-last-class-recap" class="nav-link" data-scroll-target="#slide-2-last-class-recap"><span class="header-section-number">3</span> SLIDE 2: Last Class Recap</a></li>
+  <li><a href="#slide-3-what-is-pseudocode" id="toc-slide-3-what-is-pseudocode" class="nav-link" data-scroll-target="#slide-3-what-is-pseudocode"><span class="header-section-number">4</span> SLIDE 3: What Is Pseudocode?</a></li>
+  <li><a href="#slide-4-why-pseudocode-matters" id="toc-slide-4-why-pseudocode-matters" class="nav-link" data-scroll-target="#slide-4-why-pseudocode-matters"><span class="header-section-number">5</span> SLIDE 4: Why Pseudocode Matters</a></li>
+  <li><a href="#slide-5-pseudocode-vs.-code-vs.-prose" id="toc-slide-5-pseudocode-vs.-code-vs.-prose" class="nav-link" data-scroll-target="#slide-5-pseudocode-vs.-code-vs.-prose"><span class="header-section-number">6</span> SLIDE 5: Pseudocode vs.&nbsp;Code vs.&nbsp;Prose</a></li>
+  <li><a href="#slide-6-common-pseudocode-mistakes" id="toc-slide-6-common-pseudocode-mistakes" class="nav-link" data-scroll-target="#slide-6-common-pseudocode-mistakes"><span class="header-section-number">7</span> SLIDE 6: Common Pseudocode Mistakes</a>
+  <ul class="collapse">
+  <li><a href="#mistake-1-too-vague" id="toc-mistake-1-too-vague" class="nav-link" data-scroll-target="#mistake-1-too-vague"><span class="header-section-number">7.1</span> <strong>Mistake 1: Too vague</strong></a></li>
+  <li><a href="#mistake-2-too-detailed-actually-writing-code" id="toc-mistake-2-too-detailed-actually-writing-code" class="nav-link" data-scroll-target="#mistake-2-too-detailed-actually-writing-code"><span class="header-section-number">7.2</span> <strong>Mistake 2: Too detailed (actually writing code)</strong></a></li>
+  <li><a href="#mistake-3-skipping-steps" id="toc-mistake-3-skipping-steps" class="nav-link" data-scroll-target="#mistake-3-skipping-steps"><span class="header-section-number">7.3</span> <strong>Mistake 3: Skipping steps</strong></a></li>
+  <li><a href="#mistake-4-no-decision-points" id="toc-mistake-4-no-decision-points" class="nav-link" data-scroll-target="#mistake-4-no-decision-points"><span class="header-section-number">7.4</span> <strong>Mistake 4: No decision points</strong></a></li>
+  </ul></li>
+  <li><a href="#slide-7-lets-practice-together" id="toc-slide-7-lets-practice-together" class="nav-link" data-scroll-target="#slide-7-lets-practice-together"><span class="header-section-number">8</span> SLIDE 7: Let’s Practice Together</a></li>
+  <li><a href="#slide-8-identifying-ambiguity-in-pseudocode" id="toc-slide-8-identifying-ambiguity-in-pseudocode" class="nav-link" data-scroll-target="#slide-8-identifying-ambiguity-in-pseudocode"><span class="header-section-number">9</span> SLIDE 8: Identifying Ambiguity in Pseudocode</a></li>
+  <li><a href="#slide-9-breakout-activity-rewrite-your-week-1-analysis" id="toc-slide-9-breakout-activity-rewrite-your-week-1-analysis" class="nav-link" data-scroll-target="#slide-9-breakout-activity-rewrite-your-week-1-analysis"><span class="header-section-number">10</span> SLIDE 9: Breakout Activity — Rewrite Your Week 1 Analysis</a></li>
+  <li><a href="#slide-10-report-out" id="toc-slide-10-report-out" class="nav-link" data-scroll-target="#slide-10-report-out"><span class="header-section-number">11</span> SLIDE 10: Report Out</a></li>
+  <li><a href="#slide-11-pseudocode-as-a-tool-for-debugging" id="toc-slide-11-pseudocode-as-a-tool-for-debugging" class="nav-link" data-scroll-target="#slide-11-pseudocode-as-a-tool-for-debugging"><span class="header-section-number">12</span> SLIDE 11: Pseudocode as a Tool for Debugging</a></li>
+  <li><a href="#slide-12-before-next-class" id="toc-slide-12-before-next-class" class="nav-link" data-scroll-target="#slide-12-before-next-class"><span class="header-section-number">13</span> SLIDE 12: Before Next Class</a></li>
+  <li><a href="#slide-13-key-takeaways" id="toc-slide-13-key-takeaways" class="nav-link" data-scroll-target="#slide-13-key-takeaways"><span class="header-section-number">14</span> SLIDE 13: Key Takeaways</a></li>
+  <li><a href="#materials-needed" id="toc-materials-needed" class="nav-link" data-scroll-target="#materials-needed"><span class="header-section-number">15</span> Materials Needed</a></li>
+  <li><a href="#instructor-notes" id="toc-instructor-notes" class="nav-link" data-scroll-target="#instructor-notes"><span class="header-section-number">16</span> Instructor Notes</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<p><strong>Duration:</strong> 75 minutes | <strong>Format:</strong> Online Synchronous | <strong>Students:</strong> 30</p>
+<hr>
+<section id="pre-class-setup-instructor" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="pre-class-setup-instructor"><span class="header-section-number">1</span> Pre-Class Setup (Instructor)</h2>
+<ul>
+<li>Test Zoom/conferencing platform</li>
+<li>Prepare examples of bad and good pseudocode (biology and chemistry)</li>
+<li>Have Week 1 analysis descriptions ready to reference</li>
+<li>Prepare Google Doc for guided exercise</li>
+<li>Prepare breakout rooms (groups of 3-4)</li>
+<li>Queue up examples of ambiguous instructions</li>
+</ul>
+<hr>
+</section>
+<section id="slide-1-welcome" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="slide-1-welcome"><span class="header-section-number">2</span> SLIDE 1: Welcome</h2>
+<p><strong>[0:00–0:03] — Arrival and Settling</strong></p>
+<p>Good morning! Welcome to Day 2 of Week 2.</p>
+<p>Quick tech check: If you can hear me and see the slides, give me a thumbs-up.</p>
+<p>Today we’re talking about pseudocode. If that word sounds intimidating, don’t worry — pseudocode is just a fancy name for “writing down what you plan to do before you do it.”</p>
+<hr>
+</section>
+<section id="slide-2-last-class-recap" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="slide-2-last-class-recap"><span class="header-section-number">3</span> SLIDE 2: Last Class Recap</h2>
+<p><strong>[0:03–0:06] — Connecting to Monday</strong></p>
+<p>On Monday, we talked about organizing projects — folders, file structures, relative paths, README files.</p>
+<p>Today, we’re zooming in one level: <strong>How do you plan what goes inside those scripts?</strong></p>
+<p>You can have the best folder structure in the world, but if your scripts are a mess of unplanned commands, your analysis won’t be reproducible.</p>
+<p>Pseudocode is the bridge between scientific thinking and code.</p>
+<hr>
+</section>
+<section id="slide-3-what-is-pseudocode" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="slide-3-what-is-pseudocode"><span class="header-section-number">4</span> SLIDE 3: What Is Pseudocode?</h2>
+<p><strong>[0:06–0:10] — Definition</strong></p>
+<p><strong>Pseudocode is a step-by-step description of what you want your code to do, written in plain language.</strong></p>
+<p>It’s not code. It’s not prose. It’s something in between.</p>
+<p>Think of it as a recipe for analysis:</p>
+<ul>
+<li>Clear enough that someone could follow it</li>
+<li>Specific enough that there’s no ambiguity</li>
+<li>General enough that you’re not writing actual code yet</li>
+</ul>
+<p>Here are examples from both fields:</p>
+<p><strong>Biology - Bad (too vague):</strong> - “Clean the species data”</p>
+<p><strong>Biology - Better (pseudocode):</strong> - “Remove rows where species name is missing” - “Remove rows where species name contains obvious typos (checked against species list)” - “Standardize species names to match taxonomy database” - “Save cleaned data to <code>data/processed/species_clean.csv</code>”</p>
+<p><strong>Chemistry - Bad (too vague):</strong> - “Process the spectroscopy data”</p>
+<p><strong>Chemistry - Better (pseudocode):</strong> - “Load absorbance data from CSV file” - “Subtract baseline absorbance (measured at 800 nm)” - “Apply Beer-Lambert law to calculate concentrations” - “Remove concentrations outside calibration range (0-10 μM)” - “Save processed data to <code>data/processed/concentrations.csv</code>”</p>
+<p>See the difference?</p>
+<hr>
+</section>
+<section id="slide-4-why-pseudocode-matters" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="slide-4-why-pseudocode-matters"><span class="header-section-number">5</span> SLIDE 4: Why Pseudocode Matters</h2>
+<p><strong>[0:10–0:14] — The Case for Planning</strong></p>
+<p>Why do we need pseudocode? Three reasons:</p>
+<p><strong>1. It forces you to think before you code</strong></p>
+<p>Most coding mistakes happen because people start typing before they know what they’re trying to do. Pseudocode makes you slow down and plan.</p>
+<p><strong>2. It reveals ambiguity</strong></p>
+<p>When you write “clean the data,” you think you know what you mean. But when you try to write pseudocode, you realize: <em>What does “clean” mean? What counts as invalid? What do I do with missing values?</em></p>
+<p><strong>Biology example:</strong> “Remove outliers” — which outliers? Based on what criteria? Standard deviations? IQR? Domain knowledge?</p>
+<p><strong>Chemistry example:</strong> “Correct for drift” — linear drift? Exponential? What’s your baseline reference?</p>
+<p>Pseudocode surfaces those questions before you waste time coding.</p>
+<p><strong>3. It makes collaboration easier</strong></p>
+<p>If you write pseudocode, someone else can review your logic before you invest hours in coding. You can catch flawed reasoning early.</p>
+<p><strong>[Pause]</strong></p>
+<p>Here’s the key insight: <strong>Good pseudocode can be translated into any programming language.</strong></p>
+<p>If your pseudocode is clear, converting it to R is almost mechanical. If your pseudocode is vague, your code will be vague too.</p>
+<hr>
+</section>
+<section id="slide-5-pseudocode-vs.-code-vs.-prose" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="slide-5-pseudocode-vs.-code-vs.-prose"><span class="header-section-number">6</span> SLIDE 5: Pseudocode vs.&nbsp;Code vs.&nbsp;Prose</h2>
+<p><strong>[0:14–0:18] — Three Modes of Thinking</strong></p>
+<p>Let’s look at the same task written three ways:</p>
+<p><strong>Chemistry example:</strong></p>
+<p><strong>Prose</strong> (too informal): &gt; “I’m going to remove the bad absorbance readings and then calculate the concentrations using the calibration curve.”</p>
+<p><strong>Pseudocode</strong> (just right): - Load absorbance data from instrument output - Remove rows where absorbance is negative (instrument error) - Remove rows where absorbance &gt; 3.0 (out of linear range) - Apply calibration equation: concentration = (absorbance - 0.05) / 0.123 - Create scatterplot of concentration vs.&nbsp;time - Save plot to <code>figures/concentration_timeseries.png</code></p>
+<p><strong>Code</strong> (too specific):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/raw/absorbance.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(absorbance <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         absorbance <span class="sc">&lt;=</span> <span class="fl">3.0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concentration =</span> (absorbance <span class="sc">-</span> <span class="fl">0.05</span>) <span class="sc">/</span> <span class="fl">0.123</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> concentration)) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/concentration_timeseries.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>[Pause]</strong></p>
+<p>Notice that pseudocode has: - <strong>Verbs</strong> — “Load,” “Remove,” “Apply,” “Create,” “Save” - <strong>Specific conditions</strong> — “where absorbance is negative,” “absorbance &gt; 3.0” - <strong>Clear outputs</strong> — “scatterplot,” “save to figures/” - <strong>Domain knowledge</strong> — “out of linear range,” “calibration equation”</p>
+<p>It’s detailed enough to be unambiguous, but general enough that you’re not worrying about syntax.</p>
+<hr>
+</section>
+<section id="slide-6-common-pseudocode-mistakes" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="slide-6-common-pseudocode-mistakes"><span class="header-section-number">7</span> SLIDE 6: Common Pseudocode Mistakes</h2>
+<p><strong>[0:18–0:22] — What to Avoid</strong></p>
+<p>Let me show you some common mistakes people make when writing pseudocode.</p>
+<section id="mistake-1-too-vague" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="mistake-1-too-vague"><span class="header-section-number">7.1</span> <strong>Mistake 1: Too vague</strong></h3>
+<p><strong>Biology example:</strong> ❌ “Standardize the measurements”</p>
+<p>That could mean anything. Be specific about <em>what</em> you’re standardizing and <em>how</em>.</p>
+<p>✅ “Divide each bird mass by wing length to get body condition index”</p>
+<p><strong>Chemistry example:</strong> ❌ “Normalize the data”</p>
+<p>What kind of normalization?</p>
+<p>✅ “Divide each absorbance value by the maximum absorbance to scale from 0 to 1”</p>
+<hr>
+</section>
+<section id="mistake-2-too-detailed-actually-writing-code" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="mistake-2-too-detailed-actually-writing-code"><span class="header-section-number">7.2</span> <strong>Mistake 2: Too detailed (actually writing code)</strong></h3>
+<p><strong>Biology example:</strong> ❌ “Use filter() to subset where count &gt;= 5”</p>
+<p>That’s code, not pseudocode. You’re worrying about syntax before you’ve clarified the logic.</p>
+<p>✅ “Remove sites with fewer than 5 observations”</p>
+<p><strong>Chemistry example:</strong> ❌ “Use mutate() to create new column with pH = -log10(H_concentration)”</p>
+<p>✅ “Calculate pH from hydrogen ion concentration”</p>
+<hr>
+</section>
+<section id="mistake-3-skipping-steps" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="mistake-3-skipping-steps"><span class="header-section-number">7.3</span> <strong>Mistake 3: Skipping steps</strong></h3>
+<p><strong>Biology example:</strong> ❌ “Load field data, make species accumulation curve”</p>
+<p>What happened in between? Did you clean it? Aggregate by site? Calculate richness?</p>
+<p>✅ “Load field data → Remove incomplete surveys → Count species per site → Calculate cumulative species richness → Plot accumulation curve”</p>
+<p><strong>Chemistry example:</strong> ❌ “Load titration data, determine pKa”</p>
+<p>Too many hidden steps!</p>
+<p>✅ “Load pH and volume data → Identify equivalence point → Calculate half-equivalence pH → Report pKa value”</p>
+<hr>
+</section>
+<section id="mistake-4-no-decision-points" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="mistake-4-no-decision-points"><span class="header-section-number">7.4</span> <strong>Mistake 4: No decision points</strong></h3>
+<p><strong>Biology example:</strong> ❌ “Remove rare species”</p>
+<p>How do you define rare? What’s your cutoff?</p>
+<p>✅ “Remove species that occur in fewer than 3 sites (less than 10% of total sites)”</p>
+<p><strong>Chemistry example:</strong> ❌ “Remove bad datapoints”</p>
+<p>What makes a datapoint “bad”?</p>
+<p>✅ “Remove datapoints where pH meter error flag is TRUE or pH change &gt; 2 units between consecutive readings”</p>
+<p><strong>[Pause]</strong></p>
+<p>The pattern here: <strong>Good pseudocode makes all decisions explicit.</strong></p>
+<hr>
+</section>
+</section>
+<section id="slide-7-lets-practice-together" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="slide-7-lets-practice-together"><span class="header-section-number">8</span> SLIDE 7: Let’s Practice Together</h2>
+<p><strong>[0:22–0:28] — Guided Exercise</strong></p>
+<p>Alright, let’s practice. I’m going to give you a scenario, and we’ll write pseudocode together.</p>
+<p><strong>Scenario (Biology/Ecology):</strong></p>
+<p>You have a dataset of bird observations. Each row has: - Species name - Date of observation - Location (latitude/longitude) - Observer name</p>
+<p>You want to: 1. Count how many observations there are for each species 2. Create a bar chart showing the 10 most commonly observed species 3. Save the chart</p>
+<p><strong>[Pause]</strong></p>
+<p>Let’s build this step by step. I’ll start, and you can type suggestions in the chat.</p>
+<p>Here’s how I’d start:</p>
+<pre><code>STEP 1: Load the bird observation data</code></pre>
+<p>What comes next? <strong>Type in the chat</strong> — what’s the next step?</p>
+<p><em>[Wait for responses]</em></p>
+<hr>
+<p><strong>[0:28–0:32] — Collaborative Building</strong></p>
+<p>Great! I’m seeing: - “Count observations per species” - “Group by species and count” - “Summarize by species”</p>
+<p>Those are all getting at the same idea. Let me write it in pseudocode:</p>
+<pre><code>STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species</code></pre>
+<p>Good. Now what? We want the top 10. How do we get those?</p>
+<p><em>[Wait for responses]</em></p>
+<p>Right! We need to sort and take the top 10:</p>
+<pre><code>STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species</code></pre>
+<p>Now we need to make the plot. What kind of plot?</p>
+<p><em>[Wait for responses]</em></p>
+<p>Bar chart, yes:</p>
+<pre><code>STEP 5: Create a bar chart with species on x-axis, count on y-axis</code></pre>
+<p>And finally?</p>
+<pre><code>STEP 6: Save the chart to figures/top_species.png</code></pre>
+<hr>
+<p><strong>[0:32–0:36] — Analysis of Our Pseudocode</strong></p>
+<p>Let’s look at what we just wrote:</p>
+<pre><code>STEP 1: Load the bird observation data
+STEP 2: Count the number of observations for each species
+STEP 3: Sort species by count (highest to lowest)
+STEP 4: Keep only the top 10 species
+STEP 5: Create a bar chart with species on x-axis, count on y-axis
+STEP 6: Save the chart to figures/top_species.png</code></pre>
+<p>Is this good pseudocode? Let’s check:</p>
+<p>✅ <strong>Clear verbs</strong> — Load, Count, Sort, Keep, Create, Save<br>
+✅ <strong>Specific steps</strong> — We know exactly what’s happening<br>
+✅ <strong>Ordered logically</strong> — Each step depends on the previous one<br>
+✅ <strong>Not code</strong> — We didn’t worry about R syntax<br>
+✅ <strong>Explicit output</strong> — We know where the file is saved</p>
+<p>This pseudocode could be translated into R, Python, or even Excel. The logic is clear.</p>
+<hr>
+</section>
+<section id="slide-8-identifying-ambiguity-in-pseudocode" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="slide-8-identifying-ambiguity-in-pseudocode"><span class="header-section-number">9</span> SLIDE 8: Identifying Ambiguity in Pseudocode</h2>
+<p><strong>[0:36–0:42] — Debugging Bad Pseudocode</strong></p>
+<p>Now let’s look at some pseudocode that has problems. I want you to spot the ambiguity.</p>
+<p><strong>Example 1 (Chemistry):</strong></p>
+<pre><code>Load the titration dataset
+Clean the pH data
+Calculate the equivalence point
+Plot the titration curve</code></pre>
+<p>What’s wrong with this? <strong>Type in the chat.</strong></p>
+<p><em>[Wait for responses]</em></p>
+<p>Exactly! It’s way too vague. What does “clean” mean? How do you calculate equivalence point? What kind of plot?</p>
+<hr>
+<p><strong>Example 2 (Biology):</strong></p>
+<pre><code>Load temperature data from field sensors
+Remove outliers
+Calculate average temperature by site
+Make a plot</code></pre>
+<p>Better, but still problems. What’s ambiguous here?</p>
+<p><em>[Wait for responses]</em></p>
+<p>Right! <strong>How do we define outliers?</strong> Are we using standard deviations? Domain knowledge? And what kind of plot?</p>
+<p>Here’s a better version:</p>
+<pre><code>Load temperature data from field sensors
+Remove temperatures below -50°C or above 60°C (sensor error range)
+Remove temperatures more than 3 standard deviations from site mean
+Calculate mean temperature for each site
+Create a bar plot of mean temperature by site (ordered north to south)
+Save plot to figures/temp_by_site.png</code></pre>
+<p>Much clearer!</p>
+<hr>
+<p><strong>Example 3 (Chemistry):</strong></p>
+<pre><code>Load absorbance spectra
+Correct for baseline
+Find peak wavelength
+Save results</code></pre>
+<p>What’s missing here?</p>
+<p><em>[Wait for responses]</em></p>
+<p>Better version:</p>
+<pre><code>Load absorbance spectra from UV-Vis instrument
+Subtract minimum absorbance (wavelength 800-900 nm) from all values
+Identify wavelength with maximum absorbance in range 400-700 nm
+Extract absorbance value at peak wavelength
+Save wavelength and absorbance to data/processed/peak_data.csv</code></pre>
+<hr>
+</section>
+<section id="slide-9-breakout-activity-rewrite-your-week-1-analysis" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="slide-9-breakout-activity-rewrite-your-week-1-analysis"><span class="header-section-number">10</span> SLIDE 9: Breakout Activity — Rewrite Your Week 1 Analysis</h2>
+<p><strong>[0:42–0:45] — Setting Up</strong></p>
+<p>Okay, now it’s your turn.</p>
+<p>In Week 1, you wrote a plain-language description of an analysis: clean a dataset with missing and invalid values, summarize it, and produce a figure.</p>
+<p>Now you’re going to <strong>rewrite that description as formal pseudocode.</strong></p>
+<p>I’m sending you to breakout rooms for 15 minutes. Here’s what I want:</p>
+<ol type="1">
+<li><strong>Rewrite your Week 1 analysis as numbered pseudocode steps</strong></li>
+<li><strong>Be specific</strong> — no vague verbs like “clean” or “summarize”</li>
+<li><strong>Make decisions explicit</strong> — if you’re removing something, say what and why</li>
+<li><strong>Include domain-specific details</strong> (e.g., “temperatures below -50°C,” “pH &gt; 14,” “absorbance &lt; 0”)</li>
+<li><strong>Write it in the Google Doc</strong> I’ll drop in the chat</li>
+</ol>
+<p>When you’re done, you’ll have pseudocode that could be handed to someone else and they’d know exactly what to do.</p>
+<p><strong>[Drop Google Doc link in chat]</strong></p>
+<hr>
+<p><strong>[0:45–1:00] — Breakout Rooms</strong></p>
+<p><em>[Instructor: Circulate through rooms, check in, offer feedback]</em></p>
+<p><em>[2 minutes before end: “You have 2 minutes — wrap up your pseudocode!”]</em></p>
+<hr>
+</section>
+<section id="slide-10-report-out" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="slide-10-report-out"><span class="header-section-number">11</span> SLIDE 10: Report Out</h2>
+<p><strong>[1:00–1:08] — Whole-Class Sharing</strong></p>
+<p>Welcome back! Let’s see what you came up with.</p>
+<p><em>[Call on 2-3 groups to share their pseudocode]</em></p>
+<p>Group 2 (Chemistry), can you walk us through your pseudocode?</p>
+<p><em>[Listen, validate good choices, gently point out remaining ambiguities]</em></p>
+<p>Group 5 (Biology), what did you come up with?</p>
+<p><em>[Listen, validate good choices, gently point out remaining ambiguities]</em></p>
+<hr>
+<p><strong>[1:08–1:12] — Common Patterns</strong></p>
+<p>Here’s what I’m noticing across groups:</p>
+<p><strong>Good:</strong> - Most of you specified <em>what</em> counts as invalid (e.g., “temperature below 0°C,” “negative absorbance values”) - Most of you ordered your steps logically - Most of you specified output file names and locations - Good use of domain knowledge (measurement ranges, physical constraints)</p>
+<p><strong>Needs work:</strong> - A few groups still have vague verbs like “process” or “analyze” — be more specific! - Some groups skipped intermediate steps — don’t assume the reader knows what you mean - A few groups mixed pseudocode with actual code syntax — stay in plain language</p>
+<p><strong>Chemistry-specific observation:</strong> - Great job being specific about units and calibration steps! - Remember to document your equations (e.g., “Apply Beer-Lambert law: A = εbc”)</p>
+<p><strong>Biology-specific observation:</strong> - Good job considering data quality checks (GPS errors, taxonomic issues) - Remember to document your grouping decisions (e.g., “aggregate by site,” “summarize by month”)</p>
+<hr>
+</section>
+<section id="slide-11-pseudocode-as-a-tool-for-debugging" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="slide-11-pseudocode-as-a-tool-for-debugging"><span class="header-section-number">12</span> SLIDE 11: Pseudocode as a Tool for Debugging</h2>
+<p><strong>[1:12–1:15] — Beyond Planning</strong></p>
+<p>Here’s something I want you to remember:</p>
+<p><strong>Pseudocode isn’t just for planning. It’s also for debugging.</strong></p>
+<p>When your code isn’t working, the problem is usually one of two things:</p>
+<ol type="1">
+<li><strong>Your logic is flawed</strong> — you’re asking the computer to do the wrong thing</li>
+<li><strong>Your syntax is wrong</strong> — you’re asking correctly but using the wrong words</li>
+</ol>
+<p>If you have pseudocode, you can separate these problems:</p>
+<ul>
+<li>Go back to your pseudocode and ask: “Is this what I actually want to do?”</li>
+<li>If the pseudocode is right but the code is wrong, it’s a syntax problem (easier to fix with Google/ChatGPT)</li>
+<li>If the pseudocode is wrong, fix the logic first, <em>then</em> rewrite the code</li>
+</ul>
+<p><strong>Chemistry example:</strong> - Pseudocode says: “Calculate molarity from mass and volume” - But you forgot: “First convert mass to moles using molecular weight” - That’s a logic error, not a syntax error!</p>
+<p><strong>Biology example:</strong> - Pseudocode says: “Calculate species richness per site” - But you forgot: “First remove duplicate observations of same species at same site” - Fix the logic, then fix the code!</p>
+<p><strong>This saves hours of frustration.</strong></p>
+<hr>
+</section>
+<section id="slide-12-before-next-class" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="slide-12-before-next-class"><span class="header-section-number">13</span> SLIDE 12: Before Next Class</h2>
+<p><strong>[1:13–1:15] — Homework</strong></p>
+<p>Here’s what I want you to do before Monday:</p>
+<p><strong>Exit Ticket:</strong></p>
+<p>Write pseudocode for ONE of these tasks (choose based on your field):</p>
+<p><strong>Option A (Biology/Ecology):</strong> &gt; You have a dataset of plant heights measured at different light levels. Read the dataset, remove plants with negative height values (data entry errors), remove plants with height &gt; 300 cm (measurement errors), calculate the mean height for each light level, and save the summary to a new file.</p>
+<p><strong>Option B (Chemistry):</strong> &gt; You have UV-Vis absorbance data from a kinetics experiment. Read the dataset, subtract the baseline absorbance (first 5 timepoints), remove any absorbance values &lt; 0 or &gt; 3 (outside linear range), calculate the slope of absorbance vs.&nbsp;time (reaction rate), and save the rate constant to a new file.</p>
+<p>Post your pseudocode (5-8 steps) in the discussion board. Keep it specific!</p>
+<p><strong>Also:</strong></p>
+<p>Finish setting up Git and GitHub (this week’s activity). We’ll use it starting next week.</p>
+<hr>
+</section>
+<section id="slide-13-key-takeaways" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="slide-13-key-takeaways"><span class="header-section-number">14</span> SLIDE 13: Key Takeaways</h2>
+<p><strong>[1:15] — Summary</strong></p>
+<p>Let’s review what we covered:</p>
+<ol type="1">
+<li><strong>Pseudocode is a planning tool</strong> — it bridges scientific thinking and code</li>
+<li><strong>Good pseudocode is specific, ordered, and explicit</strong> — no ambiguity</li>
+<li><strong>Pseudocode reveals flawed logic</strong> before you waste time coding</li>
+<li><strong>Pseudocode is language-agnostic</strong> — it can be translated into any programming language</li>
+<li><strong>Use domain knowledge in pseudocode</strong> — measurement ranges, physical constraints, scientific decisions</li>
+</ol>
+<p><strong>Next week:</strong> We’ll start writing actual code inside Quarto documents. But the pseudocode you write this week will make that much easier.</p>
+<p>See you Monday!</p>
+<p><em>[Stay online for 2-3 minutes for questions]</em></p>
+<hr>
+</section>
+<section id="materials-needed" class="level2" data-number="15">
+<h2 data-number="15" class="anchored" data-anchor-id="materials-needed"><span class="header-section-number">15</span> Materials Needed</h2>
+<ul>
+<li>Examples of bad and good pseudocode (both biology and chemistry)</li>
+<li>Guided exercise scenario (bird observations - accessible to both groups)</li>
+<li>Google Doc for breakout activity</li>
+<li>Breakout rooms (groups of 3-4)</li>
+<li>Week 1 analysis descriptions (students should have these)</li>
+<li>Exit ticket options (discipline-specific)</li>
+</ul>
+<hr>
+</section>
+<section id="instructor-notes" class="level2" data-number="16">
+<h2 data-number="16" class="anchored" data-anchor-id="instructor-notes"><span class="header-section-number">16</span> Instructor Notes</h2>
+<ul>
+<li><strong>Timing</strong>: The breakout activity can extend to 18 minutes if needed</li>
+<li><strong>Common struggle</strong>: Students often slip back into vague language — gently redirect them</li>
+<li><strong>Guided exercise</strong>: Type the pseudocode in a shared document as you build it with the class</li>
+<li><strong>Exit ticket</strong>: Remind students to post before Monday’s class</li>
+<li><strong>Chemistry students</strong>: May initially over-specify equations — remind them pseudocode doesn’t need full mathematical notation</li>
+<li><strong>Biology students</strong>: May initially under-specify taxonomic/ecological decisions — remind them to be explicit about grouping and filtering choices</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright © 2025, NCEAS</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

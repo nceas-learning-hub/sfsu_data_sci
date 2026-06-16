@@ -1,0 +1,326 @@
+---
+title: "How a ggplot is Built"
+subtitle: "A layer-by-layer walkthrough with the Challenger O-ring example"
+format:
+  html:
+    toc: true
+    code-fold: false
+    code-summary: "Show code"
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+# Purpose
+
+This document is designed for teaching `ggplot2` by **building a plot one stage at a time**.
+
+The goal is not just to produce a final figure, but to show students how a `ggplot` is assembled from distinct components:
+
+-   **data**
+-   **aesthetic mappings**
+-   **geometric layers**
+-   **statistical layers**
+-   **annotations**
+-   **labels**
+-   **theme elements**
+
+We will use the Challenger O-ring example because it is a classic case in data visualization: the relationship between temperature and damage becomes much easier to see once the data are plotted.
+
+# Load packages and data
+
+We will use the `orings` data from the `DAAG` package and add a damage index used in many retellings of this example.
+
+```{r}
+library(DAAG)
+library(ggplot2)
+
+data(orings)
+
+Damage <- c(11, 4, 4, 2, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0)
+oring <- cbind(orings, Damage)
+
+oring
+```
+
+# Step 0: Look at the data
+
+Before plotting, it helps to inspect the variables.
+
+```{r}
+head(oring)
+```
+
+The main variables we will use are:
+
+-   `Temperature`: launch temperature in degrees Fahrenheit
+-   `Damage`: O-ring damage index
+
+# Step 1: Create the plotting canvas
+
+A `ggplot` usually begins with the dataset and the variable mappings.
+
+```{r}
+p0 <- ggplot(data = oring, aes(x = Temperature, y = Damage))
+p0
+```
+
+This produces an empty plotting area.
+
+That is useful to show students because `ggplot()` by itself does **not** draw points or lines. It only sets up the plot structure.
+
+# Step 2: Add points
+
+Now we add a geometric layer.
+
+```{r}
+p1 <- p0 + geom_point()
+p1
+```
+
+This is the first complete graph.
+
+What changed?
+
+-   `p0` defined the data and axes
+-   `geom_point()` told `ggplot2` to represent each observation as a point
+
+# Step 3: Adjust point appearance
+
+We can set visual properties directly in the geom.
+
+```{r}
+p2 <- p0 + geom_point(size = 2)
+p2
+```
+
+Because `size = 2` is outside `aes()`, it is a fixed styling choice rather than a mapping to a variable.
+
+# Step 4: Show mapping versus setting
+
+This is one of the most important ideas for beginners.
+
+## Fixed styling
+
+```{r}
+p_fixed <- ggplot(oring, aes(x = Temperature, y = Damage)) +
+  geom_point(color = "steelblue", size = 3)
+
+p_fixed
+```
+
+Here every point gets the same color.
+
+## Mapping to a variable
+
+```{r}
+p_mapped <- ggplot(oring, aes(x = Temperature, y = Damage, color = factor(Blowby))) +
+  geom_point(size = 3)
+
+p_mapped
+```
+
+Here color depends on the data.
+
+A good rule:
+
+-   inside `aes()` means **map to data**
+-   outside `aes()` means **set a fixed value**
+
+# Step 5: Build the core scatter plot explicitly
+
+For the main walkthrough, we will return to the simpler plot and keep building.
+
+```{r}
+p3 <- ggplot(oring, aes(x = Temperature, y = Damage)) +
+  geom_point(size = 2)
+
+p3
+```
+
+# Step 6: Add a smoother
+
+Now add a statistical layer.
+
+```{r}
+p4 <- p3 + stat_smooth(method = "loess", se = FALSE)
+p4
+```
+
+This adds a smooth curve summarizing the overall relationship between temperature and damage.
+
+This is a useful teaching moment:
+
+-   `geom_point()` shows the raw observations
+-   `stat_smooth()` adds a derived summary
+
+# Step 7: Use jitter to reduce overlap
+
+Some observations share similar values, so points can overlap.
+
+```{r}
+p5 <- ggplot(oring, aes(x = Temperature, y = jitter(Damage))) +
+  geom_point(size = 2) +
+  stat_smooth(method = "loess", se = FALSE)
+
+p5
+```
+
+Jitter makes overlapping points easier to see, though it also slightly perturbs the exact positions.
+
+# Step 8: Highlight the forecast range
+
+The forecast launch temperature for Challenger was about 26 to 29 degrees Fahrenheit.
+
+We can highlight that region with a rectangle.
+
+```{r}
+p6 <- ggplot(oring, aes(x = Temperature, y = Damage)) +
+  geom_point(size = 2) +
+  stat_smooth(method = "loess", se = FALSE) +
+  annotate(
+    "rect",
+    xmin = 26, xmax = 29,
+    ymin = 0, ymax = 12,
+    alpha = 0.2,
+    fill = "red"
+  )
+
+p6
+```
+
+This is an annotation rather than a data layer.
+
+# Step 9: Add explanatory text
+
+Annotations can also include text.
+
+```{r}
+p7 <- p6 + annotate(
+  "text",
+  x = 31,
+  y = 3,
+  label = "Forecast\n26 to 29°F",
+  hjust = 0
+)
+
+p7
+```
+
+This makes the figure more explanatory and less dependent on narration.
+
+# Step 10: Add labels
+
+Now add titles and axis labels.
+
+```{r}
+p8 <- p7 + labs(
+  title = "O-ring damage versus temperature",
+  subtitle = "Lower temperatures were associated with more damage",
+  x = "Temperature (°F)",
+  y = "Damage index",
+  caption = "Data: DAAG::orings with added damage index"
+)
+
+p8
+```
+
+This is a good stage to discuss how labels shape interpretation.
+
+# Step 11: Adjust the x-axis range
+
+To focus attention on the forecast range and the observed temperatures, we can control the axis limits.
+
+```{r}
+p9 <- p8 + xlim(25, 85)
+p9
+```
+
+Now the visual framing better supports the point of the graph.
+
+# Step 12: Apply a theme
+
+Themes control non-data ink: the background, grid lines, text styling, and related elements.
+
+```{r}
+p10 <- p9 + theme_minimal(base_size = 13)
+p10
+```
+
+At this stage we have a polished plot assembled step by step.
+
+# Step 13: Show the whole build in one block
+
+After walking through each stage explicitly, it is useful to show the full code in one place.
+
+```{r}
+ggplot(oring, aes(x = Temperature, y = Damage)) +
+  geom_point(size = 2) +
+  stat_smooth(method = "loess", se = FALSE) +
+  annotate(
+    "rect",
+    xmin = 26, xmax = 29,
+    ymin = 0, ymax = 12,
+    alpha = 0.2,
+    fill = "red"
+  ) +
+  annotate(
+    "text",
+    x = 31,
+    y = 3,
+    label = "Forecast\n26 to 29°F",
+    hjust = 0
+  ) +
+  labs(
+    title = "O-ring damage versus temperature",
+    subtitle = "Lower temperatures were associated with more damage",
+    x = "Temperature (°F)",
+    y = "Damage index",
+    caption = "Data: DAAG::orings with added damage index"
+  ) +
+  xlim(25, 85) +
+  theme_minimal(base_size = 13)
+```
+
+# Summary: what are the components?
+
+The final plot contains:
+
+-   **Data**: `oring`
+-   **Mappings**: `aes(x = Temperature, y = Damage)`
+-   **Geom layer**: `geom_point()`
+-   **Statistical layer**: `stat_smooth()`
+-   **Annotations**: `annotate("rect", ...)` and `annotate("text", ...)`
+-   **Labels**: `labs(...)`
+-   **Scale control**: `xlim(25, 85)`
+-   **Theme**: `theme_minimal()`
+
+# A useful mental model
+
+One helpful way to describe `ggplot2` is:
+
+> Start with data and mappings, then add layers that display, summarize, and explain the data.
+
+That suggests a sequence of questions students can ask:
+
+1.  What data am I using?
+2.  Which variables belong on the axes?
+3.  What geom should represent the observations?
+4.  Do I want a statistical summary?
+5.  Do I need annotations?
+6.  What labels will help the viewer?
+7.  What theme or formatting best supports the message?
+
+# Optional student exercise
+
+Modify the final plot in one way:
+
+-   change the theme
+-   change point size
+-   add a color mapping
+-   remove the smoother
+-   rewrite the title and subtitle
+-   move the annotation text
+
+Then explain whether the change improves the figure and why.

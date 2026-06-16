@@ -1,0 +1,404 @@
+---
+title: "Advanced Quarto Features - Live Demo"
+author: "Dr. Gretchen LeBuhn & Dr. Nicole Adelstein"
+date: "Week 3 Day 2"
+format:
+  html:
+    toc: true
+    code-fold: true
+    theme: cosmo
+    embed-resources: true
+  pdf:
+    toc: true
+    geometry: margin=1in
+---
+
+## Introduction
+
+This document demonstrates professional Quarto features including:
+
+- Labeled figures with cross-references
+- Formatted tables with captions
+- Mathematical equations
+- Callout blocks
+- Multiple layout options
+
+We'll analyze bee species richness data from three study sites.
+
+## Load Libraries and Data
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load tidyverse package (includes ggplot2, dplyr, readr, and more)
+# This is a collection of packages for data manipulation and visualization
+library(tidyverse)
+
+# Load knitr package for creating formatted tables with kable() function
+library(knitr)
+
+# Read bee data from CSV file
+# read.csv() imports data from a comma-separated values file
+# Returns a data frame with columns matching the CSV headers
+# File must be in the same directory as this .qmd file
+bee_data <- read.csv("bee_data.csv")
+
+# head() displays the first 6 rows of the data frame
+# Useful for quickly checking that data imported correctly
+head(bee_data)
+```
+
+## Professional Figures
+
+### Species Richness by Site
+
+Let's visualize species richness across our three study sites.
+
+```{r}
+#| label: fig-richness-site
+#| fig-cap: "Species richness varies significantly among sites, with the southern site showing highest diversity."
+#| fig-width: 6
+#| fig-height: 4
+
+# ggplot() initializes a plot object
+# First argument is the data frame
+# aes() defines the aesthetic mappings (which variables map to x, y, colors, etc.)
+ggplot(bee_data, aes(x = site, y = richness, fill = site)) +
+  
+  # geom_boxplot() adds a box-and-whisker plot layer
+  # alpha = 0.7 sets transparency (0 = fully transparent, 1 = fully opaque)
+  geom_boxplot(alpha = 0.7) +
+  
+  # geom_jitter() adds individual data points with random horizontal scatter
+  # width = 0.2 controls how much horizontal jitter to apply
+  # size = 2 sets the point size (larger number = bigger points)
+  geom_jitter(width = 0.2, alpha = 0.5, size = 2) +
+  
+  # labs() sets axis labels and titles
+  # x = sets the x-axis label, y = sets the y-axis label
+  labs(x = "Study Site", 
+       y = "Species Richness") +
+  
+  # theme_minimal() applies a clean, minimalist theme
+  # base_size = 12 sets the base font size for all text in the plot
+  theme_minimal(base_size = 12) +
+  
+  # theme() allows fine-tuning of specific plot elements
+  # legend.position = "none" removes the legend entirely
+  theme(legend.position = "none") +
+  
+  # scale_fill_brewer() uses ColorBrewer color palettes
+  # palette = "Set2" selects a specific color scheme designed to be colorblind-friendly
+  scale_fill_brewer(palette = "Set2")
+```
+
+As shown in @fig-richness-site, the southern site consistently shows higher species richness compared to northern and central sites. This pattern may be related to temperature gradients across sites.
+
+### Temperature Patterns
+
+```{r}
+#| label: fig-temperature
+#| fig-cap: "Mean temperature increases from north to south across study sites."
+#| fig-width: 6
+#| fig-height: 4
+
+# Create a boxplot showing temperature distribution by site
+# aes() maps: x = categorical site variable, y = numeric temperature, fill = colors by site
+ggplot(bee_data, aes(x = site, y = temperature, fill = site)) +
+  
+  # Add boxplot layer with 70% opacity
+  geom_boxplot(alpha = 0.7) +
+  
+  # Set axis labels
+  labs(x = "Study Site",
+       y = "Temperature (°C)") +
+  
+  # Apply minimal theme with 12pt base font size
+  theme_minimal(base_size = 12) +
+  
+  # Remove legend (redundant since x-axis already shows sites)
+  theme(legend.position = "none") +
+  
+  # Use ColorBrewer "Set1" palette (different from previous plot for variety)
+  scale_fill_brewer(palette = "Set1")
+```
+
+:::{.callout-note}
+## Sampling Period
+All measurements were taken during peak flowering season (June-August 2024) to standardize environmental conditions.
+:::
+
+### Multiple Plots Side-by-Side
+
+```{r}
+#| label: fig-comparison
+#| fig-cap: "Comparison of richness and temperature patterns across sites."
+#| fig-subcap: 
+#|   - "Species richness distribution"
+#|   - "Temperature distribution"
+#| layout-ncol: 2
+#| fig-width: 4
+#| fig-height: 3
+
+# Plot 1: Richness histogram
+# aes(x = richness) maps only x variable; y is automatically the count
+ggplot(bee_data, aes(x = richness)) +
+  
+  # geom_histogram() creates a histogram (bars showing frequency distribution)
+  # binwidth = 1 makes each bar represent a 1-unit interval
+  # fill = "steelblue" sets the bar color
+  geom_histogram(binwidth = 1, fill = "steelblue", alpha = 0.7) +
+  
+  # Set axis labels
+  labs(x = "Species Richness", y = "Count") +
+  
+  # Apply minimal theme
+  theme_minimal()
+
+# Plot 2: Temperature histogram
+# Same structure as Plot 1, but with temperature data and coral color
+ggplot(bee_data, aes(x = temperature)) +
+  
+  # Create histogram with 1-degree bins
+  geom_histogram(binwidth = 1, fill = "coral", alpha = 0.7) +
+  
+  # Set axis labels
+  labs(x = "Temperature (°C)", y = "Count") +
+  
+  # Apply minimal theme
+  theme_minimal()
+```
+
+## Professional Tables
+
+### Summary Statistics
+
+Now let's create a professional summary table of our data.
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: "Summary statistics of species richness and temperature by study site."
+
+# Calculate summary statistics using tidyverse pipe operator %>%
+# The pipe passes the result of each line to the next line as the first argument
+
+# Start with bee_data
+summary_stats <- bee_data %>%
+  
+  # group_by() splits data into groups (one for each site)
+  # All subsequent operations are performed within each group
+  group_by(site) %>%
+  
+  # summarise() creates new columns by calculating summaries
+  # Each calculation is applied to each group separately
+  summarise(
+    # mean() calculates the average
+    # round(x, 1) rounds to 1 decimal place
+    # Backticks allow column names with spaces
+    `Mean Richness` = round(mean(richness), 1),
+    
+    # sd() calculates the standard deviation (measure of variability)
+    `SD Richness` = round(sd(richness), 1),
+    
+    # Same calculations for temperature
+    `Mean Temp (°C)` = round(mean(temperature), 1),
+    `SD Temp` = round(sd(temperature), 1),
+    
+    # n() counts the number of observations in each group
+    N = n()
+  )
+
+# Create formatted table
+# kable() converts data frame to formatted table
+kable(summary_stats, 
+      # digits = 1 controls decimal places for all numeric columns
+      digits = 1,
+      # align = controls text alignment: 'l' = left, 'c' = center, 'r' = right
+      # One letter per column: left-align site names, center all numbers
+      align = c('l', 'c', 'c', 'c', 'c', 'c'))
+```
+
+Statistical analysis (@tbl-summary) reveals that the southern site has the highest mean species richness (`r round(mean(bee_data$richness[bee_data$site == "South"]), 1)` species) and warmest temperatures.
+
+### ANOVA Results
+
+```{r}
+#| label: tbl-anova
+#| tbl-cap: "ANOVA results testing differences in species richness among sites."
+
+# Run ANOVA (Analysis of Variance)
+# aov() performs ANOVA test
+# Formula syntax: response_variable ~ predictor_variable
+# Tests if mean richness differs significantly among sites
+anova_results <- aov(richness ~ site, data = bee_data)
+
+# summary() extracts the ANOVA table from the model object
+# Returns a list containing F-statistic, p-value, degrees of freedom, etc.
+anova_summary <- summary(anova_results)
+
+# Extract values from the summary
+# [[1]] accesses the first element of the summary list (the ANOVA table)
+# as.data.frame() converts it to a data frame for easier manipulation
+anova_df <- as.data.frame(anova_summary[[1]])
+
+# Format for display
+# Create a cleaner version with row names as a column
+anova_table <- data.frame(
+  # row.names() extracts the row labels (Source names)
+  Source = row.names(anova_df),
+  
+  # Access columns from the ANOVA results using $ notation
+  Df = anova_df$Df,
+  
+  # round() to 2 decimal places for readability
+  `Sum Sq` = round(anova_df$`Sum Sq`, 2),
+  `Mean Sq` = round(anova_df$`Mean Sq`, 2),
+  `F value` = round(anova_df$`F value`, 2),
+  
+  # ifelse() is a conditional: if p < 0.001, show "< 0.001", else round to 3 decimals
+  # This handles the very small p-values more clearly
+  `P value` = ifelse(anova_df$`Pr(>F)` < 0.001, "< 0.001", 
+                     round(anova_df$`Pr(>F)`, 3)),
+  
+  # check.names = FALSE preserves column names with spaces
+  check.names = FALSE
+)
+
+# kable() creates formatted table
+# row.names = FALSE prevents duplicate row numbers
+kable(anova_table, row.names = FALSE)
+```
+
+Results from @tbl-anova indicate highly significant differences in species richness among the three study sites.
+
+:::{.callout-warning}
+## Sample Size Consideration
+Sample sizes were limited by weather conditions during the sampling period. Sites with rain events during scheduled sampling days have fewer replicates.
+:::
+
+## Mathematical Equations
+
+### Shannon Diversity Index
+
+We calculated Shannon diversity using the formula:
+
+$$
+H' = -\sum_{i=1}^{S} p_i \ln(p_i)
+$$ {#eq-shannon}
+
+where $S$ is the total number of species and $p_i$ is the proportion of individuals belonging to species $i$.
+
+The Shannon diversity index (@eq-shannon) provides a measure that accounts for both species richness and evenness in the community.
+
+### Simpson's Index
+
+An alternative diversity metric is Simpson's index:
+
+$$
+D = 1 - \sum_{i=1}^{S} p_i^2
+$$ {#eq-simpson}
+
+Both @eq-shannon and @eq-simpson are commonly used in community ecology, with Simpson's index being less sensitive to rare species.
+
+## Relationship Between Temperature and Richness
+
+Let's explore whether temperature predicts species richness.
+
+```{r}
+#| label: fig-temp-richness
+#| fig-cap: "Positive relationship between temperature and species richness across all sites."
+#| fig-width: 6
+#| fig-height: 5
+
+# Create scatter plot with regression line
+# aes() maps temperature to x-axis, richness to y-axis, color points by site
+ggplot(bee_data, aes(x = temperature, y = richness, color = site)) +
+  
+  # geom_point() adds scatter plot points
+  # size = 3 makes points larger for better visibility
+  # alpha = 0.7 adds slight transparency
+  geom_point(size = 3, alpha = 0.7) +
+  
+  # geom_smooth() adds a fitted line to show trend
+  # method = "lm" fits a linear model (straight line)
+  # se = TRUE includes the confidence interval (shaded area around line)
+  # color = "black" makes the line black (overrides color aesthetic)
+  # linetype = "dashed" creates a dashed line instead of solid
+  geom_smooth(method = "lm", se = TRUE, color = "black", linetype = "dashed") +
+  
+  # Set all labels including legend title
+  # color = "Study Site" labels the legend (since color aesthetic is mapped to site)
+  labs(x = "Temperature (°C)",
+       y = "Species Richness",
+       color = "Study Site") +
+  
+  # Apply minimal theme
+  theme_minimal(base_size = 12) +
+  
+  # Move legend to bottom to save horizontal space
+  # legend.position can be "top", "bottom", "left", "right", or "none"
+  theme(legend.position = "bottom") +
+  
+  # Use ColorBrewer "Dark2" palette for better contrast with black regression line
+  scale_color_brewer(palette = "Dark2")
+```
+
+:::{.callout-tip}
+## Analysis Suggestion
+The positive trend in @fig-temp-richness suggests temperature may be an important driver of bee diversity. Consider including additional environmental variables (humidity, floral resources) in future analyses to better understand this pattern.
+:::
+
+## Column Layout Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Key Findings
+
+- Southern site shows highest richness
+- Temperature correlates with diversity
+- Significant site differences
+- Pattern consistent across sampling dates
+:::
+
+::: {.column width="50%"}
+### Next Steps
+
+- Expand sampling to additional sites
+- Include rarefaction analysis
+- Measure floral resource availability
+- Conduct seasonal comparison
+:::
+
+::::
+
+## Conclusions
+
+This analysis demonstrates several important patterns:
+
+1. Species richness varies significantly among study sites (@fig-richness-site, @tbl-anova)
+2. The southern site shows consistently higher diversity (@tbl-summary)
+3. Temperature appears to be positively correlated with richness (@fig-temp-richness)
+4. These patterns warrant further investigation with expanded sampling
+
+:::{.callout-important}
+## Key Takeaway
+Geographic gradients in bee diversity may be driven by temperature, but additional environmental factors should be considered before drawing causal conclusions.
+:::
+
+## Session Information
+
+```{r}
+#| label: session-info
+
+# sessionInfo() prints information about the R session
+# Includes: R version, operating system, loaded packages and their versions
+# This is crucial for reproducibility - allows others to recreate your exact environment
+sessionInfo()
+```
+
+---
+
+**Document rendered:** `r format(Sys.Date(), "%B %d, %Y")`

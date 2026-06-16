@@ -1,0 +1,401 @@
+---
+title: "Diagnosing Join Failures"
+subtitle: "Week 7 · Lecture 2"
+format:
+  revealjs:
+    slide-number: true
+    code-link: true
+    highlight-style: a11y
+    chalkboard: true
+    theme:
+      - lh_slides_style.scss
+execute:
+  echo: true
+  eval: false
+  code-line-numbers: false
+---
+
+##  {#title-slide data-menu-title="Title Slide"}
+
+[Diagnosing Join Failures]{.custom-title}
+
+[When joins go wrong — and how to find out]{.custom-subtitle}
+
+<hr class="hr-red">
+
+[**BIO/CHEM 806 · Week 7 · Lecture 2**]{.custom-subtitle2}
+
+------------------------------------------------------------------------
+
+##  {#learning-obj data-menu-title="Learning Objectives"}
+
+[Learning Objectives]{.slide-title}
+
+::: body-text
+By the end of this lecture, you will be able to:
+
+-   Describe the three ways a join can fail scientifically
+-   Identify row multiplication and explain what causes it
+-   Use `anti_join` to diagnose key mismatches before joining
+-   Recognize common key formatting problems in real data
+-   Apply a diagnostic workflow before committing to a join
+:::
+
+------------------------------------------------------------------------
+
+##  {#three-failures data-menu-title="Three Ways Joins Fail"}
+
+[Three ways a join can fail]{.slide-title}
+
+::: body-text
+Join failures are not always errors — R will happily return a result.\
+The failure is **scientific**: the result doesn't mean what you think it does.
+:::
+
+. . .
+
+::: body-text
+**1. Silent data loss**\
+An `inner_join` drops rows that don't match — without warning.\
+You lose observations and may not notice.
+
+**2. Silent row multiplication**\
+A key matches multiple rows on the other side.\
+Your result has more rows than expected; summaries are inflated.
+
+**3. Silent key mismatch**\
+Keys that should match don't — due to formatting, case, or encoding differences.\
+You get NAs or empty results where you expected data.
+:::
+
+------------------------------------------------------------------------
+
+##  {#silent-loss data-menu-title="Silent Data Loss"}
+
+[Failure 1: Silent data loss]{.slide-title}
+
+::: body-text
+Scenario: you have 595 bird observations and join to `taxalist` using `inner_join`.
+:::
+
+``` r
+birds_joined <- bird_observations %>%
+  inner_join(y = taxalist, by = "species_id")
+```
+
+. . .
+
+::: body-text
+**What could go wrong?**\
+If any `species_id` in `bird_observations` doesn't appear in `taxalist`, that observation is silently dropped.
+
+**How to check:**
+
+``` r
+# Before joining: how many observations have no taxalist match?
+anti_join(bird_observations, taxalist, by = "species_id")
+```
+
+If this returns any rows, you need to decide: is the missing species a data entry error, an unregistered species, or a legitimate gap?
+:::
+
+------------------------------------------------------------------------
+
+##  {#silent-mult data-menu-title="Silent Multiplication"}
+
+[Failure 2: Silent row multiplication]{.slide-title}
+
+::: body-text
+Row multiplication happens when the key you're joining on is **not unique** in the right table.
+:::
+
+::: body-text
+```         
+surveys table — is survey_id unique?
+survey_id  site_id  observer
+S01        LI-W     Burns, J.
+S01        LI-W     Burns, J.   ← duplicate row!
+S02        NU-C     Morales, A.
+```
+:::
+
+. . .
+
+::: body-text
+**Effect:** every `bird_observations` row that matches `S01` now appears twice.\
+Your total bird counts will be **doubled for those surveys** — but R returns no error.
+
+**How to check:**
+
+``` r
+# Is survey_id unique in the surveys table?
+surveys %>%
+  count(survey_id) %>%
+  filter(n > 1)
+```
+:::
+
+------------------------------------------------------------------------
+
+##  {#practice1 data-menu-title="Practice 1"}
+
+[Practice: Spot the problem]{.slide-title}
+
+::: body-text
+**Take 5 minutes — answer in the chat**
+
+You run this join:
+
+``` r
+result <- bird_observations %>%          # 595 rows
+  left_join(y = surveys, by = "survey_id")
+```
+
+And `result` has **612 rows**.
+
+1.  Is this necessarily an error? What are two possible explanations?
+2.  What code would you run to investigate?
+3.  Which explanation would be a scientific problem vs. an expected result?
+:::
+
+------------------------------------------------------------------------
+
+##  {#practice1-debrief data-menu-title="Practice 1 Debrief"}
+
+[Practice 1 debrief]{.slide-title}
+
+::: body-text
+**Two possible explanations for 612 rows when you expected 595:**
+
+**Explanation A (problem):** Some `survey_id` values in `surveys` appear more than once — duplicate rows created by data entry error. Each matched observation is multiplied.
+
+**Explanation B (expected):** The join worked correctly, and you misunderstood the table structure — `surveys` has legitimate multiple rows per survey_id for some reason.
+
+**Code to investigate:**
+
+``` r
+surveys %>% count(survey_id) %>% filter(n > 1)
+```
+
+**Scientific problem:** Explanation A. Duplicated survey records would inflate all downstream summaries — mean counts, totals, observer comparisons.
+:::
+
+------------------------------------------------------------------------
+
+##  {#key-mismatches data-menu-title="Key Mismatches"}
+
+[Failure 3: Key mismatches]{.slide-title}
+
+::: body-text
+Keys that *should* match often don't — because of how data was entered.
+:::
+
+::: body-text
+**Common culprits:**
+
+| Problem                              | Example                          |
+|--------------------------------------|----------------------------------|
+| Inconsistent capitalization          | `"LI-W"` vs `"li-w"`             |
+| Leading/trailing whitespace          | `"BHCO"` vs `"BHCO "`            |
+| Different formats for the same value | `"J. Burns"` vs `"Josh Burns"`   |
+| Encoding differences                 | special characters, smart quotes |
+:::
+
+. . .
+
+::: body-text
+None of these produce an error. R joins on exact string equality.\
+`"BHCO"` and `"BHCO "` are **different keys** as far as R is concerned.
+:::
+
+------------------------------------------------------------------------
+
+##  {#detecting-mismatches data-menu-title="Detecting Mismatches"}
+
+[Detecting key mismatches with `anti_join`]{.slide-title}
+
+::: body-text
+`anti_join` is your first diagnostic. Run it in **both directions**:
+:::
+
+``` r
+# What's in bird_observations that has no match in taxalist?
+anti_join(bird_observations, taxalist, by = "species_id")
+
+# What's in taxalist that has no observations?
+anti_join(taxalist, bird_observations, by = "species_id")
+```
+
+. . .
+
+::: body-text
+When `anti_join` reveals mismatches, inspect the unmatched keys:
+
+``` r
+# Look at the specific values that didn't match
+anti_join(bird_observations, taxalist, by = "species_id") %>%
+  distinct(species_id)
+```
+
+Then ask: *Is this a real gap in the data, or a formatting problem I need to fix?*
+:::
+
+------------------------------------------------------------------------
+
+##  {#fixing-mismatches data-menu-title="Fixing Mismatches"}
+
+[Fixing key mismatches before joining]{.slide-title}
+
+::: body-text
+Fix the formatting problem in the data *before* joining — and document it in your decision log.
+:::
+
+``` r
+# Trim whitespace from keys before joining
+bird_observations <- bird_observations %>%
+  mutate(species_id = str_trim(species_id))
+
+taxalist <- taxalist %>%
+  mutate(species_id = str_trim(species_id))
+
+# Now join
+bird_observations %>%
+  left_join(y = taxalist, by = "species_id")
+```
+
+. . .
+
+::: body-text
+**The decision log entry:**\
+*"Found leading/trailing whitespace in species_id in bird_observations (3 rows affected). Applied str_trim() prior to join. Checked with anti_join — 0 unmatched rows after cleaning."*
+:::
+
+------------------------------------------------------------------------
+
+##  {#diagnostic-workflow data-menu-title="Diagnostic Workflow"}
+
+[A diagnostic workflow for every join]{.slide-title}
+
+::: body-text
+**Before joining:**
+
+1.  Verify your key is unique where expected\
+    `table %>% count(key_col) %>% filter(n > 1)`
+
+2.  Run `anti_join` to find non-matching keys\
+    `anti_join(left_table, right_table, by = "key")`
+
+3.  State your expected row count
+
+**After joining:**
+
+4.  Check actual row count against expectation\
+    `nrow(result)`
+
+5.  Check for unexpected NAs in joined columns\
+    `result %>% filter(is.na(joined_column))`
+
+6.  Document decisions in your decision log
+:::
+
+------------------------------------------------------------------------
+
+##  {#practice2 data-menu-title="Practice 2"}
+
+[Practice: Apply the diagnostic workflow]{.slide-title}
+
+::: body-text
+**Take 5 minutes — work through this in your head or on paper**
+
+You have:
+
+\- `bird_observations`: 595 rows, `species_id` column
+
+\- `taxalist`: 58 rows, `species_id` column (one row per species)
+
+You want to add common names from `taxalist` to your observations.
+
+Walk through the diagnostic workflow:
+
+1.  Which table's key needs to be unique for this join to be safe?
+2.  What would `anti_join(bird_observations, taxalist, by = "species_id")` tell you if it returns 12 rows?
+3.  You run the join and get 595 rows. Is this reassuring? What else should you check?
+:::
+
+------------------------------------------------------------------------
+
+##  {#practice2-debrief data-menu-title="Practice 2 Debrief"}
+
+[Practice 2 debrief]{.slide-title}
+
+::: body-text
+**1. Which key needs to be unique?**\
+`taxalist`'s `species_id` must be unique — one row per species. If `taxalist` has duplicate species, you'll get row multiplication. `bird_observations` can have repeated `species_id` values (multiple observations per species).
+
+**2. `anti_join` returns 12 rows:**\
+12 observations in `bird_observations` reference `species_id` values not found in `taxalist`. These will lose common name information in a `left_join`, or be dropped entirely in an `inner_join`. Need to investigate: data entry error? Unregistered species?
+
+**3. 595 rows — what else to check?**\
+Row count is correct. But check for NAs: `result %>% filter(is.na(common_name))` — any NAs here correspond to those 12 unmatched observations from the `anti_join`.
+:::
+
+------------------------------------------------------------------------
+
+##  {#join-decision data-menu-title="Join Decision Framework"}
+
+[The join decision framework]{.slide-title}
+
+::: body-text
+**Step 1: What is your scientific goal?**\
+→ Determines left vs. inner vs. full
+
+**Step 2: What does your data look like?**\
+→ Check key uniqueness; run `anti_join`; state expected row count
+
+**Step 3: Execute the join**
+
+**Step 4: Verify the result**\
+→ Check row count; check for unexpected NAs; spot-check values
+
+**Step 5: Document**\
+→ Which join, why, what you found, what you fixed
+:::
+
+. . .
+
+::: body-text
+Steps 1 and 5 are the ones most people skip.\
+They are also the ones that matter most for reproducibility.
+:::
+
+------------------------------------------------------------------------
+
+##  {#exit-ticket data-menu-title="Exit Ticket"}
+
+[Exit Ticket]{.slide-title}
+
+::: body-text
+**In the chat (or Canvas — check for the link):**
+
+Write pseudocode for a diagnostic workflow that:
+
+1.  Checks whether `survey_id` is unique in the `surveys` table
+2.  Finds any `bird_observations` rows with no matching `survey_id` in `surveys`
+3.  Joins the tables, choosing the join type appropriate for "keep all observations, add survey metadata where available"
+4.  Verifies the row count and checks for unexpected NAs
+
+Describe each step in plain language — no R syntax needed.
+:::
+
+------------------------------------------------------------------------
+
+##  {#coming-up data-menu-title="Coming Up"}
+
+[Coming up]{.slide-title}
+
+::: body-text
+**Next week:** Collaborative workflows and visualization — working on shared code with Git, and figures as scientific arguments.
+
+**Your join diagnostic habits travel with you.**\
+Every multi-table dataset you work with in your research will need this workflow.
+:::

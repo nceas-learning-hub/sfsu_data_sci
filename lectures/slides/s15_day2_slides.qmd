@@ -1,0 +1,961 @@
+---
+title: "Data Inspection & Analysis Using LLMs"
+subtitle: "BIO/CHEM 806 · Session 2"
+author: "Gretchen LeBuhn"
+date: today
+format:
+  revealjs:
+    theme: [default, lh_slides_style.scss]
+    chalkboard: true
+    slide-number: true
+    show-slide-number: all
+    progress: true
+    transition: fade
+    code-line-numbers: false
+    highlight-style: github
+    footer: "BIO/CHEM 806 · Data Inspection & Analysis Using LLMs"
+execute:
+  echo: true
+  eval: false
+  warning: false
+  message: false
+editor:
+  markdown:
+    wrap: 72
+---
+
+##  {.custom-title}
+
+::: title-block
+**Data Inspection & Analysis**\
+**Using LLMs**
+
+BIO/CHEM 806 · Session 2
+:::
+
+------------------------------------------------------------------------
+
+## Yesterday vs. Today {.slide-title}
+
+::: body-text
+**Session 1 — Copilot & ChatGPT as coding partners**
+
+- You wrote code; the LLM helped fill it in
+- Inline suggestions, pseudocode → code, refactoring
+
+**Session 2 — Flipping the question**
+
+- What can an LLM do *with your data* directly?
+- Where does it genuinely help?
+- Where does it silently fail?
+- How do we engineer prompts to catch those failures?
+:::
+
+------------------------------------------------------------------------
+
+## Learning Objectives {.slide-title}
+
+::: body-text
+By the end of this session you will be able to:
+
+1.  Upload data to ChatGPT and run exploratory inspection using natural
+    language prompts
+
+2.  Apply **Data Guardian Prompts** to catch silent errors before they
+    reach your results
+
+3.  Ask an LLM to suggest and run statistical analyses — and critically
+    evaluate the output
+
+4.  Export LLM-generated code to R and verify it reproduces the same
+    results
+:::
+
+------------------------------------------------------------------------
+
+## Session Roadmap {.slide-title}
+
+::: body-text
+| Part | Topic                                 | Time     |
+|------|---------------------------------------|----------|
+| 1    | How LLMs handle tabular data          | \~10 min |
+| 2    | Dataset inspection in ChatGPT         | \~15 min |
+| 3    | **Data Guardian Prompts**             | \~20 min |
+| 4    | Statistical analysis in ChatGPT       | \~15 min |
+| 5    | Reproducibility: export & verify in R | \~10 min |
+| —    | Wrap-up & discussion                  | \~5 min  |
+:::
+
+------------------------------------------------------------------------
+
+# Part 1 {.section-title}
+
+## How LLMs Handle Tabular Data
+
+------------------------------------------------------------------------
+
+## What an LLM "sees" {.slide-title}
+
+:::: body-text
+When you upload a CSV to ChatGPT:
+
+- The file is **converted to text tokens**
+- Everything the model can "know" about your data is what fits in its
+  **context window**
+- If your file is too large, the model **silently truncates** it
+
+::: callout-warning
+ChatGPT will **not** tell you it only read part of your dataset. It will
+produce summaries that look complete.
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Token Limits by Model {.slide-title}
+
+::: body-text
+| Model       | Token Limit | Approx. CSV capacity             |
+|-------------|-------------|----------------------------------|
+| GPT-3.5     | \~4,000     | \~200 rows × 10 cols             |
+| GPT-4 (8k)  | \~8,000     | \~400 rows × 10 cols             |
+| GPT-4-turbo | \~128,000   | \~6,000–10,000 rows × 10–20 cols |
+
+Rule of thumb: **each cell ≈ 5–10 tokens**
+
+*Today's dataset: NAPL-only fish survey subset (\<8 KB) → works fine
+with free ChatGPT*
+:::
+
+------------------------------------------------------------------------
+
+## Three Modes of LLM Data Work {.slide-title}
+
+:::::: columns
+::: {.column width="28%"}
+**Interpretation**
+
+Reads data as text, reasons in natural language
+
+*Good for:* inspection, description
+
+*Reliability:* moderate — verify against domain knowledge
+:::
+
+::: {.column width="28%"}
+**Code Execution**
+
+Writes & runs Python; returns real results
+
+*Good for:* computation, visualization
+
+*Reliability:* high *if* the code is correct
+:::
+
+::: {.column width="28%"}
+**Narrative Generation**
+
+Converts results to plain language
+
+*Good for:* methods & results writing
+
+*Reliability:* high for prose, lower for numerical accuracy
+:::
+::::::
+
+------------------------------------------------------------------------
+
+## The Key Skill {.slide-title}
+
+:::: body-text
+::: callout-tip
+## Know which mode you're in
+
+Each mode has different risks and needs different verification:
+
+- **Interpretation** → compare to what you know about the data
+- **Code execution** → inspect the code; re-run in R
+- **Narrative** → check numbers against actual model output
+:::
+
+*Chat: Which mode do you think is most useful for your thesis research?
+Post one sentence.*
+::::
+
+------------------------------------------------------------------------
+
+# Part 2 {.section-title}
+
+## Dataset Inspection in ChatGPT
+
+------------------------------------------------------------------------
+
+## Our Practice Dataset {.slide-title}
+
+::: body-text
+**SBC LTER Annual Fish Survey — NAPL subset**
+
+```         
+https://sbclter.msi.ucsb.edu/external/Reef/Data/trial_data/
+Annual_survey_NAPL_only.csv
+```
+
+- Download and upload via **paperclip** — not a URL link
+- Start a **new chat** before uploading
+- Free ChatGPT (GPT-3.5/4) works fine for this file size
+
+*Students: you're welcome to follow along with a dataset from your own
+thesis work*
+:::
+
+------------------------------------------------------------------------
+
+## 2.1 — First Look {.slide-title}
+
+:::: body-text
+**Prompt to use:**
+
+::: {.callout-note icon="false"}
+*Tell me about this dataset. What does it appear to contain, what types
+of variables are present, and what might this data be used to study?*
+:::
+
+**As you read the response, notice:**
+
+- What ecological context did it identify without metadata?
+- What did it get right? What did it oversimplify or miss?
+- This is pattern recognition from training, not domain expertise
+::::
+
+------------------------------------------------------------------------
+
+## 2.2 — Missing Values {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Which columns contain missing values, and how many are in each column?
+Present this as a table. Then tell me whether the missingness pattern
+suggests data not collected versus species not observed.*
+:::
+
+**Biological interpretation matters:**
+
+- Missing **COUNT** → species likely not observed → structural zero
+- Missing **SIZE** → animal counted but not measured → different issue
+
+These have **very different** implications for analysis
+::::
+
+------------------------------------------------------------------------
+
+## 2.3 — Summary Statistics {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Provide summary statistics — mean, median, standard deviation, min, max
+— for the COUNT and SIZE columns. Also list unique values for SITE and
+YEAR.*
+:::
+
+**Watch for:**
+
+COUNT distribution is almost certainly **right-skewed** — mean \>\>
+median because a few species dominate
+
+This informs model family selection later *(Poisson? Negative
+binomial?)*
+::::
+
+------------------------------------------------------------------------
+
+## 2.4 — Data Transformation {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Convert this dataset to wide format using SP_CODE as column headers and
+COUNT as values. If a species appears more than once for the same site
+and year combination, sum the counts. Show me the first 10 rows and tell
+me the dimensions of the resulting table.*
+:::
+
+**Verify:** Row count in wide format should equal the number of unique
+**site × year** combinations
+
+*We specified what to do with duplicates — intentional. "Tell me the
+dimensions" is a mini data guardian check built right into the prompt.*
+::::
+
+------------------------------------------------------------------------
+
+# Part 3 {.section-title}
+
+## Data Guardian Prompts
+
+------------------------------------------------------------------------
+
+## The Core Problem {.slide-title}
+
+:::: body-text
+::: callout-warning
+## LLMs produce confident output regardless of silent failures
+
+- A join removes 20% of your rows → well-formatted result
+- A filter excludes a whole year → beautiful plot
+- A model is misspecified → significant p-value
+- Data was silently truncated → authoritative summary
+
+**The model will not volunteer that anything went wrong.** You have to
+ask.
+:::
+
+**Data Guardian Prompts** force the model to show its work at every step
+— like controls in a lab experiment.
+::::
+
+------------------------------------------------------------------------
+
+## The 10 Data Guardian Prompts {.slide-title}
+
+::: body-text
+| \#  | Name                        | When                               |
+|-----|-----------------------------|------------------------------------|
+| 1   | Data Ingestion Verification | After every upload                 |
+| 2   | Row Accountability          | After every transformation         |
+| 3   | Duplicate Detection         | Before aggregation or joins        |
+| 4   | Join Audit                  | After every merge                  |
+| 5   | Zero vs. NA Distinction     | Before count/abundance analysis    |
+| 6   | Outlier Flagging            | Before fitting any model           |
+| 7   | Scope Confirmation          | Before running analysis            |
+| 8   | Model Assumption Check      | After fitting, before interpreting |
+| 9   | Aggregation Transparency    | After any summary or plot          |
+| 10  | Reproducibility Handoff     | Last thing in every session        |
+:::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 1 {.slide-title}
+
+### Data Ingestion Verification
+
+:::: body-text
+::: {.callout-note icon="false"}
+*After loading the data, confirm: (1) the number of rows and columns,
+(2) the column names and data types, (3) the first 5 rows. Do not
+proceed with any analysis until you have shown me this information.*
+:::
+
+**Why:** The very first thing that can go wrong is that the model didn't
+read what you think it read.
+
+**Watch for:** Row count doesn't match your file → stop and investigate
+before continuing.
+
+**When:** Run this immediately after **every upload**.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 2 {.slide-title}
+
+### Row Accountability After Every Transformation
+
+:::: body-text
+::: {.callout-note icon="false"}
+*After each data transformation step, print the row count and the count
+of any NA or zero values in the key response variable. If any
+transformation removes rows, stop and report which rows were removed and
+why before continuing.*
+:::
+
+**Why:** Filtering, joining, dropping NAs, pivoting — any of these can
+remove rows without warning.
+
+**Watch for:** LLMs tend to pipeline steps together. Push back — ask for
+counts after **each individual step**.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 3 {.slide-title}
+
+### Duplicate Detection Before Aggregation
+
+:::: body-text
+::: {.callout-note icon="false"}
+*Before performing any aggregation or join, check whether there are
+duplicate rows based on the key columns \[list them\]. Report the number
+of duplicate groups and show me 3 example duplicate records. Do not
+aggregate until I confirm the duplicates are expected.*
+:::
+
+**Why:** Undetected duplicates inflate counts and means. One species
+appearing twice in the same site-year inflates trend estimates —
+invisibly.
+
+**Note:** Confirming **absence** of duplicates is as valuable as
+detecting presence.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 4 {.slide-title}
+
+### Join Audit
+
+:::: body-text
+::: {.callout-note icon="false"}
+*After performing the join, report: (1) the row count of each input
+table, (2) the row count of the result, (3) any keys present in one
+table but not the other. If the result has more rows than the larger
+input, explain why.*
+:::
+
+**Why:** Inner joins silently drop unmatched rows. Left joins can
+inflate rows if the right table has duplicates.
+
+**Rule:** Result rows \> larger input rows → many-to-many duplication.
+Investigate immediately.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 5 {.slide-title}
+
+### Zero vs. NA — Force Explicit Distinction
+
+:::: body-text
+::: {.callout-note icon="false"}
+*Before any analysis involving COUNT or abundance: distinguish between
+cells where the value is 0 (species observed but none counted) and cells
+where the value is NA (data not collected). Report the count of each. Do
+not treat zeros and NAs as equivalent in any analysis.*
+:::
+
+**Why:** In ecological count data, 0 and NA have fundamentally different
+biological meanings. Models that conflate them — or drop both — produce
+wrong answers.
+
+**Especially critical for:** zero-inflated models, occupancy analyses,
+species distribution models.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 6 {.slide-title}
+
+### Outlier Flagging Before Modeling
+
+:::: body-text
+::: {.callout-note icon="false"}
+*Before fitting any model, identify values in \[response variable\] that
+are more than 3 standard deviations from the mean. List them with their
+row identifiers and ask me whether to include, exclude, or investigate
+them before proceeding.*
+:::
+
+**Why:** Outliers can dominate regression results. The model will fit
+whatever you ask for regardless of whether one record is driving the
+entire trend estimate.
+
+**Important:** Do NOT automatically exclude outliers — in ecology,
+extreme values are often real and ecologically meaningful. Surface them
+for **your judgment**.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 7 {.slide-title}
+
+### Scope Confirmation
+
+:::: body-text
+::: {.callout-note icon="false"}
+*Before running any analysis, restate in plain language: (1) which rows
+are included (what filters have been applied), (2) which columns are
+used, and (3) what the analysis unit is. Confirm this matches my
+research question.*
+:::
+
+**Why:** After multiple transformation steps, it's easy to lose track of
+what subset the analysis is actually running on.
+
+**Key move:** If the model's restatement doesn't match your intent,
+correct it **before** it runs anything. Far easier than diagnosing a
+wrong answer afterward.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 8 {.slide-title}
+
+### Model Assumption Check Before Interpretation
+
+:::: body-text
+::: {.callout-note icon="false"}
+*After fitting the model, check and report: (1) residual deviance and
+degrees of freedom, (2) whether the dispersion parameter suggests
+overdispersion, (3) a residual plot, and (4) influential observations.
+Do not present conclusions until these checks are done.*
+:::
+
+**Why:** A Poisson GLM with overdispersion produces standard errors that
+are too small and p-values that are too significant — and the model will
+show them with full confidence regardless.
+
+**Rule of thumb:** deviance/df \> 2 → switch to negative binomial.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 9 {.slide-title}
+
+### Aggregation Transparency
+
+:::: body-text
+::: {.callout-note icon="false"}
+*When you aggregate or summarize this data, tell me: (1) how many
+original rows contributed to each summary value, (2) what function was
+used (sum, mean, median), and (3) whether any rows were excluded and
+why.*
+:::
+
+**Why:** Every time series plot involves aggregation. Making the model
+describe the operation lets you verify the plot shows what you think it
+shows.
+
+**Watch for:** Whether NAs were excluded or treated as zero before
+aggregation — default behavior varies by language and function.
+::::
+
+------------------------------------------------------------------------
+
+## Guardian Prompt 10 {.slide-title}
+
+### Reproducibility Handoff
+
+:::: body-text
+::: {.callout-note icon="false"}
+*Please compile all the code used in this session into a single,
+self-contained R script that I can run locally. The script should load
+the data from file, reproduce every transformation and visualization we
+discussed, and include comments explaining each step. List any steps
+performed in Python that will need translation to R.*
+:::
+
+**Why:** Analysis done inside ChatGPT is ephemeral. This prompt converts
+a session into a permanent, auditable record.
+
+**Run it as the last thing you do in every session.** Then verify the
+script in RStudio.
+::::
+
+------------------------------------------------------------------------
+
+## Deploying the Prompts {.slide-title}
+
+::: body-text
+You don't have to use all 10 every time
+
+Think of them as **targeted controls** — deploy at the moments when
+silent errors are most likely:
+
+- **Uploads** → Prompt 1
+- **Each wrangling step** → Prompt 2
+- **Before any join or aggregation** → Prompts 3, 4, 9
+- **Count/abundance data** → Prompt 5
+- **Before modeling** → Prompts 6, 7
+- **After fitting** → Prompt 8
+- **End of session** → Prompt 10
+
+*Chat: Which one do you think you'd be most likely to forget to use on
+your own data? Why?*
+:::
+
+------------------------------------------------------------------------
+
+# Part 4 {.section-title}
+
+## Statistical Analysis in ChatGPT
+
+------------------------------------------------------------------------
+
+## Setting Up: Scope First {.slide-title}
+
+:::: body-text
+Before any plots or models, deploy **Guardian Prompt 7**:
+
+::: {.callout-note icon="false"}
+*Before creating any plots: restate which rows are included in the
+analysis, what the analysis unit is, and whether NA values in COUNT have
+been handled.*
+:::
+
+This confirms we all agree on what data we're working with before the
+analysis begins.
+
+*Continue in the same chat from Part 2.*
+::::
+
+------------------------------------------------------------------------
+
+## 4.1 — Time Series: Total Count {.slide-title}
+
+:::: body-text
+**Prompt with Guardian Prompt 9 built in:**
+
+::: {.callout-note icon="false"}
+*Create a time series plot of total fish count across all species, with
+YEAR on the x-axis and total COUNT on the y-axis. Use different colors
+for each SITE. After creating the plot, tell me how many rows
+contributed to each year's total and whether any years had missing
+data.*
+:::
+
+**Watch:** Are all sites represented in every year? Year-to-year
+variability vs. directional trend?
+::::
+
+------------------------------------------------------------------------
+
+## 4.2 — Top Species Composition {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Create a time series plot of the top 5 most abundant species across all
+years. Before plotting, report which 5 species were selected and their
+total counts so I can verify the ranking.*
+:::
+
+**"Before plotting, report..."** is the key move — it surfaces the
+intermediate aggregation step before the visualization obscures it.
+
+If the top 5 don't match your ecological expectation, you catch it
+**here** — not after the plot is in your paper.
+::::
+
+------------------------------------------------------------------------
+
+## 4.3 — Model Selection Consultation {.slide-title}
+
+:::: body-text
+**Prompt with Guardian Prompt 8 pre-flight:**
+
+::: {.callout-note icon="false"}
+*I want to understand whether total fish count has increased or
+decreased over time. Before recommending a model, tell me: (1) whether
+count data with many zeros is appropriate for a Poisson GLM or whether
+another family is more suitable, and (2) what assumptions that model
+makes that I should verify.*
+:::
+
+**Listen for the reasoning chain:**
+
+Count data → Poisson → check equidispersion → many zeros →
+zero-inflation risk → variance \> mean → overdispersion → consider
+negative binomial
+::::
+
+------------------------------------------------------------------------
+
+## 4.4 — Fitting and Checking the Model {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Fit a Poisson GLM with total annual count as the response and YEAR as
+the predictor. After fitting, report: (1) residual deviance and degrees
+of freedom, (2) the dispersion ratio (deviance/df), (3) whether this
+suggests we should switch to a negative binomial model. Do not interpret
+results until after this check.*
+:::
+
+"Do not interpret until after this check" is doing a lot of work — the
+LLM's natural tendency is to move directly to interpretation. We're
+**interrupting that flow deliberately**.
+::::
+
+------------------------------------------------------------------------
+
+## Reading the Dispersion Check {.slide-title}
+
+::::::: body-text
+::::: columns
+::: {.column width="50%"}
+**If deviance/df ≈ 1**
+
+Poisson is appropriate — proceed with interpretation
+:::
+
+::: {.column width="50%"}
+**If deviance/df \> 2**
+
+Overdispersion detected → refit with negative binomial
+
+Standard errors from Poisson will be too small → p-values will be too
+significant
+:::
+:::::
+
+**Follow-up if needed:**
+
+::: {.callout-note icon="false"}
+*The dispersion ratio suggests overdispersion. Please refit using a
+negative binomial GLM, then show me the coefficient for YEAR and its 95%
+confidence interval. Interpret in plain language — what does it mean for
+how fish counts change per year?*
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+## 4.5 — Report-Ready Narrative {.slide-title}
+
+:::: body-text
+**Prompt:**
+
+::: {.callout-note icon="false"}
+*Write a methods and results paragraph suitable for a scientific report
+describing the GLM analysis. Include the model family and link function,
+the reason for choosing it, the key statistical results (coefficient,
+confidence interval, p-value), and a plain-language interpretation of
+the trend. Use past tense and avoid jargon where possible.*
+:::
+
+This is one of ChatGPT's **strongest capabilities** — the paragraph will
+be close to publication-ready.
+
+**Critical read:** Does the narrative accurately reflect the model you
+*actually* fitted? Narrative quality is not evidence that the numbers
+are right.
+::::
+
+------------------------------------------------------------------------
+
+# Part 5 {.section-title}
+
+## Reproducibility: Export & Verify in R
+
+------------------------------------------------------------------------
+
+## The Problem {.slide-title}
+
+:::: body-text
+::: callout-warning
+## Everything we just did exists only in this chat window
+
+- Close the tab → it's gone
+- Screenshot → not reproducible
+- The analysis cannot be peer-reviewed, shared, or built upon
+:::
+
+This is not a hypothetical concern — it's the default state of any
+ChatGPT data analysis session.
+
+**The fix:** Guardian Prompt 10 — every time.
+::::
+
+------------------------------------------------------------------------
+
+## Send the Reproducibility Handoff {.slide-title}
+
+:::: body-text
+**Guardian Prompt 10 in the chat:**
+
+::: {.callout-note icon="false"}
+*Please compile all the code used in this session into a single,
+self-contained R script that I can run locally. The script should: load
+the data from file, reproduce every transformation and visualization we
+discussed, and include comments explaining each step. After generating
+the script, list any steps performed in Python that will need
+translation to R.*
+:::
+
+Copy the R script → paste into RStudio → **run it**.
+::::
+
+------------------------------------------------------------------------
+
+## What to Verify {.slide-title}
+
+::::::: body-text
+When running the exported script, check:
+
+::::: columns
+::: {.column width="50%"}
+**Numbers**
+
+- Row counts match what ChatGPT reported?
+- GLM coefficients match?
+- p-values match?
+:::
+
+::: {.column width="50%"}
+**Structure**
+
+- All packages available?
+- Data loads from file correctly?
+- Transformations produce same dimensions?
+:::
+:::::
+
+::: callout-warning
+Any numerical discrepancy in coefficients or row counts is a **bug to
+resolve** — not a rounding difference to ignore.
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+## A Reusable Verification Pattern {.slide-title}
+
+::: body-text
+Paste this helper into any R script after ChatGPT exports:
+
+```{r}
+#| eval: false
+verify_step <- function(df, label, response_col) {
+  cat("\n---", label, "---\n")
+  cat("  Rows:", nrow(df), "\n")
+  cat("  NAs in", response_col, ":",
+      sum(is.na(df[[response_col]])), "\n")
+  cat("  Zeros in", response_col, ":",
+      sum(df[[response_col]] == 0, na.rm = TRUE), "\n")
+}
+
+# Use after every transformation:
+# verify_step(fish, "after loading", "COUNT")
+# verify_step(fish_clean, "after dropping NAs", "COUNT")
+```
+
+This is Guardian Prompt 2 implemented as reusable R code.
+:::
+
+------------------------------------------------------------------------
+
+# Wrap-Up {.section-title}
+
+------------------------------------------------------------------------
+
+## The Reliability Landscape {.slide-title}
+
+:::::: body-text
+::::: columns
+::: {.column width="50%"}
+**Where LLMs are genuinely strong**
+
+- First-look data description
+- Generating plausible analysis options
+- Writing methods & results prose
+- Translating between R and Python
+- Explaining statistical reasoning
+:::
+
+::: {.column width="50%"}
+**Where silent failure is common**
+
+- Large datasets (truncation)
+- Multi-step transformations
+- Joins across tables
+- Zero vs. NA handling
+- Model assumption checking
+- Any result you don't independently verify
+:::
+:::::
+::::::
+
+------------------------------------------------------------------------
+
+## The Core Principle {.slide-title}
+
+:::: body-text
+::: callout-important
+## Data Guardian Prompts don't make the LLM smarter
+
+They force it to **show its work** so that *you* can catch the errors.
+
+The LLM will produce confident, well-formatted output regardless of
+whether it is computing on the right data, the right subset, or using
+the right model.
+
+**You are always the last line of defense.**
+:::
+::::
+
+------------------------------------------------------------------------
+
+## Quick Reference Card {.slide-title}
+
+::: body-text
+| \#  | Prompt                   | When                       |
+|-----|--------------------------|----------------------------|
+| 1   | Ingestion Verification   | After every upload         |
+| 2   | Row Accountability       | After every transformation |
+| 3   | Duplicate Detection      | Before aggregation / joins |
+| 4   | Join Audit               | After every merge          |
+| 5   | Zero vs. NA              | Before count analysis      |
+| 6   | Outlier Flagging         | Before any model           |
+| 7   | Scope Confirmation       | Before analysis            |
+| 8   | Assumption Check         | After fitting              |
+| 9   | Aggregation Transparency | After any summary or plot  |
+| 10  | Reproducibility Handoff  | End of every session       |
+
+*This table is in your live-coding companion — keep it open.*
+:::
+
+------------------------------------------------------------------------
+
+## Discussion {.slide-title}
+
+::: body-text
+Coming back to the question from the start of class:
+
+*Which mode — interpretation, code execution, narrative — turned out to
+be most useful for your work?*
+
+Open questions:
+
+- Where in your research would you trust ChatGPT output without
+  verifying in R?
+- Where would you never trust it?
+- What type of silent error would be most dangerous in **your** dataset
+  specifically?
+:::
+
+------------------------------------------------------------------------
+
+## Looking Ahead {.slide-title}
+
+::: body-text
+**Session 3 — Accessing ChatGPT via API**
+
+- Move beyond the chat interface
+- Call LLMs programmatically from R
+- Batch processing for large-scale text and data tasks
+- When the API approach is better than the browser approach
+
+**For now:** Practice Guardian Prompts on a dataset of your own — bring
+observations to the next session.
+:::
+
+------------------------------------------------------------------------
+
+##  {.custom-title}
+
+::: title-block
+Questions?
+
+*Live-coding companion:*\
+`s02_ai_analysis_livecode.qmd`
+
+*The 10 Data Guardian Prompts are in Section 3 of the companion — keep
+it open during any future LLM data session.*
+:::
